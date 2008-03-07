@@ -1,0 +1,25 @@
+ {
+    'name': 'Menu',
+    'type': 'extjs',
+    'version': '.9',
+    'jmakiVersion': '.9',    
+    'image': 'images/ext-menu.jpg',
+    'description': 'A menu widget.',
+    'config' : {
+        'type' :
+           { 'id' : 'extjs', 
+             'libs' : [
+                   '../resources/libs/adapter/yui/yui-utilities.js',
+                   '../resources/libs/adapter/yui/ext-yui-adapter.js',
+                   '../resources/libs/ext-all.js'
+               ],
+              'styles' : [
+                 '../resources/styles/css/ext-all.css',                 
+                 '../resources/styles/css/ytheme-aero.css'
+               ],
+              'resources' : [
+                '../resources/styles/images'
+               ]
+        }
+    }
+  }
