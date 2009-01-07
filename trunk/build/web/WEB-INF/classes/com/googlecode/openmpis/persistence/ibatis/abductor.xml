@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Abductor">
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getAbductor" parameterClass="int" resultClass="com.googlecode.openmpis.model.Abductor">
+        SELECT
+        ID as id,
+        FIRSTNAME as firstName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        ENCODERID as encoderID
+        FROM ABDUCTOR
+        WHERE ID = #id#
+    </select>
+
+    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <insert id="insertAbductor" parameterClass="com.googlecode.openmpis.model.Abductor">
+        INSERT INTO ABDUCTOR
+        (FIRSTNAME, MIDDLENAME, LASTNAME, STREET, CITY,
+        PROVINCE, COUNTRY, ENCODERID)
+        VALUES
+        (#firstName#, #middleName#, #lastName#,
+        #street#, #city#, #province#, #country#, #encoderID#)
+    </insert>
+
+    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <update id="updateAbductor" parameterClass="com.googlecode.openmpis.model.Abductor">
+        UPDATE ABDUCTOR SET
+        FIRSTNAME = #firstName#,
+        MIDDLENAME = #middleName#,
+        LASTNAME = #lastName#,
+        STREET = #street#,
+        CITY = #city#,
+        PROVINCE = #province#,
+        COUNTRY = #country#,
+        ENCODERID = #encoderID#
+        WHERE ID = #id#
+    </update>
+
+    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <delete id="deleteAbductor" parameterClass="int">
+        DELETE ABDUCTOR
+        WHERE ID = #id#
+    </delete>
+</sqlMap>

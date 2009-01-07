@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Person">
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getPerson" parameterClass="int" resultClass="com.googlecode.openmpis.model.Person">
+        SELECT
+        ID as id,
+        FIRSTNAME as firstName,
+        NICKNAME as nickName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHDAY as birthday,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        CIRCUMSTANCE as circumstance,
+        PERSONALEFFECTS as personalEffects,
+        MARKS as marks,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisID,
+        AFISID as afisID,
+        DENTALID as dentalID,
+        DATE as date,
+        DATEMISSING as dateMissing,
+        STATUS as status,
+        TYPE as type,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        GENDER as gender,
+        REWARD as reward,
+        ENCODERID as encoderID,
+        INVESTIGATORID as investigatorID,
+        RELATIVEID as relativeID,
+        ABDUCTORID as abductorID,
+        STATUS as status,
+        QUESTION as question,
+        ANSWER as answer
+        FROM PERSON
+        WHERE ID = #id#
+    </select>
+
+    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <insert id="insertPerson" parameterClass="com.googlecode.openmpis.model.Person">
+        INSERT INTO PERSON
+        (FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHDAY, STREET, CITY,
+        PROVINCE, COUNTRY, CIRCUMSTANCE, PERSONALEFFECTS, MARKS, PHOTO, AGEDPHOTO, CODISID, AFISID,
+        DENTALID, DATE, DATEMISSING, STATUS, TYPE, FEET, INCHES, WEIGHT, RELIGION,
+        RACE, EYECOLOR, HAIRCOLOR, GENDER, REWARD, ENCODERID, INVESTIGATORID,
+        RELATIVEID, ABDUCTORID)
+        VALUES
+        (#firstName#, #nickName#, #middleName#, #lastName#, #birthday#,
+        #street#, #city#, #province#, #country#, #circumstance#, #personalEffects#, #marks# #photo#,
+        #agedPhoto#, #codisID#, #afisID#, #dentalID#, #date#, #dateMissing#,
+        #status#, #type#, #feet#, #inches#, #weight#, #religion#, #race#,
+        #eyeColor#, #hairColor#, #gender#, #reward#, #encoderID#,
+        #investigatorID#, #relativeID#, #abductorID#)
+    </insert>
+
+    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <update id="updatePerson" parameterClass="com.googlecode.openmpis.model.Person">
+        UPDATE PERSON SET
+        FIRSTNAME = #firstName#,
+        NICKNAME = #nickName#,
+        MIDDLENAME = #middleName#,
+        LASTNAME = #lastName#,
+        BIRTHDAY = #birthday#,
+        STREET = #street#,
+        CITY = #city#,
+        PROVINCE = #province#,
+        COUNTRY = #country#,
+        CIRCUMSTANCE = #circumstance#,
+        PERSONALEFFECTS = #personalEffects#,
+        MARKS = #marks#,
+        PHOTO = #photo#,
+        AGEDPHOTO = #agedPhoto#,
+        CODISID = #codisID#,
+        AFISID = #afisID#,
+        DENTALID = #dentalID#,
+        DATE = #date#,
+        DATEMISSING = #dateMissing#,
+        STATUS = #status#,
+        TYPE = #type#,
+        FEET = #feet#,
+        INCHES = #inches#,
+        WEIGHT = #weight#,
+        RELIGION = #religion#
+        RACE = #race#,
+        EYECOLOR = #eyeColor#,
+        HAIRCOLOR = #hairColor#,
+        GENDER = #gender#,
+        REWARD = #reward#,
+        ENCODERID = #encoderID#,
+        INVESTIGATORID = #investigatorID#,
+        RELATIVEID = #relativeID#,
+        ABDUCTORID = #abductorID#,
+        WHERE ID = #id#
+    </update>
+
+    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <delete id="deletePerson" parameterClass="int">
+        DELETE PERSON
+        WHERE ID = #id#
+    </delete>
+</sqlMap>

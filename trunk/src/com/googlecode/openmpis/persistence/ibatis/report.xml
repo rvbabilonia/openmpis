@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Report">
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getReport" parameterClass="int" resultClass="com.googlecode.openmpis.model.Report">
+        SELECT
+        ID as id,
+        REPORT as report,
+        DATE as date,
+        PERSONID as personID,
+        INVESTIGATORID as investigatorID,
+        FROM REPORT
+        WHERE ID = #id#
+    </select>
+
+    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <insert id="insertReport" parameterClass="com.googlecode.openmpis.model.Report">
+        INSERT INTO REPORT
+        (REPORT, DATE, PERSONID, INVESTIGATORID)
+        VALUES
+        (#report#, #date#, #personID#, #investigatorID#)
+    </insert>
+
+    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <update id="updateReport" parameterClass="com.googlecode.openmpis.model.Report">
+        UPDATE REPORT SET
+        REPORT = #report#,
+        DATE = #date#,
+        PERSONID = #personID#,
+        INVESTIGATORID = #investigatorID#
+        WHERE ID = #id#
+    </update>
+
+    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <delete id="deleteReport" parameterClass="int">
+        DELETE REPORT
+        WHERE ID = #id#
+    </delete>
+</sqlMap>
