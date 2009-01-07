@@ -1,0 +1,204 @@
+/* Basic Elements */
+body {
+    background-color: #242424;
+    width: 100%;
+    color: #f7f7f7;
+    font: normal normal normal 9pt sans-serif; 
+    text-align: center;
+    margin: 0px 0px 0px 0px;
+}
+
+a {
+    color: #f7f7f7;
+    font: normal normal normal 9pt sans-serif;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #cccccc;
+    text-decoration: underline;
+}
+
+textarea {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+}
+
+/* Specific classes */
+.input {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+}
+
+.button {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+}
+
+.searchbutton {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+}
+
+.feedbackbutton {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+    margin-left: 4.5em;
+}
+
+.search {
+    text-align: center;
+}
+
+.feedback {
+    text-align: center;
+}
+
+/* Specific divs */
+div#container {
+}
+
+div#header {
+    height: 200px;
+    background: url(/genbankers/image/header.png) repeat-x;
+}
+
+div#header img {
+    margin-top: 82px;
+}
+
+div#menu {
+    background: url(/genbankers/image/dmenu.png) repeat-x;
+    height: 36px;
+    width: 100%;
+    white-space: nowrap;
+    padding: 0px;
+    margin: 0px auto 0px auto;
+}
+
+div#menu ul {
+    list-style-type: none;    
+    margin: 0px 0px 0px 190px;
+}
+
+div#menu li {
+    display: inline;
+}
+
+div#menu a {
+    float: left;
+    font: normal normal normal 17pt sans-serif;
+    display: block;
+    background: url(/genbankers/image/dmenu.png) no-repeat center center;
+    height: 36px;
+    width: 120px;
+}
+
+div#menu a:hover, div#menu a.chosen {
+    text-decoration: none;
+    background: url(/genbankers/image/hmenu.png) no-repeat center center;
+    height: 36px;
+    width: 120px;
+}
+
+div#content {
+    width: 80%;
+    margin: 10px auto 0px auto;
+}
+
+div#contentitem {
+    padding: 10px;
+    background: url(/genbankers/image/mid.png);
+    text-align: left;
+}
+
+div#contentitem th {
+    font: normal bold normal 12pt sans-serif;
+    text-align: center;
+}
+
+div#contentitem table {
+    width: 100%;
+    border-spacing: 5px;
+}
+
+div#contentitem td {
+    font: normal normal normal 9pt sans-serif;
+    text-align: left;
+    padding: 2px;
+}
+
+div#contentitem td.accession {
+    font: normal normal normal 9pt sans-serif;
+    text-align: center;
+    padding: 2px;
+}
+
+div#contentitem p {
+    text-align: justify;
+}
+
+div#contentitem a {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+    padding: 2px 5px 2px 5px;
+    color: #000000;
+    font: normal normal normal 9pt sans-serif;
+    text-decoration: none;
+}
+
+div#contentitem label {
+    width: 4.5em;
+    float: left;
+    text-align: right;
+    margin-right: 0.5em;
+    display: block
+}
+
+div#top-left {
+    background: url(/genbankers/image/top-left.png) no-repeat top left;
+    height: 30px;
+}
+
+div#top-right {
+    background: url(/genbankers/image/top-right.png) no-repeat top right;
+    height: 30px;
+}
+
+div#bottom-left {
+    background: url(/genbankers/image/bottom-left.png) no-repeat bottom left;
+    height: 30px;
+}
+
+div#bottom-right {
+    background: url(/genbankers/image/bottom-right.png) no-repeat bottom right;
+    height: 30px;
+}
+
+div#footer {
+    width: 100%;
+    margin: 10px auto 0px auto;
+}
+
+div#footer a {
+    background-color: #242424;
+}
+
+div#footer img {
+    border: 0px;
+    width: 88px;
+    height: 31px; 
+}
+
+div#pagination {
+    text-align: center;
+}
+
+div#pagination a {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+    padding: 2px 5px 2px 5px;
+    color: #000000;
+    font: normal normal normal 9pt sans-serif;
+    text-decoration: none;
+}

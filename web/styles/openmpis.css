@@ -1,0 +1,232 @@
+/* Basic HTML elements */
+body {
+    background-color: #bbbbbb;
+    width: 100%;
+    color: #f7f7f7;
+    font: normal normal normal 9pt sans-serif; 
+    text-align: center;
+    margin: 0px 0px 0px 0px;
+    height: 100%;
+}
+
+a {
+    color: #f7f7f7;
+    font: normal normal normal 9pt sans-serif;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+h1 {
+    color: #355d0d;
+}
+
+/* Specific classes */
+.textareaclass, .inputclass, [selected], .selectclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+}
+
+.optionclass {
+    background-color: #cccccc;
+}
+
+.buttonclass, .searchbuttonclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+}
+
+.feedbackbuttonclass, .loginbuttonclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    margin-left: 5.5em;
+}
+
+.feedbackclass, .loginclass, .searchclass {
+    text-align: left;
+}
+
+.errorclass {
+    color: #ff0000;
+}
+
+.labelclass {
+    width: 5.5em;
+    float: left;
+    text-align: left;
+    margin-right: 0.5em;
+    display: block;
+    color: #2a5104;
+}
+
+.contentclass {
+    white-space: normal;
+    text-align: justify;
+}
+
+/* Specific ids */
+
+/* Specific divs */
+div#container {
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+div#header {
+    height: 100px;
+    background-color: #bbbbbb;
+    background: url(../images/openmpis.png) no-repeat center center;
+}
+
+div#header img {
+    margin-top: 0px;
+}
+
+div#menu {
+    white-space: nowrap;
+    margin: 0px auto 0px auto;
+    padding: 0px;
+    text-align: center;
+}
+
+div#menu li {
+    display: inline;
+    list-style-type: none;
+}
+
+div#menu a {
+    color: #ffffff;
+    display: inline-block;
+    font: normal normal normal 14pt sans-serif;
+    background: url(../images/oval-dark.png) no-repeat center center;
+    height: 50px;
+    width: 150px;
+    padding-top: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+div#menu a:hover, div#menu a.chosen {
+    color: #000000;
+    text-decoration: none;
+    background: url(../images/oval-light.png) no-repeat center center;
+    height: 50px;
+    width: 150px;
+}
+
+div#content {
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 60px;
+}
+
+div#content img {
+    border: 0px;
+}
+
+div#contentitem {
+    white-space: nowrap;
+    margin: 0px auto 0px auto;
+    padding: 10px;
+    text-align: justify;
+}
+
+div#contenthome {
+    white-space: nowrap;
+    margin: 0px auto 0px auto;
+    padding: 0px;
+    text-align: center;
+}
+
+div#contenthome li {
+    display: inline;
+    list-style-type: none;
+}
+
+div#contenthome a {
+    display: inline-block;
+}
+
+div#contentitem th {
+    font: normal bold normal 12pt sans-serif;
+    text-align: center;
+}
+
+div#contentitem table {
+    width: 100%;
+    border-spacing: 1px;
+}
+
+div#contentitem td {
+    font: normal normal normal 9pt sans-serif;
+    text-align: left;
+    padding: 2px;
+    border: 1px solid #ffffff;
+}
+
+div#contentitem th {
+    font: normal normal normal 9pt sans-serif;
+    text-align: center;
+    padding: 2px;
+    border: 1px solid #ffffff;
+}
+
+div#footer {
+    clear: both;
+    width: 100%;
+    height: 50px;
+    margin: 30px auto 0px auto;
+    background-color: #424242;
+    border: 1px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font: normal normal normal 7pt sans-serif;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+div#link a, div#copyright a {
+    font: normal normal normal 7pt sans-serif;
+}
+
+div#link li {
+    display: inline;
+    list-style-type: none;
+    padding-left: 1em;
+    margin-left: 1em;
+    border-left: 1px solid #000000;
+}
+
+div#link li:first-child {
+    border-left:none
+}
+
+div#copyright {
+    float: left;
+    padding-left: 10px;
+}
+
+div#link {
+    float: right;
+    padding-right: 10px;
+}
+
+div#pagination {
+    text-align: center;
+}
+
+div#pagination a {
+    border: 1px solid #6c6c6c;
+    background: #cccccc;
+    padding: 2px 5px 2px 5px;
+    color: #000000;
+    font: normal normal normal 9pt sans-serif;
+    text-decoration: none;
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Relative">
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getRelative" parameterClass="int" resultClass="com.googlecode.openmpis.model.Relative">
+        SELECT
+        ID as id,
+        FIRSTNAME as firstName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        EMAIL as email,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        NUMBER as number,
+        ENCODERID as encoderID
+        FROM RELATIVE
+        WHERE ID = #id#
+    </select>
+
+    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <insert id="insertRelative" parameterClass="com.googlecode.openmpis.model.Relative">
+        INSERT INTO RELATIVE
+        (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET, CITY,
+        PROVINCE, COUNTRY, NUMBER, ENCODERID)
+        VALUES
+        (#firstName#, #middleName#, #lastName#, #email#,
+        #street#, #city#, #province#, #country#, #number#, #encoderID#)
+    </insert>
+
+    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <update id="updateRelative" parameterClass="com.googlecode.openmpis.model.Relative">
+        UPDATE RELATIVE SET
+        FIRSTNAME = #firstName#,
+        MIDDLENAME = #middleName#,
+        LASTNAME = #lastName#,
+        EMAIL = #email#,
+        STREET = #street#,
+        CITY = #city#,
+        PROVINCE = #province#,
+        COUNTRY = #country#,
+        NUMBER = #number#,
+        ENCODERID = #encoderID#
+        WHERE ID = #id#
+    </update>
+
+    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <delete id="deleteRelative" parameterClass="int">
+        DELETE RELATIVE
+        WHERE ID = #id#
+    </delete>
+</sqlMap>

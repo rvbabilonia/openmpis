@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+<struts-config>
+    <form-beans>
+        <form-bean name="feedbackForm" type="com.googlecode.openmpis.form.FeedbackForm"/>
+        <form-bean name="searchForm" type="com.googlecode.openmpis.form.SearchForm"/>
+        <form-bean name="loginForm" type="com.googlecode.openmpis.form.LoginForm"/>
+        <form-bean name="passwordForm" type="com.googlecode.openmpis.form.PasswordForm"/>
+        <form-bean name="userForm" type="com.googlecode.openmpis.form.UserForm"/>
+        <form-bean name="caseForm" type="com.googlecode.openmpis.form.CaseForm"/>
+        <form-bean name="relativeForm" type="com.googlecode.openmpis.form.RelativeForm"/>
+        <form-bean name="abductorForm" type="com.googlecode.openmpis.form.AbductorForm"/>
+    </form-beans>
+    
+    <global-exceptions>
+    </global-exceptions>
+    
+    <global-forwards>
+        <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+    </global-forwards>
+    
+    <action-mappings>
+        <action path="/viewHome" forward="/index.jsp"/>
+        <action path="/viewAbout" forward="/about/about.jsp"/>
+        <action path="/viewStatistics" forward="/statistics/statistics.jsp"/>
+        <action path="/viewTips" forward="/tips/tips.jsp"/>
+        <action path="/viewSearch" forward="/search/searchForm.jsp"/>
+        <action path="/viewPrivacy" forward="/about/privacy.jsp"/>
+        <action path="/viewTerms" forward="/about/terms.jsp"/>
+        <action path="/viewDisclaimer" forward="/about/disclaimer.jsp"/>
+        <action path="/viewAccessibility" forward="/about/accessibility.jsp"/>
+        <action path="/viewSitemap" forward="/about/sitemap.jsp"/>
+        
+        <action validate="true" input="/search/searchForm.jsp" name="searchForm" path="/searchBean" scope="request" type="com.googlecode.openmpis.action.SearchAction">
+            <forward name="success" path="/search/searchSuccess.jsp"/>
+        </action>
+        <action path="/viewFeedback" forward="/feedback/feedbackForm.jsp"/>
+        <action validate="true" input="/feedback/feedbackForm.jsp" name="feedbackForm" path="/feedbackBean" scope="request" type="com.googlecode.openmpis.action.FeedbackAction">
+            <forward name="success" path="/feedback/feedbackSuccess.jsp"/>
+            <forward name="redo" path="/feedback/feedbackForm.jsp"/>
+        </action>
+        <action path="/viewLogin" forward="/session/loginForm.jsp"/>
+        <action validate="true" input="/session/loginForm.jsp" name="loginForm" path="/loginBean" scope="request" type="com.googlecode.openmpis.action.LoginAction">
+            <forward name="success" redirect="true" path="/viewUserHome.do"/>
+            <forward name="sessionExpired" path="/session/loginRequired.jsp"/>
+            <forward name="redo" path="/session/loginForm.jsp"/>
+        </action>
+        <action path="/viewPassword" forward="/password/passwordForm.jsp"/>
+        <action validate="true" input="/password/passwordForm.jsp" name="passwordForm" path="/passwordBean" scope="request" type="com.googlecode.openmpis.action.PasswordAction">
+            <forward name="success" path="/password/passwordSuccess.jsp"/>
+            <forward name="redo" path="/password/passwordForm.jsp"/>
+        </action>
+        <action path="/viewPerson" scope="request" type="com.googlecode.openmpis.action.PersonAction">
+            <forward name="success" path="/person/person.jsp"/>
+        </action>
+        <action path="/viewLogout" scope="session" type="com.googlecode.openmpis.action.LogoutAction">
+            <forward name="success" path="/session/logoutSuccess.jsp"/>
+        </action>
+        <action path="/viewMissing" scope="request" type="com.googlecode.openmpis.action.ListMissingAction">
+            <forward name="success" path="/person/personList.jsp"/>
+        </action>
+        <action path="/viewFound" scope="request" type="com.googlecode.openmpis.action.ListFoundAction">
+            <forward name="success" path="/person/personList.jsp"/>
+        </action>
+        <action path="/viewUnidentified" scope="request" type="com.googlecode.openmpis.action.ListUnidentifiedAction">
+            <forward name="success" path="/person/personList.jsp"/>
+        </action>
+        <action path="/viewCase" forward="/session/caseForm.jsp"/>
+        <action validate="true" input="/session/caseForm.jsp" name="caseForm" path="/caseBean" scope="session" type="com.googlecode.openmpis.action.CaseAction">
+            <forward name="success" path="/session/caseSuccess.jsp"/>
+        </action>
+        <action path="/viewRelative" forward="/session/relativeForm.jsp"/>
+        <action validate="true" input="/session/relativeForm.jsp" name="relativeForm" path="/relativeBean" scope="session" type="com.googlecode.openmpis.action.RelativeAction">
+            <forward name="success" path="/session/relativeSuccess.jsp"/>
+        </action>
+        <action path="/viewRelatives" scope="request" type="com.googlecode.openmpis.action.ListRelativeAction">
+            <forward name="success" path="/session/relativeList.jsp"/>
+        </action>
+        <action path="/viewUser" forward="/session/userForm.jsp"/>
+        <action validate="true" input="/session/userForm.jsp" name="userForm" path="/userBean" scope="request" type="com.googlecode.openmpis.action.UserAction">
+            <forward name="success" path="/session/passwordSuccess.jsp"/>
+        </action>
+        <action path="/viewUsers" scope="request" type="com.googlecode.openmpis.action.ListUserAction">
+            <forward name="success" path="/session/userList.jsp"/>
+            <forward name="sessionExpired" path="/session/loginRequired.jsp"/>
+        </action>
+        <action path="/viewUserHome" scope="request" type="com.googlecode.openmpis.action.UserHomeAction">
+            <forward name="success" path="/session/index.jsp"/>
+            <forward name="sessionExpired" path="/session/loginRequired.jsp"/>
+        </action>
+        <action path="/viewAbductor" forward="/session/abductorForm.jsp"/>
+        <action validate="true" input="/session/abductorForm.jsp" name="abductorForm" path="/abductorBean" scope="session" type="com.googlecode.openmpis.action.AbductorAction">
+            <forward name="success" path="/session/abductorSuccess.jsp"/>
+        </action>
+        
+        <!--<action path="/downloadReport" scope="request" type="com.googlecode.openmpis.action.DownloadReportAction">
+            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+        </action>
+        
+        <action path="/downloadPoster" scope="request" type="com.googlecode.openmpis.action.DownloadPosterAction">
+            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+        </action>
+        
+        <action path="/downloadForm" scope="request" type="com.googlecode.openmpis.action.DownloadFormAction">
+            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+        </action>-->
+    </action-mappings>
+    
+    <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" nocache="true"/>
+    
+    <message-resources parameter="com.googlecode.openmpis.resource.ApplicationResource"/>
+    <message-resources key="_PH" parameter="com.googlecode.openmpis.resource.ApplicationResource__PH"/>
+    <message-resources key="en" parameter="com.googlecode.openmpis.resource.ApplicationResource_en"/>
+    
+    <!-- ========================= Tiles plugin ===============================-->
+    <!--
+    This plugin initialize Tiles definition factory. This later can takes some
+    parameters explained here after. The plugin first read parameters from
+    web.xml, thenoverload them with parameters defined here. All parameters
+    are optional.
+    The plugin should be declared in each struts-config file.
+    - definitions-config: (optional)
+    Specify configuration file names. There can be several comma
+    separated file names (default: ?? )
+    - moduleAware: (optional - struts1.1)
+    Specify if the Tiles definition factory is module aware. If true
+    (default), there will be one factory for each Struts module.
+    If false, there will be one common factory for all module. In this
+    later case, it is still needed to declare one plugin per module.
+    The factory will be initialized with parameters found in the first
+    initialized plugin (generally the one associated with the default
+    module).
+    true : One factory per module. (default)
+    false : one single shared factory for all modules
+    - definitions-parser-validate: (optional)
+    Specify if xml parser should validate the Tiles configuration file.
+    true : validate. DTD should be specified in file header (default)
+    false : no validation
+
+    Paths found in Tiles definitions are relative to the main context.
+    -->
+    <plug-in className="org.apache.struts.tiles.TilesPlugin" >
+        <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+        <set-property property="moduleAware" value="true" />
+    </plug-in>
+    
+    <!-- ========================= Validator plugin ================================= -->
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property
+            property="pathnames"
+            value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+    </plug-in>
+</struts-config>
