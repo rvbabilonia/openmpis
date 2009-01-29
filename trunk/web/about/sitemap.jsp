@@ -32,7 +32,7 @@
             <div id="content">
                 <div id="contentitem">
                     <h1>Sitemap</h1>
-                    <p class="contentclass">Home Page</p>
+                    <h2>Home Page</h2>
                     <ul>
                         <li>Home</li>
                         <li>About</li>
@@ -44,6 +44,22 @@
                         <li>Missing Persons</li>
                         <li>Found Persons</li>
                         <li>Unidentified Persons</li>
+                        <li>Privacy Policy</li>
+                        <li>Terms and Conditions</li>
+                        <li>Disclaimer</li>
+                        <li>Accessibility</li>
+                        <li>Sitemap</li>
+                    </ul>
+                    <h2>Log In Page</h2>
+                    <ul>
+                        <li>Home</li>
+                        <li>About</li>
+                        <li>Search</li>
+                        <li>Feedback</li>
+                        <li>Statistics</li>
+                        <li>Safety Tips</li>
+                        <li>Log In</li>
+                        <li>Password Retrieval</li>
                         <li>Privacy Policy</li>
                         <li>Terms and Conditions</li>
                         <li>Disclaimer</li>

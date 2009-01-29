@@ -25,9 +25,12 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
 import java.util.Properties;
+
 import java.sql.Date;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -90,10 +93,21 @@ public class Mail {
         message.setEmail(senderAddress);
         message.setSubject(subject);
         message.setMessage(messageBody);
-        message.setDate(new Date(System.currentTimeMillis()));
+        Date date = new Date(System.currentTimeMillis());
+        message.setDate(date);
         message.setIpAddress(ipAddress);
         
+        // Log message receipt
+        Log log = new Log();
+        log.setLog("Email received from " + senderAddress + ".");
+        log.setDate(date);
+        
+        // Create SQL map
         SqlMapClient sqlMap = SqlMapConfig.getSqlMapInstance();
+        sqlMap.startTransaction();
         sqlMap.insert("insertMessage", message);
+        sqlMap.insert("insertLog", log);
+        sqlMap.commitTransaction();
+        sqlMap.endTransaction();
     }
 }

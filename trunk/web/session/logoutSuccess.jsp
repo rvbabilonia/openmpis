@@ -31,7 +31,9 @@
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    <bean:message key="logout.content"/>
+                    <p class="contentclass">
+                        <bean:message key="logout.content"/>
+                    </p>
                 </div>
             </div>
         

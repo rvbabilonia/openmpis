@@ -5,6 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -17,7 +18,17 @@
         <meta name="robots" content="all"/>
         <bean:message key="global.icon"/>
         <bean:message key="global.style"/>
-        <bean:message key="admin.home.title"/>
+        <c:choose>
+            <c:when test="${currentuser.groupId eq '0'}">
+                <bean:message key="admin.home.title"/>
+            </c:when>
+            <c:when test="${currentuser.groupId eq '1'}">
+                <bean:message key="encoder.home.title"/>
+            </c:when>
+            <c:when test="${currentuser.groupId eq '2'}">
+                <bean:message key="investigator.home.title"/>
+            </c:when>
+        </c:choose>
         <html:base/>
     </head>
     <body>
@@ -25,14 +36,36 @@
 
             <!-- Menu -->
             <div id="menu">
-                <bean:message key="admin.home.menu"/>
+                <c:choose>
+                    <c:when test="${currentuser.groupId eq '0'}">
+                        <bean:message key="admin.home.menu"/>
+                    </c:when>
+                    <c:when test="${currentuser.groupId eq '1'}">
+                        <bean:message key="encoder.home.menu"/>
+                    </c:when>
+                    <c:when test="${currentuser.groupId eq '2'}">
+                        <bean:message key="investigator.home.menu"/>
+                    </c:when>
+                </c:choose>
             </div>
         
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    <bean:message key="admin.home.heading"/>
-                    <bean:message key="admin.home.content" arg0="${firstname}"/>
+                    <c:choose>
+                        <c:when test="${currentuser.groupId eq '0'}">
+                            <bean:message key="admin.home.heading"/>
+                            <bean:message key="admin.home.content" arg0="${currentuser.firstName}"/>
+                        </c:when>
+                        <c:when test="${currentuser.groupId eq '1'}">
+                            <bean:message key="encoder.home.heading"/>
+                            <bean:message key="encoder.home.content" arg0="${currentuser.firstName}"/>
+                        </c:when>
+                        <c:when test="${currentuser.groupId eq '2'}">
+                            <bean:message key="investigator.home.heading"/>
+                            <bean:message key="investigator.home.content" arg0="${currentuser.firstName}"/>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         

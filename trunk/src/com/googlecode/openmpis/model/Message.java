@@ -35,7 +35,7 @@ public class Message
    private String subject;
    private String message;
    private String ipAddress;
-   private int personID;
+   private int personId;
 
    public int getId() {
        return id;
@@ -101,11 +101,11 @@ public class Message
       this.ipAddress = ipAddress;
    }
 
-   public int getPersonID() {
-       return personID;
+   public int getPersonId() {
+       return personId;
    }
 
-   public void setPersonID(int personID) {
-      this.personID = personID;
+   public void setPersonId(int personId) {
+      this.personId = personId;
    }
 }

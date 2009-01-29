@@ -52,12 +52,10 @@ public class FeedbackAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm  form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws AddressException, MessagingException, Exception {
+            HttpServletRequest request, HttpServletResponse response) {
         FeedbackForm feedbackForm = (FeedbackForm) form;
         
         Mail mail = new Mail();
@@ -68,11 +66,11 @@ public class FeedbackAction extends Action {
 
             return mapping.findForward(SUCCESS);
         } catch (AddressException ae) {
-            throw new AddressException("Invalid recipient email address: " + feedbackForm.getAdminEmail());
+            return mapping.findForward(FAILURE);
         } catch (MessagingException me) {
-            throw new MessagingException("Failed sending email.");
+            return mapping.findForward(FAILURE);
         } catch (Exception e){
-            throw e;
+            return mapping.findForward(FAILURE);
         }
     }
 }

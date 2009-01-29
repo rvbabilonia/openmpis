@@ -28,8 +28,8 @@ import java.sql.Date;
 public class Report
 {
    private int id;
-   private int personID;
-   private int investigatorID;
+   private int personId;
+   private int investigatorId;
    private String report;
    private Date date;
 
@@ -41,20 +41,20 @@ public class Report
       this.id = id;
    }
 
-   public int getPersonID() {
-       return personID;
+   public int getPersonId() {
+       return personId;
    }
 
-   public void setPersonID(int personID) {
-      this.personID = personID;
+   public void setPersonId(int personId) {
+      this.personId = personId;
    }
 
-   public int getInvestigatorID() {
-       return investigatorID;
+   public int getInvestigatorId() {
+       return investigatorId;
    }
 
-   public void setInvestigatorID(int investigatorID) {
-      this.investigatorID = investigatorID;
+   public void setInvestigatorId(int investigatorId) {
+      this.investigatorId = investigatorId;
    }
 
    public String getReport() {

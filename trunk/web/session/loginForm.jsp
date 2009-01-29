@@ -38,8 +38,8 @@
                     <bean:message key="error.javascript.disabled"/>
                 </noscript>
                 <html:form styleId="loginform" styleClass="loginclass" method="post" action="loginBean"
-                    onsubmit="javascript:j_password.value = hex_md5(password.value);password.value='';">
-                    <c:if test="${error == 1}">
+                    onsubmit="javascript:j_password.value = hex_md5(password.value); password.value = convert(password.value);">
+                    <c:if test="${usererror == 1}">
                         <bean:message key="error.login.invalid"/>
                     </c:if>
                     <p>

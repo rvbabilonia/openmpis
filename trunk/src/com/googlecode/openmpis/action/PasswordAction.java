@@ -29,10 +29,12 @@ import org.apache.struts.action.ActionForward;
 import com.googlecode.openmpis.form.PasswordForm;
 import com.googlecode.openmpis.model.User;
 import com.googlecode.openmpis.model.SqlMapConfig;
+import com.googlecode.openmpis.model.Log;
 import com.googlecode.openmpis.model.Mail;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.mail.MessagingException;
@@ -58,65 +60,70 @@ public class PasswordAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws SQLException {
         PasswordForm passwordForm = (PasswordForm) form;
-        
+        User user = null;
         SqlMapClient sqlMap = SqlMapConfig.getSqlMapInstance();
         
-        User user = null;
-        
-        String isSuccess = null;
-        
         try {
+            sqlMap.startTransaction();
             user = (User) sqlMap.queryForObject("getUser", passwordForm.getUsername());
-        } catch (SQLException se)  {
-            se.printStackTrace();
-        }
-        
-        if (user == null) {
-            request.setAttribute("error", "1");
-            isSuccess = FAILURE;
-        } else {
-            if ((passwordForm.getQuestion() == user.getQuestion()) && (passwordForm.getAnswer().equals(user.getAnswer()))) {
-                isSuccess = SUCCESS;
-                request.setAttribute("email", user.getEmail());
-        
-                Mail mail = new Mail();
-                try {
+            sqlMap.commitTransaction();
+            sqlMap.endTransaction();
+            
+            if (user == null) {
+                request.setAttribute("error", "1");
+                return mapping.findForward(FAILURE);
+            } else {
+                if ((passwordForm.getQuestion() == user.getQuestion())
+                        && (passwordForm.getAnswer().equals(user.getAnswer()))) {
+                    request.setAttribute("email", user.getEmail());
+
+                    // Reset password
                     String password = "op3nmp!s";
                     user.setPassword(password);
-                    int row = sqlMap.update("updatePassword", user);
-                    
-                    if (row == 1)
-                        mail.send("Administrator", "", passwordForm.getAdminEmail(), user.getEmail(),
-                                "Password Retrieval",
-                                "Dear " + user.getFirstName() + "," +
-                                "\n\nYour new password is " + password + ". You received this email because" +
-                                "you have forgotten your password or someone pretending to be you" +
-                                "is trying to log into the system." +
-                                "\n\nYours truly," +
-                                "\nAdministrator",
-                                request.getRemoteAddr());
-                } catch (AddressException ae) {
-                    //throw new AddressException("Invalid email address: " + user.getEmail());
-                    ae.printStackTrace();
-                } catch (MessagingException me) {
-                    //throw new MessagingException("Failed sending email.");
-                    me.printStackTrace();
-                } catch (Exception e){
-                    //throw e;
-                    e.printStackTrace();
-                }
-            } else {
-                request.setAttribute("error", "1");
-                isSuccess = FAILURE;
-            }
-        }
 
-        return mapping.findForward(isSuccess);
+                    // Log password modification event
+                    Log log = new Log();
+                    log.setLog("User " + user.getUsername() + " reset his password.");
+                    log.setDate(new Date(System.currentTimeMillis()));
+                    
+                    sqlMap.startTransaction();
+                    sqlMap.update("updatePassword", user);
+                    sqlMap.insert("insertLog", log);
+                    sqlMap.commitTransaction();
+                    sqlMap.endTransaction();
+
+                    Mail mail = new Mail();
+                    mail.send("Administrator", "", passwordForm.getAdminEmail(), user.getEmail(),
+                            "Password Retrieval",
+                            "Dear " + user.getFirstName() + "," +
+                            "\n\nYour new password is " + password + ". You received this email because" +
+                            "you have forgotten your password or someone pretending to be you" +
+                            "is trying to log into the system." +
+                            "\n\nYours truly," +
+                            "\nAdministrator",
+                            request.getRemoteAddr());
+
+                    return mapping.findForward(SUCCESS);
+                } else {
+                    request.setAttribute("error", "1");
+                    return mapping.findForward(FAILURE);
+                }
+            }
+        } catch (SQLException sqle)  {
+            sqlMap.endTransaction();
+            throw new SQLException(sqle.getCause());
+        } catch (AddressException ae) {
+            return mapping.findForward(FAILURE);
+        } catch (MessagingException me) {
+            return mapping.findForward(FAILURE);
+        } catch (Exception e){
+            return mapping.findForward(FAILURE);
+        }
     }
 }

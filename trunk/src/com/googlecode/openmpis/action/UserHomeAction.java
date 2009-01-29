@@ -36,7 +36,7 @@ public class UserHomeAction extends Action {
      * The forwarding instances
      */
     private final static String SUCCESS = "success";
-    private final static String EXPIRED = "sessionExpired";
+    private final static String EXPIRED = "expired";
 
     /**
      * This is the action called from the Struts framework.
@@ -46,13 +46,12 @@ public class UserHomeAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) {
         // Check if there exists a session
-        if (request.getSession().getAttribute("userid") == null)
+        if (request.getSession().getAttribute("currentuser") == null)
             return mapping.findForward(EXPIRED);
         else
             return mapping.findForward(SUCCESS);

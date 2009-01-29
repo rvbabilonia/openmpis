@@ -9,8 +9,8 @@
         ID as id,
         REPORT as report,
         DATE as date,
-        PERSONID as personID,
-        INVESTIGATORID as investigatorID,
+        PERSONID as personId,
+        INVESTIGATORID as investigatorId,
         FROM REPORT
         WHERE ID = #id#
     </select>
@@ -21,7 +21,7 @@
         INSERT INTO REPORT
         (REPORT, DATE, PERSONID, INVESTIGATORID)
         VALUES
-        (#report#, #date#, #personID#, #investigatorID#)
+        (#report#, #date#, #personId#, #investigatorId#)
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
@@ -30,8 +30,8 @@
         UPDATE REPORT SET
         REPORT = #report#,
         DATE = #date#,
-        PERSONID = #personID#,
-        INVESTIGATORID = #investigatorID#
+        PERSONID = #personId#,
+        INVESTIGATORID = #investigatorId#
         WHERE ID = #id#
     </update>
 

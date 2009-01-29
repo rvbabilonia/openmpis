@@ -21,9 +21,9 @@
         MARKS as marks,
         PHOTO as photo,
         AGEDPHOTO as agedPhoto,
-        CODISID as codisID,
-        AFISID as afisID,
-        DENTALID as dentalID,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
         DATE as date,
         DATEMISSING as dateMissing,
         STATUS as status,
@@ -37,10 +37,10 @@
         HAIRCOLOR as hairColor,
         GENDER as gender,
         REWARD as reward,
-        ENCODERID as encoderID,
-        INVESTIGATORID as investigatorID,
-        RELATIVEID as relativeID,
-        ABDUCTORID as abductorID,
+        ENCODERID as encoderId,
+        INVESTIGATORID as investigatorId,
+        RELATIVEID as relativeId,
+        ABDUCTORID as abductorId,
         STATUS as status,
         QUESTION as question,
         ANSWER as answer
@@ -60,10 +60,10 @@
         VALUES
         (#firstName#, #nickName#, #middleName#, #lastName#, #birthday#,
         #street#, #city#, #province#, #country#, #circumstance#, #personalEffects#, #marks# #photo#,
-        #agedPhoto#, #codisID#, #afisID#, #dentalID#, #date#, #dateMissing#,
+        #agedPhoto#, #codisId#, #afisId#, #dentalId#, #date#, #dateMissing#,
         #status#, #type#, #feet#, #inches#, #weight#, #religion#, #race#,
-        #eyeColor#, #hairColor#, #gender#, #reward#, #encoderID#,
-        #investigatorID#, #relativeID#, #abductorID#)
+        #eyeColor#, #hairColor#, #gender#, #reward#, #encoderId#,
+        #investigatorId#, #relativeId#, #abductorId#)
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
@@ -84,9 +84,9 @@
         MARKS = #marks#,
         PHOTO = #photo#,
         AGEDPHOTO = #agedPhoto#,
-        CODISID = #codisID#,
-        AFISID = #afisID#,
-        DENTALID = #dentalID#,
+        CODISID = #codisId#,
+        AFISID = #afisId#,
+        DENTALID = #dentalId#,
         DATE = #date#,
         DATEMISSING = #dateMissing#,
         STATUS = #status#,
@@ -100,10 +100,10 @@
         HAIRCOLOR = #hairColor#,
         GENDER = #gender#,
         REWARD = #reward#,
-        ENCODERID = #encoderID#,
-        INVESTIGATORID = #investigatorID#,
-        RELATIVEID = #relativeID#,
-        ABDUCTORID = #abductorID#,
+        ENCODERID = #encoderId#,
+        INVESTIGATORID = #investigatorId#,
+        RELATIVEID = #relativeId#,
+        ABDUCTORID = #abductorId#,
         WHERE ID = #id#
     </update>
 

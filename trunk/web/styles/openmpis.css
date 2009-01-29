@@ -28,10 +28,13 @@ h1 {
 .textareaclass, .inputclass, [selected], .selectclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
+    width: 300px;
 }
 
 .optionclass {
+    border: 0px solid #6c6c6c;
     background-color: #cccccc;
+    width: 250px;
 }
 
 .buttonclass, .searchbuttonclass {
@@ -39,13 +42,13 @@ h1 {
     background-color: #cccccc;
 }
 
-.feedbackbuttonclass, .loginbuttonclass {
+.feedbackbuttonclass, .loginbuttonclass, .userbuttonclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
-    margin-left: 5.5em;
+    margin-left: 5.8em;
 }
 
-.feedbackclass, .loginclass, .searchclass {
+.feedbackclass, .loginclass, .searchclass, .adduserclass {
     text-align: left;
 }
 
@@ -54,7 +57,7 @@ h1 {
 }
 
 .labelclass {
-    width: 5.5em;
+    width: 6em;
     float: left;
     text-align: left;
     margin-right: 0.5em;
@@ -165,13 +168,15 @@ div#contentitem table {
 
 div#contentitem td {
     font: normal normal normal 9pt sans-serif;
+    color: #111111;
     text-align: left;
     padding: 2px;
     border: 1px solid #ffffff;
 }
 
 div#contentitem th {
-    font: normal normal normal 9pt sans-serif;
+    font: bold normal normal 12pt sans-serif;
+    color: #000000;
     text-align: center;
     padding: 2px;
     border: 1px solid #ffffff;
@@ -180,7 +185,7 @@ div#contentitem th {
 div#footer {
     clear: both;
     width: 100%;
-    height: 50px;
+    height: 30px;
     margin: 30px auto 0px auto;
     background-color: #424242;
     border: 1px;

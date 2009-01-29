@@ -34,7 +34,7 @@
                     <h1>Accessibility</h1>
                     <p class="contentclass">
                         The Open Source Missing Persons Information System is committed to providing information
-                        that is accessible by all users. This website has been built to comply with guidelines
+                        that is accessible by all users. This Web site has been built to comply with guidelines
                         laid out by the Web Accessibility Initiative (WAI), conforming to AAA Standards.
                     </p>
                     <p class="contentclass">
@@ -64,14 +64,13 @@
                     </ul>
                     <h1>To use access keys:</h1>
                     <p class="contentclass">
-                        On Windows: Using either Internet Explorer or Firefox, simply hold down the the Alt key
-                        and press the number you want.
+                        On Internet Explorer, simply hold down the the Alt key and press the number you want.
                     </p>
                     <p class="contentclass">
-                        On Macintosh: Hold down the the Ctrl key and press the number you want.
+                        On Safari, simply hold down the the Ctrl key and press the number you want.
                     </p>
                     <p class="contentclass">
-                        On Linux: 
+                        On Firefox, simply hold down the the Shift+Alt key and press the number you want.
                     </p>
                     <p class="contentclass">
                         Access keys are not supported on some older versions of Web browsers.
