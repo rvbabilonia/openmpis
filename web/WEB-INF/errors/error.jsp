@@ -5,6 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -25,13 +26,28 @@
 
             <!-- Menu -->
             <div id="menu">
-                <bean:message key="global.menu"/>
+                <c:choose>
+                    <c:when test="${currentuser.groupId eq '0'}">
+                        <bean:message key="admin.home.menu"/>
+                    </c:when>
+                    <c:when test="${currentuser.groupId eq '1'}">
+                        <bean:message key="encoder.home.menu"/>
+                    </c:when>
+                    <c:when test="${currentuser.groupId eq '2'}">
+                        <bean:message key="investigator.home.menu"/>
+                    </c:when>
+                    <c:otherwise>
+                        <bean:message key="global.menu"/>
+                    </c:otherwise>
+                </c:choose>
             </div>
         
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    <p class="errorclass">${pageContext.exception}</p>
+                    <p class="errorclass">
+                        ${pageContext.exception}
+                    </p>
                 </div>
             </div>
         

@@ -42,9 +42,9 @@ public class Person
    private String marks;
    private String photo;
    private String agedPhoto;
-   private String codisID;
-   private String afisID;
-   private String dentalID;
+   private String codisId;
+   private String afisId;
+   private String dentalId;
    private Date date;
    private Date dateMissing;
    private String status;
@@ -58,10 +58,10 @@ public class Person
    private int hairColor;
    private int gender;
    private int reward;
-   private int encoderID;
-   private int investigatorID;
-   private int relativeID;
-   private int abductorID;
+   private int encoderId;
+   private int investigatorId;
+   private int relativeId;
+   private int abductorId;
 
    public int getId() {
        return id;
@@ -183,28 +183,28 @@ public class Person
       this.agedPhoto = agedPhoto;
    }
 
-   public String getCodisID() {
-       return codisID;
+   public String getCodisId() {
+       return codisId;
    }
 
-   public void setCodisID(String codisID) {
-      this.codisID = codisID;
+   public void setCodisId(String codisId) {
+      this.codisId = codisId;
    }
 
-   public String getAfisID() {
-       return afisID;
+   public String getAfisId() {
+       return afisId;
    }
 
-   public void setAfisID(String afisID) {
-      this.afisID = afisID;
+   public void setAfisId(String afisId) {
+      this.afisId = afisId;
    }
 
-   public String getDentalID() {
-       return dentalID;
+   public String getDentalId() {
+       return dentalId;
    }
 
-   public void setDentalID(String dentalID) {
-      this.dentalID = dentalID;
+   public void setDentalId(String dentalId) {
+      this.dentalId = dentalId;
    }
 
    public Date getDate() {
@@ -311,35 +311,35 @@ public class Person
       this.reward = reward;
    }
 
-   public int getEncoderID() {
-       return encoderID;
+   public int getEncoderId() {
+       return encoderId;
    }
 
-   public void setEncoderID(int encoderID) {
-      this.encoderID = encoderID;
+   public void setEncoderId(int encoderId) {
+      this.encoderId = encoderId;
    }
 
-   public int getInvestigatorID() {
-       return investigatorID;
+   public int getInvestigatorId() {
+       return investigatorId;
    }
 
-   public void setInvestigatorID(int investigatorID) {
-      this.investigatorID = investigatorID;
+   public void setInvestigatorId(int investigatorId) {
+      this.investigatorId = investigatorId;
    }
 
-   public int getRelativeID() {
-       return relativeID;
+   public int getRelativeId() {
+       return relativeId;
    }
 
-   public void setRelativeID(int relativeID) {
-      this.relativeID = relativeID;
+   public void setRelativeId(int relativeId) {
+      this.relativeId = relativeId;
    }
 
-   public int getAbductorID() {
-       return abductorID;
+   public int getAbductorId() {
+       return abductorId;
    }
 
-   public void setAbductorID(int abductorID) {
-      this.abductorID = abductorID;
+   public void setAbductorId(int abductorId) {
+      this.abductorId = abductorId;
    }
 }

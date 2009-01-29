@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.googlecode.openmpis.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +27,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
 
 import com.googlecode.openmpis.model.SqlMapConfig;
+import com.googlecode.openmpis.model.User;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 import java.sql.SQLException;
+
 import java.util.List;
 
 /**
@@ -43,8 +46,9 @@ public class ListUserAction extends Action {
      * The forwarding instances
      */
     private final static String SUCCESS = "success";
+    private final static String UNAUTHORIZED = "unauthorized";
+    private final static String EXPIRED = "expired";
     private final static String FAILURE = "failure";
-    private final static String EXPIRED = "sessionExpired";
 
     /**
      * This is the action called from the Struts framework.
@@ -54,27 +58,36 @@ public class ListUserAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws SQLException {
-        SqlMapClient sqlMap = SqlMapConfig.getSqlMapInstance();
-        List userList = null;
-
         // Check if there exists a session
-        if (request.getSession().getAttribute("userid") == null) {
+        if (request.getSession().getAttribute("currentuser") == null) {
             return mapping.findForward(EXPIRED);
         } else {
-            // Retrieve users
-            try {
-                userList = sqlMap.queryForList("getUsers");
-                request.setAttribute("userlist", userList);
+            User currentUser = (User) request.getSession().getAttribute("currentuser");
+            
+            // Check the group
+            if((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+                SqlMapClient sqlMap = SqlMapConfig.getSqlMapInstance();
 
-                return mapping.findForward(SUCCESS);
-            } catch (SQLException se) {
-                throw new SQLException("Cannot connect to the database.");
+                try {
+                    // Retrieve users
+                    sqlMap.startTransaction();
+                    List userList = sqlMap.queryForList("getUsers");
+                    sqlMap.commitTransaction();
+                    sqlMap.endTransaction();
+                    request.setAttribute("userlist", userList);
+
+                    return mapping.findForward(SUCCESS);
+                } catch (SQLException sqle) {
+                    sqlMap.endTransaction();
+                    throw new SQLException(sqle.getCause());
+                }
+            } else {
+                return mapping.findForward(UNAUTHORIZED);
             }
         }
     }

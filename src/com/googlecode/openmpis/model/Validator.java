@@ -105,6 +105,19 @@ public class Validator {
      */
     public boolean isValidPassword(String password)
     {
-        return password.matches("[a-z0-9]{32}");
+        return true;
+        //return password.matches("[a-z0-9]{32}");
+    }
+
+    /**
+     * Validates the telephone number.
+     * 
+     * @param   number              the telephone number
+     * @return              true    if the telephone number is valid, otherwise false
+     */
+    public boolean isValidNumber(String number)
+    {
+        return true;
+        //return number.matches("[a-zA-Z0-9+-.]");
     }
 }

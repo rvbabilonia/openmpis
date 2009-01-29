@@ -45,7 +45,6 @@ public class LogoutAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,

@@ -16,7 +16,7 @@
         PROVINCE as province,
         COUNTRY as country,
         NUMBER as number,
-        ENCODERID as encoderID
+        ENCODERID as encoderId
         FROM RELATIVE
         WHERE ID = #id#
     </select>
@@ -29,7 +29,7 @@
         PROVINCE, COUNTRY, NUMBER, ENCODERID)
         VALUES
         (#firstName#, #middleName#, #lastName#, #email#,
-        #street#, #city#, #province#, #country#, #number#, #encoderID#)
+        #street#, #city#, #province#, #country#, #number#, #encoderId#)
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
@@ -45,7 +45,7 @@
         PROVINCE = #province#,
         COUNTRY = #country#,
         NUMBER = #number#,
-        ENCODERID = #encoderID#
+        ENCODERID = #encoderId#
         WHERE ID = #id#
     </update>
 

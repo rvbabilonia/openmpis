@@ -33,7 +33,7 @@ public class Abductor
    private String city;
    private String province;
    private String country;
-   private int encoderID;
+   private int encoderId;
    
    public int getId() {
        return id;
@@ -99,11 +99,11 @@ public class Abductor
       this.country = country;
    }
 
-   public int getEncoderID() {
-       return encoderID;
+   public int getEncoderId() {
+       return encoderId;
    }
 
-   public void setEncoderID(int encoderID) {
-      this.encoderID = encoderID;
+   public void setEncoderId(int encoderId) {
+      this.encoderId = encoderId;
    }
 }

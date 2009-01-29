@@ -13,7 +13,7 @@
         MESSAGE as message,
         EMAIL as email,
         IPADDRESS as ipAddress,
-        PERSONID as personID,
+        PERSONID as personId,
         DATE as date,
         FROM MESSAGE
         WHERE ID = #id#
@@ -26,7 +26,7 @@
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#,
-        #personID#, #date#)
+        #personId#, #date#)
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
@@ -39,7 +39,7 @@
         SUBJECT = #subject#,
         MESSAGE = #message#,
         IPADDRESS = #ipAddress#,
-        PERSONID = #personID#,
+        PERSONID = #personId#,
         DATE = #date#
         WHERE ID = #id#
     </update>

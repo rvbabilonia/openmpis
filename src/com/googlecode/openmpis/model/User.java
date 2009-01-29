@@ -19,17 +19,15 @@
 package com.googlecode.openmpis.model;
 
 import java.sql.Date;
-//import java.net.InetAddress;
 
 /**
  * 
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  */
-public class User
-{
+public class User implements java.io.Serializable {
    private int id;
-   private int groupID;
+   private int groupId;
    private String username;
    private String password;
    private String firstName;
@@ -42,7 +40,7 @@ public class User
    private String ipAddress;
    private Date lastLogin;
    private Date date;
-   private int creatorID;
+   private int creatorId;
    private int status;
    private int question;
    private String answer;
@@ -55,12 +53,12 @@ public class User
       this.id = id;
    }
 
-   public int getGroupID() {
-       return groupID;
+   public int getGroupId() {
+       return groupId;
    }
 
-   public void setGroupID(int groupID) {
-      this.groupID = groupID;
+   public void setGroupId(int groupId) {
+      this.groupId = groupId;
    }
 
    public String getUsername() {
@@ -159,12 +157,12 @@ public class User
       this.date = date;
    }
 
-   public int getCreatorID() {
-       return creatorID;
+   public int getCreatorId() {
+       return creatorId;
    }
 
-   public void setCreatorID(int creatorID) {
-      this.creatorID = creatorID;
+   public void setCreatorId(int creatorId) {
+      this.creatorId = creatorId;
    }
    
    public int getStatus() {

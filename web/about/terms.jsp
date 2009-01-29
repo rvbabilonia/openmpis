@@ -50,15 +50,15 @@
                     </p>
                     <h2>3. Copyright and Trade Marks</h2>
                     <p class="contentclass">
-                        The Open Source Missing Persons Information System or its content suppliers own the intellectual
-                        property rights of any material used on the site including text, video, photographs and pictures.
-                        Unauthorised use including reproduction, storage, modification, distribution or publication
-                        without prior consent is prohibited.
+                        The Open Source Missing Persons Information System or its content suppliers own the
+                        intellectual property rights of any material used on the site including text, video,
+                        photographs and pictures. Unauthorised use including reproduction, storage,
+                        modification, distribution or publication without prior consent is prohibited.
                     </p>
                     <p class="contentclass">
-                        The names, logos and all related design marks, slogans, product and service names are the trade
-                        names, trade marks or service marks of the Open Source Missing Persons Information System and
-                        must not be used without my consent.
+                        The names, logos and all related design marks, slogans, product and service names are
+                        the trade names, trade marks or service marks of the Open Source Missing Persons
+                        Information System and must not be used without my consent.
                     </p>
                     <p class="contentclass">
                         If you have any queries or complaints about these Terms and Conditions, please email

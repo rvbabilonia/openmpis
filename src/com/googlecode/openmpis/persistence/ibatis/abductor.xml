@@ -14,7 +14,7 @@
         CITY as city,
         PROVINCE as province,
         COUNTRY as country,
-        ENCODERID as encoderID
+        ENCODERID as encoderId
         FROM ABDUCTOR
         WHERE ID = #id#
     </select>
@@ -27,7 +27,7 @@
         PROVINCE, COUNTRY, ENCODERID)
         VALUES
         (#firstName#, #middleName#, #lastName#,
-        #street#, #city#, #province#, #country#, #encoderID#)
+        #street#, #city#, #province#, #country#, #encoderId#)
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
@@ -41,7 +41,7 @@
         CITY = #city#,
         PROVINCE = #province#,
         COUNTRY = #country#,
-        ENCODERID = #encoderID#
+        ENCODERID = #encoderId#
         WHERE ID = #id#
     </update>
 

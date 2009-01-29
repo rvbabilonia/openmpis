@@ -30,9 +30,11 @@ import org.apache.struts.action.ActionForward;
 import com.googlecode.openmpis.form.LoginForm;
 import com.googlecode.openmpis.model.User;
 import com.googlecode.openmpis.model.SqlMapConfig;
+import com.googlecode.openmpis.model.Log;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 /**
@@ -46,6 +48,7 @@ public class LoginAction extends Action {
      */
     private final static String SUCCESS = "success";
     private final static String REDO = "redo";
+    private final static String FAILURE = "failure";
     
     /**
      * This is the action called from the Struts framework.
@@ -55,7 +58,6 @@ public class LoginAction extends Action {
      * @param   request     the HTTP Request we are processing
      * @param   response    the HTTP Response we are processing
      * @return              the forwarding instance
-     * @throws  java.lang.Exception
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -63,33 +65,53 @@ public class LoginAction extends Action {
             throws SQLException {
         LoginForm loginForm = (LoginForm) form;
         SqlMapClient sqlMap = SqlMapConfig.getSqlMapInstance();
-        User user = null;
 
         // Retrieve user object with the specified j_username
         try {
-            user = (User) sqlMap.queryForObject("getUser", loginForm.getJ_username());
+            sqlMap.startTransaction();
+            User user = (User) sqlMap.queryForObject("getUser", loginForm.getJ_username());
+            sqlMap.commitTransaction();
+            sqlMap.endTransaction();
 
             // Check if j_username exists in the database
             if (user == null) {
-                request.setAttribute("error", "1");
+                request.setAttribute("usererror", "1");
                 return mapping.findForward(REDO);
             } else {
                 // Check if j_password matches
-                if (user.getPassword().equals(loginForm.getJ_password())) {                        
+                if (user.getPassword().equals(loginForm.getJ_password())) {                     
                     // Start the session
                     HttpSession session = request.getSession();
-                    session.setAttribute("firstname", user.getFirstName());
-                    session.setAttribute("userid", user.getId());
-                    session.setAttribute("groupid", user.getGroupID());
+                    session.setAttribute("currentuser", user);
+                    
+                    // Update user log
+                    Date date = new Date(System.currentTimeMillis());
+                    user.setLastLogin(date);
+                    String ipAddress = request.getRemoteAddr();
+                    user.setIpAddress(ipAddress);
+        
+                    Log log = new Log();
+                    log.setLog("User " + user.getUsername() + " logged in from " + ipAddress + ".");
+                    log.setDate(date);
+                    
+                    sqlMap.startTransaction();
+                    int row = sqlMap.update("updateLogin", user);
+                    sqlMap.insert("insertLog", log);
+                    sqlMap.commitTransaction();
+                    sqlMap.endTransaction();
 
-                    return mapping.findForward(SUCCESS);
+                    if (row == 1)
+                        return mapping.findForward(SUCCESS);
+                    else
+                        return mapping.findForward(FAILURE);
                 } else {
-                    request.setAttribute("error", "1");
+                    request.setAttribute("usererror", "1");
                     return mapping.findForward(REDO);
                 }
             }
-        } catch (SQLException se) {
-            throw new SQLException("Cannot connect to the database.");
+        } catch (SQLException sqle) {
+            sqlMap.endTransaction();
+            throw new SQLException(sqle.getCause());
         }
     }
 }
