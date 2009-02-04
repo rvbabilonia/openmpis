@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.googlecode.openmpis.form;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,62 +24,52 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
-import com.googlecode.openmpis.model.Validator;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.IOException;
-
-import java.util.Properties;
+import com.googlecode.openmpis.util.Validator;
 
 /**
- * The FeedbackForm class provides methods to validate the feedback form inputs.
+ * The PasswordForm class provides methods to validate the paswword retrieval form inputs.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  */
 public class PasswordForm extends ActionForm {
-    
+
     /**
      * The username
      */
     private String username;
-    
     /**
      * The password
      */
     private String password;
-    
     /**
      * The email address
      */
     private String email;
-    
     /**
      * The question
      */
     private int question;
-    
     /**
      * The answer
      */
     private String answer;
 
-   /**
-    * Gets the username.
-    * 
-    * @return           the username
-    */
+    /**
+     * Gets the username.
+     * 
+     * @return           the username
+     */
     public String getUsername() {
-       return username;
+        return username;
     }
 
     /**
-    * Sets the username.
-    * 
-    * @param    username  the username
-    */
+     * Sets the username.
+     * 
+     * @param    username  the username
+     */
     public void setUsername(String username) {
-       this.username = username;
+        this.username = username;
     }
 
     /**
@@ -154,76 +143,11 @@ public class PasswordForm extends ActionForm {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    /**
-     * Gets the administrator's email address.
-     * 
-     * @return          the administrator's email address
-     */
-    public String getAdminEmail() {
-        Properties properties = new Properties();
-
-        // Retrieve administrator's email address
-        try {
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("mail.properties");
-            properties.load(is);
-            is.close();
-        } catch (FileNotFoundException fnfe){
-            //throw new FileNotFoundException("Cannot find mail.properties file.");
-            fnfe.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        
-        return (String) properties.get("mail.administrator");
-    }
 
     /**
      * Sole constructor.
      */
     public PasswordForm() {
-       super();
-    }
-
-    /**
-     * Validates the inputs from the feedback form.
-     * 
-     * @param   mapping the action mapping
-     * @param   request the HTTP request
-     * @return          the action errors
-     */
-    @Override
-    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
-        ActionErrors errors = new ActionErrors();
-        
-        request.setAttribute("username", username);
-        request.setAttribute("question", question);
-        request.setAttribute("answer", answer);
-       
-        Validator v = new Validator();
-
-        if (username == null)
-            errors.add("username", new ActionMessage(""));
-        else {
-            if (username.length() < 1)
-                errors.add("username", new ActionMessage("error.username.required"));
-            else {
-                if ((!v.isValidUsername(username)))
-                    errors.add("username", new ActionMessage("error.username.invalid"));
-            }
-        }
-
-        if (answer == null)
-            errors.add("answer", new ActionMessage(""));
-        else {
-            if (answer.length() < 1)
-                errors.add("answer", new ActionMessage("error.answer.required"));
-            else {
-                if (!v.isValidKeyword(answer))
-                    errors.add("answer", new ActionMessage("error.answer.invalid"));
-            }
-        }
-
-        return errors;
+        super();
     }
 }
