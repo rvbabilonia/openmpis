@@ -19,10 +19,10 @@
         <bean:message key="global.icon"/>
         <bean:message key="global.style"/>
         <c:choose>
-            <c:when test="${currentuser.groupId eq '0'}">
+            <c:when test="${currentuser.groupId == 0}">
                 <bean:message key="admin.home.title"/>
             </c:when>
-            <c:when test="${currentuser.groupId eq '1'}">
+            <c:when test="${currentuser.groupId == 1}">
                 <bean:message key="encoder.home.title"/>
             </c:when>
         </c:choose>
@@ -34,10 +34,10 @@
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
-                    <c:when test="${currentuser.groupId eq '0'}">
+                    <c:when test="${currentuser.groupId == 0}">
                         <bean:message key="admin.user.menu"/>
                     </c:when>
-                    <c:when test="${currentuser.groupId eq '1'}">
+                    <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.user.menu"/>
                     </c:when>
                 </c:choose>
