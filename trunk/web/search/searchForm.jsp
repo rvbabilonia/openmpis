@@ -1,6 +1,5 @@
 <%@ page contentType="text/html" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page session="false" %>
 
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -32,7 +31,7 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="search.heading"/>
-                    <html:form method="get" action="searchBean" styleClass="search">
+                    <html:form method="get" action="search" styleClass="search">
                         <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
                         <bean:message key="search.searchbutton"/>
                     </html:form>
