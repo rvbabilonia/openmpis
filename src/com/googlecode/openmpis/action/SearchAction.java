@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.googlecode.openmpis.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,11 +35,12 @@ import java.util.List;
  * @author  <a href="mailto:rvincent@asti.dost.gov.ph">Rey Vincent Babilonia</a>
  */
 public class SearchAction extends Action {
+
     /**
      * The forwarding instance
      */
     private final static String SUCCESS = "success";
-    
+
     /**
      * This is the action called from the Struts framework.
      * 
@@ -52,21 +52,21 @@ public class SearchAction extends Action {
      * @throws  java.lang.Exception
      */
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm  form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) {
         SearchForm sf = (SearchForm) form;
-        
+
         int pageNumber = request.getParameter("pn") != null ? Integer.parseInt(request.getParameter("pn")) : 1;
-        
+
         //List<String[]> sequenceList = e.getSequences(sf.getKeyword(), pageNumber);
-        
+
         //int pageCount;
-        
+
         //request.setAttribute("sequencelist", sequenceList);
         request.setAttribute("currentpage", pageNumber);
         //request.setAttribute("pagecount", pageCount);
         request.setAttribute("keyword", sf.getKeyword());
-        
+
         return mapping.findForward(SUCCESS);
     }
 }
