@@ -159,7 +159,7 @@
                             <html:text styleId="creatoridfield" styleClass="inputclass" property="creatorId" readonly="true" maxlength="30"/>
                             <html:errors property="creatorid"/>
                         </p>
-                        <c:if test="${edituserForm.id == currentuser.id}">
+                        <c:if test="${userForm.id == currentuser.id}">
                             <p class="contentclass">
                                 <label id="questionlabel" class="labelclass" for="questionfield"><bean:message key="user.label.question"/></label>
                                 <html:select property="question" styleId="questionfield" styleClass="selectclass">
