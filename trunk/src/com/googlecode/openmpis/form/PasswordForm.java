@@ -17,14 +17,7 @@
  */
 package com.googlecode.openmpis.form;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-
-import com.googlecode.openmpis.util.Validator;
 
 /**
  * The PasswordForm class provides methods to validate the paswword retrieval form inputs.
