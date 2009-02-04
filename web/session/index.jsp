@@ -19,13 +19,13 @@
         <bean:message key="global.icon"/>
         <bean:message key="global.style"/>
         <c:choose>
-            <c:when test="${currentuser.groupId eq '0'}">
+            <c:when test="${currentuser.groupId == 0}">
                 <bean:message key="admin.home.title"/>
             </c:when>
-            <c:when test="${currentuser.groupId eq '1'}">
+            <c:when test="${currentuser.groupId == 1}">
                 <bean:message key="encoder.home.title"/>
             </c:when>
-            <c:when test="${currentuser.groupId eq '2'}">
+            <c:when test="${currentuser.groupId == 2}">
                 <bean:message key="investigator.home.title"/>
             </c:when>
         </c:choose>
@@ -37,13 +37,13 @@
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
-                    <c:when test="${currentuser.groupId eq '0'}">
+                    <c:when test="${currentuser.groupId == 0}">
                         <bean:message key="admin.home.menu"/>
                     </c:when>
-                    <c:when test="${currentuser.groupId eq '1'}">
+                    <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.home.menu"/>
                     </c:when>
-                    <c:when test="${currentuser.groupId eq '2'}">
+                    <c:when test="${currentuser.groupId == 2}">
                         <bean:message key="investigator.home.menu"/>
                     </c:when>
                 </c:choose>
@@ -53,17 +53,19 @@
             <div id="content">
                 <div id="contentitem">
                     <c:choose>
-                        <c:when test="${currentuser.groupId eq '0'}">
+                        <c:when test="${currentuser.groupId == 0}">
                             <bean:message key="admin.home.heading"/>
                             <bean:message key="admin.home.content" arg0="${currentuser.firstName}"/>
+                            You have 0 feedbacks.
                         </c:when>
-                        <c:when test="${currentuser.groupId eq '1'}">
+                        <c:when test="${currentuser.groupId == 1}">
                             <bean:message key="encoder.home.heading"/>
                             <bean:message key="encoder.home.content" arg0="${currentuser.firstName}"/>
                         </c:when>
-                        <c:when test="${currentuser.groupId eq '2'}">
+                        <c:when test="${currentuser.groupId == 2}">
                             <bean:message key="investigator.home.heading"/>
                             <bean:message key="investigator.home.content" arg0="${currentuser.firstName}"/>
+                            Person has 1 sighting(s).
                         </c:when>
                     </c:choose>
                 </div>
