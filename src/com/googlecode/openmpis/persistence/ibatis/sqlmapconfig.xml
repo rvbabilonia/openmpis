@@ -5,7 +5,7 @@
 <sqlMapConfig>
     <!-- The properties (name=value) in the file specified here can be used placeholders in this config
     file (e.g. “${driver}”. The file is usually relative to the classpath and is optional. -->
-    <properties resource="com/googlecode/openmpis/persistence/ibatis/sqlmapconfig.properties" />
+    <properties resource="sqlmapconfig.properties" />
     
     <!-- These settings control SqlMap configuration details, primarily to do with transaction
     management. They are all optional (see the Developer Guide for more). -->
@@ -18,15 +18,6 @@
         maxTransactions="5"
         useStatementNamespaces="false"
     />
-
-    <!-- Type aliases allow you to use a shorter name for long fully qualified class names. -->
-    <typeAlias alias="abductor" type="com.googlecode.openmpis.model.Abductor"/>
-    <typeAlias alias="log" type="com.googlecode.openmpis.model.Log"/>
-    <typeAlias alias="message" type="com.googlecode.openmpis.model.Message"/>
-    <typeAlias alias="person" type="com.googlecode.openmpis.model.Person"/>
-    <typeAlias alias="relative" type="com.googlecode.openmpis.model.Relative"/>
-    <typeAlias alias="report" type="com.googlecode.openmpis.model.Report"/>
-    <typeAlias alias="user" type="com.googlecode.openmpis.model.User"/>
 
     <!-- Configure a datasource to use with this SQL Map using SimpleDataSource.
     Notice the use of the properties from the above resource -->
@@ -41,11 +32,13 @@
 
     <!-- Identify all SQL Map XML files to be loaded by this SQL map. Notice the paths
     are relative to the classpath. For now, we only have one… -->
-    <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/abductor.xml" />
+    <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/user.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/log.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/message.xml" />
+    <!--
+    <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/abductor.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/person.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/relative.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/report.xml" />
-    <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/user.xml" />
+    -->
 </sqlMapConfig>
