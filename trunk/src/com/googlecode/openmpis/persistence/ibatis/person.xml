@@ -2,9 +2,12 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="Person">
+    <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
+    <typeAlias alias="person" type="com.googlecode.openmpis.dto.Person"/>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
     be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getPerson" parameterClass="int" resultClass="com.googlecode.openmpis.model.Person">
+    <select id="getPerson" parameterClass="int" resultClass="person">
         SELECT
         ID as id,
         FIRSTNAME as firstName,
@@ -50,7 +53,7 @@
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertPerson" parameterClass="com.googlecode.openmpis.model.Person">
+    <insert id="insertPerson" parameterClass="person">
         INSERT INTO PERSON
         (FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHDAY, STREET, CITY,
         PROVINCE, COUNTRY, CIRCUMSTANCE, PERSONALEFFECTS, MARKS, PHOTO, AGEDPHOTO, CODISID, AFISID,
@@ -68,7 +71,7 @@
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <update id="updatePerson" parameterClass="com.googlecode.openmpis.model.Person">
+    <update id="updatePerson" parameterClass="person">
         UPDATE PERSON SET
         FIRSTNAME = #firstName#,
         NICKNAME = #nickName#,
