@@ -5,120 +5,241 @@
           "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 <struts-config>
     <form-beans>
-        <form-bean name="feedbackForm" type="com.googlecode.openmpis.form.FeedbackForm"/>
-        <form-bean name="searchForm" type="com.googlecode.openmpis.form.SearchForm"/>
-        <form-bean name="loginForm" type="com.googlecode.openmpis.form.LoginForm"/>
-        <form-bean name="passwordForm" type="com.googlecode.openmpis.form.PasswordForm"/>
-        <form-bean name="editUserForm" type="com.googlecode.openmpis.form.EditUserForm"/>
-        <form-bean name="addUserForm" type="com.googlecode.openmpis.form.AddUserForm"/>
-        <form-bean name="deleteUserForm" type="com.googlecode.openmpis.form.DeleteUserForm"/>
-        <form-bean name="caseForm" type="com.googlecode.openmpis.form.CaseForm"/>
-        <form-bean name="relativeForm" type="com.googlecode.openmpis.form.RelativeForm"/>
-        <form-bean name="abductorForm" type="com.googlecode.openmpis.form.AbductorForm"/>
+        <form-bean
+                name="feedbackForm"
+                type="com.googlecode.openmpis.form.FeedbackForm"/>
+        <form-bean
+                name="searchForm"
+                type="com.googlecode.openmpis.form.SearchForm"/>
+        <form-bean
+                name="loginForm"
+                type="com.googlecode.openmpis.form.LoginForm"/>
+        <form-bean
+                name="passwordForm"
+                type="com.googlecode.openmpis.form.PasswordForm"/>
+        <form-bean
+                name="userForm"
+                type="com.googlecode.openmpis.form.UserForm"/>
+        <form-bean
+                name="caseForm"
+                type="com.googlecode.openmpis.form.CaseForm"/>
+        <form-bean
+                name="relativeForm"
+                type="com.googlecode.openmpis.form.RelativeForm"/>
+        <form-bean
+                name="abductorForm"
+                type="com.googlecode.openmpis.form.AbductorForm"/>
     </form-beans>
     <global-exceptions>
     </global-exceptions>
     <global-forwards>
-        <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
-        <forward name="expired" path="/WEB-INF/errors/sessionError.jsp"/>
-        <forward name="unauthorized" path="/WEB-INF/errors/authorizationError.jsp"/>
+        <forward
+                name="failure"
+                path="/WEB-INF/errors/error.jsp"/>
+        <forward
+                name="expired"
+                path="/WEB-INF/errors/sessionError.jsp"/>
+        <forward
+                name="unauthorized"
+                path="/WEB-INF/errors/authorizationError.jsp"/>
+        <forward
+                name="cancelled"
+                path="/viewUserHome.do"/>
     </global-forwards>
     <action-mappings>
-        <action path="/viewHome" forward="/index.jsp"/>
-        <action path="/viewAbout" forward="/about/about.jsp"/>
-        <action path="/viewStatistics" forward="/statistics/statistics.jsp"/>
-        <action path="/viewTips" forward="/tips/tips.jsp"/>
-        <action path="/viewPrivacy" forward="/about/privacy.jsp"/>
-        <action path="/viewTerms" forward="/about/terms.jsp"/>
-        <action path="/viewDisclaimer" forward="/about/disclaimer.jsp"/>
-        <action path="/viewAccessibility" forward="/about/accessibility.jsp"/>
-        <action path="/viewSitemap" forward="/about/sitemap.jsp"/>
-        <action path="/viewSearch" forward="/search/searchForm.jsp"/>
-        <action validate="true" input="/search/searchForm.jsp" name="searchForm" path="/searchBean" scope="request" type="com.googlecode.openmpis.action.SearchAction">
+        <action
+                path="/viewHome"
+                forward="/index.jsp"/>
+        <action
+                path="/viewAbout"
+                forward="/about/about.jsp"/>
+        <action
+                path="/viewPrivacy"
+                forward="/about/privacy.jsp"/>
+        <action
+                path="/viewTerms"
+                forward="/about/terms.jsp"/>
+        <action
+                path="/viewDisclaimer"
+                forward="/about/disclaimer.jsp"/>
+        <action
+                path="/viewAccessibility"
+                forward="/about/accessibility.jsp"/>
+        <action
+                path="/viewSitemap"
+                forward="/about/sitemap.jsp"/>
+        <action
+                path="/viewStatistics"
+                forward="/statistics/statistics.jsp"/>
+        <action
+                path="/viewSearch"
+                forward="/search/searchForm.jsp"/>
+        <action
+                path="/viewTips"
+                forward="/tips/tips.jsp"/>
+        <action
+                path="/viewLogin"
+                forward="/session/loginForm.jsp"/>
+        <action
+                path="/viewFeedback"
+                forward="/feedback/feedbackForm.jsp"/>
+        <action
+                path="/viewPassword"
+                forward="/password/passwordForm.jsp"/>
+        <action
+                path="/viewDownload"
+                forward="/form/download.jsp"/>
+        <!-- List, add, view, edit and delete user -->
+        <action
+                path="/viewUser"
+                type="com.googlecode.openmpis.action.UserAction"
+                scope="request"
+                name="userForm"
+                input="/session/userForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="list-success" path="/session/listUsers.jsp"/>
+            <forward name="add-user"  path="/session/addUserForm.jsp"/>
+            <forward name="add-redo"  path="/session/addUserForm.jsp"/>
+            <forward name="add-success" path="/session/userSuccess.jsp"/>
+            <forward name="edit-user" path="/session/editUserForm.jsp"/>
+            <forward name="edit-redo" path="/session/editUserForm.jsp"/>
+            <forward name="edit-success" path="/session/userSuccess.jsp"/>
+            <forward name="delete-user" path="/session/deleteUserForm.jsp"/>
+            <forward name="delete-redo" path="/session/deleteUserForm.jsp"/>
+            <forward name="delete-success" path="/session/userSuccess.jsp"/>
+        </action>
+        <!-- User home page -->
+        <action
+                path="/viewUserHome"
+                type="com.googlecode.openmpis.action.AuthenticateAction"
+                scope="request">
+            <forward name="authenticated" path="/session/index.jsp"/>
+        </action>
+        <!-- Log in -->
+        <action
+                path="/login"
+                type="com.googlecode.openmpis.action.LoginAction"
+                scope="request"
+                name="loginForm"
+                input="/session/loginForm.jsp"
+                validate="false">
+            <forward name="login-success" redirect="true" path="/viewUserHome.do"/>
+            <forward name="login-redo" path="/viewLogin.do"/>
+        </action>
+        <!-- Log out -->
+        <action
+                path="/viewLogout"
+                type="com.googlecode.openmpis.action.LogoutAction"
+                scope="request">
+            <forward name="logout-success" path="/session/logoutSuccess.jsp"/>
+        </action>
+        <!-- Send feedback -->
+        <action
+                path="/feedback"
+                type="com.googlecode.openmpis.action.FeedbackAction"
+                scope="request"
+                name="feedbackForm"
+                input="/feedback/feedbackForm.jsp"
+                validate="false">
+            <forward name="feedback-success" path="/feedback/feedbackSuccess.jsp"/>
+            <forward name="feedback-redo" path="/feedback/feedbackForm.jsp"/>
+        </action>
+        <!-- Reset password -->
+        <action
+                path="/resetPassword"
+                type="com.googlecode.openmpis.action.PasswordAction"
+                scope="request"
+                name="passwordForm"
+                input="/password/passwordForm.jsp"
+                validate="true">
+            <forward name="password-success" path="/password/passwordSuccess.jsp"/>
+            <forward name="password-redo" path="/password/passwordForm.jsp"/>
+        </action>
+        
+        <!-- Not yet implemented -->
+        <action
+            path="/search"
+            type="com.googlecode.openmpis.action.SearchAction"
+            name="searchForm"
+            input="/search/searchForm.jsp"
+            validate="true">
             <forward name="success" path="/search/searchSuccess.jsp"/>
         </action>
-        <action path="/viewFeedback" forward="/feedback/feedbackForm.jsp"/>
-        <action validate="true" input="/feedback/feedbackForm.jsp" name="feedbackForm" path="/feedbackBean" scope="request" type="com.googlecode.openmpis.action.FeedbackAction">
-            <forward name="success" path="/feedback/feedbackSuccess.jsp"/>
-            <forward name="redo" path="/feedback/feedbackForm.jsp"/>
-        </action>
-        <action path="/viewLogin" forward="/session/loginForm.jsp"/>
-        <action validate="true" input="/session/loginForm.jsp" name="loginForm" path="/loginBean" scope="request" type="com.googlecode.openmpis.action.LoginAction">
-            <forward name="success" redirect="true" path="/viewUserHome.do"/>
-            <forward name="redo" path="/session/loginForm.jsp"/>
-        </action>
-        <action path="/viewLogout" scope="session" type="com.googlecode.openmpis.action.LogoutAction">
-            <forward name="success" path="/session/logoutSuccess.jsp"/>
-        </action>
-        <action path="/viewPassword" forward="/password/passwordForm.jsp"/>
-        <action validate="true" input="/password/passwordForm.jsp" name="passwordForm" path="/passwordBean" scope="request" type="com.googlecode.openmpis.action.PasswordAction">
-            <forward name="success" path="/password/passwordSuccess.jsp"/>
-            <forward name="redo" path="/password/passwordForm.jsp"/>
-        </action>
-        <action path="/viewPerson" scope="request" type="com.googlecode.openmpis.action.PersonAction">
+        <action
+            path="/viewPerson"
+            type="com.googlecode.openmpis.action.PersonAction">
             <forward name="success" path="/person/person.jsp"/>
         </action>
-        <action path="/viewMissing" scope="request" type="com.googlecode.openmpis.action.ListMissingAction">
+        <action
+            path="/viewMissing"
+            type="com.googlecode.openmpis.action.ListMissingAction">
             <forward name="success" path="/person/personList.jsp"/>
         </action>
-        <action path="/viewFound" scope="request" type="com.googlecode.openmpis.action.ListFoundAction">
+        <action
+            path="/viewFound"
+            type="com.googlecode.openmpis.action.ListFoundAction">
             <forward name="success" path="/person/personList.jsp"/>
         </action>
-        <action path="/viewUnidentified" scope="request" type="com.googlecode.openmpis.action.ListUnidentifiedAction">
+        <action
+            path="/viewUnidentified"
+            type="com.googlecode.openmpis.action.ListUnidentifiedAction">
             <forward name="success" path="/person/personList.jsp"/>
         </action>
-        <action path="/viewCase" forward="/session/caseForm.jsp"/>
-        <action validate="true" input="/session/caseForm.jsp" name="caseForm" path="/caseBean" scope="session" type="com.googlecode.openmpis.action.CaseAction">
+        <action
+            validate="true"
+            input="/session/caseForm.jsp"
+            name="caseForm"
+            path="/case"
+            type="com.googlecode.openmpis.action.CaseAction">
             <forward name="success" path="/session/caseSuccess.jsp"/>
         </action>
-        <action path="/viewRelative" forward="/session/relativeForm.jsp"/>
-        <action validate="true" input="/session/relativeForm.jsp" name="relativeForm" path="/relativeBean" scope="session" type="com.googlecode.openmpis.action.RelativeAction">
+        <action
+            path="/viewCase"
+            forward="/session/caseForm.jsp"/>
+        <action
+            path="/viewRelative"
+            forward="/session/relativeForm.jsp"/>
+        <action
+            path="/viewAbductor"
+            forward="/session/abductorForm.jsp"/>
+        <action
+            validate="true"
+            input="/session/relativeForm.jsp"
+            name="relativeForm"
+            path="/relative"
+            type="com.googlecode.openmpis.action.RelativeAction">
             <forward name="success" path="/session/relativeSuccess.jsp"/>
         </action>
-        <action path="/viewRelatives" scope="request" type="com.googlecode.openmpis.action.ListRelativeAction">
+        <action
+            path="/viewRelatives"
+            type="com.googlecode.openmpis.action.ListRelativeAction">
             <forward name="success" path="/session/relativeList.jsp"/>
         </action>
-        <action path="/viewUser" scope="request" type="com.googlecode.openmpis.action.ViewUserAction">
-            <forward name="success" path="/session/editUserForm.jsp"/>
-        </action>
-        <!--action path="/viewEditUser" forward="/session/editUserForm.jsp"/-->
-        <action validate="true" input="/session/editUserForm.jsp" name="editUserForm" path="/editUserBean" scope="request" type="com.googlecode.openmpis.action.EditUserAction">
-            <forward name="success" path="/session/userSuccess.jsp"/>
-            <!--
-            <forward name="redo" path="/session/editUserForm.jsp"/>
-            -->
-            <!--forward name="redo" redirect="true" path="/viewUser.do"/-->
-        </action>
-        <action path="/viewAddUser" forward="/session/addUserForm.jsp"/>
-        <action validate="true" input="/session/addUserForm.jsp" name="addUserForm" path="/addUserBean" scope="request" type="com.googlecode.openmpis.action.AddUserAction">
-            <forward name="success" path="/session/userSuccess.jsp"/>
-            <forward name="redo" path="/session/addUserForm.jsp"/>
-        </action>
-        <action path="/viewUsers" scope="request" type="com.googlecode.openmpis.action.ListUserAction">
-            <forward name="success" path="/session/listUser.jsp"/>
-        </action>
-        <action path="/viewDeleteUser" scope="request" type="com.googlecode.openmpis.action.DeleteUserAction">
-            <forward name="success" path="/session/userSuccess.jsp"/>
-        </action>
-        <action path="/viewUserHome" scope="request" type="com.googlecode.openmpis.action.UserHomeAction">
-            <forward name="success" path="/session/index.jsp"/>
-        </action>
-        <action path="/viewAbductor" forward="/session/abductorForm.jsp"/>
-        <action validate="true" input="/session/abductorForm.jsp" name="abductorForm" path="/abductorBean" scope="session" type="com.googlecode.openmpis.action.AbductorAction">
+        <action
+            validate="true"
+            input="/session/abductorForm.jsp"
+            name="abductorForm"
+            path="/abductor"
+            type="com.googlecode.openmpis.action.AbductorAction">
             <forward name="success" path="/session/abductorSuccess.jsp"/>
         </action>
-        
-        <!--<action path="/downloadReport" scope="request" type="com.googlecode.openmpis.action.DownloadReportAction">
-            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+        <!-- PDF forms -->
+        <action
+            path="/downloadReport"
+            type="com.googlecode.openmpis.action.DownloadReportAction">
+            <forward name="success" path="/statistics/downloadSuccess.jsp"/>
         </action>
-        
-        <action path="/downloadPoster" scope="request" type="com.googlecode.openmpis.action.DownloadPosterAction">
-            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
+        <action
+            path="/downloadPoster"
+            type="com.googlecode.openmpis.action.DownloadPosterAction">
+            <forward name="success" path="/person/downloadSuccess.jsp"/>
         </action>
-        
-        <action path="/downloadForm" scope="request" type="com.googlecode.openmpis.action.DownloadFormAction">
-            <forward name="failure" path="/WEB-INF/errors/error.jsp"/>
-        </action>-->
+        <action
+            path="/downloadForm"
+            type="com.googlecode.openmpis.action.DownloadFormAction">
+            <forward name="success" path="/form/downloadSuccess.jsp"/>
+        </action>
     </action-mappings>
     <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" nocache="true"/>
     <message-resources parameter="com.googlecode.openmpis.resource.ApplicationResource"/>
@@ -158,9 +279,11 @@
     </plug-in>
     
     <!-- ========================= Validator plugin ================================= -->
+    <!--
     <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
         <set-property
             property="pathnames"
             value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
     </plug-in>
+    -->
 </struts-config>
