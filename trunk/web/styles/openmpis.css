@@ -92,7 +92,7 @@ div#header img {
 
 div#menu {
     white-space: nowrap;
-    margin: 0px auto 0px auto;
+    margin: 0px 0px 0px 0px;
     padding: 0px;
     text-align: center;
 }
@@ -104,12 +104,13 @@ div#menu li {
 
 div#menu a {
     color: #ffffff;
+    text-decoration: none;
     display: inline-block;
     font: normal normal normal 14pt sans-serif;
     background: url(../images/oval-dark.png) no-repeat center center;
-    height: 50px;
+    height: 40px;
     width: 150px;
-    padding-top: 20px;
+    padding-top: 10px;
     margin-left: 2px;
     margin-right: 2px;
 }
@@ -117,9 +118,14 @@ div#menu a {
 div#menu a:hover, div#menu a.chosen {
     color: #000000;
     text-decoration: none;
+    display: inline-block;
+    font: normal normal normal 14pt sans-serif;
     background: url(../images/oval-light.png) no-repeat center center;
-    height: 50px;
+    height: 40px;
     width: 150px;
+    padding-top: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 div#content {
@@ -161,12 +167,18 @@ div#contentitem th {
     text-align: center;
 }
 
-div#contentitem table {
+div#table {
+    display: table;
     width: 100%;
     border-spacing: 1px;
 }
 
-div#contentitem td {
+div#row {
+    display: table-row;
+}
+
+div#cell {
+    display: table-cell;
     font: normal normal normal 9pt sans-serif;
     color: #111111;
     text-align: left;
@@ -174,7 +186,8 @@ div#contentitem td {
     border: 1px solid #ffffff;
 }
 
-div#contentitem th {
+div#columnheader {
+    display: table-cell;
     font: bold normal normal 12pt sans-serif;
     color: #000000;
     text-align: center;
