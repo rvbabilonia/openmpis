@@ -2,9 +2,12 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="Relative">
+    <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
+    <typeAlias alias="relative" type="com.googlecode.openmpis.dto.Relative"/>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
     be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getRelative" parameterClass="int" resultClass="com.googlecode.openmpis.model.Relative">
+    <select id="getRelative" parameterClass="int" resultClass="relative">
         SELECT
         ID as id,
         FIRSTNAME as firstName,
@@ -23,7 +26,7 @@
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertRelative" parameterClass="com.googlecode.openmpis.model.Relative">
+    <insert id="insertRelative" parameterClass="relative">
         INSERT INTO RELATIVE
         (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET, CITY,
         PROVINCE, COUNTRY, NUMBER, ENCODERID)
@@ -34,7 +37,7 @@
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <update id="updateRelative" parameterClass="com.googlecode.openmpis.model.Relative">
+    <update id="updateRelative" parameterClass="relative">
         UPDATE RELATIVE SET
         FIRSTNAME = #firstName#,
         MIDDLENAME = #middleName#,
