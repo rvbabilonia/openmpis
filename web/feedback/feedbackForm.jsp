@@ -1,6 +1,5 @@
 <%@ page contentType="text/html" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page session="false" %>
 
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -40,30 +39,30 @@
                         <label id="numberlabel" class="labelclass"><bean:message key="feedback.label.number"/></label>
                         <bean:message key="feedback.number"/>
                     </p>
-                    <html:form styleId="feedbackform" method="post" action="feedbackBean" styleClass="feedbackclass">
+                    <html:form method="post" action="feedback" styleClass="feedbackclass">
                         <p>
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield"><bean:message key="feedback.label.firstname"/></label>
-                            <html:text styleId="firstnamefield" styleClass="inputclass" property="firstname" size="66" maxlength="30" value="${firstname}"/>
+                            <html:text styleId="firstnamefield" styleClass="inputclass" property="firstName" size="66" maxlength="30"/>
                             <html:errors property="firstname"/>
                         </p>
                         <p>
                             <label id="lastnamelabel" class="labelclass" for="lastnamefield"><bean:message key="feedback.label.lastname"/></label>
-                            <html:text styleId="lastnamefield" styleClass="inputclass" property="lastname" size="66" maxlength="30" value="${lastname}"/>
+                            <html:text styleId="lastnamefield" styleClass="inputclass" property="lastName" size="66" maxlength="30"/>
                             <html:errors property="lastname"/>
                         </p>
                         <p>
                             <label id="emaillabel" class="labelclass" for="emailfield"><bean:message key="feedback.label.email"/></label>
-                            <html:text styleId="emailfield" styleClass="inputclass" property="email" size="66" maxlength="30" value="${email}"/>
+                            <html:text styleId="emailfield" styleClass="inputclass" property="email" size="66" maxlength="30"/>
                             <html:errors property="email"/>
                         </p>
                         <p>
                             <label id="subjectlabel" class="labelclass" for="subjectfield"><bean:message key="feedback.label.subject"/></label>
-                            <html:text styleId="subjectfield" styleClass="inputclass" property="subject" size="66" maxlength="60" value="${subject}"/>
+                            <html:text styleId="subjectfield" styleClass="inputclass" property="subject" size="66" maxlength="60"/>
                             <html:errors property="subject"/>
                         </p>
                         <p>
                             <label id="messagelabel" class="labelclass" for="messagefield"><bean:message key="feedback.label.message"/></label>
-                            <html:textarea styleId="messagefield" styleClass="textareaclass" property="message" cols="50" rows="10" value="${message}"/>
+                            <html:textarea styleId="messagefield" styleClass="textareaclass" property="message" cols="50" rows="10"/>
                             <html:errors property="message"/>
                         </p>
                         <p>
