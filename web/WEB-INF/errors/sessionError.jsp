@@ -10,6 +10,7 @@
 
 <html:html xhtml="true">
     <head>
+        <meta http-equiv="refresh" content="3;URL=.">
         <meta http-equiv="content-type" content="text/html"/>
         <meta name="author" content="Rey Vincent Babilonia"/>
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
