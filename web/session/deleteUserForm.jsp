@@ -71,7 +71,7 @@
                         <p class="contentclass">
                             <label id="usercodelabel" class="labelclass" for="usercodefield"><bean:message key="user.label.code.verify"/></label>
                             <html:text styleId="usercodefield" styleClass="inputclass" property="userCode" maxlength="4"/>
-                            <html:errors property="userCode"/>
+                            <html:errors property="usercode"/>
                         </p>
                         <p class="contentclass">
                             <bean:message key="user.delete.confirm.buttons" arg0="${userForm.id}"/>
