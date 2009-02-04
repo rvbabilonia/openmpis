@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.googlecode.openmpis.form;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
-import com.googlecode.openmpis.model.Validator;
+import com.googlecode.openmpis.util.Validator;
 
 /**
  * The SearchForm class provides methods to validate the search form input.
@@ -33,6 +32,7 @@ import com.googlecode.openmpis.model.Validator;
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  */
 public class SearchForm extends ActionForm {
+
     /**
      * The keyword to be searched.
      */
@@ -70,13 +70,14 @@ public class SearchForm extends ActionForm {
      * @param   request the HTTP request
      * @return          the action errors
      */
+    @Override
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = new ActionErrors();
-        
+
         request.setAttribute("keyword", keyword);
-        
+
         Validator v = new Validator();
-        
+
         if ((keyword == null) || (keyword.trim().length() < 1)) {
             errors.add("keyword", new ActionMessage(""));
         } else {
@@ -84,7 +85,7 @@ public class SearchForm extends ActionForm {
                 errors.add("keyword", new ActionMessage("error.keyword.required"));
             }
         }
-        
+
         return errors;
     }
 }
