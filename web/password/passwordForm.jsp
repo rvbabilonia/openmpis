@@ -1,6 +1,5 @@
 <%@ page contentType="text/html" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page session="false" %>
 
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -36,13 +35,12 @@
                 <noscript>
                     <bean:message key="error.javascript.disabled"/>
                 </noscript>
-                <html:form styleId="passwordform" method="post" action="passwordBean" styleClass="login">
-                    <c:if test="${error == 1}">
-                        <bean:message key="error.question.invalid"/>
-                    </c:if>
+                <html:form method="post" action="resetPassword" styleClass="login">
+                    <html:errors property="question"/>
+                    <html:errors property="user"/>
                     <p>
                         <label id="usernamelabel" class="labelclass" for="usernamefield"><bean:message key="password.username"/></label>
-                        <html:text styleId="usernamefield" styleClass="inputclass" property="username" size="37" maxlength="6" value="${username}"/>
+                        <html:text styleId="usernamefield" styleClass="inputclass" property="username" size="37" maxlength="6"/>
                         <html:errors property="username"/>
                     </p>
                     <p>
@@ -55,7 +53,7 @@
                     </p>
                     <p>
                         <label id="answerlabel" class="labelclass" for="answerfield"><bean:message key="password.answer"/></label>
-                        <html:text styleId="answerfield" styleClass="inputclass" property="answer" size="37" maxlength="10" value="${answer}"/>
+                        <html:text styleId="answerfield" styleClass="inputclass" property="answer" size="37" maxlength="10"/>
                         <html:errors property="answer"/>
                     </p>
                     <p>
