@@ -37,19 +37,18 @@
                 <noscript>
                     <bean:message key="error.javascript.disabled"/>
                 </noscript>
-                <html:form styleId="loginform" styleClass="loginclass" method="post" action="loginBean"
+                
+                <html:form styleClass="loginclass" method="post" action="login"
                     onsubmit="javascript:j_password.value = hex_md5(password.value); password.value = convert(password.value);">
-                    <c:if test="${usererror == 1}">
-                        <bean:message key="error.login.invalid"/>
-                    </c:if>
+                    <html:errors property="login"/>
                     <p>
                         <label id="usernamelabel" class="labelclass" for="usernamefield"><bean:message key="login.username"/></label>
-                        <html:text styleId="usernamefield" styleClass="inputclass" property="j_username" size="20" maxlength="6" value="${j_username}"/>
+                        <html:text styleId="usernamefield" styleClass="inputclass" property="j_username" size="20" maxlength="6"/>
                         <html:errors property="j_username"/>
                     </p>
                     <p>
                         <label id="passwordlabel" class="labelclass" for="passwordfield"><bean:message key="login.password"/></label>
-                        <html:password styleId="passwordfield" name="password" styleClass="inputclass" property="password" size="20" maxlength="10" value="" redisplay="false"/>
+                        <html:password styleId="passwordfield" name="password" styleClass="inputclass" property="password" size="20" maxlength="10" redisplay="false"/>
                         <html:errors property="j_password"/>
                         <html:hidden property="j_password"/>
                     </p>
@@ -58,6 +57,7 @@
                     </p>
                 </html:form>
                 <p>Forgot password? Click <html:link page="/viewPassword.do">here</html:link>.</p>
+                
             </div>
         </div>
         
