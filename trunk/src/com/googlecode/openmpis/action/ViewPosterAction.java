@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.googlecode.openmpis.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.googlecode.openmpis.model.Validator;
+import com.googlecode.openmpis.util.Validator;
 
 /**
  * The ViewPosterAction class provides the method to retrieve a sequence and display it.
@@ -38,11 +37,12 @@ import com.googlecode.openmpis.model.Validator;
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  */
 public class ViewPosterAction extends Action {
+
     /**
      * The successful forwarding instance
      */
     private final static String SUCCESS = "success";
-    
+
     /**
      * This is the action called from the Struts framework.
      * 
@@ -56,16 +56,17 @@ public class ViewPosterAction extends Action {
      * @throws  java.lang.Exception
      */
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm  form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws NullPointerException, IOException, Exception {
-        
+
         Validator v = new Validator();
 
         String id = (String) request.getParameter("id");
         if (v.isValidID(id)) {
-                return mapping.findForward(SUCCESS);
-        } else
+            return mapping.findForward(SUCCESS);
+        } else {
             throw new Exception(id + " is not a valid accession ID.");
+        }
     }
 }
