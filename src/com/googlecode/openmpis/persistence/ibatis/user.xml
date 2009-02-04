@@ -2,31 +2,22 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="User">
-    <!--resultMap id="userResult" class="com.googlecode.openmpis.model.User">
-        <result property="id" column="ID"/>
-        <result property="groupID" column="GROUPID"/>
-        <result property="username" column="USERNAME"/>
-        <result property="password" column="PASSWORD"/>
-        <result property="firstName" column="FIRSTNAME"/>
-        <result property="middleName" column="MIDDLENAME"/>
-        <result property="lastName" column="LASTNAME"/>
-        <result property="email" column="EMAIL"/>
-        <result property="designation" column="DESIGNATION"/>
-        <result property="agency" column="AGENCY"/>
-        <result property="number" column="NUMBER"/>
-        <result property="ipAddress" column="IPADDRESS"/>
-        <result property="lastLogin" column="LASTLOGIN"/>
-        <result property="date" column="DATE"/>
-        <result property="status" column="STATUS"/>
-        <result property="question" column="QUESTION"/>
-        <result property="answer" column="ANSWER"/>
-        <result property="creatorID" column="CREATORID"/>
-    </resultMap-->
+    <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
+    <typeAlias alias="user" type="com.googlecode.openmpis.dto.User"/>
+    
+    <cacheModel id="userCache" type="LRU">
+        <flushOnExecute statement="insertUser"/>
+        <flushOnExecute statement="updateUser"/>
+        <flushOnExecute statement="updatePassword"/>
+        <flushOnExecute statement="updateLogin"/>
+        <flushOnExecute statement="deleteUser"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
+    be auto-mapped results to User object (JavaBean) properties -->
     <!--select id="getUser" resultMap="userResult"-->
-    <select id="getUser" parameterClass="String" resultClass="com.googlecode.openmpis.model.User">
+    <select id="getUserByUsername" parameterClass="String" resultClass="user" cacheModel="userCache">
         SELECT
         ID as id,
         GROUPID as groupId,
@@ -37,16 +28,18 @@
         EMAIL as email,
         STATUS as status,
         QUESTION as question,
-        ANSWER as answer
+        ANSWER as answer,
+        CREATORID as creatorId
         FROM USER
         WHERE USERNAME = #username# AND STATUS = '0'
     </select>
     
-    <select id="viewUser" parameterClass="int" resultClass="com.googlecode.openmpis.model.User">
+    <select id="getUserById" parameterClass="java.lang.Integer" resultClass="user" cacheModel="userCache">
         SELECT
         ID as id,
         GROUPID as groupId,
         USERNAME as username,
+        PASSWORD as password,
         FIRSTNAME as firstName,
         MIDDLENAME as middleName,
         LASTNAME as lastName,
@@ -65,7 +58,7 @@
         WHERE ID = #id#
     </select>
     
-    <select id="getUsers" resultClass="com.googlecode.openmpis.model.User">
+    <select id="getAllUsers" resultClass="user" cacheModel="userCache">
         SELECT
         ID as id,
         GROUPID as groupId,
@@ -85,23 +78,23 @@
         FROM USER
     </select>
         
-    <select id="checkUsername" parameterClass="com.googlecode.openmpis.model.User" resultClass="String">
+    <select id="checkUsername" parameterClass="user" resultClass="user" cacheModel="userCache">
         SELECT
         USERNAME as username
         FROM USER
         WHERE USERNAME = #username# AND ID != #id#
     </select>
         
-    <select id="checkEmail" parameterClass="com.googlecode.openmpis.model.User" resultClass="String">
+    <select id="checkEmail" parameterClass="user" resultClass="user" cacheModel="userCache">
         SELECT
         EMAIL as email
         FROM USER
         WHERE EMAIL = #email# AND ID != #id# 
     </select>
 
-    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    <!-- Use User object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertUser" parameterClass="com.googlecode.openmpis.model.User">
+    <insert id="insertUser" parameterClass="user">
         INSERT INTO USER
         (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, DESIGNATION,
         AGENCY, NUMBER, DATE, STATUS, CREATORID, QUESTION)
@@ -110,9 +103,9 @@
         #email#, #designation#, #agency#, #number#, #date#, #status#, #creatorId#, #question#)
     </insert>
 
-    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    <!-- Use User object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <update id="updateUser" parameterClass="com.googlecode.openmpis.model.User">
+    <update id="updateUser" parameterClass="user">
         UPDATE USER SET
         GROUPID = #groupId#,
         USERNAME = #username#,
@@ -124,32 +117,28 @@
         DESIGNATION = #designation#,
         AGENCY = #agency#,
         NUMBER = #number#,
-        IPADDRESS = #ipAddress#,
-        LASTLOGIN = #lastLogin#,
-        DATE = #date#,
         STATUS = #status#,
         QUESTION = #question#,
-        ANSWER = #answer#,
-        CREATORID = #creatorId#
+        ANSWER = #answer#
         WHERE ID = #id#
     </update>
     
-    <update id="updatePassword" parameterClass="com.googlecode.openmpis.model.User">
+    <update id="updatePassword" parameterClass="user">
         UPDATE USER SET
         PASSWORD = MD5(#password#)
         WHERE ID = #id#
     </update>
     
-    <update id="updateLogin" parameterClass="com.googlecode.openmpis.model.User">
+    <update id="updateLogin" parameterClass="user">
         UPDATE USER SET
         IPADDRESS = #ipAddress#,
         LASTLOGIN = #lastLogin#
         WHERE ID = #id#
     </update>
 
-    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    <!-- Use User object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deleteUser" parameterClass="int">
+    <delete id="deleteUser" parameterClass="java.lang.Integer">
         DELETE FROM USER
         WHERE ID = #id#
     </delete>

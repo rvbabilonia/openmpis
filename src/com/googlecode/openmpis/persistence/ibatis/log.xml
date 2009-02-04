@@ -2,9 +2,25 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="Log">
+    <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
+    <typeAlias alias="log" type="com.googlecode.openmpis.dto.Log"/>
+    
+    <cacheModel id="logCache" type="LRU">
+        <flushOnExecute statement="insertLog"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getLog" parameterClass="int" resultClass="com.googlecode.openmpis.model.Log">
+    be auto-mapped results to Log object (JavaBean) properties -->
+    <select id="getAllLogs" resultClass="log" cacheModel="logCache">
+        SELECT
+        ID as id,
+        LOG as log,
+        DATE as date,
+        FROM LOG
+    </select>
+    
+    <select id="getLogById" parameterClass="java.lang.Integer" resultClass="log" cacheModel="logCache">
         SELECT
         ID as id,
         LOG as log,
@@ -13,27 +29,11 @@
         WHERE ID = #id#
     </select>
 
-    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    <!-- Use Log object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertLog" parameterClass="com.googlecode.openmpis.model.Log">
+    <insert id="insertLog" parameterClass="log">
         INSERT INTO
         LOG (LOG, DATE)
         VALUES (#log#, #date#)
     </insert>
-
-    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
-    parameters in the #hash# symbols is a JavaBeans property. -->
-    <update id="updateLog" parameterClass="com.googlecode.openmpis.model.Log">
-        UPDATE LOG
-        SET LOG = #log#,
-        DATE = #date#
-        WHERE ID = #id#
-    </update>
-
-    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
-    parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deleteLog" parameterClass="int">
-        DELETE LOG
-        WHERE ID = #id#
-    </delete>
 </sqlMap>
