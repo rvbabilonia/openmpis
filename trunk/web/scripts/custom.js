@@ -16,18 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function addUser() {
-    window.location = "/openmpis/viewAddUser.do";
-}
-
 function convert(password) {
     var stars = '';
     for (var i = 0; i < password.length; i++) {
         stars += '*';
     }
     return stars;
-}
-
-function deleteUser(id) {
-    window.location = "/openmpis/viewDeleteUser.do?id=" + id;
 }
