@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.googlecode.openmpis.action;
+
+import com.googlecode.openmpis.util.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +33,7 @@ import org.apache.struts.action.ActionForward;
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  */
 public class LogoutAction extends Action {
-    /**
-     * The forwarding instance
-     */
-    private final static String SUCCESS = "success";
-    
+
     /**
      * This is the action called from the Struts framework.
      * 
@@ -50,7 +47,7 @@ public class LogoutAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
-        
-        return mapping.findForward(SUCCESS);
+
+        return mapping.findForward(Constants.LOGOUT_SUCCESS);
     }
 }
