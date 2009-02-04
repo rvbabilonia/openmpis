@@ -2,9 +2,33 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="Message">
+    <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
+    <typeAlias alias="message" type="com.googlecode.openmpis.dto.Message"/>
+    
+    <cacheModel id="messageCache" type="LRU">
+        <flushOnExecute statement="insertMessage"/>
+        <flushOnExecute statement="insertFeedback"/>
+        <flushOnExecute statement="deleteMessage"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getMessage" parameterClass="int" resultClass="com.googlecode.openmpis.model.Message">
+    be auto-mapped results to Message object (JavaBean) properties -->
+    <select id="getAllMessages" resultClass="message" cacheModel="messageCache">
+        SELECT
+        ID as id,
+        FIRSTNAME as firstName,
+        LASTNAME as lastName,
+        SUBJECT as subject,
+        MESSAGE as message,
+        EMAIL as email,
+        IPADDRESS as ipAddress,
+        PERSONID as personId,
+        DATE as date,
+        FROM MESSAGE
+    </select>
+    
+    <select id="getMessageById" parameterClass="java.lang.Integer" resultClass="message" cacheModel="messageCache">
         SELECT
         ID as id,
         FIRSTNAME as firstName,
@@ -19,34 +43,26 @@
         WHERE ID = #id#
     </select>
 
-    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    <!-- Use Message object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertMessage" parameterClass="com.googlecode.openmpis.model.Message">
+    <insert id="insertMessage" parameterClass="message">
         INSERT INTO MESSAGE
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#,
         #personId#, #date#)
     </insert>
+    
+    <insert id="insertFeedback" parameterClass="message">
+        INSERT INTO MESSAGE
+        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, DATE)
+        VALUES
+        (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#, #date#)
+    </insert>
 
-    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    <!-- Use Message object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <update id="updateMessage" parameterClass="com.googlecode.openmpis.model.Message">
-        UPDATE MESSAGE SET
-        FIRSTNAME = #firstName#,
-        LASTNAME = #lastName#,
-        EMAIL = #email#,
-        SUBJECT = #subject#,
-        MESSAGE = #message#,
-        IPADDRESS = #ipAddress#,
-        PERSONID = #personId#,
-        DATE = #date#
-        WHERE ID = #id#
-    </update>
-
-    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
-    parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deleteMessage" parameterClass="int">
+    <delete id="deleteMessage" parameterClass="java.lang.Integer">
         DELETE MESSAGE
         WHERE ID = #id#
     </delete>
