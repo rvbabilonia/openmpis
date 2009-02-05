@@ -39,7 +39,7 @@ import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
 
 import com.googlecode.openmpis.util.Validator;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
@@ -93,7 +93,8 @@ public class PasswordAction extends Action {
                     // Set password modification event
                     Log log = new Log();
                     log.setLog("User " + user.getUsername() + " reset his password.");
-                    log.setDate(new Date(System.currentTimeMillis()));
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    log.setDate(sdf.format(System.currentTimeMillis()));
 
                     // Update user password and insert log
                     userService.updatePassword(user);

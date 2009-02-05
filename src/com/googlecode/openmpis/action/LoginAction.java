@@ -37,7 +37,7 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.UserServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 
 import com.googlecode.openmpis.util.Validator;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
@@ -77,7 +77,8 @@ public class LoginAction extends Action {
                 request.getSession().setAttribute("currentuser", user);
 
                 // Set user's new login date and IP address
-                Date date = new Date(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = sdf.format(System.currentTimeMillis());
                 user.setLastLogin(date);
                 String ipAddress = request.getRemoteAddr();
                 user.setIpAddress(ipAddress);

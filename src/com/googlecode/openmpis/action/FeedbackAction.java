@@ -39,7 +39,7 @@ import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
 
 import com.googlecode.openmpis.util.Validator;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
@@ -76,7 +76,8 @@ public class FeedbackAction extends Action {
             message.setEmail(feedbackForm.getEmail());
             message.setSubject(feedbackForm.getSubject());
             message.setMessage(feedbackForm.getMessage());
-            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(System.currentTimeMillis());
             message.setDate(date);
             message.setIpAddress(request.getRemoteAddr());
 
