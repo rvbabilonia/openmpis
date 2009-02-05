@@ -63,14 +63,15 @@
                         <p class="contentclass">
                             <label id="groupidlabel" class="labelclass" for="groupidfield"><bean:message key="user.label.group"/></label>
                             <html:select property="groupId" styleId="groupidfield" styleClass="selectclass">
-                                <c:if test="${currentuser.groupId == 0}">
-                                    <html:option value="0" styleId="optionfield0" styleClass="optionclass"><bean:message key="group.0"/></html:option>
-                                    <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
-                                </c:if>
-                                <c:if test="${currentuser.groupId == 1}">
-                                    <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
-                                </c:if>
-                                <html:option value="2" styleId="optionfield2" styleClass="optionclass"><bean:message key="group.2"/></html:option>
+                                <c:choose>
+                                    <c:when test="${currentuser.groupId == 0}">
+                                        <html:option value="0" styleId="optionfield0" styleClass="optionclass"><bean:message key="group.0"/></html:option>
+                                        <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <html:option value="2" styleId="optionfield2" styleClass="optionclass"><bean:message key="group.2"/></html:option>
+                                    </c:otherwise>
+                                </c:choose>
                             </html:select>
                         </p>
                         <p class="contentclass">
