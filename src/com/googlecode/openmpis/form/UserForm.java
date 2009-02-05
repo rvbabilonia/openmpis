@@ -19,8 +19,6 @@ package com.googlecode.openmpis.form;
 
 import org.apache.struts.action.ActionForm;
 
-import java.sql.Date;
-
 /**
  * The UserForm class provides methods to validate the user form inputs.
  * 
@@ -83,11 +81,11 @@ public class UserForm extends ActionForm {
     /**
      * The last login date
      */
-    private Date lastLogin;
+    private String lastLogin;
     /**
      * The date this user account was created
      */
-    private Date date;
+    private String date;
     /**
      * The encoder of this user account
      */
@@ -352,7 +350,7 @@ public class UserForm extends ActionForm {
      * 
      * @return              the user's last login date
      */
-    public Date getLastLogin() {
+    public String getLastLogin() {
         return lastLogin;
     }
 
@@ -361,7 +359,7 @@ public class UserForm extends ActionForm {
      * 
      * @param   lastLogin   the user's last login date
      */
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 
@@ -370,7 +368,7 @@ public class UserForm extends ActionForm {
      * 
      * @return              the date this user account was created
      */
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -379,7 +377,7 @@ public class UserForm extends ActionForm {
      * 
      * @param   date        the date this user account was created
      */
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -489,6 +487,34 @@ public class UserForm extends ActionForm {
      */
     public void setUserCode(int userCode) {
         this.userCode = userCode;
+    }
+
+    /**
+     * Returns a String representation of this data transfer object.
+     * 
+     * @return              the String representation of this data transfer object
+     */
+    @Override
+    public String toString() {
+        String user = "ID: " + id;
+        user += "\nGroup ID: " + groupId;
+        user += "\nUsername: " + username;
+        user += "\nPassword: " + password;
+        user += "\nFirst Name: " + firstName;
+        user += "\nMiddle Name: " + middleName;
+        user += "\nLast Name: " + lastName;
+        user += "\nAgency: " + agency;
+        user += "\nDesignation: " + designation;
+        user += "\nEmail: " + email;
+        user += "\nNumber: " + number;
+        user += "\nLast Login: " + lastLogin;
+        user += "\nIP Address: " + ipAddress;
+        user += "\nDate: " + date;
+        user += "\nStatus: " + status;
+        user += "\nQuestion: " + question;
+        user += "\nAnswer: " + answer;
+        user += "\nCreator ID: " + creatorId;
+        return user;
     }
 
     /**
