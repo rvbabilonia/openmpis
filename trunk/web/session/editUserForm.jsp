@@ -71,14 +71,18 @@
                         <p class="contentclass">
                             <label id="groupidlabel" class="labelclass" for="groupidfield"><bean:message key="user.label.group"/></label>
                             <html:select property="groupId" styleId="groupidfield" styleClass="selectclass">
-                                <c:if test="${currentuser.groupId == 0}">
-                                    <html:option value="0" styleId="optionfield0" styleClass="optionclass"><bean:message key="group.0"/></html:option>
-                                    <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
-                                </c:if>
-                                <c:if test="${currentuser.groupId == 1}">
-                                    <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
-                                </c:if>
-                                <html:option value="2" styleId="optionfield2" styleClass="optionclass"><bean:message key="group.2"/></html:option>
+                                <c:choose>
+                                    <c:when test="${currentuser.groupId == 0}">
+                                        <html:option value="0" styleId="optionfield0" styleClass="optionclass"><bean:message key="group.0"/></html:option>
+                                        <html:option value="1" styleId="optionfield1" styleClass="optionclass"><bean:message key="group.1"/></html:option>
+                                    </c:when>
+                                    <c:when test="${currentuser.id == userForm.id}">
+                                        <html:option value="${userForm.groupId}" styleId="optionfield${userForm.groupId}" styleClass="optionclass"><bean:message key="group.${userForm.groupId}"/></html:option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <html:option value="2" styleId="optionfield2" styleClass="optionclass"><bean:message key="group.2"/></html:option>
+                                    </c:otherwise>
+                                </c:choose>
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -90,10 +94,10 @@
                                 <c:otherwise>
                                     <html:text styleId="usernamefield" styleClass="inputclass" property="username" maxlength="6" readonly="true"/>
                                 </c:otherwise>
-                                </c:choose>
+                            </c:choose>
                             <html:errors property="username"/>
                         </p>
-                        <c:if test="${userForm.id eq currentuser.id}">
+                        <c:if test="${userForm.id == currentuser.id}">
                             <p class="contentclass">
                                 <label id="passwordlabel" class="labelclass" for="passwordfield"><bean:message key="user.label.password"/></label>
                                 <html:password styleId="passwordfield" styleClass="inputclass" property="password" maxlength="10" redisplay="false"/>
