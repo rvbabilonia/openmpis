@@ -17,8 +17,6 @@
  */
 package com.googlecode.openmpis.dto;
 
-import java.sql.Date;
-
 /**
  * 
  * 
@@ -28,7 +26,7 @@ public class Log {
 
     private int id;
     private String log;
-    private Date date;
+    private String date;
 
     public int getId() {
         return id;
@@ -46,11 +44,16 @@ public class Log {
         this.log = log;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+    
+    @Override
+    public String toString() {
+        return log;
     }
 }
