@@ -17,8 +17,6 @@
  */
 package com.googlecode.openmpis.dto;
 
-import java.sql.Date;
-
 /**
  * 
  * 
@@ -77,11 +75,11 @@ public class User implements java.io.Serializable {
     /**
      * The last login date
      */
-    private Date lastLogin;
+    private String lastLogin;
     /**
      * The date this user account was created
      */
-    private Date date;
+    private String date;
     /**
      * The encoder of this user account
      */
@@ -328,7 +326,7 @@ public class User implements java.io.Serializable {
      * 
      * @return              the user's last login date
      */
-    public Date getLastLogin() {
+    public String getLastLogin() {
         return lastLogin;
     }
 
@@ -337,7 +335,7 @@ public class User implements java.io.Serializable {
      * 
      * @param   lastLogin   the user's last login date
      */
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 
@@ -346,7 +344,7 @@ public class User implements java.io.Serializable {
      * 
      * @return              the date this user account was created
      */
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -355,7 +353,7 @@ public class User implements java.io.Serializable {
      * 
      * @param   date        the date this user account was created
      */
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -467,6 +465,11 @@ public class User implements java.io.Serializable {
         this.userCode = userCode;
     }
 
+    /**
+     * Returns a String representation of this data transfer object.
+     * 
+     * @return              the String representation of this data transfer object
+     */
     @Override
     public String toString() {
         String user = "ID: " + id;
