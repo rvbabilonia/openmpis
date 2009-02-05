@@ -109,7 +109,6 @@
         UPDATE USER SET
         GROUPID = #groupId#,
         USERNAME = #username#,
-        PASSWORD = MD5(#password#),
         FIRSTNAME = #firstName#,
         MIDDLENAME = #middleName#,
         LASTNAME = #lastName#,
