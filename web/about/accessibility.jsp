@@ -52,10 +52,11 @@
                         <li>accesskey "3" = Search</li>
                         <li>accesskey "4" = Feedback</li>
                         <li>accesskey "5" = Statistics</li>
-                        <li>accesskey "6" = Safety Tips</li>
-                        <li>accesskey "7" = Missing Persons</li>
-                        <li>accesskey "8" = Found Persons</li>
-                        <li>accesskey "9" = Unidentified Persons</li>
+                        <li>accesskey "6" = Download</li>
+                        <li>accesskey "7" = Safety Tips</li>
+                        <li>accesskey "8" = Missing Persons</li>
+                        <li>accesskey "9" = Found Persons</li>
+                        <li>accesskey "0" = Unidentified Persons</li>
                         <li>accesskey="a" = Privacy Policy</li>
                         <li>accesskey="b" = Terms and Conditions</li>
                         <li>accesskey="c" = Disclaimer</li>
