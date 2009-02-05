@@ -31,7 +31,7 @@ import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
 
 import com.googlecode.openmpis.util.Validator;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +63,10 @@ public class UserAction extends DispatchAction {
      * The file logger
      */
     private Logger logger = Logger.getLogger(this.getClass());
+    /**
+     * 
+     */
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * This is the list action called from the Struts framework.
@@ -178,7 +182,7 @@ public class UserAction extends DispatchAction {
                         user.setDesignation(userForm.getDesignation());
                         user.setAgency(userForm.getAgency());
                         user.setNumber(userForm.getNumber());
-                        Date date = new Date(System.currentTimeMillis());
+                        String date = sdf.format(System.currentTimeMillis());
                         user.setDate(date);
                         user.setCreatorId(currentUser.getId());
                         user.setQuestion(0);
@@ -190,7 +194,7 @@ public class UserAction extends DispatchAction {
                         addLog.setLog("User " + user.getUsername() + " was created by " + currentUser.getUsername() + ".");
                         addLog.setDate(date);
                         logService.insertLog(addLog);
-                        logger.info(addLog);
+                        logger.info(addLog.toString());
 
                         // Retrieve mail properties
                         Configuration config = new Configuration("mail.properties");
@@ -234,8 +238,6 @@ public class UserAction extends DispatchAction {
                 }
             } else {
                 // Return form validation errors
-                logger.error("Form errors.");
-                    
                 return mapping.findForward(Constants.ADD_REDO);
             }
         } else {
@@ -286,6 +288,8 @@ public class UserAction extends DispatchAction {
             userForm.setDate(user.getDate());
             userForm.setCreatorId(user.getCreatorId());
             userForm.setStatus(user.getStatus());
+            userForm.setQuestion(user.getQuestion());
+            userForm.setAnswer(user.getAnswer());
 
             // Edit what you created/encoded
             // Edit your profile
@@ -342,20 +346,13 @@ public class UserAction extends DispatchAction {
                     // Check if email address is unique
                     if (userService.isUniqueEmail(checker)) {
                         // Retrieve user
-                        User tmpUser = (User) userService.getUserById(new Integer(userForm.getId()));
+                        //User tmpUser = (User) userService.getUserById(new Integer(userForm.getId()));
 
                         // Update user
                         User user = new User();
                         user.setId(userForm.getId());
                         user.setGroupId(userForm.getGroupId());
                         user.setUsername(userForm.getUsername());
-                        if ( (userForm.getPassword() != null) &&
-                                (userForm.getRetype() != null) &&
-                                (userForm.getPassword().equals(userForm.getRetype())) ) {
-                            user.setPassword(userForm.getPassword());
-                        } else {
-                            user.setPassword(tmpUser.getPassword());
-                        }
                         user.setFirstName(userForm.getFirstName());
                         user.setMiddleName(userForm.getMiddleName());
                         user.setLastName(userForm.getLastName());
@@ -366,19 +363,22 @@ public class UserAction extends DispatchAction {
                         user.setStatus(userForm.getStatus());
                         user.setQuestion(userForm.getQuestion());
                         user.setAnswer(userForm.getAnswer());
-                        logger.info("Inserting...");
-                        if (userService.updateUser(user))
-                            logger.info("Inserted.");
-                        //logger.info(user.toString());
-                        else
-                            logger.info("Failed insertion.");
+                        userService.updateUser(user);
+                        
+                        // Check if password is also being updated
+                        if ( (userForm.getPassword() != null) &&
+                                (userForm.getRetype() != null) &&
+                                (userForm.getPassword().equals(userForm.getRetype())) ) {
+                            user.setPassword(userForm.getPassword());
+                            userService.updatePassword(user);
+                        }
 
                         // Log user modification event
                         Log editLog = new Log();
                         editLog.setLog("User " + user.getUsername() + " was updated by " + currentUser.getUsername() + ".");
-                        editLog.setDate(new Date(System.currentTimeMillis()));
+                        editLog.setDate(sdf.format(System.currentTimeMillis()));
                         logService.insertLog(editLog);
-                        logger.info(editLog);
+                        logger.info(editLog.toString());
 
                         // Return username and operation type
                         request.setAttribute("username", userForm.getUsername());
@@ -495,9 +495,9 @@ public class UserAction extends DispatchAction {
                     // Log user deletion event
                     Log deleteLog = new Log();
                     deleteLog.setLog("User " + user.getUsername() + " was deleted by " + currentUser.getUsername() + ".");
-                    deleteLog.setDate(new Date(System.currentTimeMillis()));
+                    deleteLog.setDate(sdf.format(System.currentTimeMillis()));
                     logService.insertLog(deleteLog);
-                    logger.info(deleteLog);
+                    logger.info(deleteLog.toString());
 
                     // Retrieve mail properties
                     Configuration config = new Configuration("mail.properties");
@@ -588,7 +588,7 @@ public class UserAction extends DispatchAction {
         if (username == null) {
             errors.add("username", new ActionMessage(""));
         } else {
-            if (username.length() < 1) {
+            if (username.trim().length() < 1) {
                 errors.add("username", new ActionMessage("error.username.required"));
             } else {
                 if (!validator.isValidUsername(username)) {
@@ -600,7 +600,7 @@ public class UserAction extends DispatchAction {
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {
-            if (firstName.length() < 1) {
+            if (firstName.trim().length() < 1) {
                 errors.add("firstname", new ActionMessage("error.firstname.required"));
             } else {
                 if (!validator.isValidFirstName(firstName)) {
@@ -612,7 +612,7 @@ public class UserAction extends DispatchAction {
         if (middleName == null) {
             errors.add("middlename", new ActionMessage(""));
         } else {
-            if (middleName.length() < 1) {
+            if (middleName.trim().length() < 1) {
                 errors.add("middlename", new ActionMessage("error.middlename.required"));
             } else {
                 if (!validator.isValidLastName(middleName)) {
@@ -624,7 +624,7 @@ public class UserAction extends DispatchAction {
         if (lastName == null) {
             errors.add("lastname", new ActionMessage(""));
         } else {
-            if (lastName.length() < 1) {
+            if (lastName.trim().length() < 1) {
                 errors.add("lastname", new ActionMessage("error.lastname.required"));
             } else {
                 if (!validator.isValidLastName(lastName)) {
@@ -636,7 +636,7 @@ public class UserAction extends DispatchAction {
         if (email == null) {
             errors.add("email", new ActionMessage(""));
         } else {
-            if (email.length() < 1) {
+            if (email.trim().length() < 1) {
                 errors.add("email", new ActionMessage("error.email.required"));
             } else {
                 if (!validator.isValidEmailAddress(email)) {
@@ -648,7 +648,7 @@ public class UserAction extends DispatchAction {
         if (designation == null) {
             errors.add("designation", new ActionMessage(""));
         } else {
-            if (designation.length() < 1) {
+            if (designation.trim().length() < 1) {
                 errors.add("designation", new ActionMessage("error.designation.required"));
             } else {
                 if (!validator.isValidKeyword(designation)) {
@@ -660,7 +660,7 @@ public class UserAction extends DispatchAction {
         if (agency == null) {
             errors.add("agency", new ActionMessage(""));
         } else {
-            if (agency.length() < 1) {
+            if (agency.trim().length() < 1) {
                 errors.add("agency", new ActionMessage("error.agency.required"));
             } else {
                 if (!validator.isValidKeyword(agency)) {
@@ -672,7 +672,7 @@ public class UserAction extends DispatchAction {
         if (number == null) {
             errors.add("number", new ActionMessage(""));
         } else {
-            if (number.length() < 1) {
+            if (number.trim().length() < 1) {
                 errors.add("number", new ActionMessage("error.number.required"));
             } else {
                 if (!validator.isValidNumber(number)) {
@@ -700,6 +700,7 @@ public class UserAction extends DispatchAction {
         ActionMessages errors = new ActionMessages();
         Validator validator = new Validator();
         boolean isValid = true;
+        User currentUser = (User) request.getSession().getAttribute("currentuser");
 
         UserForm userForm = (UserForm) form;
         String username = userForm.getUsername();
@@ -717,7 +718,7 @@ public class UserAction extends DispatchAction {
         if (username == null) {
             errors.add("username", new ActionMessage(""));
         } else {
-            if (username.length() < 1) {
+            if (username.trim().length() < 1) {
                 errors.add("username", new ActionMessage("error.username.required"));
             } else {
                 if (!validator.isValidUsername(username)) {
@@ -726,16 +727,35 @@ public class UserAction extends DispatchAction {
             }
         }
 
-        if (password == null) {
-            errors.add("password", new ActionMessage(""));
-        } else {
-            if (password.length() < 1) {
-                errors.add("password", new ActionMessage("error.password.required"));
+        // Check if current user is editing his profile
+        // Password and security answer are required
+        if (currentUser.getId() == userForm.getId()) {
+            // Check if retyped password exists
+            if ((retype != null) && (retype.trim().length() > 0)) {
+                if (password == null) {
+                    errors.add("password", new ActionMessage(""));
+                } else {
+                    if (password.trim().length() < 1) {
+                        errors.add("password", new ActionMessage("error.password.required"));
+                    } else {
+                        if (!validator.isValidPassword(password)) {
+                            errors.add("password", new ActionMessage("error.password.invalid"));
+                        } else if (password.equals(retype)) {
+                            errors.add("password", new ActionMessage("error.password.mismatch"));
+                        }
+                    }
+                }
+            }
+
+            if (answer == null) {
+                errors.add("answer", new ActionMessage(""));
             } else {
-                if (!validator.isValidPassword(password)) {
-                    errors.add("password", new ActionMessage("error.password.invalid"));
-                } else if (password.equals(retype)) {
-                    errors.add("password", new ActionMessage("error.password.mismatch"));
+                if (answer.trim().length() < 1) {
+                    errors.add("answer", new ActionMessage("error.answer.required"));
+                } else {
+                    if (!validator.isValidKeyword(answer)) {
+                        errors.add("answer", new ActionMessage("error.answer.invalid"));
+                    }
                 }
             }
         }
@@ -743,7 +763,7 @@ public class UserAction extends DispatchAction {
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {
-            if (firstName.length() < 1) {
+            if (firstName.trim().length() < 1) {
                 errors.add("firstname", new ActionMessage("error.firstname.required"));
             } else {
                 if (!validator.isValidFirstName(firstName)) {
@@ -755,7 +775,7 @@ public class UserAction extends DispatchAction {
         if (middleName == null) {
             errors.add("middlename", new ActionMessage(""));
         } else {
-            if (middleName.length() < 1) {
+            if (middleName.trim().length() < 1) {
                 errors.add("middlename", new ActionMessage("error.middlename.required"));
             } else {
                 if (!validator.isValidLastName(middleName)) {
@@ -767,7 +787,7 @@ public class UserAction extends DispatchAction {
         if (lastName == null) {
             errors.add("lastname", new ActionMessage(""));
         } else {
-            if (lastName.length() < 1) {
+            if (lastName.trim().length() < 1) {
                 errors.add("lastname", new ActionMessage("error.lastname.required"));
             } else {
                 if (!validator.isValidLastName(lastName)) {
@@ -779,7 +799,7 @@ public class UserAction extends DispatchAction {
         if (email == null) {
             errors.add("email", new ActionMessage(""));
         } else {
-            if (email.length() < 1) {
+            if (email.trim().length() < 1) {
                 errors.add("email", new ActionMessage("error.email.required"));
             } else {
                 if (!validator.isValidEmailAddress(email)) {
@@ -791,7 +811,7 @@ public class UserAction extends DispatchAction {
         if (designation == null) {
             errors.add("designation", new ActionMessage(""));
         } else {
-            if (designation.length() < 1) {
+            if (designation.trim().length() < 1) {
                 errors.add("designation", new ActionMessage("error.designation.required"));
             } else {
                 if (!validator.isValidKeyword(designation)) {
@@ -803,7 +823,7 @@ public class UserAction extends DispatchAction {
         if (agency == null) {
             errors.add("agency", new ActionMessage(""));
         } else {
-            if (agency.length() < 1) {
+            if (agency.trim().length() < 1) {
                 errors.add("agency", new ActionMessage("error.agency.required"));
             } else {
                 if (!validator.isValidKeyword(agency)) {
@@ -815,23 +835,11 @@ public class UserAction extends DispatchAction {
         if (number == null) {
             errors.add("number", new ActionMessage(""));
         } else {
-            if (number.length() < 1) {
+            if (number.trim().length() < 1) {
                 errors.add("number", new ActionMessage("error.number.required"));
             } else {
                 if (!validator.isValidNumber(number)) {
                     errors.add("number", new ActionMessage("error.number.invalid"));
-                }
-            }
-        }
-
-        if (answer == null) {
-            errors.add("answer", new ActionMessage(""));
-        } else {
-            if (answer.length() < 1) {
-                errors.add("answer", new ActionMessage("error.answer.required"));
-            } else {
-                if (!validator.isValidKeyword(answer)) {
-                    errors.add("answer", new ActionMessage("error.answer.invalid"));
                 }
             }
         }
