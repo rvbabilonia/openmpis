@@ -63,4 +63,20 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="help">
+        <echo message="To build everything, type: ant"/>
+        <echo message="You can now deploy dist/openmpis.war to the application server."/>
+        <echo message=""/>
+        <echo message="To create the WAR file only, type: ant dist"/>
+        <echo message="This will create dist/openmpis.war."/>
+        <echo message=""/>
+        <echo message="To compile only, type: ant compile"/>
+        <echo message="This will generate the compiled classes in the build/ directory."/>
+        <echo message=""/>
+        <echo message="To generate documentation only, type: ant javadoc"/>
+        <echo message="This will generate the API's in the dist/javadocs directory."/>
+        <echo message=""/>
+        <echo message="To start from scratch, type: ant clean"/>
+        <echo message="This will erase build/ and dist/ directories."/>
+    </target>
 </project>
