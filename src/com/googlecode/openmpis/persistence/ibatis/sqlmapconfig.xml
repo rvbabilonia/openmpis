@@ -35,10 +35,8 @@
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/user.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/log.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/message.xml" />
-    <!--
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/abductor.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/person.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/relative.xml" />
     <sqlMap resource="com/googlecode/openmpis/persistence/ibatis/report.xml" />
-    -->
 </sqlMapConfig>
