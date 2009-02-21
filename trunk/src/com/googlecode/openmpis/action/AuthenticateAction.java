@@ -18,28 +18,30 @@
 package com.googlecode.openmpis.action;
 
 import com.googlecode.openmpis.util.Constants;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 /**
  * The AuthenticateAction class provides the method to check if there exists a session.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class AuthenticateAction extends Action {
 
     /**
      * This is the action called from the Struts framework.
      * 
-     * @param   mapping     the ActionMapping used to select this instance
-     * @param   form        the optional ActionForm bean for this request
-     * @param   request     the HTTP Request we are processing
-     * @param   response    the HTTP Response we are processing
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
      * @return              the forwarding instance
      */
     @Override
