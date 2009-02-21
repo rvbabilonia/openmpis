@@ -28,11 +28,12 @@ import com.ibatis.sqlmap.client.SqlMapClientBuilder;
  * thread safe service object called SqlMapClient.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class SqlMapConfig {
 
     /**
-     * The SQL map.
+     * The SQL map
      */
     private static final SqlMapClient sqlMap;
     
@@ -53,7 +54,7 @@ public class SqlMapConfig {
     /**
      * Returns the SQL map.
      * 
-     * @return  the SQL map
+     * @return      the SQL map
      */
     public static SqlMapClient getSqlMapInstance() {
         return sqlMap;
