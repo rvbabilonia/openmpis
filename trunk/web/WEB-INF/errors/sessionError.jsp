@@ -1,6 +1,5 @@
 <%@ page contentType="text/html" %>
 <%@ page pageEncoding="UTF-8" %>
-<%@ page session="true" %>
 
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -16,13 +15,14 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <bean:message key="global.icon"/>
-        <bean:message key="global.style"/>
+        <link rel="shortcut icon" href="<html:rewrite page=""/>/images/favicon.ico"/>
+        <style type="text/css" media="all">@import "<html:rewrite page=""/>/<bean:message key="global.style"/>";</style>
         <bean:message key="login.title"/>
         <html:base/>
     </head>
     <body>
-        <tag:header/>
+        <div id="container">
+            <tag:header/>
 
             <!-- Menu -->
             <div id="menu">
@@ -38,6 +38,7 @@
                 </div>
             </div>
         
-        <tag:footer/>
+            <tag:footer/>
+        </div>
     </body>
 </html:html>
