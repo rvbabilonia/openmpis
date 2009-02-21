@@ -57,13 +57,6 @@ public class SearchForm extends ActionForm {
     }
 
     /**
-     * Sole constructor.
-     */
-    public SearchForm() {
-        super();
-    }
-
-    /**
      * Validates the keyword from the search form.
      * 
      * @param   mapping the action mapping
