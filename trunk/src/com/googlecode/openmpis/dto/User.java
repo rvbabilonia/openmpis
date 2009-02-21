@@ -17,12 +17,16 @@
  */
 package com.googlecode.openmpis.dto;
 
+import java.io.Serializable;
+
 /**
- * 
+ * The User class implements Serializable.
+ * This is used to represent administrators, encoders and investigators.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
-public class User implements java.io.Serializable {
+public class User implements Serializable {
 
     /**
      * The user ID
@@ -45,13 +49,13 @@ public class User implements java.io.Serializable {
      */
     private String firstName;
     /**
-     * The first name of the user
-     */
-    private String lastName;
-    /**
-     * The first name of the user
+     * The middle name of the user
      */
     private String middleName;
+    /**
+     * The last name of the user
+     */
+    private String lastName;
     /**
      * The email address of the user
      */
@@ -89,11 +93,11 @@ public class User implements java.io.Serializable {
      */
     private int status;
     /**
-     * The first name of the user
+     * The security question of the user
      */
     private int question;
     /**
-     * The first name of the user
+     * The security answer of the user
      */
     private String answer;
     /**
@@ -104,6 +108,18 @@ public class User implements java.io.Serializable {
      * The user-inputted confirmation code 
      */
     private int userCode;
+    /**
+     * The birth month
+     */
+    private int birthMonth;
+    /**
+     * The birth day
+     */
+    private int birthDay;
+    /**
+     * The birth year
+     */
+    private int birthYear;
 
     /**
      * Gets the ID of the user.
@@ -117,7 +133,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the ID of the user.
      * 
-     * @param    id          the ID of the user
+     * @param id            the ID of the user
      */
     public void setId(int id) {
         this.id = id;
@@ -126,7 +142,7 @@ public class User implements java.io.Serializable {
     /**
      * Gets the group ID of the user.
      * 
-     * @return               the group Id of the user
+     * @return               the group ID of the user
      */
     public int getGroupId() {
         return groupId;
@@ -135,7 +151,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the group ID of the user.
      * 
-     * @param    groupId     the group Id of the user
+     * @param groupId       the group ID of the user
      */
     public void setGroupId(int groupId) {
         this.groupId = groupId;
@@ -153,7 +169,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the username.
      * 
-     * @param    username    the username
+     * @param username      the username
      */
     public void setUsername(String username) {
         this.username = username;
@@ -171,7 +187,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the password of the user.
      * 
-     * @param    password    the password of the user
+     * @param password      the password of the user
      */
     public void setPassword(String password) {
         this.password = password;
@@ -189,10 +205,28 @@ public class User implements java.io.Serializable {
     /**
      * Sets the first name of the user.
      * 
-     * @param    firstName   the first name of the user
+     * @param firstName     the first name of the user
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    /**
+     * Gets the middle name of the user.
+     *
+     * @return               the middle name of the user
+     */
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    /**
+     * Sets the middle name of the user.
+     *
+     * @param middleName    the middle name of the user
+     */
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     /**
@@ -207,28 +241,10 @@ public class User implements java.io.Serializable {
     /**
      * Sets the last name of the user.
      * 
-     * @param    lastName    the last name of the user
+     * @param lastName      the last name of the user
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    /**
-     * Gets the middle name of the user.
-     * 
-     * @return               the middle name of the user
-     */
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    /**
-     * Sets the middle name of the user.
-     * 
-     * @param    middleName  the middle name of the user
-     */
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 
     /**
@@ -243,7 +259,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the email address of the user.
      * 
-     * @param   email       the email address of the user
+     * @param email         the email address of the user
      */
     public void setEmail(String email) {
         this.email = email;
@@ -261,7 +277,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the position or designation of the user.
      * 
-     * @param   designation the position or designation of the user
+     * @param designation   the position or designation of the user
      */
     public void setDesignation(String designation) {
         this.designation = designation;
@@ -279,7 +295,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the agency to which the user belongs.
      * 
-     * @param   agency      the agency to which the user belongs
+     * @param agency        the agency to which the user belongs
      */
     public void setAgency(String agency) {
         this.agency = agency;
@@ -297,7 +313,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the telephone number of the user.
      * 
-     * @param   number      the telephone number of the user
+     * @param number        the telephone number of the user
      */
     public void setNumber(String number) {
         this.number = number;
@@ -315,7 +331,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the last IP address of the user.
      * 
-     * @param   ipAddress   the last IP address of the user
+     * @param ipAddress     the last IP address of the user
      */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
@@ -333,7 +349,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the date of the user's last login
      * 
-     * @param   lastLogin   the user's last login date
+     * @param lastLogin     the user's last login date
      */
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
@@ -351,7 +367,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the date this user account was created.
      * 
-     * @param   date        the date this user account was created
+     * @param date          the date this user account was created
      */
     public void setDate(String date) {
         this.date = date;
@@ -369,7 +385,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the encoder of this user account.
      * 
-     * @param   creatorId   the encoder of this user account
+     * @param creatorId     the encoder of this user account
      */
     public void setCreatorId(int creatorId) {
         this.creatorId = creatorId;
@@ -387,7 +403,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the status of the user.
      * 
-     * @param   status      the status of the user
+     * @param status        the status of the user
      */
     public void setStatus(int status) {
         this.status = status;
@@ -405,7 +421,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the security question of the user.
      * 
-     * @param   question    the security question of the user
+     * @param question      the security question of the user
      */
     public void setQuestion(int question) {
         this.question = question;
@@ -423,7 +439,7 @@ public class User implements java.io.Serializable {
     /**
      * Sets the security answer of the user.
      * 
-     * @param   answer      the security answer of the user
+     * @param answer        the security answer of the user
      */
     public void setAnswer(String answer) {
         this.answer = answer;
@@ -459,10 +475,64 @@ public class User implements java.io.Serializable {
     /**
      * Sets the user-inputted confirmation code.
      * 
-     * @param code          the user-inputted confirmation code
+     * @param userCode      the user-inputted confirmation code
      */
     public void setUserCode(int userCode) {
         this.userCode = userCode;
+    }
+
+    /**
+     * Gets the birth day.
+     *
+     * @return              the birth day
+     */
+    public int getBirthDay() {
+        return birthDay;
+    }
+
+    /**
+     * Sets the birth day.
+     *
+     * @param birthDay      the birth day
+     */
+    public void setBirthDay(int birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    /**
+     * Gets the birth month.
+     *
+     * @return              the birth month
+     */
+    public int getBirthMonth() {
+        return birthMonth;
+    }
+
+    /**
+     * Sets the birth month.
+     *
+     * @param birthMonth    the birth month
+     */
+    public void setBirthMonth(int birthMonth) {
+        this.birthMonth = birthMonth;
+    }
+
+    /**
+     * Gets the birth year.
+     *
+     * @return              the birth year
+     */
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    /**
+     * Sets the birth year.
+     *
+     * @param birthYear     the birth year
+     */
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 
     /**
@@ -472,24 +542,26 @@ public class User implements java.io.Serializable {
      */
     @Override
     public String toString() {
-        String user = "ID: " + id;
-        user += "\nGroup ID: " + groupId;
-        user += "\nUsername: " + username;
-        user += "\nPassword: " + password;
-        user += "\nFirst Name: " + firstName;
-        user += "\nMiddle Name: " + middleName;
-        user += "\nLast Name: " + lastName;
-        user += "\nAgency: " + agency;
-        user += "\nDesignation: " + designation;
-        user += "\nEmail: " + email;
-        user += "\nNumber: " + number;
-        user += "\nLast Login: " + lastLogin;
-        user += "\nIP Address: " + ipAddress;
-        user += "\nDate: " + date;
-        user += "\nStatus: " + status;
-        user += "\nQuestion: " + question;
-        user += "\nAnswer: " + answer;
-        user += "\nCreator ID: " + creatorId;
-        return user;
+        String content = "";
+        content += "\nID: " + id;
+        content += "\nGroup ID: " + groupId;
+        content += "\nUsername: " + username;
+        content += "\nPassword: " + password;
+        content += "\nFirst Name: " + firstName;
+        content += "\nMiddle Name: " + middleName;
+        content += "\nLast Name: " + lastName;
+        content += "\nBirthdate: " + birthYear + "-" + birthMonth + "-" + birthDay;
+        content += "\nAgency: " + agency;
+        content += "\nDesignation: " + designation;
+        content += "\nEmail: " + email;
+        content += "\nNumber: " + number;
+        content += "\nLast Login: " + lastLogin;
+        content += "\nIP Address: " + ipAddress;
+        content += "\nDate: " + date;
+        content += "\nStatus: " + status;
+        content += "\nQuestion: " + question;
+        content += "\nAnswer: " + answer;
+        content += "\nCreator ID: " + creatorId;
+        return content;
     }
 }
