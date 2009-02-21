@@ -19,11 +19,13 @@ package com.googlecode.openmpis.persistence.ibatis.dao.impl;
 
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.persistence.ibatis.dao.UserDAO;
+import com.googlecode.openmpis.util.Pagination;
 import com.googlecode.openmpis.util.SqlMapConfig;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +46,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Deletes a user with the specified ID.
      * 
-     * @param id    the ID of the user to be deleted
-     * @return      <code>true</code> if the user was successfully deleted; <code>false</code> otherwise
+     * @param id            the ID of the user to be deleted
+     * @return              <code>true</code> if the user was successfully deleted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -67,17 +69,20 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Retrieves all users.
-     * 
-     * @return      the list of users
+     *
+     * @param pagination    the pagination context
+     * @return              the list of users
      * @throws java.sql.SQLException
      */
     @Override
-    public List getAllUsers() throws SQLException {
-        List userList = null;
+    @SuppressWarnings("unchecked")
+    public List<User> getAllUsers(Pagination pagination) throws SQLException {
+        List<User> userList = new ArrayList<User>();
         
         try {
             sqlMap.startTransaction();
-            userList = sqlMap.queryForList("getAllUsers");
+            userList = sqlMap.queryForList("getAllUsers", pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllUsers"));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -91,8 +96,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Retrieves a user given his ID.
      * 
-     * @param id    the user ID
-     * @return      the user
+     * @param id            the user ID
+     * @return              the user
      * @throws java.sql.SQLException
      */
     @Override
@@ -115,8 +120,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Retrieves a user given his username.
      * 
-     * @param username  the username
-     * @return          the user
+     * @param username      the username
+     * @return              the user
      * @throws java.sql.SQLException
      */
     @Override
@@ -139,8 +144,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Inserts a new user.
      * 
-     * @param user  the new user
-     * @return      <code>true</code> if the user was successfully inserted; <code>false</code> otherwise
+     * @param user          the new user
+     * @return              <code>true</code> if the user was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -163,8 +168,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Checks if an email address is unique.
      * 
-     * @param user  the existing user
-     * @return      <code>true</code> if the email address is unique; <code>false</code> otherwise
+     * @param user          the existing user
+     * @return              <code>true</code> if the email address is unique; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -189,8 +194,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Checks if a username is unique.
      * 
-     * @param user  the existing user
-     * @return      <code>true</code> if the username is unique; <code>false</code> otherwise
+     * @param user          the existing user
+     * @return              <code>true</code> if the username is unique; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -215,8 +220,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Updates a user's last log in date and IP address.
      * 
-     * @param user  the user who logged in
-     * @return      <code>true</code> if the log in date and IP address were successfully updated; <code>false</code> otherwise
+     * @param user          the user who logged in
+     * @return              <code>true</code> if the log in date and IP address were successfully updated; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -239,8 +244,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Resets a user's password.
      * 
-     * @param user  the user who supplied the correct security question and answer
-     * @return      <code>true</code> if the password was successfully reset; <code>false</code> otherwise
+     * @param user          the user who supplied the correct security question and answer
+     * @return              <code>true</code> if the password was successfully reset; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -263,8 +268,8 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Updates an existing user.
      * 
-     * @param user  the existing user
-     * @return      <code>true</code> if the user was successfully updated; <code>false</code> otherwise
+     * @param user          the existing user
+     * @return              <code>true</code> if the user was successfully updated; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -282,5 +287,143 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return false;
+    }
+
+    /**
+     * Returns the total number of users.
+     *
+     * @return              the total number of users
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllUsers() throws SQLException {
+        int userCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            userCount = (Integer) sqlMap.queryForObject("countAllUsers");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return userCount;
+    }
+
+    /**
+     * Returns the total number of administrators.
+     *
+     * @return              the total number of administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAdministrators() throws SQLException {
+        int userCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            userCount = (Integer) sqlMap.queryForObject("countAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return userCount;
+    }
+
+    /**
+     * Returns the total number of encoders.
+     *
+     * @return              the total number of encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countEncoders() throws SQLException {
+        int encoderCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            encoderCount = (Integer) sqlMap.queryForObject("countEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return encoderCount;
+    }
+
+    /**
+     * Returns the total number of investigators.
+     *
+     * @return              the total number of investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countInvestigators() throws SQLException {
+        int investigatorCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            investigatorCount = (Integer) sqlMap.queryForObject("countInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorCount;
+    }
+
+    /**
+     * Returns the total number of active users.
+     *
+     * @return              the total number of active users
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveUsers() throws SQLException {
+        int activeCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            activeCount = (Integer) sqlMap.queryForObject("countActiveUsers");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return activeCount;
+    }
+
+    /**
+     * Returns the total number of suspended users.
+     *
+     * @return              the total number of suspended users
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedUsers() throws SQLException {
+        int suspendedCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            suspendedCount = (Integer) sqlMap.queryForObject("countSuspendedUsers");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return suspendedCount;
     }
 }
