@@ -37,19 +37,61 @@ h1 {
     width: 250px;
 }
 
+.monthselectclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 100px;
+}
+
+.monthoptionclass {
+    border: 0px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 70px;
+}
+
+.dayselectclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 40px;
+}
+
+.dayoptionclass {
+    border: 0px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 15px;
+}
+
+.yearselectclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 70px;
+}
+
+.yearoptionclass {
+    border: 0px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 40px;
+}
+
 .buttonclass, .searchbuttonclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
 }
 
-.feedbackbuttonclass, .loginbuttonclass, .userbuttonclass {
+.feedbackbuttonclass, .loginbuttonclass, .userbuttonclass, .casebuttonclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
-    margin-left: 5.8em;
+    margin-left: 9.4em;
 }
 
 .feedbackclass, .loginclass, .searchclass, .adduserclass {
     text-align: left;
+}
+
+.logincontentclass {
+    white-space: normal;
+    text-align: justify;
+    margin-left: 10.4em;
 }
 
 .errorclass {
@@ -57,7 +99,7 @@ h1 {
 }
 
 .labelclass {
-    width: 6em;
+    width: 10em;
     float: left;
     text-align: left;
     margin-right: 0.5em;
@@ -68,6 +110,34 @@ h1 {
 .contentclass {
     white-space: normal;
     text-align: justify;
+}
+
+.table {
+    display: table;
+    width: 100%;
+    border-spacing: 1px;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    font: normal normal normal 9pt sans-serif;
+    color: #111111;
+    text-align: left;
+    padding: 2px;
+    border: 1px solid #ffffff;
+}
+
+.columnheader {
+    display: table-cell;
+    font: bold normal normal 12pt sans-serif;
+    color: #000000;
+    text-align: center;
+    padding: 2px;
+    border: 1px solid #ffffff;
 }
 
 /* Specific ids */
@@ -162,39 +232,6 @@ div#contenthome a {
     display: inline-block;
 }
 
-div#contentitem th {
-    font: normal bold normal 12pt sans-serif;
-    text-align: center;
-}
-
-div#table {
-    display: table;
-    width: 100%;
-    border-spacing: 1px;
-}
-
-div#row {
-    display: table-row;
-}
-
-div#cell {
-    display: table-cell;
-    font: normal normal normal 9pt sans-serif;
-    color: #111111;
-    text-align: left;
-    padding: 2px;
-    border: 1px solid #ffffff;
-}
-
-div#columnheader {
-    display: table-cell;
-    font: bold normal normal 12pt sans-serif;
-    color: #000000;
-    text-align: center;
-    padding: 2px;
-    border: 1px solid #ffffff;
-}
-
 div#footer {
     clear: both;
     width: 100%;
@@ -208,6 +245,7 @@ div#footer {
     position: fixed;
     bottom: 0;
     left: 0;
+    z-index: 100;
 }
 
 div#link a, div#copyright a {
