@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
  * The UserForm class provides methods to validate the user form inputs.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class UserForm extends ActionForm {
 
@@ -110,11 +111,23 @@ public class UserForm extends ActionForm {
      * The user-inputted confirmation code 
      */
     private int userCode;
+    /**
+     * The birth month
+     */
+    private int birthMonth;
+    /**
+     * The birth day
+     */
+    private int birthDay;
+    /**
+     * The birth year
+     */
+    private int birthYear;
 
     /**
      * Gets the ID of the user.
      * 
-     * @return               the ID of the user
+     * @return              the ID of the user
      */
     public int getId() {
         return id;
@@ -123,7 +136,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the ID of the user.
      * 
-     * @param    id          the ID of the user
+     * @param id            the ID of the user
      */
     public void setId(int id) {
         this.id = id;
@@ -132,7 +145,7 @@ public class UserForm extends ActionForm {
     /**
      * Gets the group ID of the user.
      * 
-     * @return               the group Id of the user
+     * @return              the group ID of the user
      */
     public int getGroupId() {
         return groupId;
@@ -141,7 +154,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the group ID of the user.
      * 
-     * @param    groupId     the group Id of the user
+     * @param groupId       the group ID of the user
      */
     public void setGroupId(int groupId) {
         this.groupId = groupId;
@@ -150,7 +163,7 @@ public class UserForm extends ActionForm {
     /**
      * Gets the username.
      * 
-     * @return               the username
+     * @return              the username
      */
     public String getUsername() {
         return username;
@@ -159,16 +172,16 @@ public class UserForm extends ActionForm {
     /**
      * Sets the username.
      * 
-     * @param    username    the username
+     * @param username      the username
      */
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.trim();
     }
 
     /**
      * Gets the password of the user.
      * 
-     * @return               the password of the user
+     * @return              the password of the user
      */
     public String getPassword() {
         return password;
@@ -177,16 +190,16 @@ public class UserForm extends ActionForm {
     /**
      * Sets the password of the user.
      * 
-     * @param    password    the password of the user
+     * @param password      the password of the user
      */
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password.trim();
     }
 
     /**
      * Gets the retyped password of the user.
      * 
-     * @return               the retyped password of the user
+     * @return              the retyped password of the user
      */
     public String getRetype() {
         return retype;
@@ -195,16 +208,16 @@ public class UserForm extends ActionForm {
     /**
      * Sets the retyped password of the user.
      * 
-     * @param    retype      the retyped password of the user
+     * @param retype        the retyped password of the user
      */
     public void setRetype(String retype) {
-        this.retype = retype;
+        this.retype = retype.trim();
     }
 
     /**
      * Gets the first name of the user.
      * 
-     * @return               the first name of the user
+     * @return              the first name of the user
      */
     public String getFirstName() {
         return firstName;
@@ -213,16 +226,16 @@ public class UserForm extends ActionForm {
     /**
      * Sets the first name of the user.
      * 
-     * @param    firstName   the first name of the user
+     * @param firstName     the first name of the user
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
      * Gets the last name of the user.
      * 
-     * @return               the last name of the user
+     * @return              the last name of the user
      */
     public String getLastName() {
         return lastName;
@@ -231,16 +244,16 @@ public class UserForm extends ActionForm {
     /**
      * Sets the last name of the user.
      * 
-     * @param    lastName    the last name of the user
+     * @param lastName      the last name of the user
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
      * Gets the middle name of the user.
      * 
-     * @return               the middle name of the user
+     * @return              the middle name of the user
      */
     public String getMiddleName() {
         return middleName;
@@ -249,10 +262,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the middle name of the user.
      * 
-     * @param    middleName  the middle name of the user
+     * @param middleName    the middle name of the user
      */
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName = middleName.trim();
     }
 
     /**
@@ -267,10 +280,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the email address of the user.
      * 
-     * @param   email       the email address of the user
+     * @param email         the email address of the user
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     /**
@@ -285,10 +298,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the position or designation of the user.
      * 
-     * @param   designation the position or designation of the user
+     * @param designation   the position or designation of the user
      */
     public void setDesignation(String designation) {
-        this.designation = designation;
+        this.designation = designation.trim();
     }
 
     /**
@@ -303,10 +316,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the agency to which the user belongs.
      * 
-     * @param   agency      the agency to which the user belongs
+     * @param agency        the agency to which the user belongs
      */
     public void setAgency(String agency) {
-        this.agency = agency;
+        this.agency = agency.trim();
     }
 
     /**
@@ -321,10 +334,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the telephone number of the user.
      * 
-     * @param   number      the telephone number of the user
+     * @param number        the telephone number of the user
      */
     public void setNumber(String number) {
-        this.number = number;
+        this.number = number.trim();
     }
 
     /**
@@ -339,7 +352,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the last IP address of the user.
      * 
-     * @param   ipAddress   the last IP address of the user
+     * @param ipAddress     the last IP address of the user
      */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
@@ -357,7 +370,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the date of the user's last login
      * 
-     * @param   lastLogin   the user's last login date
+     * @param lastLogin     the user's last login date
      */
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
@@ -375,7 +388,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the date this user account was created.
      * 
-     * @param   date        the date this user account was created
+     * @param date          the date this user account was created
      */
     public void setDate(String date) {
         this.date = date;
@@ -393,7 +406,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the encoder of this user account.
      * 
-     * @param   creatorId   the encoder of this user account
+     * @param creatorId     the encoder of this user account
      */
     public void setCreatorId(int creatorId) {
         this.creatorId = creatorId;
@@ -411,7 +424,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the status of the user.
      * 
-     * @param   status      the status of the user
+     * @param status        the status of the user
      */
     public void setStatus(int status) {
         this.status = status;
@@ -429,7 +442,7 @@ public class UserForm extends ActionForm {
     /**
      * Sets the security question of the user.
      * 
-     * @param   question    the security question of the user
+     * @param question      the security question of the user
      */
     public void setQuestion(int question) {
         this.question = question;
@@ -447,10 +460,10 @@ public class UserForm extends ActionForm {
     /**
      * Sets the security answer of the user.
      * 
-     * @param   answer      the security answer of the user
+     * @param answer        the security answer of the user
      */
     public void setAnswer(String answer) {
-        this.answer = answer;
+        this.answer = answer.trim();
     }
 
     /**
@@ -483,10 +496,64 @@ public class UserForm extends ActionForm {
     /**
      * Sets the user-inputted confirmation code.
      * 
-     * @param code          the user-inputted confirmation code
+     * @param userCode      the user-inputted confirmation code
      */
     public void setUserCode(int userCode) {
         this.userCode = userCode;
+    }
+
+    /**
+     * Gets the birth day.
+     *
+     * @return              the birth day
+     */
+    public int getBirthDay() {
+        return birthDay;
+    }
+
+    /**
+     * Sets the birth day.
+     *
+     * @param birthDay      the birth day
+     */
+    public void setBirthDay(int birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    /**
+     * Gets the birth month.
+     *
+     * @return              the birth month
+     */
+    public int getBirthMonth() {
+        return birthMonth;
+    }
+
+    /**
+     * Sets the birth month.
+     *
+     * @param birthMonth    the birth month
+     */
+    public void setBirthMonth(int birthMonth) {
+        this.birthMonth = birthMonth;
+    }
+
+    /**
+     * Gets the birth year.
+     *
+     * @return              the birth year
+     */
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    /**
+     * Sets the birth year.
+     *
+     * @param birthYear     the birth year
+     */
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 
     /**
@@ -496,31 +563,25 @@ public class UserForm extends ActionForm {
      */
     @Override
     public String toString() {
-        String user = "ID: " + id;
-        user += "\nGroup ID: " + groupId;
-        user += "\nUsername: " + username;
-        user += "\nPassword: " + password;
-        user += "\nFirst Name: " + firstName;
-        user += "\nMiddle Name: " + middleName;
-        user += "\nLast Name: " + lastName;
-        user += "\nAgency: " + agency;
-        user += "\nDesignation: " + designation;
-        user += "\nEmail: " + email;
-        user += "\nNumber: " + number;
-        user += "\nLast Login: " + lastLogin;
-        user += "\nIP Address: " + ipAddress;
-        user += "\nDate: " + date;
-        user += "\nStatus: " + status;
-        user += "\nQuestion: " + question;
-        user += "\nAnswer: " + answer;
-        user += "\nCreator ID: " + creatorId;
-        return user;
-    }
-
-    /**
-     * Sole constructor.
-     */
-    public UserForm() {
-        super();
+        String content = "ID: " + id;
+        content += "\nGroup ID: " + groupId;
+        content += "\nUsername: " + username;
+        content += "\nPassword: " + password;
+        content += "\nFirst Name: " + firstName;
+        content += "\nMiddle Name: " + middleName;
+        content += "\nLast Name: " + lastName;
+        content += "\nBirthdate: " + birthYear + "-" + birthMonth + "-" + birthDay;
+        content += "\nAgency: " + agency;
+        content += "\nDesignation: " + designation;
+        content += "\nEmail: " + email;
+        content += "\nNumber: " + number;
+        content += "\nLast Login: " + lastLogin;
+        content += "\nIP Address: " + ipAddress;
+        content += "\nDate: " + date;
+        content += "\nStatus: " + status;
+        content += "\nQuestion: " + question;
+        content += "\nAnswer: " + answer;
+        content += "\nCreator ID: " + creatorId;
+        return content;
     }
 }
