@@ -5,9 +5,29 @@
     <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
     <typeAlias alias="report" type="com.googlecode.openmpis.dto.Report"/>
     
+    <cacheModel id="reportCache" type="LRU">
+        <flushOnExecute statement="insertReport"/>
+        <flushOnExecute statement="updateReport"/>
+        <flushOnExecute statement="deleteReport"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
     be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getReport" parameterClass="int" resultClass="report">
+    <select id="getReportById" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
+        <![CDATA[
+        SELECT
+        REPORT as report,
+        DATE as date,
+        PERSONID as personId,
+        INVESTIGATORID as investigatorId,
+        FROM REPORT
+        WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="getAllReportsForPerson" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
+        <![CDATA[
         SELECT
         ID as id,
         REPORT as report,
@@ -15,33 +35,49 @@
         PERSONID as personId,
         INVESTIGATORID as investigatorId,
         FROM REPORT
-        WHERE ID = #id#
+        WHERE PERSONID = #id#
+        ]]>
+    </select>
+
+    <select id="countAllReportsForPerson" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="reportCache">
+        <![CDATA[
+        SELECT
+        COUNT(ID)
+        FROM REPORT
+        WHERE PERSONID = #id#
+        ]]>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertReport" parameterClass="report">
+        <![CDATA[
         INSERT INTO REPORT
         (REPORT, DATE, PERSONID, INVESTIGATORID)
         VALUES
         (#report#, #date#, #personId#, #investigatorId#)
+        ]]>
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateReport" parameterClass="report">
+        <![CDATA[
         UPDATE REPORT SET
         REPORT = #report#,
         DATE = #date#,
         PERSONID = #personId#,
         INVESTIGATORID = #investigatorId#
         WHERE ID = #id#
+        ]]>
     </update>
 
     <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deleteReport" parameterClass="int">
+    <delete id="deleteReport" parameterClass="java.lang.Integer">
+        <![CDATA[
         DELETE REPORT
         WHERE ID = #id#
+        ]]>
     </delete>
 </sqlMap>

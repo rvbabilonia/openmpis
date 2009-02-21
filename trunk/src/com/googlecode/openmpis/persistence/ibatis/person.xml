@@ -5,32 +5,32 @@
     <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
     <typeAlias alias="person" type="com.googlecode.openmpis.dto.Person"/>
     
-    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getPerson" parameterClass="int" resultClass="person">
-        SELECT
+    <cacheModel id="personCache" type="LRU">
+        <flushOnExecute statement="insertPerson"/>
+        <flushOnExecute statement="updatePerson"/>
+        <flushOnExecute statement="updatePersonRelative"/>
+        <flushOnExecute statement="updatePersonInvestigator"/>
+        <flushOnExecute statement="updatePersonAbductor"/>
+        <flushOnExecute statement="deletePerson"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
+
+    <sql id="allColumnsFragment">
         ID as id,
+        STATUS as status,
+        TYPE as type,
         FIRSTNAME as firstName,
-        NICKNAME as nickName,
+        NICKNAME as nickname,
         MIDDLENAME as middleName,
         LASTNAME as lastName,
-        BIRTHDAY as birthday,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
         STREET as street,
         CITY as city,
         PROVINCE as province,
         COUNTRY as country,
-        CIRCUMSTANCE as circumstance,
-        PERSONALEFFECTS as personalEffects,
-        MARKS as marks,
-        PHOTO as photo,
-        AGEDPHOTO as agedPhoto,
-        CODISID as codisId,
-        AFISID as afisId,
-        DENTALID as dentalId,
-        DATE as date,
-        DATEMISSING as dateMissing,
-        STATUS as status,
-        TYPE as type,
+        SEX as sex,
         FEET as feet,
         INCHES as inches,
         WEIGHT as weight,
@@ -38,82 +38,693 @@
         RACE as race,
         EYECOLOR as eyeColor,
         HAIRCOLOR as hairColor,
-        GENDER as gender,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        MISSINGFROMCITY as missingFromCity,
+        MISSINGFROMPROVINCE as missingFromProvince,
+        MISSINGFROMCOUNTRY as missingFromCountry,
+        POSSIBLECITY as possibleCity,
+        POSSIBLEPROVINCE as possibleProvince,
+        POSSIBLECOUNTRY as possibleCountry,
+        CIRCUMSTANCE as circumstance,
         REWARD as reward,
-        ENCODERID as encoderId,
-        INVESTIGATORID as investigatorId,
+        INSTITUTION as institution,
+        INSTITUTIONSTREET as institutionStreet,
+        INSTITUTIONCITY as institutionCity,
+        INSTITUTIONPROVINCE as institutionProvince,
+        INSTITUTIONCOUNTRY as institutionCountry,
+        INSTITUTIONEMAIL as institutionEmail,
+        INSTITUTIONNUMBER as institutionNumber,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
         RELATIVEID as relativeId,
         ABDUCTORID as abductorId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
+        FROM PERSON
+    </sql>
+
+    <sql id="ongoingFragment">
+        FROM PERSON
+        WHERE STATUS = 0
+    </sql>
+
+    <sql id="solvedFragment">
+        FROM PERSON
+        WHERE STATUS = 1
+    </sql>
+
+    <sql id="unsolvedFragment">
+        FROM PERSON
+        WHERE STATUS = 2
+    </sql>
+
+    <sql id="missingColumnsFragment">
+        ID as id,
         STATUS as status,
-        QUESTION as question,
-        ANSWER as answer
+        TYPE as type,
+        FIRSTNAME as firstName,
+        NICKNAME as nickname,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        SEX as sex,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        MISSINGFROMCITY as missingFromCity,
+        MISSINGFROMPROVINCE as missingFromProvince,
+        MISSINGFROMCOUNTRY as missingFromCountry,
+        POSSIBLECITY as possibleCity,
+        POSSIBLEPROVINCE as possibleProvince,
+        POSSIBLECOUNTRY as possibleCountry,
+        CIRCUMSTANCE as circumstance,
+        REWARD as reward,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
+        RELATIVEID as relativeId,
+        ABDUCTORID as abductorId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
+    </sql>
+
+    <sql id="foundColumnsFragment">
+        ID as id,
+        STATUS as status,
+        TYPE as type,
+        FIRSTNAME as firstName,
+        NICKNAME as nickname,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        SEX as sex,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        INSTITUTION as institution,
+        INSTITUTIONSTREET as institutionStreet,
+        INSTITUTIONCITY as institutionCity,
+        INSTITUTIONPROVINCE as institutionProvince,
+        INSTITUTIONCOUNTRY as institutionCountry,
+        INSTITUTIONEMAIL as institutionEmail,
+        INSTITUTIONNUMBER as institutionNumber,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
+    </sql>
+
+    <sql id="allMissingFragment">
+        FROM PERSON
+        WHERE TYPE = 0 OR TYPE = 1 OR TYPE = 2 OR TYPE = 3 OR TYPE = 4
+    </sql>
+
+    <sql id="missingFragment">
+        FROM PERSON
+        WHERE TYPE = 0
+    </sql>
+
+    <sql id="familyAbductionFragment">
+        FROM PERSON
+        WHERE TYPE = 1
+    </sql>
+
+    <sql id="nonFamilyAbductionFragment">
+        FROM PERSON
+        WHERE TYPE = 2
+    </sql>
+
+    <sql id="runawayFragment">
+        FROM PERSON
+        WHERE TYPE = 3
+    </sql>
+
+    <sql id="unknownFragment">
+        FROM PERSON
+        WHERE TYPE = 4
+    </sql>
+
+    <sql id="allFoundFragment">
+        FROM PERSON
+        WHERE TYPE = 5 OR TYPE = 6
+        ORDER BY TYPE
+    </sql>
+
+    <sql id="abandonedFragment">
+        FROM PERSON
+        WHERE TYPE = 5
+    </sql>
+
+    <sql id="throwawayFragment">
+        FROM PERSON
+        WHERE TYPE = 6
+    </sql>
+
+    <sql id="unidentifiedFragment">
+        FROM PERSON
+        WHERE TYPE = 7
+    </sql>
+    
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getPersonById" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        STATUS as status,
+        TYPE as type,
+        FIRSTNAME as firstName,
+        NICKNAME as nickname,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        SEX as sex,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        MISSINGFROMCITY as missingFromCity,
+        MISSINGFROMPROVINCE as missingFromProvince,
+        MISSINGFROMCOUNTRY as missingFromCountry,
+        POSSIBLECITY as possibleCity,
+        POSSIBLEPROVINCE as possibleProvince,
+        POSSIBLECOUNTRY as possibleCountry,
+        CIRCUMSTANCE as circumstance,
+        REWARD as reward,
+        INSTITUTION as institution,
+        INSTITUTIONSTREET as institutionStreet,
+        INSTITUTIONCITY as institutionCity,
+        INSTITUTIONPROVINCE as institutionProvince,
+        INSTITUTIONCOUNTRY as institutionCountry,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
+        RELATIVEID as relativeId,
+        ABDUCTORID as abductorId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
         FROM PERSON
         WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="getPersonsByEncoderId" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        STATUS as status,
+        TYPE as type,
+        FIRSTNAME as firstName,
+        NICKNAME as nickname,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        SEX as sex,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        MISSINGFROMCITY as missingFromCity,
+        MISSINGFROMPROVINCE as missingFromProvince,
+        MISSINGFROMCOUNTRY as missingFromCountry,
+        POSSIBLECITY as possibleCity,
+        POSSIBLEPROVINCE as possibleProvince,
+        POSSIBLECOUNTRY as possibleCountry,
+        CIRCUMSTANCE as circumstance,
+        REWARD as reward,
+        INSTITUTION as institution,
+        INSTITUTIONSTREET as institutionStreet,
+        INSTITUTIONCITY as institutionCity,
+        INSTITUTIONPROVINCE as institutionProvince,
+        INSTITUTIONCOUNTRY as institutionCountry,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
+        RELATIVEID as relativeId,
+        ABDUCTORID as abductorId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
+        FROM PERSON
+        WHERE ENCODERID = #encoderId#
+        ]]>
+    </select>
+
+    <select id="countPersonsByEncoderId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        WHERE ENCODERID = #encoderId#
+        ]]>
+    </select>
+
+    <select id="getPersonsByInvestigatorId" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        STATUS as status,
+        TYPE as type,
+        FIRSTNAME as firstName,
+        NICKNAME as nickname,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        SEX as sex,
+        FEET as feet,
+        INCHES as inches,
+        WEIGHT as weight,
+        RELIGION as religion,
+        RACE as race,
+        EYECOLOR as eyeColor,
+        HAIRCOLOR as hairColor,
+        MEDICALCONDITION as medicalCondition,
+        MARKS as marks,
+        PERSONALEFFECTS as personalEffects,
+        REMARKS as remarks,
+        DATEMISSINGORFOUND as dateMissingOrFound,
+        MISSINGFROMCITY as missingFromCity,
+        MISSINGFROMPROVINCE as missingFromProvince,
+        MISSINGFROMCOUNTRY as missingFromCountry,
+        POSSIBLECITY as possibleCity,
+        POSSIBLEPROVINCE as possibleProvince,
+        POSSIBLECOUNTRY as possibleCountry,
+        CIRCUMSTANCE as circumstance,
+        REWARD as reward,
+        INSTITUTION as institution,
+        INSTITUTIONSTREET as institutionStreet,
+        INSTITUTIONCITY as institutionCity,
+        INSTITUTIONPROVINCE as institutionProvince,
+        INSTITUTIONCOUNTRY as institutionCountry,
+        PHOTO as photo,
+        AGEDPHOTO as agedPhoto,
+        CODISID as codisId,
+        AFISID as afisId,
+        DENTALID as dentalId,
+        RELATIVEID as relativeId,
+        ABDUCTORID as abductorId,
+        INVESTIGATORID as investigatorId,
+        DATE as date,
+        ENCODERID as encoderId
+        FROM PERSON
+        WHERE INVESTIGATORID = #investigatorId#
+        ]]>
+    </select>
+
+    <select id="countPersonsByInvestigatorId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        WHERE INVESTIGATORID = #investigatorId#
+        ]]>
+    </select>
+
+    <!-- According to person ID -->
+    <select id="getAllPersons" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countAllPersons" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+    </select>
+
+    <select id="getOngoing" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <include refid="ongoingFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countOngoing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="ongoingFragment"/>
+    </select>
+
+    <select id="getSolved" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <include refid="solvedFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countSolved" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="solvedFragment"/>
+    </select>
+
+    <select id="getUnsolved" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <include refid="unsolvedFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countUnsolved" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="unsolvedFragment"/>
+    </select>
+
+    <select id="getAllMissing" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="allMissingFragment"/>
+        ORDER BY TYPE, ID
+    </select>
+
+    <select id="countAllMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="allMissingFragment"/>
+    </select>
+
+    <select id="getMissing" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="missingFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="missingFragment"/>
+    </select>
+
+    <select id="getFamilyAbduction" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="familyAbductionFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="familyAbductionFragment"/>
+    </select>
+
+    <select id="getNonFamilyAbduction" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="nonFamilyAbductionFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="nonFamilyAbductionFragment"/>
+    </select>
+
+    <select id="getRunaway" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="runawayFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="runawayFragment"/>
+    </select>
+
+    <select id="getUnknown" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="unknownFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="unknownFragment"/>
+    </select>
+
+    <select id="getAllFound" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="foundColumnsFragment"/>
+        <include refid="allFoundFragment"/>
+        ORDER BY TYPE, ID
+    </select>
+
+    <select id="countAllFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="allFoundFragment"/>
+    </select>
+
+    <select id="getAbandoned" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="foundColumnsFragment"/>
+        <include refid="abandonedFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="abandonedFragment"/>
+    </select>
+
+    <select id="getThrowaway" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="foundColumnsFragment"/>
+        <include refid="throwawayFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="throwawayFragment"/>
+    </select>
+
+    <select id="getUnidentified" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="foundColumnsFragment"/>
+        <include refid="unidentifiedFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        <include refid="unidentifiedFragment"/>
+    </select>
+
+    <select id="checkPerson" parameterClass="person" resultClass="person" cacheModel="personCache">
+        <![CDATA[
+        SELECT
+        FIRSTNAME as firstName,
+        LASTNAME as lastName,
+        NICKNAME as nickname
+        FROM PERSON
+        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND LASTNAME = #lastName#) OR NICKNAME = #nickname#
+        ]]>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertPerson" parameterClass="person">
+        <selectKey property="id" type="post" resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        <![CDATA[
         INSERT INTO PERSON
-        (FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHDAY, STREET, CITY,
-        PROVINCE, COUNTRY, CIRCUMSTANCE, PERSONALEFFECTS, MARKS, PHOTO, AGEDPHOTO, CODISID, AFISID,
-        DENTALID, DATE, DATEMISSING, STATUS, TYPE, FEET, INCHES, WEIGHT, RELIGION,
-        RACE, EYECOLOR, HAIRCOLOR, GENDER, REWARD, ENCODERID, INVESTIGATORID,
-        RELATIVEID, ABDUCTORID)
+        (STATUS, TYPE, FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
+        STREET, CITY, PROVINCE, COUNTRY, SEX, FEET, INCHES, WEIGHT, RELIGION, RACE,
+        EYECOLOR, HAIRCOLOR, MEDICALCONDITION, MARKS, PERSONALEFFECTS, REMARKS,
+        DATEMISSINGORFOUND, MISSINGFROMCITY, MISSINGFROMPROVINCE, MISSINGFROMCOUNTRY,
+        POSSIBLECITY, POSSIBLEPROVINCE, POSSIBLECOUNTRY, CIRCUMSTANCE, REWARD,
+        INSTITUTION, INSTITUTIONSTREET, INSTITUTIONCITY, INSTITUTIONPROVINCE, INSTITUTIONCOUNTRY,
+        INSTITUTIONEMAIL, INSTITUTIONNUMBER, PHOTO, AGEDPHOTO, CODISID, AFISID, DENTALID, DATE, ENCODERID)
         VALUES
-        (#firstName#, #nickName#, #middleName#, #lastName#, #birthday#,
-        #street#, #city#, #province#, #country#, #circumstance#, #personalEffects#, #marks# #photo#,
-        #agedPhoto#, #codisId#, #afisId#, #dentalId#, #date#, #dateMissing#,
-        #status#, #type#, #feet#, #inches#, #weight#, #religion#, #race#,
-        #eyeColor#, #hairColor#, #gender#, #reward#, #encoderId#,
-        #investigatorId#, #relativeId#, #abductorId#)
+        (#status#, #type#, #firstName#, #nickname#, #middleName#, #lastName#, #birthMonth#, #birthDay#, #birthYear#,
+        #street#, #city#, #province#, #country#, #sex#, #feet#, #inches#, #weight#, #religion#, #race#,
+        #eyeColor#, #hairColor#, #medicalCondition#, #marks#, #personalEffects#, #remarks#,
+        #dateMissingOrFound#, #missingFromCity#, #missingFromProvince#, #missingFromCountry#,
+        #possibleCity#, #possibleProvince#, #possibleCountry#, #circumstance#, #reward#,
+        #institution#, #institutionStreet#, #institutionCity#, #institutionProvince#, #institutionCountry#,
+        #institutionEmail#, #institutionNumber#,#photo#, #agedPhoto#, #codisId#, #afisId#, #dentalId#, #date#, #encoderId#)
+        ]]>
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updatePerson" parameterClass="person">
+        <![CDATA[
         UPDATE PERSON SET
+        STATUS = #status#,
+        TYPE = #type#,
         FIRSTNAME = #firstName#,
-        NICKNAME = #nickName#,
+        NICKNAME = #nickname#,
         MIDDLENAME = #middleName#,
         LASTNAME = #lastName#,
-        BIRTHDAY = #birthday#,
+        BIRTHMONTH = #birthMonth#,
+        BIRTHDAY = #birthDay#,
+        BIRTHYEAR = #birthYear#,
         STREET = #street#,
         CITY = #city#,
         PROVINCE = #province#,
         COUNTRY = #country#,
-        CIRCUMSTANCE = #circumstance#,
-        PERSONALEFFECTS = #personalEffects#,
+        SEX = #sex#,
+        FEET = #feet#,
+        INCHES = #inches#,
+        WEIGHT = #weight#,
+        RELIGION = #religion#,
+        RACE = #race#,
+        EYECOLOR = #eyeColor#,
+        HAIRCOLOR = #hairColor#,
+        MEDICALCONDITION = #medicalCondition#,
         MARKS = #marks#,
+        PERSONALEFFECTS = #personalEffects#,
+        REMARKS = #remarks#,
+        DATEMISSINGORFOUND = #dateMissingOrFound#,
+        MISSINGFROMCITY = #missingFromCity#,
+        MISSINGFROMPROVINCE = #missingFromProvince#,
+        MISSINGFROMCOUNTRY = #missingFromCountry#,
+        POSSIBLECITY = #possibleCity#,
+        POSSIBLEPROVINCE = #possibleProvince#,
+        POSSIBLECOUNTRY = #possibleCountry#,
+        CIRCUMSTANCE = #circumstance#,
+        REWARD = #reward#,
+        INSTITUTION = #institution#,
+        INSTITUTIONSTREET = #institutionStreet#,
+        INSTITUTIONCITY = #institutionCity#,
+        INSTITUTIONPROVINCE = #institutionProvince#,
+        INSTITUTIONCOUNTRY = #institutionCountry#,
+        INSTITUTIONEMAIL = #institutionEmail#,
+        INSTITUTIONNUMBER = #institutionNumber#,
         PHOTO = #photo#,
         AGEDPHOTO = #agedPhoto#,
         CODISID = #codisId#,
         AFISID = #afisId#,
-        DENTALID = #dentalId#,
-        DATE = #date#,
-        DATEMISSING = #dateMissing#,
-        STATUS = #status#,
-        TYPE = #type#,
-        FEET = #feet#,
-        INCHES = #inches#,
-        WEIGHT = #weight#,
-        RELIGION = #religion#
-        RACE = #race#,
-        EYECOLOR = #eyeColor#,
-        HAIRCOLOR = #hairColor#,
-        GENDER = #gender#,
-        REWARD = #reward#,
-        ENCODERID = #encoderId#,
-        INVESTIGATORID = #investigatorId#,
-        RELATIVEID = #relativeId#,
-        ABDUCTORID = #abductorId#,
+        DENTALID = #dentalId#
         WHERE ID = #id#
+        ]]>
+    </update>
+    
+    <update id="updatePersonRelative" parameterClass="person">
+        <![CDATA[
+        UPDATE PERSON SET
+        RELATIVEID = #relativeId#
+        WHERE ID = #id#
+        ]]>
+    </update>
+
+    <update id="updatePersonInvestigator" parameterClass="person">
+        <![CDATA[
+        UPDATE PERSON SET
+        INVESTIGATORID = #investigatorId#
+        WHERE ID = #id#
+        ]]>
+    </update>
+
+    <update id="updatePersonAbductor" parameterClass="person">
+        <![CDATA[
+        UPDATE PERSON SET
+        ABDUCTORID = #abductorId#
+        WHERE ID = #id#
+        ]]>
     </update>
 
     <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deletePerson" parameterClass="int">
+    <delete id="deletePerson" parameterClass="java.lang.Integer">
+        <![CDATA[
         DELETE PERSON
         WHERE ID = #id#
+        ]]>
     </delete>
 </sqlMap>

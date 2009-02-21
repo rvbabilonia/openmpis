@@ -5,9 +5,34 @@
     <!-- Type alias allow you to use a shorter name for long fully qualified class names. -->
     <typeAlias alias="relative" type="com.googlecode.openmpis.dto.Relative"/>
     
+    <cacheModel id="relativeCache" type="LRU">
+        <flushOnExecute statement="insertRelative"/>
+        <flushOnExecute statement="updateRelative"/>
+        <flushOnExecute statement="deleteRelative"/>
+        <flushInterval hours="24"/>
+    </cacheModel>
+    
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
     be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getRelative" parameterClass="int" resultClass="relative">
+    <select id="getRelativeById" parameterClass="java.lang.Integer" resultClass="relative" cacheModel="relativeCache">
+        <![CDATA[
+        SELECT
+        FIRSTNAME as firstName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        EMAIL as email,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        NUMBER as number,
+        RELATION as relation
+        FROM RELATIVE
+        WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="getAllRelatives" resultClass="relative" cacheModel="relativeCache">
         SELECT
         ID as id,
         FIRSTNAME as firstName,
@@ -19,25 +44,46 @@
         PROVINCE as province,
         COUNTRY as country,
         NUMBER as number,
-        ENCODERID as encoderId
+        RELATION as relation
         FROM RELATIVE
-        WHERE ID = #id#
+        ORDER BY ID
+    </select>
+
+    <select id="countAllRelatives" resultClass="java.lang.Integer" cacheModel="relativeCache">
+        SELECT
+        COUNT(ID)
+        FROM RELATIVE
+    </select>
+
+    <select id="checkRelative" parameterClass="relative" resultClass="relative" cacheModel="relativeCache">
+        <![CDATA[
+        SELECT
+        FIRSTNAME as firstName
+        FROM RELATIVE
+        WHERE ID != #id# AND FIRSTNAME = #firstName# AND LASTNAME = #lastName#
+        ]]>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertRelative" parameterClass="relative">
+        <selectKey property="id" type="post" resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        <![CDATA[
         INSERT INTO RELATIVE
-        (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET, CITY,
-        PROVINCE, COUNTRY, NUMBER, ENCODERID)
+        (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET,
+        CITY, PROVINCE, COUNTRY, NUMBER, RELATION)
         VALUES
-        (#firstName#, #middleName#, #lastName#, #email#,
-        #street#, #city#, #province#, #country#, #number#, #encoderId#)
+        (#firstName#, #middleName#, #lastName#, #email#, #street#,
+        #city#, #province#, #country#, #number#, #relation#)
+        ]]>
     </insert>
 
     <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateRelative" parameterClass="relative">
+        <![CDATA[
         UPDATE RELATIVE SET
         FIRSTNAME = #firstName#,
         MIDDLENAME = #middleName#,
@@ -48,14 +94,17 @@
         PROVINCE = #province#,
         COUNTRY = #country#,
         NUMBER = #number#,
-        ENCODERID = #encoderId#
+        RELATION = #relation#
         WHERE ID = #id#
+        ]]>
     </update>
 
     <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <delete id="deleteRelative" parameterClass="int">
+    <delete id="deleteRelative" parameterClass="java.lang.Integer">
+        <![CDATA[
         DELETE RELATIVE
         WHERE ID = #id#
+        ]]>
     </delete>
 </sqlMap>
