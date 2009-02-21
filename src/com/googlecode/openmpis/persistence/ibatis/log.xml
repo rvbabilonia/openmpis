@@ -18,22 +18,32 @@
         LOG as log,
         DATE as date,
         FROM LOG
+        ORDER BY ID
     </select>
     
     <select id="getLogById" parameterClass="java.lang.Integer" resultClass="log" cacheModel="logCache">
+        <![CDATA[
         SELECT
-        ID as id,
         LOG as log,
         DATE as date,
         FROM LOG
         WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="countAllLogs" resultClass="java.lang.Integer" cacheModel="logCache">
+        SELECT
+        COUNT(ID)
+        FROM LOG
     </select>
 
     <!-- Use Log object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertLog" parameterClass="log">
+        <![CDATA[
         INSERT INTO
         LOG (LOG, DATE)
         VALUES (#log#, #date#)
+        ]]>
     </insert>
 </sqlMap>

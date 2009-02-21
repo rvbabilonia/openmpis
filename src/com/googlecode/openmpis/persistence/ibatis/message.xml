@@ -26,11 +26,12 @@
         PERSONID as personId,
         DATE as date,
         FROM MESSAGE
+        ORDER BY ID
     </select>
     
     <select id="getMessageById" parameterClass="java.lang.Integer" resultClass="message" cacheModel="messageCache">
+        <![CDATA[
         SELECT
-        ID as id,
         FIRSTNAME as firstName,
         LASTNAME as lastName,
         SUBJECT as subject,
@@ -41,29 +42,42 @@
         DATE as date,
         FROM MESSAGE
         WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="countAllMessages" resultClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
     </select>
 
     <!-- Use Message object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertMessage" parameterClass="message">
+        <![CDATA[
         INSERT INTO MESSAGE
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#,
         #personId#, #date#)
+        ]]>
     </insert>
     
     <insert id="insertFeedback" parameterClass="message">
+        <![CDATA[
         INSERT INTO MESSAGE
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#, #date#)
+        ]]>
     </insert>
 
     <!-- Use Message object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteMessage" parameterClass="java.lang.Integer">
+        <![CDATA[
         DELETE MESSAGE
         WHERE ID = #id#
+        ]]>
     </delete>
 </sqlMap>

@@ -13,11 +13,54 @@
         <flushOnExecute statement="deleteUser"/>
         <flushInterval hours="24"/>
     </cacheModel>
+
+    <sql id="publicColumnFragment">
+        ID as id,
+        GROUPID as groupId,
+        USERNAME as username,
+        FIRSTNAME as firstName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        EMAIL as email,
+        DESIGNATION as designation,
+        AGENCY as agency,
+        NUMBER as number,
+        IPADDRESS as ipAddress,
+        LASTLOGIN as lastLogin,
+        DATE as date,
+        STATUS as status,
+        CREATORID as creatorId
+    </sql>
+
+    <sql id="administratorFragment">
+        FROM USER
+        WHERE GROUPID = 0
+    </sql>
+
+    <sql id="encoderFragment">
+        FROM USER
+        WHERE GROUPID = 1
+    </sql>
+
+    <sql id="investigatorFragment">
+        FROM USER
+        WHERE GROUPID = 2
+    </sql>
+
+    <sql id="activeFragment">
+        FROM USER
+        WHERE STATUS = 0
+    </sql>
+
+    <sql id="suspendedFragment">
+        FROM USER
+        WHERE STATUS = 1
+    </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
     be auto-mapped results to User object (JavaBean) properties -->
-    <!--select id="getUser" resultMap="userResult"-->
     <select id="getUserByUsername" parameterClass="String" resultClass="user" cacheModel="userCache">
+        <![CDATA[
         SELECT
         ID as id,
         GROUPID as groupId,
@@ -26,15 +69,18 @@
         FIRSTNAME as firstName,
         LASTNAME as lastName,
         EMAIL as email,
+        DATE as date,
         STATUS as status,
         QUESTION as question,
         ANSWER as answer,
         CREATORID as creatorId
         FROM USER
-        WHERE USERNAME = #username# AND STATUS = '0'
+        WHERE USERNAME LIKE BINARY #username# AND STATUS = '0'
+        ]]>
     </select>
     
     <select id="getUserById" parameterClass="java.lang.Integer" resultClass="user" cacheModel="userCache">
+        <![CDATA[
         SELECT
         ID as id,
         GROUPID as groupId,
@@ -43,6 +89,9 @@
         FIRSTNAME as firstName,
         MIDDLENAME as middleName,
         LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
         EMAIL as email,
         DESIGNATION as designation,
         AGENCY as agency,
@@ -56,8 +105,10 @@
         ANSWER as answer
         FROM USER
         WHERE ID = #id#
+        ]]>
     </select>
-    
+
+    <!-- According to user ID -->
     <select id="getAllUsers" resultClass="user" cacheModel="userCache">
         SELECT
         ID as id,
@@ -76,42 +127,124 @@
         STATUS as status,
         CREATORID as creatorId
         FROM USER
+        ORDER BY ID
+    </select>
+
+    <select id="countAllUsers" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+    </select>
+
+    <select id="getAdministrators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="publicColumnFragment"/>
+        <include refid="administratorFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        <include refid="administratorFragment"/>
+    </select>
+
+    <select id="getEncoders" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="publicColumnFragment"/>
+        <include refid="encoderFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        <include refid="encoderFragment"/>
+    </select>
+
+    <select id="getInvestigators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="publicColumnFragment"/>
+        <include refid="investigatorFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        <include refid="investigatorFragment"/>
+    </select>
+
+    <select id="getActiveUsers" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="publicColumnFragment"/>
+        <include refid="activeFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countActiveUsers" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        <include refid="activeFragment"/>
+    </select>
+
+    <select id="getSuspendedUsers" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="publicColumnFragment"/>
+        <include refid="suspendedFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countSuspendedUsers" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        <include refid="suspendedFragment"/>
     </select>
         
     <select id="checkUsername" parameterClass="user" resultClass="user" cacheModel="userCache">
+        <![CDATA[
         SELECT
         USERNAME as username
         FROM USER
         WHERE USERNAME = #username# AND ID != #id#
+        ]]>
     </select>
         
     <select id="checkEmail" parameterClass="user" resultClass="user" cacheModel="userCache">
+        <![CDATA[
         SELECT
         EMAIL as email
         FROM USER
-        WHERE EMAIL = #email# AND ID != #id# 
+        WHERE EMAIL = #email# AND ID != #id#
+        ]]>
     </select>
 
     <!-- Use User object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertUser" parameterClass="user">
+        <![CDATA[
         INSERT INTO USER
-        (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, DESIGNATION,
-        AGENCY, NUMBER, DATE, STATUS, CREATORID, QUESTION)
+        (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
+        EMAIL, DESIGNATION, AGENCY, NUMBER, DATE, STATUS, CREATORID, QUESTION)
         VALUES
-        (#groupId#, #username#, MD5(#password#), #firstName#, #middleName#, #lastName#,
+        (#groupId#, #username#, MD5(#password#), #firstName#, #middleName#, #lastName#, #birthMonth#, #birthDay#, #birthYear#,
         #email#, #designation#, #agency#, #number#, #date#, #status#, #creatorId#, #question#)
+        ]]>
     </insert>
 
     <!-- Use User object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateUser" parameterClass="user">
+        <![CDATA[
         UPDATE USER SET
         GROUPID = #groupId#,
         USERNAME = #username#,
         FIRSTNAME = #firstName#,
         MIDDLENAME = #middleName#,
         LASTNAME = #lastName#,
+        BIRTHMONTH = #birthMonth#,
+        BIRTHDAY = #birthDay#,
+        BIRTHYEAR = #birthYear#,
         EMAIL = #email#,
         DESIGNATION = #designation#,
         AGENCY = #agency#,
@@ -120,25 +253,32 @@
         QUESTION = #question#,
         ANSWER = #answer#
         WHERE ID = #id#
+        ]]>
     </update>
     
     <update id="updatePassword" parameterClass="user">
+        <![CDATA[
         UPDATE USER SET
-        PASSWORD = MD5(#password#)
+        PASSWORD = #password#
         WHERE ID = #id#
+        ]]>
     </update>
     
     <update id="updateLogin" parameterClass="user">
+        <![CDATA[
         UPDATE USER SET
         IPADDRESS = #ipAddress#,
         LASTLOGIN = #lastLogin#
         WHERE ID = #id#
+        ]]>
     </update>
 
     <!-- Use User object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteUser" parameterClass="java.lang.Integer">
+        <![CDATA[
         DELETE FROM USER
         WHERE ID = #id#
+        ]]>
     </delete>
 </sqlMap>
