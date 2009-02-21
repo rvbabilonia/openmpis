@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
  * The PasswordForm class provides methods to validate the paswword retrieval form inputs.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class PasswordForm extends ActionForm {
 
@@ -30,14 +31,6 @@ public class PasswordForm extends ActionForm {
      * The username
      */
     private String username;
-    /**
-     * The password
-     */
-    private String password;
-    /**
-     * The email address
-     */
-    private String email;
     /**
      * The question
      */
@@ -50,7 +43,7 @@ public class PasswordForm extends ActionForm {
     /**
      * Gets the username.
      * 
-     * @return           the username
+     * @return              the username
      */
     public String getUsername() {
         return username;
@@ -59,16 +52,16 @@ public class PasswordForm extends ActionForm {
     /**
      * Sets the username.
      * 
-     * @param    username  the username
+     * @param username      the username
      */
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.trim();
     }
 
     /**
      * Gets the question.
      * 
-     * @return          the question
+     * @return              the question
      */
     public int getQuestion() {
         return question;
@@ -77,7 +70,7 @@ public class PasswordForm extends ActionForm {
     /**
      * Sets the question.
      * 
-     * @param   question   the question
+     * @param question      the question
      */
     public void setQuestion(int question) {
         this.question = question;
@@ -86,7 +79,7 @@ public class PasswordForm extends ActionForm {
     /**
      * Gets the answer.
      * 
-     * @return          the answer
+     * @return              the answer
      */
     public String getAnswer() {
         return answer;
@@ -95,52 +88,9 @@ public class PasswordForm extends ActionForm {
     /**
      * Sets the answer.
      * 
-     * @param   answer the answer
+     * @param answer        the answer
      */
     public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    /**
-     * Gets the email address.
-     * 
-     * @return          the email address
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets the email.
-     * 
-     * @param   email the email address
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Gets the password.
-     * 
-     * @return          the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the password.
-     * 
-     * @param   password the password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Sole constructor.
-     */
-    public PasswordForm() {
-        super();
+        this.answer = answer.trim();
     }
 }
