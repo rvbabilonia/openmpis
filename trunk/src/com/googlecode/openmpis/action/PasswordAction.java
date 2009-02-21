@@ -17,13 +17,17 @@
  */
 package com.googlecode.openmpis.action;
 
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.User;
@@ -37,26 +41,28 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.UserServiceImpl;
 import com.googlecode.openmpis.util.Configuration;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
-
 import com.googlecode.openmpis.util.Validator;
-import java.text.SimpleDateFormat;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 /**
  * The PasswordAction class provides the method to reset a user's password.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class PasswordAction extends Action {
 
     /**
+     * The file logger
+     */
+    private Logger logger = Logger.getLogger(this.getClass());
+
+    /**
      * This is the action called from the Struts framework.
      * 
-     * @param   mapping     the ActionMapping used to select this instance
-     * @param   form        the optional ActionForm bean for this request
-     * @param   request     the HTTP Request we are processing
-     * @param   response    the HTTP Response we are processing
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
@@ -91,14 +97,15 @@ public class PasswordAction extends Action {
                     user.setPassword(password);
 
                     // Set password modification event
-                    Log log = new Log();
-                    log.setLog("User " + user.getUsername() + " reset his password.");
+                    Log resetLog = new Log();
+                    resetLog.setLog("User " + user.getUsername() + " reset his password.");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    log.setDate(sdf.format(System.currentTimeMillis()));
+                    resetLog.setDate(sdf.format(System.currentTimeMillis()));
 
                     // Update user password and insert log
                     userService.updatePassword(user);
-                    logService.insertLog(log);
+                    logService.insertLog(resetLog);
+                    logger.info(resetLog.toString());
 
                     // Retrieve mail properties
                     Configuration config = new Configuration("mail.properties");
@@ -123,12 +130,16 @@ public class PasswordAction extends Action {
                     errors.add("question", new ActionMessage("error.question.invalid"));
                     saveErrors(request, errors);
 
+                    logger.info("Invalid password or answer for user " + passwordForm.getUsername() +
+                            " from " + request.getRemoteAddr() + ".");
+
                     forward = Constants.PASSWORD_REDO;
                 }
 
                 return mapping.findForward(forward);
             }
         } else {
+            logger.info("Invalid password retrieval credentials from " + request.getRemoteAddr() + ".");
             return mapping.findForward(Constants.PASSWORD_REDO);
         }
     }
@@ -136,9 +147,9 @@ public class PasswordAction extends Action {
     /**
      * Validates the inputs from the user form.
      * 
-     * @param request   the HTTP Request we are processing
-     * @param form      the ActionForm bean for this request
-     * @return          <code>true</code> if there are no errors in the form; <code>false</code> otherwise
+     * @param request       the HTTP Request we are processing
+     * @param form          the ActionForm bean for this request
+     * @return              <code>true</code> if there are no errors in the form; <code>false</code> otherwise
      */
     private boolean isValidAccount(HttpServletRequest request, ActionForm form) {
         ActionMessages errors = new ActionMessages();

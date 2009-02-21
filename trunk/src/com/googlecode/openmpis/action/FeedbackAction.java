@@ -17,13 +17,16 @@
  */
 package com.googlecode.openmpis.action;
 
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Message;
@@ -37,26 +40,29 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.MessageServiceImp
 import com.googlecode.openmpis.util.Configuration;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
-
 import com.googlecode.openmpis.util.Validator;
-import java.text.SimpleDateFormat;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.log4j.Logger;
 
 /**
  * The FeedbackAction class provides the method to email a feedback to the administrator.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class FeedbackAction extends Action {
 
     /**
+     * The file logger
+     */
+    private Logger logger = Logger.getLogger(this.getClass());
+
+    /**
      * This is the action called from the Struts framework.
      * 
-     * @param   mapping     the ActionMapping used to select this instance
-     * @param   form        the optional ActionForm bean for this request
-     * @param   request     the HTTP Request we are processing
-     * @param   response    the HTTP Response we are processing
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
@@ -82,13 +88,14 @@ public class FeedbackAction extends Action {
             message.setIpAddress(request.getRemoteAddr());
 
             // Log message receipt
-            Log log = new Log();
-            log.setLog("Email received from " + feedbackForm.getEmail() + ".");
-            log.setDate(date);
+            Log feedbackLog = new Log();
+            feedbackLog.setLog("Email received from " + feedbackForm.getEmail() + ".");
+            feedbackLog.setDate(date);
 
             // Insert feedback and log
             messageService.insertFeedback(message);
-            logService.insertLog(log);
+            logService.insertLog(feedbackLog);
+            logger.info(feedbackLog.toString());
 
             // Retrieve mail properties
             Configuration config = new Configuration("mail.properties");
@@ -103,6 +110,8 @@ public class FeedbackAction extends Action {
 
             return mapping.findForward(Constants.FEEDBACK_SUCCESS);
         } else {
+            logger.info("Invalid feedback from " + request.getRemoteAddr() + ".");
+
             return mapping.findForward(Constants.FEEDBACK_REDO);
         }
     }
@@ -110,9 +119,9 @@ public class FeedbackAction extends Action {
     /**
      * Validates the inputs from the user form.
      * 
-     * @param request   the HTTP Request we are processing
-     * @param form      the ActionForm bean for this request
-     * @return          <code>true</code> if there are no errors in the form; <code>false</code> otherwise
+     * @param request       the HTTP Request we are processing
+     * @param form          the ActionForm bean for this request
+     * @return              <code>true</code> if there are no errors in the form; <code>false</code> otherwise
      */
     private boolean isValidFeedback(HttpServletRequest request, ActionForm form) {
         ActionMessages errors = new ActionMessages();
