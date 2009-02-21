@@ -18,42 +18,91 @@
 package com.googlecode.openmpis.dto;
 
 /**
- * 
+ * The Log class is used to represent events pertaining to the system's operations.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class Log {
 
+    /**
+     * The log ID
+     */
     private int id;
+    /**
+     * The logged event
+     */
     private String log;
+    /**
+     * The date this log was created
+     */
     private String date;
 
+    /**
+     * Gets the log ID.
+     * 
+     * @return              the ID of the log
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the log ID.
+     * 
+     * @param id            the ID of the log
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Gets the logged event.
+     * 
+     * @return              the logged event
+     */
     public String getLog() {
         return log;
     }
 
+    /**
+     * Sets the logged event.
+     * 
+     * @param log           the logged event
+     */
     public void setLog(String log) {
         this.log = log;
     }
 
+    /**
+     * Gets the date this log was created.
+     * 
+     * @return              the date this log was created
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * Sets the date this log was created.
+     * 
+     * @param date          the date this log was created
+     */
     public void setDate(String date) {
         this.date = date;
     }
-    
+
+    /**
+     * Returns a String representation of this data transfer object.
+     * 
+     * @return              the String representation of this data transfer object
+     */
     @Override
     public String toString() {
-        return log;
+        String content = "";
+        content += "\nID: " + id;
+        content += "\nLog: " + log;
+        content += "\nDate: " + date;
+        return content;
     }
 }
