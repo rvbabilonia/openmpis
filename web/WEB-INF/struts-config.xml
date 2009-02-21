@@ -21,14 +21,20 @@
                 name="userForm"
                 type="com.googlecode.openmpis.form.UserForm"/>
         <form-bean
-                name="caseForm"
-                type="com.googlecode.openmpis.form.CaseForm"/>
+                name="personForm"
+                type="com.googlecode.openmpis.form.PersonForm"/>
         <form-bean
                 name="relativeForm"
                 type="com.googlecode.openmpis.form.RelativeForm"/>
         <form-bean
                 name="abductorForm"
                 type="com.googlecode.openmpis.form.AbductorForm"/>
+        <form-bean
+                name="reportForm"
+                type="com.googlecode.openmpis.form.ReportForm"/>
+        <form-bean
+                name="investigatorForm"
+                type="com.googlecode.openmpis.form.InvestigatorForm"/>
     </form-beans>
     <global-exceptions>
     </global-exceptions>
@@ -42,79 +48,209 @@
         <forward
                 name="unauthorized"
                 path="/WEB-INF/errors/authorizationError.jsp"/>
-        <forward
-                name="cancelled"
-                path="/viewUserHome.do"/>
     </global-forwards>
     <action-mappings>
         <action
                 path="/viewHome"
-                forward="/index.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/index.jsp"/>
         <action
                 path="/viewAbout"
-                forward="/about/about.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/about.jsp"/>
         <action
                 path="/viewPrivacy"
-                forward="/about/privacy.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/privacy.jsp"/>
         <action
                 path="/viewTerms"
-                forward="/about/terms.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/terms.jsp"/>
         <action
                 path="/viewDisclaimer"
-                forward="/about/disclaimer.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/disclaimer.jsp"/>
         <action
                 path="/viewAccessibility"
-                forward="/about/accessibility.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/accessibility.jsp"/>
         <action
                 path="/viewSitemap"
-                forward="/about/sitemap.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/about/sitemap.jsp"/>
         <action
                 path="/viewStatistics"
-                forward="/statistics/statistics.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/statistics/statistics.jsp" />
         <action
                 path="/viewSearch"
-                forward="/search/searchForm.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/search/searchForm.jsp"/>
         <action
                 path="/viewTips"
-                forward="/tips/tips.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/tips/tips.jsp"/>
         <action
                 path="/viewLogin"
-                forward="/session/loginForm.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/session/loginForm.jsp"/>
         <action
                 path="/viewFeedback"
-                forward="/feedback/feedbackForm.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/feedback/feedbackForm.jsp"/>
         <action
                 path="/viewPassword"
-                forward="/password/passwordForm.jsp"/>
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/password/passwordForm.jsp"/>
         <action
                 path="/viewDownload"
-                forward="/form/download.jsp"/>
-        <!-- List, add, view, edit and delete user -->
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/form/download.jsp"/>
+        <action
+                path="/viewCaseForm"
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/form/OpenMPIS Case Form.pdf"/>
+        <action
+                path="/viewUserForm"
+                type="org.apache.struts.actions.ForwardAction"
+                parameter="/WEB-INF/pages/form/OpenMPIS User Form.pdf"/>
+        <!-- List, add, view, edit, delete and count users -->
         <action
                 path="/viewUser"
                 type="com.googlecode.openmpis.action.UserAction"
                 scope="request"
                 name="userForm"
-                input="/session/userForm.jsp"
+                input="/WEB-INF/pages/session/userForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="list-success" path="/session/listUsers.jsp"/>
-            <forward name="add-user"  path="/session/addUserForm.jsp"/>
-            <forward name="add-redo"  path="/session/addUserForm.jsp"/>
-            <forward name="add-success" path="/session/userSuccess.jsp"/>
-            <forward name="edit-user" path="/session/editUserForm.jsp"/>
-            <forward name="edit-redo" path="/session/editUserForm.jsp"/>
-            <forward name="edit-success" path="/session/userSuccess.jsp"/>
-            <forward name="delete-user" path="/session/deleteUserForm.jsp"/>
-            <forward name="delete-redo" path="/session/deleteUserForm.jsp"/>
-            <forward name="delete-success" path="/session/userSuccess.jsp"/>
+            <forward name="list-user" path="/WEB-INF/pages/session/listUsers.jsp"/>
+            <forward name="add-user"  path="/WEB-INF/pages/session/addUserForm.jsp"/>
+            <forward name="add-user-redo"  path="/WEB-INF/pages/session/addUserForm.jsp"/>
+            <forward name="add-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
+            <forward name="edit-user" path="/WEB-INF/pages/session/editUserForm.jsp"/>
+            <forward name="edit-user-redo" path="/WEB-INF/pages/session/editUserForm.jsp"/>
+            <forward name="edit-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
+            <forward name="delete-user" path="/WEB-INF/pages/session/deleteUserForm.jsp"/>
+            <forward name="delete-user-redo" path="/WEB-INF/pages/session/deleteUserForm.jsp"/>
+            <forward name="delete-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
+            <forward name="user-statistics" path="/WEB-INF/pages/statistics/userStatistics.jsp"/>
+        </action>
+        <!-- List and count persons and abductors -->
+        <action
+                path="/viewCase"
+                type="com.googlecode.openmpis.action.CaseAction"
+                scope="request"
+                parameter="action">
+            <forward name="list-person" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-all-missing" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-missing" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-familyabduction" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-nonfamilyabduction" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-all-found" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-abandoned" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-throwaway" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-unidentified" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-abductor" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="case-statistics" path="/WEB-INF/pages/statistics/caseStatistics.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete relatives -->
+        <action
+                path="/viewRelative"
+                type="com.googlecode.openmpis.action.RelativeAction"
+                scope="request"
+                name="personForm"
+                input="/WEB-INF/pages/session/addPersonForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="view-relative" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
+            <forward name="add-relative"  path="/WEB-INF/pages/session/addRelativeForm.jsp"/>
+            <forward name="add-relative-redo"  path="/WEB-INF/pages/session/addRelativeForm.jsp"/>
+            <forward name="add-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
+            <forward name="edit-relative" path="/WEB-INF/pages/session/editRelativeForm.jsp"/>
+            <forward name="edit-relative-redo" path="/WEB-INF/pages/session/editRelativeForm.jsp"/>
+            <forward name="edit-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
+            <forward name="delete-relative" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
+            <forward name="delete-relative-redo" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
+            <forward name="delete-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete abductors -->
+        <action
+                path="/viewAbductor"
+                type="com.googlecode.openmpis.action.AbductorAction"
+                scope="request"
+                name="abductorForm"
+                input="/WEB-INF/pages/session/addAbductorForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="view-abductor" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
+            <forward name="add-abductor"  path="/WEB-INF/pages/session/addAbductorForm.jsp"/>
+            <forward name="add-abductor-redo"  path="/WEB-INF/pages/session/addAbductorForm.jsp"/>
+            <forward name="add-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
+            <forward name="edit-abductor" path="/WEB-INF/pages/session/editAbductorForm.jsp"/>
+            <forward name="edit-abductor-redo" path="/WEB-INF/pages/session/editAbductorForm.jsp"/>
+            <forward name="edit-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
+            <forward name="delete-abductor" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
+            <forward name="delete-abductor-redo" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
+            <forward name="delete-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete persons -->
+        <action
+                path="/viewPerson"
+                type="com.googlecode.openmpis.action.PersonAction"
+                scope="request"
+                name="personForm"
+                input="/WEB-INF/pages/session/addPersonForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="view-person" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
+            <forward name="add-person"  path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="add-person-redo"  path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="add-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+            <forward name="edit-person" path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="edit-person-redo" path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="edit-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+            <forward name="delete-person" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
+            <forward name="delete-person-redo" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
+            <forward name="delete-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete reports -->
+        <action
+                path="/viewReport"
+                type="com.googlecode.openmpis.action.ReportAction"
+                scope="request"
+                name="reportForm"
+                input="/WEB-INF/pages/session/addReportForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="view-report" path="/WEB-INF/pages/report/viewReportForm.jsp"/>
+            <forward name="add-report"  path="/WEB-INF/pages/session/addReportForm.jsp"/>
+            <forward name="add-report-redo"  path="/WEB-INF/pages/session/addReportForm.jsp"/>
+            <forward name="add-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
+            <forward name="edit-report" path="/WEB-INF/pages/session/editReportForm.jsp"/>
+            <forward name="edit-report-redo" path="/WEB-INF/pages/session/editReportForm.jsp"/>
+            <forward name="edit-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
+            <forward name="delete-report" path="/WEB-INF/pages/session/deleteReportForm.jsp"/>
+            <forward name="delete-report-redo" path="/WEB-INF/pages/session/deleteReportForm.jsp"/>
+            <forward name="delete-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete reports -->
+        <action
+                path="/viewInvestigator"
+                type="com.googlecode.openmpis.action.InvestigatorAction"
+                scope="request"
+                name="investigatorForm"
+                input="/WEB-INF/pages/session/assignInvestigatorForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="assign-investigator"  path="/WEB-INF/pages/session/assignInvestigatorForm.jsp"/>
+            <forward name="assign-investigator-success" path="/WEB-INF/pages/session/investigatorSuccess.jsp"/>
         </action>
         <!-- User home page -->
         <action
                 path="/viewUserHome"
                 type="com.googlecode.openmpis.action.AuthenticateAction"
                 scope="request">
-            <forward name="authenticated" path="/session/index.jsp"/>
+            <forward name="authenticated" path="/WEB-INF/pages/session/index.jsp"/>
         </action>
         <!-- Log in -->
         <action
@@ -122,7 +258,7 @@
                 type="com.googlecode.openmpis.action.LoginAction"
                 scope="request"
                 name="loginForm"
-                input="/session/loginForm.jsp"
+                input="/WEB-INF/pages/session/loginForm.jsp"
                 validate="false">
             <forward name="login-success" redirect="true" path="/viewUserHome.do"/>
             <forward name="login-redo" path="/viewLogin.do"/>
@@ -132,7 +268,7 @@
                 path="/viewLogout"
                 type="com.googlecode.openmpis.action.LogoutAction"
                 scope="request">
-            <forward name="logout-success" path="/session/logoutSuccess.jsp"/>
+            <forward name="logout-success" path="/WEB-INF/pages/session/logoutSuccess.jsp"/>
         </action>
         <!-- Send feedback -->
         <action
@@ -140,10 +276,10 @@
                 type="com.googlecode.openmpis.action.FeedbackAction"
                 scope="request"
                 name="feedbackForm"
-                input="/feedback/feedbackForm.jsp"
+                input="/WEB-INF/pages/feedback/feedbackForm.jsp"
                 validate="false">
-            <forward name="feedback-success" path="/feedback/feedbackSuccess.jsp"/>
-            <forward name="feedback-redo" path="/feedback/feedbackForm.jsp"/>
+            <forward name="feedback-success" path="/WEB-INF/pages/feedback/feedbackSuccess.jsp"/>
+            <forward name="feedback-redo" path="/WEB-INF/pages/feedback/feedbackForm.jsp"/>
         </action>
         <!-- Reset password -->
         <action
@@ -151,100 +287,26 @@
                 type="com.googlecode.openmpis.action.PasswordAction"
                 scope="request"
                 name="passwordForm"
-                input="/password/passwordForm.jsp"
+                input="/WEB-INF/pages/password/passwordForm.jsp"
                 validate="true">
-            <forward name="password-success" path="/password/passwordSuccess.jsp"/>
-            <forward name="password-redo" path="/password/passwordForm.jsp"/>
+            <forward name="password-success" path="/WEB-INF/pages/password/passwordSuccess.jsp"/>
+            <forward name="password-redo" path="/WEB-INF/pages/password/passwordForm.jsp"/>
         </action>
         
         <!-- Not yet implemented -->
+        <!-- Search -->
         <action
-            path="/search"
-            type="com.googlecode.openmpis.action.SearchAction"
-            name="searchForm"
-            input="/search/searchForm.jsp"
-            validate="true">
-            <forward name="success" path="/search/searchSuccess.jsp"/>
-        </action>
-        <action
-            path="/viewPerson"
-            type="com.googlecode.openmpis.action.PersonAction">
-            <forward name="success" path="/person/person.jsp"/>
-        </action>
-        <action
-            path="/viewMissing"
-            type="com.googlecode.openmpis.action.ListMissingAction">
-            <forward name="success" path="/person/personList.jsp"/>
-        </action>
-        <action
-            path="/viewFound"
-            type="com.googlecode.openmpis.action.ListFoundAction">
-            <forward name="success" path="/person/personList.jsp"/>
-        </action>
-        <action
-            path="/viewUnidentified"
-            type="com.googlecode.openmpis.action.ListUnidentifiedAction">
-            <forward name="success" path="/person/personList.jsp"/>
-        </action>
-        <action
-            validate="true"
-            input="/session/caseForm.jsp"
-            name="caseForm"
-            path="/case"
-            type="com.googlecode.openmpis.action.CaseAction">
-            <forward name="success" path="/session/caseSuccess.jsp"/>
-        </action>
-        <action
-            path="/viewCase"
-            forward="/session/caseForm.jsp"/>
-        <action
-            path="/viewRelative"
-            forward="/session/relativeForm.jsp"/>
-        <action
-            path="/viewAbductor"
-            forward="/session/abductorForm.jsp"/>
-        <action
-            validate="true"
-            input="/session/relativeForm.jsp"
-            name="relativeForm"
-            path="/relative"
-            type="com.googlecode.openmpis.action.RelativeAction">
-            <forward name="success" path="/session/relativeSuccess.jsp"/>
-        </action>
-        <action
-            path="/viewRelatives"
-            type="com.googlecode.openmpis.action.ListRelativeAction">
-            <forward name="success" path="/session/relativeList.jsp"/>
-        </action>
-        <action
-            validate="true"
-            input="/session/abductorForm.jsp"
-            name="abductorForm"
-            path="/abductor"
-            type="com.googlecode.openmpis.action.AbductorAction">
-            <forward name="success" path="/session/abductorSuccess.jsp"/>
-        </action>
-        <!-- PDF forms -->
-        <action
-            path="/downloadReport"
-            type="com.googlecode.openmpis.action.DownloadReportAction">
-            <forward name="success" path="/statistics/downloadSuccess.jsp"/>
-        </action>
-        <action
-            path="/downloadPoster"
-            type="com.googlecode.openmpis.action.DownloadPosterAction">
-            <forward name="success" path="/person/downloadSuccess.jsp"/>
-        </action>
-        <action
-            path="/downloadForm"
-            type="com.googlecode.openmpis.action.DownloadFormAction">
-            <forward name="success" path="/form/downloadSuccess.jsp"/>
+                path="/search"
+                type="com.googlecode.openmpis.action.SearchAction"
+                name="searchForm"
+                input="/WEB-INF/pages/search/searchForm.jsp"
+                validate="true">
+            <forward name="success" path="/WEB-INF/pages/search/searchSuccess.jsp"/>
         </action>
     </action-mappings>
     <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" nocache="true"/>
     <message-resources parameter="com.googlecode.openmpis.resource.ApplicationResource"/>
     <message-resources key="_PH" parameter="com.googlecode.openmpis.resource.ApplicationResource__PH"/>
-    <message-resources key="en" parameter="com.googlecode.openmpis.resource.ApplicationResource_en"/>
     
     <!-- ========================= Tiles plugin ===============================-->
     <!--
