@@ -20,13 +20,14 @@ package com.googlecode.openmpis.persistence.ibatis.service.impl;
 import com.googlecode.openmpis.dto.Message;
 import com.googlecode.openmpis.persistence.ibatis.dao.MessageDAO;
 import com.googlecode.openmpis.persistence.ibatis.service.MessageService;
+import com.googlecode.openmpis.util.Pagination;
 
 import java.sql.SQLException;
 import java.util.List;
 
 /**
  * The MessageServiceImpl class implements the MessageService interface.
- * This provides the ability to add, delete and retrieve messages and feedbacks.
+ * This provides the ability to add, delete and retrieve sightings and feedbacks.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  * @version 1.0
@@ -34,12 +35,12 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     /**
-     * The MessageDAO
+     * The message DAO
      */
     private MessageDAO messageDAO = null;
     
     /**
-     * Sole constructor.
+     * Creates a new message service implementation.
      * 
      * @param messageDAO   the message DAO
      */
@@ -50,8 +51,8 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Deletes a message with the specified ID.
      * 
-     * @param id    the ID of the message to be deleted
-     * @return      <code>true</code> if the message was successfully deleted; <code>false</code> otherwise
+     * @param id            the ID of the message to be deleted
+     * @return              <code>true</code> if the message was successfully deleted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -61,20 +62,21 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Retrieves all messages.
-     * 
-     * @return      the list of messages
+     *
+     * @param pagination    the pagination context
+     * @return              the list of messages
      * @throws java.sql.SQLException
      */
     @Override
-    public List getAllMessages() throws SQLException {
-        return messageDAO.getAllMessages();
+    public List<Message> getAllMessages(Pagination pagination) throws SQLException {
+        return messageDAO.getAllMessages(pagination);
     }
 
     /**
      * Retrieves a message given his ID.
      * 
-     * @param id    the message ID
-     * @return      the message
+     * @param id            the message ID
+     * @return              the message
      * @throws java.sql.SQLException
      */
     @Override
@@ -85,8 +87,8 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Inserts a new message.
      * 
-     * @param message  the new message
-     * @return      <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
+     * @param message       the new message
+     * @return              <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -97,8 +99,8 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Inserts a new feedback.
      * 
-     * @param message   the new feedback
-     * @return          <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
+     * @param message       the new feedback
+     * @return              <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override

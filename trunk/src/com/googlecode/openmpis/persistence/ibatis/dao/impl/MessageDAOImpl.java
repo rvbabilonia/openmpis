@@ -19,16 +19,18 @@ package com.googlecode.openmpis.persistence.ibatis.dao.impl;
 
 import com.googlecode.openmpis.dto.Message;
 import com.googlecode.openmpis.persistence.ibatis.dao.MessageDAO;
+import com.googlecode.openmpis.util.Pagination;
 import com.googlecode.openmpis.util.SqlMapConfig;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The MessageDAOImpl class implements the MessageDAO interface.
- * This provides the ability to add, delete and retrieve messages and feedbacks.
+ * This provides the ability to add, delete and retrieve sightings and feedbacks.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  * @version 1.0
@@ -43,8 +45,8 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Deletes a message with the specified ID.
      * 
-     * @param id    the ID of the message to be deleted
-     * @return      <code>true</code> if the message was successfully deleted; <code>false</code> otherwise
+     * @param id            the ID of the message to be deleted
+     * @return              <code>true</code> if the message was successfully deleted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -66,17 +68,20 @@ public class MessageDAOImpl implements MessageDAO {
 
     /**
      * Retrieves all messages.
-     * 
-     * @return      the list of messages
+     *
+     * @param pagination    the pagination context
+     * @return              the list of messages
      * @throws java.sql.SQLException
      */
     @Override
-    public List getAllMessages() throws SQLException {
-        List messageList = null;
+    @SuppressWarnings("unchecked")
+    public List<Message> getAllMessages(Pagination pagination) throws SQLException {
+        List<Message> messageList = new ArrayList<Message>();
         
         try {
             sqlMap.startTransaction();
-            messageList = sqlMap.queryForList("getAllMessages");
+            messageList = sqlMap.queryForList("getAllMessages", pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllMessages"));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -90,8 +95,8 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Retrieves a message given its ID.
      * 
-     * @param id    the message ID
-     * @return      the message
+     * @param id            the message ID
+     * @return              the message
      * @throws java.sql.SQLException
      */
     @Override
@@ -114,8 +119,8 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Inserts a new message.
      * 
-     * @param message   the new message
-     * @return          <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
+     * @param message       the new message
+     * @return              <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
@@ -138,8 +143,8 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Inserts a new feedback.
      * 
-     * @param message   the new feedback
-     * @return          <code>true</code> if the feedback was successfully inserted; <code>false</code> otherwise
+     * @param message       the new feedback
+     * @return              <code>true</code> if the feedback was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override

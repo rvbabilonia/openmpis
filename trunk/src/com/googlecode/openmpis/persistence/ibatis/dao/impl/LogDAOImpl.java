@@ -19,11 +19,13 @@ package com.googlecode.openmpis.persistence.ibatis.dao.impl;
 
 import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.persistence.ibatis.dao.LogDAO;
+import com.googlecode.openmpis.util.Pagination;
 import com.googlecode.openmpis.util.SqlMapConfig;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,17 +44,20 @@ public class LogDAOImpl implements LogDAO {
 
     /**
      * Retrieves all logs.
-     * 
-     * @return      the list of logs
+     *
+     * @param pagination    the pagination context
+     * @return              the list of logs
      * @throws java.sql.SQLException
      */
     @Override
-    public List getAllLogs() throws SQLException {
-        List logList = null;
+    @SuppressWarnings("unchecked")
+    public List<Log> getAllLogs(Pagination pagination) throws SQLException {
+        List<Log> logList = new ArrayList<Log>();
         
         try {
             sqlMap.startTransaction();
-            logList = sqlMap.queryForList("getAllLogs");
+            logList = sqlMap.queryForList("getAllLogs", pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllLogs"));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -66,8 +71,8 @@ public class LogDAOImpl implements LogDAO {
     /**
      * Retrieves a log given its ID.
      * 
-     * @param id    the log ID
-     * @return      the log
+     * @param id            the log ID
+     * @return              the log
      * @throws java.sql.SQLException
      */
     @Override
@@ -90,8 +95,8 @@ public class LogDAOImpl implements LogDAO {
     /**
      * Inserts a new log.
      * 
-     * @param log   the new log
-     * @return      <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
+     * @param log           the new log
+     * @return              <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override

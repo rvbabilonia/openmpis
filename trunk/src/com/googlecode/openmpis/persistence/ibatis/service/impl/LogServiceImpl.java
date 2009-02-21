@@ -20,6 +20,7 @@ package com.googlecode.openmpis.persistence.ibatis.service.impl;
 import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.persistence.ibatis.dao.LogDAO;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
+import com.googlecode.openmpis.util.Pagination;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -34,14 +35,14 @@ import java.util.List;
 public class LogServiceImpl implements LogService {
 
     /**
-     * The LogDAO
+     * The log DAO
      */
     private LogDAO logDAO = null;
     
     /**
-     * Sole constructor.
+     * Creates a new log service implementation.
      * 
-     * @param logDAO   the log DAO
+     * @param logDAO        the log DAO
      */
     public LogServiceImpl(LogDAO logDAO) {
         this.logDAO = logDAO;
@@ -49,20 +50,21 @@ public class LogServiceImpl implements LogService {
 
     /**
      * Retrieves all logs.
-     * 
-     * @return      the list of logs
+     *
+     * @param pagination    the pagination context
+     * @return              the list of logs
      * @throws java.sql.SQLException
      */
     @Override
-    public List getAllLogs() throws SQLException {
-        return logDAO.getAllLogs();
+    public List<Log> getAllLogs(Pagination pagination) throws SQLException {
+        return logDAO.getAllLogs(pagination);
     }
 
     /**
      * Retrieves a log given its ID.
      * 
-     * @param id    the log ID
-     * @return      the log
+     * @param id            the log ID
+     * @return              the log
      * @throws java.sql.SQLException
      */
     @Override
@@ -73,8 +75,8 @@ public class LogServiceImpl implements LogService {
     /**
      * Inserts a new log.
      * 
-     * @param log  the new log
-     * @return      <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
+     * @param log           the new log
+     * @return              <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override

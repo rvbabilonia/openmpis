@@ -18,6 +18,7 @@
 package com.googlecode.openmpis.persistence.ibatis.service;
 
 import com.googlecode.openmpis.dto.Log;
+import com.googlecode.openmpis.util.Pagination;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,17 +33,18 @@ public interface LogService {
 
     /**
      * Retrieves all logs.
-     * 
-     * @return      the list of logs
+     *
+     * @param pagination    the pagination context
+     * @return              the list of logs
      * @throws java.sql.SQLException
      */
-    public List getAllLogs() throws SQLException;
+    public List<Log> getAllLogs(Pagination pagination) throws SQLException;
 
     /**
      * Retrieves a log given its ID.
      * 
-     * @param id    the log ID
-     * @return      the log
+     * @param id            the log ID
+     * @return              the log
      * @throws java.sql.SQLException
      */
     public Log getLogById(Integer id) throws SQLException;
@@ -50,9 +52,9 @@ public interface LogService {
     /**
      * Inserts a new log.
      * 
-     * @param log   the new log
-     * @return      <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
+     * @param log           the new log
+     * @return              <code>true</code> if the log was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
-    public boolean insertLog(Log user) throws SQLException;
+    public boolean insertLog(Log log) throws SQLException;
 }
