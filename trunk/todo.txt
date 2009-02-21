@@ -1,0 +1,276 @@
+ar9gV5fH6gx7
+
+missingfilipinos.css
+    buttons
+    layout
+
+validation
+    xhtml
+
+database
+    backup
+    dynamic map (46)
+
+security audit
+    firewall
+    injection
+    scripting
+
+test cases
+
+documentation
+    user manual
+    developer manual
+    system administrator manual
+
+manuscript
+
+case
+    person
+    relative
+    abductor
+    investigator
+    encoder
+    calculate number of years missing
+    calculate current age from birth date
+    convert weight in pounds to kilograms
+    convert height in feet and inches to meters
+    inches: 0-11
+
+        http://javascript.internet.com/forms/country-state-city-drop-down-list.html
+        http://www.sitepoint.com/forums/showthread.php?t=350291
+        <c:forEach begin="1" end="27" step="1" var="i">
+            <c:set var="cityname"><bean:message key="city.1.${i}"/></c:set>
+            <html:option value="${cityname}" styleId="cityfield${i}" styleClass="optionclass">${cityname}</html:option>
+        </c:forEach>
+        <c:forEach begin="1" end="82" step="1" var="i">
+            <c:set var="provincename"><bean:message key="province.${i}"/></c:set>
+            <html:option value="${provincename}" styleId="provincefield${i}" styleClass="optionclass">${provincename}</html:option>
+        </c:forEach>
+        <c:forEach begin="1" end="229" step="1" var="i">
+            <c:set var="countryname"><bean:message key="country.${i}"/></c:set>
+            <html:option value="${countryname}" styleId="countryfield${i}" styleClass="optionclass">${countryname}</html:option>
+        </c:forEach>
+
+    encoder
+        /viewCase.do?action=list
+            getPersonsByEncoderId(request.getAttribute(currentuser.getId))
+        /viewCase.do?action=newPerson
+            upload photo
+        /viewCase.do?action=addPerson (form action)
+        /viewCase.do?action=viewPerson&id=
+            upload photo
+        /viewCase.do?action=editPerson (form action)
+        /viewCase.do?action=erasePerson&id=
+        /viewCase.do?action=deletePerson (form action)
+        /viewUser.do
+            getUsersByEncoderId(request.getAttribute(currentuser.getId))
+    investigator
+        /viewCase.do?action=viewPerson&id=
+        /viewCase.do?action=list
+            getPersonsByInvestigatorId(request.getAttribute(currentuser.getId))
+    public
+        /viewCase.do?action=viewPerson&id=
+        /viewCase.do?action=viewPoster&id=
+
+    encoder
+        /viewCase.do?action=newRelative
+        /viewCase.do?action=addRelative (form action)
+        /viewCase.do?action=viewRelative&id=
+        /viewCase.do?action=editRelative (form action)
+        /viewCase.do?action=eraseRelative&id=
+        /viewCase.do?action=deleteRelative (form action)
+    investigator and public
+        /viewCase.do?action=viewRelative&id=
+
+    encoder
+        /viewCase.do?action=newAbductor
+            upload photo
+        /viewCase.do?action=addAbductor (form action)
+        /viewCase.do?action=viewAbductor&id=
+            upload photo
+        /viewCase.do?action=editAbductor (form action)
+        /viewCase.do?action=eraseAdbuctor&id=
+        /viewCase.do?action=deleteAbductor (form action)
+    investigator and public
+        /viewCase.do?action=viewAbductor&id=
+
+    investigator
+        /viewCase.do?action=listReport&id=
+        /viewCase.do?action=newReport
+        /viewCase.do?action=addReport
+        /viewCase.do?action=viewReport&id=
+        /viewCase.do?action=downloadReport&id=
+        /viewCase.do?action=editReport
+        /viewCase.do?action=eraseReport&id=
+        /viewCase.do?action=deleteReport
+
+    all
+        /viewCase.do?action=list
+            pagination
+        /viewCase.do?action=listSolved
+            pagination
+        /viewCase.do?action=listUnsolved
+            pagination
+        /viewCase.do?action=listAllMissing
+            pagination
+        /viewCase.do?action=listAllFound
+            pagination
+        /viewCase.do?action=listUnidentified
+            pagination
+        /viewCase.do?action=search&query=
+            pagination
+            table joining
+            query validation
+
+administrator
+    home
+        feedbacks (message)
+    reports using itext
+        list of users
+        list of feedbacks
+        list of logs
+
+encoder
+    users
+        reminder (username, user id, case id, relative id, abductor id, investigator id, investigator username, date encoded, printed name, signature, designation)
+    cases
+    reports using itext
+        list of users
+        list of cases
+        list of feedbacks from administrator
+
+investigator
+    home
+        sightings (message)
+    profile view
+    cases
+    reports using itext
+        list of reports
+        list of feedbacks from administrator and encoder
+        list of messages from the public
+
+directory structure
+    com
+        googlecode
+            openmpis
+                log4j.properties
+                mail.properties
+                sqlmapconfig.properties
+                action
+                    AuthenticateAction.java
+                    * CaseAction.java
+                        person
+                        relative
+                        abductor
+                        investigator
+                        poster
+                        report
+                    FeedbackAction.java
+                    LoginAction.java
+                    LogoutAction.java
+                    PasswordAction.java
+                    * SearchAction.java
+                        regular search
+                        advanced search
+                    UserAction.java
+                    package.html
+                dto
+                    Abductor.java
+                    Log.java
+                    Message.java
+                    Person.java
+                    Relative.java
+                    Report.java
+                    User.java
+                    package.html
+                form
+                    AbductorForm.java
+                    FeedbackForm.java
+                    LoginForm.java
+                    MessageForm.java
+                    PasswordForm.java
+                    PersonForm.java
+                    RelativeForm.java
+                    ReportForm.java
+                    SearchForm.java
+                    UserForm.java
+                    package.html
+                persistence
+                    ibatis
+                        abductor.xml
+                        log.xml
+                        message.xml
+                        person.xml
+                        relative.xml
+                        report.xml
+                        sqlmapconfig.xml
+                        user.xml
+                        dao
+                            AbductorDAO.java
+                            LogDAO.java
+                            MessageDAO.java
+                            PersonDAO.java
+                            RelativeDAO.java
+                            ReportDAO.java
+                            UserDAO.java
+                            package.html
+                            impl
+                                AbductorDAOImpl.java
+                                LogDAOImpl.java
+                                MessageDAOImpl.java
+                                PersonDAOImpl.java
+                                RelativeDAOImpl.java
+                                ReportDAOImpl.java
+                                UserDAOImpl.java
+                                package.html
+                        service
+                            AbductorService.java
+                            LogService.java
+                            MessageService.java
+                            PersonService.java
+                            RelativeService.java
+                            ReportService.java
+                            UserService.java
+                            package.html
+                            impl
+                                AbductorServiceImpl.java
+                                LogServiceImpl.java
+                                MessageServiceImpl.java
+                                PersonServiceImpl.java
+                                RelativeServiceImpl.java
+                                ReportServiceImpl.java
+                                UserServiceImpl.java
+                                package.html
+                resource
+                    ApplicationResource.properties
+                    * ApplicationResource__PH.properties
+                util
+                    Configuration.java
+                    Constants.java
+                    Mail.java
+                    Pagination.java
+                    SqlMapConfig.java
+                    Validator.java
+                    package.html
+
+DEBUG SMTP: trying to connect to host "liham.asti.dost.gov.ph", port 465, isSSL true
+DEBUG SMTP: exception reading response: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+
+administrator
+    (currentuser.groupId == 0)
+
+not your creator
+    (currentuser.creatorId != editUserForm.id)
+
+not your personal account
+    (currentuser.id != editUserForm.id)
+
+personal account
+    (currentuser.id == editUserForm.id)
+
+your creator/encoder
+    (currentuser.creatorId == editUserForm.id)
+
+you are the creator/encoder
+    (currentuser.id == editUserForm.creatorId)
