@@ -24,28 +24,30 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 /**
- * The SearchAction class provides the method to pass queries and results.
+ * The LogoutAction class provides the method to end a session.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class LogoutAction extends Action {
 
     /**
      * This is the action called from the Struts framework.
      * 
-     * @param   mapping     the ActionMapping used to select this instance
-     * @param   form        the optional ActionForm bean for this request
-     * @param   request     the HTTP Request we are processing
-     * @param   response    the HTTP Response we are processing
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
      * @return              the forwarding instance
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) {
+        // Invalidate the session
         request.getSession().invalidate();
 
         return mapping.findForward(Constants.LOGOUT_SUCCESS);
