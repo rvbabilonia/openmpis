@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
  * The FeedbackForm class provides methods to validate the feedback form inputs.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
+ * @version 1.0
  */
 public class FeedbackForm extends ActionForm {
 
@@ -50,7 +51,7 @@ public class FeedbackForm extends ActionForm {
     /**
      * Gets the first name of the sender.
      * 
-     * @return           the sender's first name
+     * @return              the sender's first name
      */
     public String getFirstName() {
         return firstName;
@@ -59,16 +60,16 @@ public class FeedbackForm extends ActionForm {
     /**
      * Sets the first name of the sender.
      * 
-     * @param    firstName  the first name of the sender
+     * @param firstName     the first name of the sender
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
      * Gets the last name of the sender.
      * 
-     * @return           the sender's last name
+     * @return              the sender's last name
      */
     public String getLastName() {
         return lastName;
@@ -77,16 +78,16 @@ public class FeedbackForm extends ActionForm {
     /**
      * Sets the last name of the sender.
      * 
-     * @param    lastName  the last name of the sender
+     * @param lastName      the last name of the sender
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
      * Gets the email address of the sender.
      * 
-     * @return          the email address of the sender
+     * @return              the email address of the sender
      */
     public String getEmail() {
         return email;
@@ -95,16 +96,16 @@ public class FeedbackForm extends ActionForm {
     /**
      * Sets the email address of the sender.
      * 
-     * @param   email   the email address of the sender
+     * @param email         the email address of the sender
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     /**
      * Gets the message body of the email.
      * 
-     * @return          the message body of the email
+     * @return              the message body of the email
      */
     public String getMessage() {
         return message;
@@ -113,16 +114,16 @@ public class FeedbackForm extends ActionForm {
     /**
      * Sets the message body of the email.
      * 
-     * @param   message the message body of the email
+     * @param message       the message body of the email
      */
     public void setMessage(String message) {
-        this.message = message;
+        this.message = message.trim();
     }
 
     /**
      * Gets the subject of the email.
      * 
-     * @return          the subject of the email
+     * @return              the subject of the email
      */
     public String getSubject() {
         return subject;
@@ -131,16 +132,9 @@ public class FeedbackForm extends ActionForm {
     /**
      * Sets the subject of the email.
      * 
-     * @param   subject the subject of the email
+     * @param subject       the subject of the email
      */
     public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    /**
-     * Sole constructor.
-     */
-    public FeedbackForm() {
-        super();
+        this.subject = subject.trim();
     }
 }
