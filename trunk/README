@@ -37,10 +37,12 @@
                     The manifest file
         conf/META-INF/context.xml
                     The context file
+        database/   The directory containing the database schemas for MySQL and
+                    PostgreSQL databases and the Druid file
         dist/       The directory containing the deployable openmpis.war file
                     and javadocs/ directory (generated upon running ant)
-        manuals/    The directory containing the user, developer and system
-                    administrator manuals
+        manuals/    The directory containing the user, developer, system
+                    administrator and database manuals
         nbproject/  The NetBeans project directory
         src/        The directory containing the Java Server Pages and source
                     codes
@@ -125,13 +127,23 @@
 
     3. On your MS-DOS prompt or Linux terminal, go to the extracted directory.
 
-    4. Run ant.
+    4. Start MySQL database server.
 
-    5. Start Tomcat.
+    5. Edit src/sqlmapconfig.properties to reflect the correct MySQL username
+    and password.
 
-    6. Go to http://localhost:8080/manager/html and upload
+    6. Run ant create-database to set up the schema on the database server.
+
+    7. Run ant to compile the source codes and generate the WAR file.
+
+    8. Start Tomcat application server.
+
+    9. Go to http://localhost:8080/manager/html and upload
     openmpis-<version>/dist/openmpis.war or copy it to Tomcat's webapps
     directory.
+
+    10. Go to http://localhost:8080/openmpis to start using the system. The
+    default username is RB0106 and the default password is admin[123].
 
     Problems
     --------
