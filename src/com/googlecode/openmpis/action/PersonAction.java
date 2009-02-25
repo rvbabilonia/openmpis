@@ -17,9 +17,11 @@
  */
 package com.googlecode.openmpis.action;
 
-import com.googlecode.openmpis.dto.Log;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,8 +30,12 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
 
+import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Person;
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.PersonForm;
@@ -49,15 +55,12 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl
 import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.ReportServiceImpl;
 import com.googlecode.openmpis.util.Constants;
-
 import com.googlecode.openmpis.util.Validator;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-import java.util.Calendar;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 /**
  * The PersonAction class provides the methods to list, add, edit, delete and view
@@ -120,6 +123,8 @@ public class PersonAction extends DispatchAction {
 
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
+            request.setAttribute("action", request.getParameter("action"));
+
             return mapping.findForward(Constants.ADD_PERSON);
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
@@ -183,9 +188,14 @@ public class PersonAction extends DispatchAction {
                     person.setDate(date);
                     person.setEncoderId(currentUser.getId());
                     person.setStatus(personForm.getStatus());
-                    boolean isInserted = personService.insertPerson(person);
+                    if (person.getType() <= 4)
+                        person.setMissingFromCity(personForm.getMissingFromCity());
+                    else
+                        person.setInstitution(personForm.getInstitution());
+                    int isInserted = personService.insertPerson(person);
+                    //int generatedId = personService.insertPerson(person);
 
-                    if (isInserted) {
+                    if (isInserted > 0) {
                         // Log person creation event
                         Log addLog = new Log();
                         if ((!firstName.isEmpty()) && (!lastName.isEmpty()))
@@ -386,8 +396,8 @@ public class PersonAction extends DispatchAction {
     return mapping.findForward(Constants.EDIT_REDO);
     }
     } else {
-    // Return duplicate personname error
-    errors.add("personname", new ActionMessage("error.personname.duplicate"));
+    // Return duplicate person error
+    errors.add("firstname", new ActionMessage("error.firstname.duplicate"));
     saveErrors(request, errors);
 
     logger.error("Duplicate personname.");
@@ -557,11 +567,29 @@ public class PersonAction extends DispatchAction {
         String street = personForm.getStreet();
         String city = personForm.getCity();
         String province = personForm.getProvince();
+        FormFile photoFile = personForm.getPhotoFile();
+        /*
+        String hashcode = "test";
+        File directory = new File("D:" + File.separator + hashcode);
+        directory.mkdir();
+        directory = new File("D:" + File.separator + hashcode + File.separator + "default");
+        directory.mkdir();
+        directory = new File("D:" + File.separator + hashcode + File.separator + "aged");
+        directory.mkdir();
+        File file = new File("D:" + File.separator + hashcode + File.separator + "default" + File.separator + photoFile.getFileName());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(photoFile.getFileData());
+        fos.close();
+        fos.flush();
+        System.out.println(photoFile.getContentType());
+         */
+
+        // TODO error if birth date and date missingorfound are greater than current date
 
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {
-            if (firstName.trim().length() < 1) {
+            if (firstName.length() < 1) {
                 errors.add("firstname", new ActionMessage("error.firstname.required"));
             } else {
                 if (!validator.isValidFirstName(firstName)) {
@@ -573,7 +601,7 @@ public class PersonAction extends DispatchAction {
         if (middleName == null) {
             errors.add("middlename", new ActionMessage(""));
         } else {
-            if (middleName.trim().length() < 1) {
+            if (middleName.length() < 1) {
                 errors.add("middlename", new ActionMessage("error.middlename.required"));
             } else {
                 if (!validator.isValidLastName(middleName)) {
@@ -585,7 +613,7 @@ public class PersonAction extends DispatchAction {
         if (lastName == null) {
             errors.add("lastname", new ActionMessage(""));
         } else {
-            if (lastName.trim().length() < 1) {
+            if (lastName.length() < 1) {
                 errors.add("lastname", new ActionMessage("error.lastname.required"));
             } else {
                 if (!validator.isValidLastName(lastName)) {
@@ -601,7 +629,7 @@ public class PersonAction extends DispatchAction {
         if (nickname == null) {
             errors.add("nickname", new ActionMessage(""));
         } else {
-            if (nickname.trim().length() < 1) {
+            if (nickname.length() < 1) {
                 errors.add("nickname", new ActionMessage("error.nickname.required"));
             } else {
                 if (!validator.isValidEmailAddress(nickname)) {
@@ -613,7 +641,7 @@ public class PersonAction extends DispatchAction {
         if (city == null) {
             errors.add("city", new ActionMessage(""));
         } else {
-            if (city.trim().length() < 1) {
+            if (city.length() < 1) {
                 errors.add("city", new ActionMessage("error.city.required"));
             } else {
                 if (!validator.isValidKeyword(city)) {
@@ -625,7 +653,7 @@ public class PersonAction extends DispatchAction {
         if (street == null) {
             errors.add("street", new ActionMessage(""));
         } else {
-            if (street.trim().length() < 1) {
+            if (street.length() < 1) {
                 errors.add("street", new ActionMessage("error.street.required"));
             } else {
                 if (!validator.isValidKeyword(street)) {
@@ -637,7 +665,7 @@ public class PersonAction extends DispatchAction {
         if (province == null) {
             errors.add("province", new ActionMessage(""));
         } else {
-            if (province.trim().length() < 1) {
+            if (province.length() < 1) {
                 errors.add("province", new ActionMessage("error.province.required"));
             } else {
                 if (!validator.isValidNumber(province)) {
@@ -686,11 +714,11 @@ public class PersonAction extends DispatchAction {
     // Password and security answer are required
     if (currentUser.getId() == personForm.getId()) {
     // Check if retyped password exists
-    if ((retype != null) && (retype.trim().length() > 0)) {
+    if ((retype != null) && (retype.length() > 0)) {
     if (password == null) {
     errors.add("password", new ActionMessage(""));
     } else {
-    if (password.trim().length() < 1) {
+    if (password.length() < 1) {
     errors.add("password", new ActionMessage("error.password.required"));
     } else {
     if (!validator.isValidPassword(password)) {
@@ -705,7 +733,7 @@ public class PersonAction extends DispatchAction {
     if (answer == null) {
     errors.add("answer", new ActionMessage(""));
     } else {
-    if (answer.trim().length() < 1) {
+    if (answer.length() < 1) {
     errors.add("answer", new ActionMessage("error.answer.required"));
     } else {
     if (!validator.isValidKeyword(answer)) {
@@ -718,7 +746,7 @@ public class PersonAction extends DispatchAction {
     if (firstName == null) {
     errors.add("firstname", new ActionMessage(""));
     } else {
-    if (firstName.trim().length() < 1) {
+    if (firstName.length() < 1) {
     errors.add("firstname", new ActionMessage("error.firstname.required"));
     } else {
     if (!validator.isValidFirstName(firstName)) {
@@ -730,7 +758,7 @@ public class PersonAction extends DispatchAction {
     if (middleName == null) {
     errors.add("middlename", new ActionMessage(""));
     } else {
-    if (middleName.trim().length() < 1) {
+    if (middleName.length() < 1) {
     errors.add("middlename", new ActionMessage("error.middlename.required"));
     } else {
     if (!validator.isValidLastName(middleName)) {
@@ -742,7 +770,7 @@ public class PersonAction extends DispatchAction {
     if (lastName == null) {
     errors.add("lastname", new ActionMessage(""));
     } else {
-    if (lastName.trim().length() < 1) {
+    if (lastName.length() < 1) {
     errors.add("lastname", new ActionMessage("error.lastname.required"));
     } else {
     if (!validator.isValidLastName(lastName)) {
@@ -758,7 +786,7 @@ public class PersonAction extends DispatchAction {
     if (nickname == null) {
     errors.add("nickname", new ActionMessage(""));
     } else {
-    if (nickname.trim().length() < 1) {
+    if (nickname.length() < 1) {
     errors.add("nickname", new ActionMessage("error.nickname.required"));
     } else {
     if (!validator.isValidEmailAddress(nickname)) {
@@ -770,7 +798,7 @@ public class PersonAction extends DispatchAction {
     if (city == null) {
     errors.add("city", new ActionMessage(""));
     } else {
-    if (city.trim().length() < 1) {
+    if (city.length() < 1) {
     errors.add("city", new ActionMessage("error.city.required"));
     } else {
     if (!validator.isValidKeyword(city)) {
@@ -782,7 +810,7 @@ public class PersonAction extends DispatchAction {
     if (street == null) {
     errors.add("street", new ActionMessage(""));
     } else {
-    if (street.trim().length() < 1) {
+    if (street.length() < 1) {
     errors.add("street", new ActionMessage("error.street.required"));
     } else {
     if (!validator.isValidKeyword(street)) {
@@ -794,7 +822,7 @@ public class PersonAction extends DispatchAction {
     if (province == null) {
     errors.add("province", new ActionMessage(""));
     } else {
-    if (province.trim().length() < 1) {
+    if (province.length() < 1) {
     errors.add("province", new ActionMessage("error.province.required"));
     } else {
     if (!validator.isValidNumber(province)) {

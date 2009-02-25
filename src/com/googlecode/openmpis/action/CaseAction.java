@@ -42,9 +42,13 @@ import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Pagination;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfWriter;
+import java.text.SimpleDateFormat;
 
 /**
  * The CaseAction class provides the methods to list persons.
@@ -109,8 +113,11 @@ public class CaseAction extends DispatchAction {
         } else if (currentUser.getGroupId() == 2) {
             personList = personService.getPersonsByInvestigatorId(pagination, currentUser.getId());
         } else {
-            request.setAttribute("personlist", personList);
+            personList = personService.getAllPersons(pagination);
         }
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
         // Return list of persons
         request.setAttribute("personlist", personList);
@@ -163,6 +170,9 @@ public class CaseAction extends DispatchAction {
         // Retrieve list of persons
         List<Person> personList = personService.getAllMissing(pagination);
 
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
         // Return list of persons
         request.setAttribute("personlist", personList);
 
@@ -213,6 +223,9 @@ public class CaseAction extends DispatchAction {
 
         // Retrieve list of persons
         List<Person> personList = personService.getMissing(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
         // Return list of persons
         request.setAttribute("personlist", personList);
@@ -265,6 +278,9 @@ public class CaseAction extends DispatchAction {
         // Retrieve list of persons
         List<Person> personList = personService.getFamilyAbduction(pagination);
 
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
         // Return list of persons
         request.setAttribute("personlist", personList);
 
@@ -315,6 +331,63 @@ public class CaseAction extends DispatchAction {
 
         // Retrieve list of persons
         List<Person> personList = personService.getNonFamilyAbduction(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
+        // Return list of persons
+        request.setAttribute("personlist", personList);
+
+        // Return current page
+        request.setAttribute("currentpage", pagination.getCurrentPage());
+
+        // Return total number of pages
+        request.setAttribute("totalpages", pagination.getTotalPages());
+
+        // Return total results
+        request.setAttribute("totalresults", pagination.getTotalResults());
+
+        // Return max results
+        request.setAttribute("maxresults", pagination.getMaxResults());
+
+        // Return condition if there are more pages
+        request.setAttribute("morepages", pagination.hasMorePages());
+
+        return mapping.findForward(Constants.LIST_PERSON_ALL_MISSING);
+    }
+
+    /**
+     * Lists runaway persons.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward listRunaway(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String page = (String) request.getParameter("page");
+
+        // Set pagination direction
+        if (page != null) {
+            if (page.equals("next")) {
+                pagination.nextPage();
+            } else if (page.equals("previous")) {
+                pagination.previousPage();
+            } else if (page.equals("start")) {
+                pagination.firstPage();
+            } else if (page.equals("end")) {
+                pagination.lastPage();
+            }
+        }
+
+        // Retrieve list of persons
+        List<Person> personList = personService.getRunaway(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
         // Return list of persons
         request.setAttribute("personlist", personList);
@@ -367,6 +440,9 @@ public class CaseAction extends DispatchAction {
         // Retrieve list of persons
         List<Person> personList = personService.getUnknown(pagination);
 
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
         // Return list of persons
         request.setAttribute("personlist", personList);
 
@@ -417,6 +493,9 @@ public class CaseAction extends DispatchAction {
 
         // Retrieve list of persons
         List<Person> personList = personService.getAllFound(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
         // Return list of persons
         request.setAttribute("personlist", personList);
@@ -469,6 +548,9 @@ public class CaseAction extends DispatchAction {
         // Retrieve list of persons
         List<Person> personList = personService.getAbandoned(pagination);
 
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
         // Return list of persons
         request.setAttribute("personlist", personList);
 
@@ -520,6 +602,9 @@ public class CaseAction extends DispatchAction {
         // Retrieve list of persons
         List<Person> personList = personService.getThrowaway(pagination);
 
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
         // Return list of persons
         request.setAttribute("personlist", personList);
 
@@ -570,6 +655,9 @@ public class CaseAction extends DispatchAction {
 
         // Retrieve list of persons
         List<Person> personList = personService.getUnidentified(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
         // Return list of persons
         request.setAttribute("personlist", personList);
@@ -635,7 +723,7 @@ public class CaseAction extends DispatchAction {
     public ActionForward printCaseStatistics(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         // Set the paper size and margins
-        Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
+        Document document = new Document(PageSize.LETTER.rotate(), 50, 50, 50, 50);
 
         // Create the PDF writer
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -649,6 +737,16 @@ public class CaseAction extends DispatchAction {
         document.addProducer();
         document.addCreationDate();
         document.addCreator("OpenMPIS version " + Constants.VERSION);
+
+        // Set the header
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = simpleDateFormat.format(System.currentTimeMillis());
+        document.setHeader(new HeaderFooter(new Phrase("Statistics for cases as of " + date), false));
+
+        // Set the footer
+        HeaderFooter footer = new HeaderFooter(new Phrase("Page : "), true);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        document.setFooter(footer);
 
         // Open the document for writing
         document.open();
