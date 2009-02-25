@@ -287,7 +287,7 @@ public class UserAction extends DispatchAction {
                     }
                 } else {
                     // Return duplicate username error
-                    errors.add("username", new ActionMessage("error.username.duplicate"));
+                    errors.add("username", new ActionMessage("error.username.duplicate", username));
                     saveErrors(request, errors);
 
                     logger.error("Duplicate username.");
@@ -468,7 +468,7 @@ public class UserAction extends DispatchAction {
                     }
                 } else {
                     // Return duplicate username error
-                    errors.add("username", new ActionMessage("error.username.duplicate"));
+                    errors.add("username", new ActionMessage("error.username.duplicate", username));
                     saveErrors(request, errors);
 
                     logger.error("Duplicate username.");
@@ -642,7 +642,7 @@ public class UserAction extends DispatchAction {
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {
-            if (firstName.trim().length() < 1) {
+            if (firstName.length() < 1) {
                 errors.add("firstname", new ActionMessage("error.firstname.required"));
             } else {
                 if (!validator.isValidFirstName(firstName)) {
@@ -654,7 +654,7 @@ public class UserAction extends DispatchAction {
         if (middleName == null) {
             errors.add("middlename", new ActionMessage(""));
         } else {
-            if (middleName.trim().length() < 1) {
+            if (middleName.length() < 1) {
                 errors.add("middlename", new ActionMessage("error.middlename.required"));
             } else {
                 if (!validator.isValidLastName(middleName)) {
@@ -666,7 +666,7 @@ public class UserAction extends DispatchAction {
         if (lastName == null) {
             errors.add("lastname", new ActionMessage(""));
         } else {
-            if (lastName.trim().length() < 1) {
+            if (lastName.length() < 1) {
                 errors.add("lastname", new ActionMessage("error.lastname.required"));
             } else {
                 if (!validator.isValidLastName(lastName)) {
@@ -682,7 +682,7 @@ public class UserAction extends DispatchAction {
         if (email == null) {
             errors.add("email", new ActionMessage(""));
         } else {
-            if (email.trim().length() < 1) {
+            if (email.length() < 1) {
                 errors.add("email", new ActionMessage("error.email.required"));
             } else {
                 if (!validator.isValidEmailAddress(email)) {
@@ -694,7 +694,7 @@ public class UserAction extends DispatchAction {
         if (designation == null) {
             errors.add("designation", new ActionMessage(""));
         } else {
-            if (designation.trim().length() < 1) {
+            if (designation.length() < 1) {
                 errors.add("designation", new ActionMessage("error.designation.required"));
             } else {
                 if (!validator.isValidKeyword(designation)) {
@@ -706,7 +706,7 @@ public class UserAction extends DispatchAction {
         if (agency == null) {
             errors.add("agency", new ActionMessage(""));
         } else {
-            if (agency.trim().length() < 1) {
+            if (agency.length() < 1) {
                 errors.add("agency", new ActionMessage("error.agency.required"));
             } else {
                 if (!validator.isValidKeyword(agency)) {
@@ -718,7 +718,7 @@ public class UserAction extends DispatchAction {
         if (number == null) {
             errors.add("number", new ActionMessage(""));
         } else {
-            if (number.trim().length() < 1) {
+            if (number.length() < 1) {
                 errors.add("number", new ActionMessage("error.number.required"));
             } else {
                 if (!validator.isValidNumber(number)) {
@@ -783,7 +783,7 @@ public class UserAction extends DispatchAction {
             if (answer == null) {
                 errors.add("answer", new ActionMessage(""));
             } else {
-                if (answer.trim().length() < 1) {
+                if (answer.length() < 1) {
                     errors.add("answer", new ActionMessage("error.answer.required"));
                 } else {
                     if (!validator.isValidKeyword(answer)) {
@@ -796,7 +796,7 @@ public class UserAction extends DispatchAction {
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {
-            if (firstName.trim().length() < 1) {
+            if (firstName.length() < 1) {
                 errors.add("firstname", new ActionMessage("error.firstname.required"));
             } else {
                 if (!validator.isValidFirstName(firstName)) {
@@ -808,7 +808,7 @@ public class UserAction extends DispatchAction {
         if (middleName == null) {
             errors.add("middlename", new ActionMessage(""));
         } else {
-            if (middleName.trim().length() < 1) {
+            if (middleName.length() < 1) {
                 errors.add("middlename", new ActionMessage("error.middlename.required"));
             } else {
                 if (!validator.isValidLastName(middleName)) {
@@ -820,7 +820,7 @@ public class UserAction extends DispatchAction {
         if (lastName == null) {
             errors.add("lastname", new ActionMessage(""));
         } else {
-            if (lastName.trim().length() < 1) {
+            if (lastName.length() < 1) {
                 errors.add("lastname", new ActionMessage("error.lastname.required"));
             } else {
                 if (!validator.isValidLastName(lastName)) {
@@ -836,7 +836,7 @@ public class UserAction extends DispatchAction {
         if (email == null) {
             errors.add("email", new ActionMessage(""));
         } else {
-            if (email.trim().length() < 1) {
+            if (email.length() < 1) {
                 errors.add("email", new ActionMessage("error.email.required"));
             } else {
                 if (!validator.isValidEmailAddress(email)) {
@@ -848,7 +848,7 @@ public class UserAction extends DispatchAction {
         if (designation == null) {
             errors.add("designation", new ActionMessage(""));
         } else {
-            if (designation.trim().length() < 1) {
+            if (designation.length() < 1) {
                 errors.add("designation", new ActionMessage("error.designation.required"));
             } else {
                 if (!validator.isValidKeyword(designation)) {
@@ -860,7 +860,7 @@ public class UserAction extends DispatchAction {
         if (agency == null) {
             errors.add("agency", new ActionMessage(""));
         } else {
-            if (agency.trim().length() < 1) {
+            if (agency.length() < 1) {
                 errors.add("agency", new ActionMessage("error.agency.required"));
             } else {
                 if (!validator.isValidKeyword(agency)) {
@@ -872,7 +872,7 @@ public class UserAction extends DispatchAction {
         if (number == null) {
             errors.add("number", new ActionMessage(""));
         } else {
-            if (number.trim().length() < 1) {
+            if (number.length() < 1) {
                 errors.add("number", new ActionMessage("error.number.required"));
             } else {
                 if (!validator.isValidNumber(number)) {
