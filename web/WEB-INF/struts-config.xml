@@ -53,7 +53,7 @@
         <action
                 path="/viewHome"
                 type="org.apache.struts.actions.ForwardAction"
-                parameter="/index.jsp"/>
+                parameter="/WEB-INF/pages/home.jsp"/>
         <action
                 path="/viewAbout"
                 type="org.apache.struts.actions.ForwardAction"
@@ -103,17 +103,17 @@
                 type="org.apache.struts.actions.ForwardAction"
                 parameter="/WEB-INF/pages/password/passwordForm.jsp"/>
         <action
-                path="/viewDownload"
+                path="/viewForm"
                 type="org.apache.struts.actions.ForwardAction"
-                parameter="/WEB-INF/pages/form/download.jsp"/>
+                parameter="/WEB-INF/pages/form/form.jsp"/>
         <action
                 path="/viewCaseForm"
                 type="org.apache.struts.actions.ForwardAction"
-                parameter="/WEB-INF/pages/form/OpenMPIS Case Form.pdf"/>
+                parameter="/WEB-INF/pages/form/OpenMPIS Case Form 1.0.pdf"/>
         <action
                 path="/viewUserForm"
                 type="org.apache.struts.actions.ForwardAction"
-                parameter="/WEB-INF/pages/form/OpenMPIS User Form.pdf"/>
+                parameter="/WEB-INF/pages/form/OpenMPIS User Form 1.0.pdf"/>
         <!-- List, add, view, edit, delete and count users -->
         <action
                 path="/viewUser"
@@ -158,16 +158,16 @@
                 path="/viewRelative"
                 type="com.googlecode.openmpis.action.RelativeAction"
                 scope="request"
-                name="personForm"
-                input="/WEB-INF/pages/session/addPersonForm.jsp"
+                name="relativeForm"
+                input="/WEB-INF/pages/session/relativeForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="view-relative" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
-            <forward name="add-relative"  path="/WEB-INF/pages/session/addRelativeForm.jsp"/>
-            <forward name="add-relative-redo"  path="/WEB-INF/pages/session/addRelativeForm.jsp"/>
+            <forward name="view-relative" path="/WEB-INF/pages/session/relativeForm.jsp"/>
+            <forward name="add-relative"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
+            <forward name="add-relative-redo"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
-            <forward name="edit-relative" path="/WEB-INF/pages/session/editRelativeForm.jsp"/>
-            <forward name="edit-relative-redo" path="/WEB-INF/pages/session/editRelativeForm.jsp"/>
+            <forward name="edit-relative" path="/WEB-INF/pages/session/relativeForm.jsp"/>
+            <forward name="edit-relative-redo" path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="edit-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
             <forward name="delete-relative" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
             <forward name="delete-relative-redo" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
@@ -179,15 +179,15 @@
                 type="com.googlecode.openmpis.action.AbductorAction"
                 scope="request"
                 name="abductorForm"
-                input="/WEB-INF/pages/session/addAbductorForm.jsp"
+                input="/WEB-INF/pages/session/abductorForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="view-abductor" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
-            <forward name="add-abductor"  path="/WEB-INF/pages/session/addAbductorForm.jsp"/>
-            <forward name="add-abductor-redo"  path="/WEB-INF/pages/session/addAbductorForm.jsp"/>
+            <forward name="view-abductor" path="/WEB-INF/pages/person/personForm.jsp"/>
+            <forward name="add-abductor"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
+            <forward name="add-abductor-redo"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
-            <forward name="edit-abductor" path="/WEB-INF/pages/session/editAbductorForm.jsp"/>
-            <forward name="edit-abductor-redo" path="/WEB-INF/pages/session/editAbductorForm.jsp"/>
+            <forward name="edit-abductor" path="/WEB-INF/pages/session/abductorForm.jsp"/>
+            <forward name="edit-abductor-redo" path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="edit-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
             <forward name="delete-abductor" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
             <forward name="delete-abductor-redo" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
@@ -199,15 +199,15 @@
                 type="com.googlecode.openmpis.action.PersonAction"
                 scope="request"
                 name="personForm"
-                input="/WEB-INF/pages/session/addPersonForm.jsp"
+                input="/WEB-INF/pages/session/personForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="view-person" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
-            <forward name="add-person"  path="/WEB-INF/pages/session/addPersonForm.jsp"/>
-            <forward name="add-person-redo"  path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="view-person" path="/WEB-INF/pages/person/personForm.jsp"/>
+            <forward name="add-person"  path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="add-person-redo"  path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="add-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
-            <forward name="edit-person" path="/WEB-INF/pages/session/addPersonForm.jsp"/>
-            <forward name="edit-person-redo" path="/WEB-INF/pages/session/addPersonForm.jsp"/>
+            <forward name="edit-person" path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="edit-person-redo" path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="edit-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
             <forward name="delete-person" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
             <forward name="delete-person-redo" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
