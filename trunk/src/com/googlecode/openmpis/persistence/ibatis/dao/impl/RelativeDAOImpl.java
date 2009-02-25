@@ -70,6 +70,30 @@ public class RelativeDAOImpl implements RelativeDAO {
     }
 
     /**
+     * Retrieves all relatives according to last name.
+     *
+     * @return              the list of relatives
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Relative> listRelatives() throws SQLException {
+        List<Relative> relativeList = new ArrayList<Relative>();
+
+        try {
+            sqlMap.startTransaction();
+            relativeList = sqlMap.queryForList("listRelatives");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return relativeList;
+    }
+
+    /**
      * Retrieves a relative given his ID.
      * 
      * @param id            the relative ID
@@ -97,24 +121,24 @@ public class RelativeDAOImpl implements RelativeDAO {
      * Inserts a new relative.
      * 
      * @param relative      the new relative
-     * @return              <code>true</code> if the relative was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertRelative(Relative relative) throws SQLException {
+    public int insertRelative(Relative relative) throws SQLException {
+        int index = 0;
+
         try {
             sqlMap.startTransaction();
-            sqlMap.insert("insertRelative", relative);
+            index = (Integer) sqlMap.insert("insertRelative", relative);
             sqlMap.commitTransaction();
-
-            return true;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } finally {
             sqlMap.endTransaction();
         }
 
-        return false;
+        return index;
     }
 
     /**

@@ -73,6 +73,32 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
+     * Retrieves all feedbacks.
+     *
+     * @param pagination    the pagination context
+     * @param userId        the user ID
+     * @return              the list of feedbacks
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> getAllFeedbacks(Pagination pagination, Integer userId) throws SQLException {
+        return messageDAO.getAllFeedbacks(pagination, userId);
+    }
+
+    /**
+     * Retrieves all sightings for a given person.
+     *
+     * @param pagination    the pagination context
+     * @param sighting      the sighting
+     * @return              the list of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> getAllSightingsForPerson(Pagination pagination, Message sighting) throws SQLException {
+        return messageDAO.getAllSightingsForPerson(pagination, sighting);
+    }
+
+    /**
      * Retrieves a message given his ID.
      * 
      * @param id            the message ID
@@ -85,15 +111,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * Inserts a new message.
+     * Inserts a new sighting.
      * 
-     * @param message       the new message
-     * @return              <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
+     * @param sighting      the new sighting
+     * @return              <code>true</code> if the sighting was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertMessage(Message message) throws SQLException {
-        return messageDAO.insertMessage(message);
+    public boolean insertSighting(Message sighting) throws SQLException {
+        return messageDAO.insertSighting(sighting);
     }
 
     /**
@@ -106,5 +132,65 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean insertFeedback(Message message) throws SQLException {
         return messageDAO.insertFeedback(message);
+    }
+
+    /**
+     * Returns the total number of feedbacks for the administrator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of feedbacks for the administrator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllFeedbacks(Integer userId) throws SQLException {
+        return messageDAO.countAllFeedbacks(userId);
+    }
+
+    /**
+     * Returns the total number of new feedbacks for the administrator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new feedbacks for the administrator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewFeedbacks(Integer userId) throws SQLException {
+        return messageDAO.countAllNewFeedbacks(userId);
+    }
+
+    /**
+     * Returns the total number of new sightings attributed to the investigator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new sightings attributed to the investigator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewSightings(Integer userId) throws SQLException {
+        return messageDAO.countAllNewSightings(userId);
+    }
+
+    /**
+     * Returns the total number of sightings for a given person.
+     *
+     * @param userId        the user ID
+     * @return              the total number of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSightingsForPerson(Message sighting) throws SQLException {
+        return messageDAO.countAllSightingsForPerson(sighting);
+    }
+
+    /**
+     * Returns the total number of new sightings for a given person.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewSightingsForPerson(Message sighting) throws SQLException {
+        return messageDAO.countAllNewSightingsForPerson(sighting);
     }
 }

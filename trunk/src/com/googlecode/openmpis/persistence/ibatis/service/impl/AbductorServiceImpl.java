@@ -76,11 +76,11 @@ public class AbductorServiceImpl implements AbductorService {
      * Inserts a new abductor.
      * 
      * @param abductor      the new abductor
-     * @return              <code>true</code> if the abductor was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertAbductor(Abductor abductor) throws SQLException {
+    public int insertAbductor(Abductor abductor) throws SQLException {
         return abductorDAO.insertAbductor(abductor);
     }
 

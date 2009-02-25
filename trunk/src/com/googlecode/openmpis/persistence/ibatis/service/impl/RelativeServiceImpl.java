@@ -61,6 +61,17 @@ public class RelativeServiceImpl implements RelativeService {
     }
 
     /**
+     * Retrieves all relatives according to last name.
+     *
+     * @return              the list of relatives
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Relative> listRelatives() throws SQLException {
+        return relativeDAO.listRelatives();
+    }
+
+    /**
      * Retrieves a relative given his ID.
      * 
      * @param id            the relative ID
@@ -76,11 +87,11 @@ public class RelativeServiceImpl implements RelativeService {
      * Inserts a new relative.
      * 
      * @param relative      the new relative
-     * @return              <code>true</code> if the relative was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertRelative(Relative relative) throws SQLException {
+    public int insertRelative(Relative relative) throws SQLException {
         return relativeDAO.insertRelative(relative);
     }
 
