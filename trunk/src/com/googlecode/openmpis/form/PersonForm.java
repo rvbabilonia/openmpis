@@ -18,6 +18,7 @@
 package com.googlecode.openmpis.form;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 
 /**
  * The Person class is used to represent a missing or found person.
@@ -68,6 +69,10 @@ public class PersonForm extends ActionForm {
      */
     private int birthYear;
     /**
+     * The current age
+     */
+    private int age;
+    /**
      * The street address of the person
      */
     private String street;
@@ -96,9 +101,17 @@ public class PersonForm extends ActionForm {
      */
     private int inches;
     /**
+     * The height of the person in centimeters
+     */
+    private double cm;
+    /**
      * The weight of the person in pounds
      */
-    private int weight;
+    private double weight;
+    /**
+     * The mass of the person in kilograms
+     */
+    private double mass;
     /**
      * The religion of the person
      */
@@ -132,9 +145,21 @@ public class PersonForm extends ActionForm {
      */
     private String remarks;
     /**
-     * The date the person has gone missing or was found
+     * The month the person has gone missing or was found
      */
-    private String dateMissingOrFound;
+    private int monthMissingOrFound;
+    /**
+     * The day the person has gone missing or was found
+     */
+    private int dayMissingOrFound;
+    /**
+     * The year the person has gone missing or was found
+     */
+    private int yearMissingOrFound;
+    /**
+     * The number of days the person has gone missing
+     */
+    private int daysMissing;
     /**
      * The city the person disappeared from
      */
@@ -196,13 +221,21 @@ public class PersonForm extends ActionForm {
      */
     private String institutionNumber;
     /**
-     * The photo of the person
+     * The filename of the photo of the person
      */
     private String photo;
     /**
-     * The optional age-progressed photo of the person
+     * The photo of the person
+     */
+    private FormFile photoFile;
+    /**
+     * The filename of the optional age-progressed photo of the person
      */
     private String agedPhoto;
+    /**
+     * The optional age-progressed photo of the person
+     */
+    private FormFile agedPhotoFile;
     /**
      * The optional DNA ID of the person
      */
@@ -425,6 +458,24 @@ public class PersonForm extends ActionForm {
     }
 
     /**
+     * Gets the current age.
+     *
+     * @return              the current age
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
+     * Sets the current age.
+     *
+     * @param age           the current age
+     */
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    /**
      * Gets the street address of the person.
      *
      * @return              the street address of the person
@@ -551,11 +602,29 @@ public class PersonForm extends ActionForm {
     }
 
     /**
+     * Gets the height of the person in centimeters.
+     *
+     * @return              the height of the person in centimeters
+     */
+    public double getCm() {
+        return cm;
+    }
+
+    /**
+     * Sets the height of the person in centimeters.
+     *
+     * @param cm            the height of the person in centimeters
+     */
+    public void setCm(double cm) {
+        this.cm = cm;
+    }
+
+    /**
      * Gets the weight of the person.
      *
      * @return              the weight of the person
      */
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -564,8 +633,26 @@ public class PersonForm extends ActionForm {
      *
      * @param weight        the weight of the person
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    /**
+     * Gets the mass of the person in kilograms
+     *
+     * @return              the mass of the person in kilograms
+     */
+    public double getMass() {
+        return mass;
+    }
+
+    /**
+     * Sets the mass of the person in kilograms
+     *
+     * @param mass          the mass of the person in kilograms
+     */
+    public void setMass(double mass) {
+        this.mass = mass;
     }
 
     /**
@@ -713,21 +800,75 @@ public class PersonForm extends ActionForm {
     }
 
     /**
-     * Gets the date the person has gone missing or was found.
+     * Gets the month the person has gone missing or was found.
      *
-     * @return              the date the person has gone missing or was found
+     * @return              the month the person has gone missing or was found
      */
-    public String getDateMissingOrFound() {
-        return dateMissingOrFound;
+    public int getMonthMissingOrFound() {
+        return monthMissingOrFound;
     }
 
     /**
-     * Sets the date the person has gone missing or was found.
+     * Sets the month the person has gone missing or was found.
      *
-     * @param dateMissingOrFound the date the person has gone missing or was found
+     * @param monthMissingOrFound the date the person has gone missing or was found
      */
-    public void setDateMissingOrFound(String dateMissingOrFound) {
-        this.dateMissingOrFound = dateMissingOrFound;
+    public void setMonthMissingOrFound(int monthMissingOrFound) {
+        this.monthMissingOrFound = monthMissingOrFound;
+    }
+
+    /**
+     * Gets the day the person has gone missing or was found.
+     *
+     * @return              the day the person has gone missing or was found
+     */
+    public int getDayMissingOrFound() {
+        return dayMissingOrFound;
+    }
+
+    /**
+     * Sets the day the person has gone missing or was found.
+     *
+     * @param dayMissingOrFound the day the person has gone missing or was found
+     */
+    public void setDayMissingOrFound(int dayMissingOrFound) {
+        this.dayMissingOrFound = dayMissingOrFound;
+    }
+
+    /**
+     * Gets the year the person has gone missing or was found.
+     *
+     * @return              the year the person has gone missing or was found
+     */
+    public int getYearMissingOrFound() {
+        return monthMissingOrFound;
+    }
+
+    /**
+     * Sets the year the person has gone missing or was found.
+     *
+     * @param yearMissingOrFound the year the person has gone missing or was found
+     */
+    public void setYearMissingOrFound(int yearMissingOrFound) {
+        this.yearMissingOrFound = yearMissingOrFound;
+    }
+
+    /**
+     * Gets the number of days the person has gone missing.
+     *
+     * @return              the number of days the person has gone missing
+     */
+    public int getDaysMissing() {
+        return daysMissing;
+    }
+
+    /**
+     * Sets the number of days the person has gone missing.
+     *
+     * @param daysMissing   the number of days the person has gone missing
+     */
+    public void setDaysMissing(int daysMissing) {
+        this.daysMissing = daysMissing;
     }
 
     /**
@@ -1217,6 +1358,42 @@ public class PersonForm extends ActionForm {
     }
 
     /**
+     * Gets the uploaded optional age-progressed photo.
+     *
+     * @return              the uploaded optional age-progressed photo
+     */
+    public FormFile getAgedPhotoFile() {
+        return agedPhotoFile;
+    }
+
+    /**
+     * Sets the optional age-progressed photo.
+     *
+     * @param agedPhotoFile the optional age-progressed photo
+     */
+    public void setAgedPhotoFile(FormFile agedPhotoFile) {
+        this.agedPhotoFile = agedPhotoFile;
+    }
+
+    /**
+     * Gets the uploaded photo of the person.
+     *
+     * @return              the uploaded photo of the person
+     */
+    public FormFile getPhotoFile() {
+        return photoFile;
+    }
+
+    /**
+     * Sets the uploaded photo of the person.
+     *
+     * @param photoFile     the uploaded photo of the person
+     */
+    public void setPhotoFile(FormFile photoFile) {
+        this.photoFile = photoFile;
+    }
+
+    /**
      * Returns a String representation of this data transfer object.
      *
      * @return              the String representation of this data transfer object
@@ -1250,7 +1427,9 @@ public class PersonForm extends ActionForm {
         content += "\nDistinguishing Marks: " + marks;
         content += "\nPersonal Effects: " + personalEffects;
         content += "\nRemarks: " + remarks;
-        content += "\nDate Missing or Found: " + dateMissingOrFound;
+        content += "\nMonth Missing or Found: " + monthMissingOrFound;
+        content += "\nDay Missing or Found: " + dayMissingOrFound;
+        content += "\nYear Missing or Found: " + yearMissingOrFound;
         content += "\nMissing from City: " + missingFromCity;
         content += "\nMissing from Province: " + missingFromProvince;
         content += "\nMissing from Country: " + missingFromCountry;

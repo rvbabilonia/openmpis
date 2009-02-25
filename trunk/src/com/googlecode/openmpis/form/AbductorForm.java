@@ -96,9 +96,17 @@ public class AbductorForm extends ActionForm {
      */
     private int inches;
     /**
+     * The height of the person in centimeters
+     */
+    private double cm;
+    /**
      * The weight of the person in pounds
      */
-    private int weight;
+    private double weight;
+    /**
+     * The mass of the person in kilograms
+     */
+    private double mass;
     /**
      * The religion of the person
      */
@@ -118,7 +126,7 @@ public class AbductorForm extends ActionForm {
     /**
      * The relationship of the abductor to the person
      */
-    private int relation;
+    private int relationToAbductor;
     /**
      * The distinguishing marks of the person
      */
@@ -467,11 +475,29 @@ public class AbductorForm extends ActionForm {
     }
 
     /**
+     * Gets the height of the person in centimeters.
+     *
+     * @return              the height of the person in centimeters
+     */
+    public double getCm() {
+        return cm;
+    }
+
+    /**
+     * Sets the height of the person in centimeters.
+     *
+     * @param cm            the height of the person in centimeters
+     */
+    public void setCm(double cm) {
+        this.cm = cm;
+    }
+
+    /**
      * Gets the weight of the person.
      *
      * @return              the weight of the person
      */
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -480,8 +506,26 @@ public class AbductorForm extends ActionForm {
      *
      * @param weight        the weight of the person
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    /**
+     * Gets the mass of the person in kilograms
+     *
+     * @return              the mass of the person in kilograms
+     */
+    public double getMass() {
+        return mass;
+    }
+
+    /**
+     * Sets the mass of the person in kilograms
+     *
+     * @param mass          the mass of the person in kilograms
+     */
+    public void setMass(double mass) {
+        this.mass = mass;
     }
 
     /**
@@ -575,21 +619,21 @@ public class AbductorForm extends ActionForm {
     }
 
     /**
-     * Gets the relationship of the relative to the person.
+     * Gets the relationship of the abductor to the person.
      *
-     * @return              the relationship of the relative to the person
+     * @return              the relationship of the abductor to the person
      */
-    public int getRelation() {
-        return relation;
+    public int getRelationToAbductor() {
+        return relationToAbductor;
     }
 
     /**
-     * Sets the relationship of the relative to the person.
+     * Sets the relationship of the abductor to the person.
      *
-     * @param relation      the relationship of the relative to the person
+     * @param relationToAbductor the relationship of the abductor to the person
      */
-    public void setRelation(int relation) {
-        this.relation = relation;
+    public void setRelationToAbductor(int relationToAbductor) {
+        this.relationToAbductor = relationToAbductor;
     }
 
     /**
@@ -784,7 +828,7 @@ public class AbductorForm extends ActionForm {
         content += "\nHair Color: " + hairColor;
         content += "\nDistinguishing Marks: " + marks;
         content += "\nPersonal Effects: " + personalEffects;
-        content += "\nRelation: " + relation;
+        content += "\nRelation: " + relationToAbductor;
         content += "\nRemarks: " + remarks;
         content += "\nPhoto Filename: " + photo;
         content += "\nAged Photo Filename: " + agedPhoto;

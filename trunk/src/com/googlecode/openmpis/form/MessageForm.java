@@ -56,6 +56,10 @@ public class MessageForm extends ActionForm {
      */
     private String message;
     /**
+     * The status of the message
+     */
+    private int status;
+    /**
      * The originating IP address of the message
      */
     private String ipAddress;
@@ -199,6 +203,24 @@ public class MessageForm extends ActionForm {
     }
 
     /**
+     * Gets the status of the message.
+     *
+     * @return              the status of the message
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the status of the message.
+     *
+     * @param status        the status of the message
+     */
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    /**
      * Gets the originating IP address of the message.
      * 
      * @return              the originating IP address of the message
@@ -285,6 +307,7 @@ public class MessageForm extends ActionForm {
         content += "\nLast Name: " + lastName;
         content += "\nSubject: " + subject;
         content += "\nMessage: " + message;
+        content += "\nStatus: " + status;
         content += "\nIP Address: " + ipAddress;
         content += "\nPerson ID: " + personId;
         return content;

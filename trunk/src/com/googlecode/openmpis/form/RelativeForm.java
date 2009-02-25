@@ -70,7 +70,7 @@ public class RelativeForm extends ActionForm {
     /**
      * The relationship of the relative to the person
      */
-    private int relation;
+    private int relationToRelative;
     /**
      * The generated confirmation code
      */
@@ -113,7 +113,7 @@ public class RelativeForm extends ActionForm {
      * @param firstName     the first name of the relative
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
@@ -131,7 +131,7 @@ public class RelativeForm extends ActionForm {
      * @param lastName      the last name of the relative
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
@@ -149,7 +149,7 @@ public class RelativeForm extends ActionForm {
      * @param middleName    the middle name of the relative
      */
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName = middleName.trim();
     }
 
     /**
@@ -167,7 +167,7 @@ public class RelativeForm extends ActionForm {
      * @param email         the email address of the relative
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     /**
@@ -185,7 +185,7 @@ public class RelativeForm extends ActionForm {
      * @param number        the telephone number of the relative
      */
     public void setNumber(String number) {
-        this.number = number;
+        this.number = number.trim();
     }
 
     /**
@@ -203,7 +203,7 @@ public class RelativeForm extends ActionForm {
      * @param street        the street address of the relative
      */
     public void setStreet(String street) {
-        this.street = street;
+        this.street = street.trim();
     }
 
     /**
@@ -221,7 +221,7 @@ public class RelativeForm extends ActionForm {
      * @param city          the home city of the relative
      */
     public void setCity(String city) {
-        this.city = city;
+        this.city = city.trim();
     }
 
     /**
@@ -239,7 +239,7 @@ public class RelativeForm extends ActionForm {
      * @param province      the home province of the relative
      */
     public void setProvince(String province) {
-        this.province = province;
+        this.province = province.trim();
     }
 
     /**
@@ -257,7 +257,7 @@ public class RelativeForm extends ActionForm {
      * @param country       the home country of the relative
      */
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country.trim();
     }
 
     /**
@@ -265,17 +265,17 @@ public class RelativeForm extends ActionForm {
      *
      * @return              the relationship of the relative to the person
      */
-    public int getRelation() {
-        return relation;
+    public int getRelationToRelative() {
+        return relationToRelative;
     }
 
     /**
      * Sets the relationship of the relative to the person.
      *
-     * @param relation      the relationship of the relative to the person
+     * @param relationToRelative the relationship of the relative to the person
      */
-    public void setRelation(int relation) {
-        this.relation = relation;
+    public void setRelationToRelative(int relationToRelative) {
+        this.relationToRelative = relationToRelative;
     }
 
     /**
@@ -332,7 +332,7 @@ public class RelativeForm extends ActionForm {
         content += "\nCity: " + city;
         content += "\nProvince: " + province;
         content += "\nCountry: " + country;
-        content += "\nRelation: " + relation;
+        content += "\nRelation: " + relationToRelative;
         return content;
     }
 }
