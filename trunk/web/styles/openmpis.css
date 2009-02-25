@@ -2,7 +2,7 @@
 body {
     background-color: #bbbbbb;
     width: 100%;
-    color: #f7f7f7;
+    color: #000000;
     font: normal normal normal 9pt sans-serif; 
     text-align: center;
     margin: 0px 0px 0px 0px;
@@ -25,10 +25,23 @@ h1 {
 }
 
 /* Specific classes */
-.textareaclass, .inputclass, [selected], .selectclass {
+.textareaclass, .inputclass, [selected], .selectclass, .fileclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
     width: 300px;
+}
+
+.hiddeninputclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 300px;
+    display: none;
+}
+
+.weightinputclass, .heightinputclass, .ageinputclass {
+    border: 1px solid #6c6c6c;
+    background-color: #cccccc;
+    width: 40px;
 }
 
 .optionclass {
@@ -49,13 +62,13 @@ h1 {
     width: 70px;
 }
 
-.dayselectclass {
+.dayselectclass, .feetselectclass, .inchesselectclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
     width: 40px;
 }
 
-.dayoptionclass {
+.dayoptionclass, .feetoptionclass, .inchesoptionclass {
     border: 0px solid #6c6c6c;
     background-color: #cccccc;
     width: 15px;
@@ -209,6 +222,12 @@ div#content img {
     border: 0px;
 }
 
+div#content .photoclass {
+    border: 1px solid olive;
+    height: 300px;
+    width: 200px;
+}
+
 div#contentitem {
     white-space: nowrap;
     margin: 0px auto 0px auto;
@@ -285,4 +304,16 @@ div#pagination a {
     color: #000000;
     font: normal normal normal 9pt sans-serif;
     text-decoration: none;
+}
+
+div#casemenu li {
+    display: inline;
+    list-style-type: none;
+    padding-left: 1em;
+    margin-left: 1em;
+    border-left: 1px solid #000000;
+}
+
+div#casemenu li:first-child {
+    border-left:none
 }
