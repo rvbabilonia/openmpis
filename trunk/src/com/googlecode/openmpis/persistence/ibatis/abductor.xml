@@ -38,7 +38,6 @@
         HAIRCOLOR as hairColor,
         MARKS as marks,
         PERSONALEFFECTS as personalEffects,
-        RELATION as relation,
         REMARKS as remarks,
         PHOTO as photo,
         AGEDPHOTO as agedPhoto,
@@ -74,7 +73,6 @@
         HAIRCOLOR as hairColor,
         MARKS as marks,
         PERSONALEFFECTS as personalEffects,
-        RELATION as relation,
         REMARKS as remarks,
         PHOTO as photo,
         AGEDPHOTO as agedPhoto,
@@ -103,19 +101,19 @@
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertAbductor" parameterClass="abductor">
-        <selectKey property="id" type="post" resultClass="int">
+        <selectKey type="post" resultClass="int">
             SELECT LAST_INSERT_ID()
         </selectKey>
         <![CDATA[
         INSERT INTO ABDUCTOR
         (FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
         STREET, CITY, PROVINCE, COUNTRY, SEX, FEET, INCHES, WEIGHT, RELIGION, RACE,
-        EYECOLOR, HAIRCOLOR, MARKS, PERSONALEFFECTS, RELATION, REMARKS,
+        EYECOLOR, HAIRCOLOR, MARKS, PERSONALEFFECTS, REMARKS,
         PHOTO, AGEDPHOTO, CODISID, AFISID, DENTALID)
         VALUES
         (#firstName#, #nickname#, #middleName#, #lastName#, #birthMonth#, #birthDay#, #birthYear#,
         #street#, #city#, #province#, #country#, #sex#, #feet#, #inches#, #weight#, #religion#, #race#,
-        #eyeColor#, #hairColor#, #marks#, #personalEffects#, #relation#, #remarks#,
+        #eyeColor#, #hairColor#, #marks#, #personalEffects#, #remarks#,
         #photo#, #agedPhoto#, #codisId#, #afisId#, #dentalId#)
         ]]>
     </insert>
@@ -146,7 +144,6 @@
         HAIRCOLOR = #hairColor#,
         MARKS = #marks#,
         PERSONALEFFECTS = #personalEffects#,
-        RELATION = #relation#,
         REMARKS = #remarks#,
         PHOTO = #photo#,
         AGEDPHOTO = #agedPhoto#,
