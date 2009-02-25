@@ -157,4 +157,28 @@ public abstract class Constants {
      * The logical name of the forwarding instance for successful listing of all missing persons
      */
     public static final String LIST_PERSON_UNIDENTIFIED = "list-person-unidentified";
+    /**
+     * The logical name of the forwarding instance for adding a new relative
+     */
+    public static final String ADD_RELATIVE = "add-relative";
+    /**
+     * The logical name of the forwarding instance for unsuccessful adding of a new relative
+     */
+    public static final String ADD_RELATIVE_REDO = "add-relative-redo";
+    /**
+     * The logical name of the forwarding instance for successful adding of a new relative
+     */
+    public static final String ADD_RELATIVE_SUCCESS = "add-relative-success";
+    /**
+     * The logical name of the forwarding instance for adding a new relative
+     */
+    public static final String EDIT_RELATIVE = "edit-relative";
+    /**
+     * The logical name of the forwarding instance for unsuccessful editing of a new relative
+     */
+    public static final String EDIT_RELATIVE_REDO = "edit-relative-redo";
+    /**
+     * The logical name of the forwarding instance for successful editing of a new relative
+     */
+    public static final String EDIT_RELATIVE_SUCCESS = "edit-relative-success";
 }
