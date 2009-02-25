@@ -96,7 +96,7 @@ public class Abductor {
     /**
      * The weight of the person in pounds
      */
-    private int weight;
+    private double weight;
     /**
      * The religion of the person
      */
@@ -113,10 +113,6 @@ public class Abductor {
      * The hair color of the person
      */
     private int hairColor;
-    /**
-     * The relationship of the abductor to the person
-     */
-    private int relation;
     /**
      * The distinguishing marks of the person
      */
@@ -461,7 +457,7 @@ public class Abductor {
      *
      * @return              the weight of the person
      */
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -470,7 +466,7 @@ public class Abductor {
      *
      * @param weight        the weight of the person
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -562,24 +558,6 @@ public class Abductor {
      */
     public void setMarks(String marks) {
         this.marks = marks;
-    }
-
-    /**
-     * Gets the relationship of the relative to the person.
-     *
-     * @return              the relationship of the relative to the person
-     */
-    public int getRelation() {
-        return relation;
-    }
-
-    /**
-     * Sets the relationship of the relative to the person.
-     *
-     * @param relation      the relationship of the relative to the person
-     */
-    public void setRelation(int relation) {
-        this.relation = relation;
     }
 
     /**
@@ -738,7 +716,6 @@ public class Abductor {
         content += "\nHair Color: " + hairColor;
         content += "\nDistinguishing Marks: " + marks;
         content += "\nPersonal Effects: " + personalEffects;
-        content += "\nRelation: " + relation;
         content += "\nRemarks: " + remarks;
         content += "\nPhoto Filename: " + photo;
         content += "\nAged Photo Filename: " + agedPhoto;

@@ -96,7 +96,7 @@ public class Person {
     /**
      * The weight of the person in pounds
      */
-    private int weight;
+    private double weight;
     /**
      * The religion of the person
      */
@@ -130,9 +130,17 @@ public class Person {
      */
     private String remarks;
     /**
-     * The date the person has gone missing or was found
+     * The month the person has gone missing or was found
      */
-    private String dateMissingOrFound;
+    private int monthMissingOrFound;
+    /**
+     * The day the person has gone missing or was found
+     */
+    private int dayMissingOrFound;
+    /**
+     * The year the person has gone missing or was found
+     */
+    private int yearMissingOrFound;
     /**
      * The city the person disappeared from
      */
@@ -233,6 +241,14 @@ public class Person {
      * The ID of the encoder
      */
     private int encoderId;
+    /**
+     * The relationship of the relative to the person
+     */
+    private int relationToRelative;
+    /**
+     * The relationship of the abductor to the person
+     */
+    private int relationToAbductor;
 
     /**
      * Gets the ID of the person.
@@ -545,7 +561,7 @@ public class Person {
      *
      * @return              the weight of the person
      */
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -554,7 +570,7 @@ public class Person {
      *
      * @param weight        the weight of the person
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -703,21 +719,39 @@ public class Person {
     }
 
     /**
-     * Gets the date the person has gone missing or was found.
+     * Gets the day the person has gone missing or was found.
      *
-     * @return              the date the person has gone missing or was found
+     * @return              the day the person has gone missing or was found
      */
-    public String getDateMissingOrFound() {
-        return dateMissingOrFound;
+    public int getDayMissingOrFound() {
+        return dayMissingOrFound;
     }
 
     /**
-     * Sets the date the person has gone missing or was found.
+     * Sets the day the person has gone missing or was found.
      *
-     * @param dateMissingOrFound the date the person has gone missing or was found
+     * @param dayMissingOrFound the day the person has gone missing or was found
      */
-    public void setDateMissingOrFound(String dateMissingOrFound) {
-        this.dateMissingOrFound = dateMissingOrFound;
+    public void setDayMissingOrFound(int dayMissingOrFound) {
+        this.dayMissingOrFound = dayMissingOrFound;
+    }
+
+    /**
+     * Gets the year the person has gone missing or was found.
+     *
+     * @return              the year the person has gone missing or was found
+     */
+    public int getYearMissingOrFound() {
+        return monthMissingOrFound;
+    }
+
+    /**
+     * Sets the year the person has gone missing or was found.
+     *
+     * @param yearMissingOrFound the year the person has gone missing or was found
+     */
+    public void setYearMissingOrFound(int yearMissingOrFound) {
+        this.yearMissingOrFound = yearMissingOrFound;
     }
 
     /**
@@ -1171,6 +1205,42 @@ public class Person {
     }
 
     /**
+     * Gets the relationship of the relative to the person.
+     *
+     * @return              the relationship of the relative to the person
+     */
+    public int getRelationToRelative() {
+        return relationToRelative;
+    }
+
+    /**
+     * Sets the relationship of the relative to the person.
+     *
+     * @param relationToRelative the relationship of the relative to the person
+     */
+    public void setRelationToRelative(int relationToRelative) {
+        this.relationToRelative = relationToRelative;
+    }
+
+    /**
+     * Gets the relationship of the abductor to the person.
+     *
+     * @return              the relationship of the abductor to the person
+     */
+    public int getRelationToAbductor() {
+        return relationToAbductor;
+    }
+
+    /**
+     * Sets the relationship of the abductor to the person.
+     *
+     * @param relationToAbductor the relationship of the abductor to the person
+     */
+    public void setRelationToAbductor(int relationToAbductor) {
+        this.relationToAbductor = relationToAbductor;
+    }
+
+    /**
      * Returns a String representation of this data transfer object.
      *
      * @return              the String representation of this data transfer object
@@ -1204,7 +1274,9 @@ public class Person {
         content += "\nDistinguishing Marks: " + marks;
         content += "\nPersonal Effects: " + personalEffects;
         content += "\nRemarks: " + remarks;
-        content += "\nDate Missing or Found: " + dateMissingOrFound;
+        content += "\nMonth Missing or Found: " + monthMissingOrFound;
+        content += "\nDay Missing or Found: " + dayMissingOrFound;
+        content += "\nYear Missing or Found: " + yearMissingOrFound;
         content += "\nMissing from City: " + missingFromCity;
         content += "\nMissing from Province: " + missingFromProvince;
         content += "\nMissing from Country: " + missingFromCountry;

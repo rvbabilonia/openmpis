@@ -65,10 +65,6 @@ public class Relative {
      * The home country of the relative
      */
     private String country;
-    /**
-     * The relationship of the relative to the person
-     */
-    private int relation;
 
     /**
      * Gets the ID of the relative.
@@ -251,24 +247,6 @@ public class Relative {
     }
 
     /**
-     * Gets the relationship of the relative to the person.
-     *
-     * @return              the relationship of the relative to the person
-     */
-    public int getRelation() {
-        return relation;
-    }
-
-    /**
-     * Sets the relationship of the relative to the person.
-     *
-     * @param relation      the relationship of the relative to the person
-     */
-    public void setRelation(int relation) {
-        this.relation = relation;
-    }
-
-    /**
      * Returns a String representation of this data transfer object.
      *
      * @return              the String representation of this data transfer object
@@ -286,7 +264,6 @@ public class Relative {
         content += "\nCity: " + city;
         content += "\nProvince: " + province;
         content += "\nCountry: " + country;
-        content += "\nRelation: " + relation;
         return content;
     }
 }
