@@ -63,8 +63,8 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="help">
-        <echo message="To build everything, type: ant"/>
+    <target name="help" description="Displays this help menu.">
+        <echo message="To build everything and install the database schema, type: ant"/>
         <echo message="You can now deploy dist/openmpis.war to the application server."/>
         <echo message=""/>
         <echo message="To create the WAR file only, type: ant dist"/>
@@ -76,7 +76,35 @@
         <echo message="To generate documentation only, type: ant javadoc"/>
         <echo message="This will generate the API's in the dist/javadocs directory."/>
         <echo message=""/>
+        <echo message="To install the database schema only, type: ant create-database"/>
+        <echo message=""/>
+        <echo message="To remove the database schema, type: ant drop-database"/>
+        <echo message=""/>
         <echo message="To start from scratch, type: ant clean"/>
         <echo message="This will erase build/ and dist/ directories."/>
+    </target>
+    <target depends="create-database" name="-post-dist"/>
+    <target depends="library-inclusion-in-archive,javadoc-build" name="create-database" description="Installs the OpenMPIS schema on the MySQL database server.">
+        <property file="src/sqlmapconfig.properties"/>
+        <property name="sql.url" value="jdbc:mysql://localhost:3306"/>
+        <sql driver="${driver}" url="${sql.url}" userid="${username}" password="${password}" src="database/MySQL/openmpis-mysql-schema-1.0.sql" rdbms="mysql">
+            <classpath>
+                <pathelement location="build/web/WEB-INF/lib/mysql-connector-java-5.1.6-bin.jar"/>
+            </classpath>
+        </sql>
+    </target>
+    <target depends="library-inclusion-in-archive" name="drop-database" description="Removes the database schema from the database server.">
+        <input message="This will remove the database. Proceed?" validargs="y,n" addproperty="do.delete" />
+        <condition property="do.abort">
+            <equals arg1="n" arg2="${do.delete}"/>
+        </condition>
+        <fail if="do.abort">Database dropping aborted by user.</fail>
+        <property file="src/sqlmapconfig.properties"/>
+        <sql driver="${driver}" url="${url}" userid="${username}" password="${password}">
+            <classpath>
+                <pathelement location="build/web/WEB-INF/lib/mysql-connector-java-5.1.6-bin.jar"/>
+            </classpath>
+            DROP DATABASE openmpis;
+        </sql>
     </target>
 </project>
