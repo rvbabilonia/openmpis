@@ -1,5 +1,3 @@
-package WEB-INF.pages.session;
-
 <%@ page contentType="text/html" %>
 <%@ page pageEncoding="UTF-8" %>
 
@@ -17,10 +15,9 @@ package WEB-INF.pages.session;
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="<html:rewrite page=""/>/images/favicon.ico"/>
-        <style type="text/css" media="all">@import "<html:rewrite page=""/>/<bean:message key="global.style"/>";</style>
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="user.title"/>
-        <html:base/>
     </head>
     <body>
         <div id="container">

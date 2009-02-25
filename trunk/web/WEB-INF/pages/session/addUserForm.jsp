@@ -5,6 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -15,10 +16,9 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="<html:rewrite page=""/>/images/favicon.ico"/>
-        <style type="text/css" media="all">@import "<html:rewrite page=""/>/<bean:message key="global.style"/>";</style>
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="user.title"/>
-        <html:base/>
     </head>
     <body>
         <div id="container">
@@ -40,14 +40,16 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="user.add"/>
-                    
+                    <p class="contentclass">
+                        <html:errors property="username"/>
+                    </p>
                     <html:form method="post" action="viewUser" styleClass="adduserclass">
                         <p class="contentclass">
                             <html:hidden property="action" value="addUser"/>
                         </p>
                         <p class="contentclass">
                             <label id="groupidlabel" class="labelclass" for="groupidfield">
-                                <bean:message key="label.group"/>
+                                * <bean:message key="label.group"/>
                             </label>
                             <html:select property="groupId" styleId="groupidfield" styleClass="selectclass">
                                 <c:choose>
@@ -63,28 +65,28 @@
                         </p>
                         <p class="contentclass">
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield">
-                                <bean:message key="label.firstname"/>
+                                * <bean:message key="label.firstname"/>
                             </label>
                             <html:text styleId="firstnamefield" styleClass="inputclass" property="firstName" maxlength="30"/>
                             <html:errors property="firstname"/>
                         </p>
                         <p class="contentclass">
                             <label id="middlenamelabel" class="labelclass" for="middlenamefield">
-                                <bean:message key="label.middlename"/>
+                                * <bean:message key="label.middlename"/>
                             </label>
                             <html:text styleId="middlenamefield" styleClass="inputclass" property="middleName" maxlength="30"/>
                             <html:errors property="middlename"/>
                         </p>
                         <p class="contentclass">
                             <label id="lastnamelabel" class="labelclass" for="lastnamefield">
-                                <bean:message key="label.lastname"/>
+                                * <bean:message key="label.lastname"/>
                             </label>
                             <html:text styleId="lastnamefield" styleClass="inputclass" property="lastName" maxlength="30"/>
                             <html:errors property="lastname"/>
                         </p>
                         <p class="contentclass">
                             <label id="birthdatelabel" class="labelclass" for="monthfield">
-                                <bean:message key="label.birthdate"/>
+                                * <bean:message key="label.date.birth"/>
                             </label>
                             <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth">
                                 <c:forEach begin="1" end="12" step="1" var="i">
@@ -96,8 +98,10 @@
                                     <html:option value="${i}" styleId="dayfield${i}" styleClass="dayoptionclass">${i}</html:option>
                                 </c:forEach>
                             </html:select>
+                            <jsp:useBean id="currentDate" class="java.util.Date"/>
+                            <fmt:formatDate var="currentYear" value="${currentDate}" pattern="yyyy"/>
                             <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear">
-                                <c:forEach begin="1949" end="1988" step="1" var="i">
+                                <c:forEach begin="${currentYear - 60}" end="${currentYear - 21}" step="1" var="i">
                                     <html:option value="${i}" styleId="yearfield${i}" styleClass="yearoptionclass">${i}</html:option>
                                 </c:forEach>
                             </html:select>
@@ -105,28 +109,28 @@
                         </p>
                         <p class="contentclass">
                             <label id="designationlabel" class="labelclass" for="designationfield">
-                                <bean:message key="label.designation"/>
+                                * <bean:message key="label.designation"/>
                             </label>
                             <html:text styleId="designationfield" styleClass="inputclass" property="designation" maxlength="30"/>
                             <html:errors property="designation"/>
                         </p>
                         <p class="contentclass">
                             <label id="agencylabel" class="labelclass" for="agencyfield">
-                                <bean:message key="label.agency"/>
+                                * <bean:message key="label.agency"/>
                             </label>
                             <html:text styleId="agencyfield" styleClass="inputclass" property="agency" maxlength="60"/>
                             <html:errors property="agency"/>
                         </p>
                         <p class="contentclass">
                             <label id="emaillabel" class="labelclass" for="emailfield">
-                                <bean:message key="label.email"/>
+                                * <bean:message key="label.email"/>
                             </label>
                             <html:text styleId="emailfield" styleClass="inputclass" property="email" maxlength="60"/>
                             <html:errors property="email"/>
                         </p>
                         <p class="contentclass">
                             <label id="numberlabel" class="labelclass" for="numberfield">
-                                <bean:message key="label.number"/>
+                                * <bean:message key="label.number"/>
                             </label>
                             <html:text styleId="numberfield" styleClass="inputclass" property="number" maxlength="30"/>
                             <html:errors property="number"/>

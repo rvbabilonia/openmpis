@@ -15,8 +15,8 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="<html:rewrite page=""/>/images/favicon.ico"/>
-        <style type="text/css" media="all">@import "<html:rewrite page=""/>/<bean:message key="global.style"/>";</style>
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <c:choose>
             <c:when test="${currentuser.groupId == 0}">
                 <bean:message key="admin.home.title"/>
@@ -28,7 +28,6 @@
                 <bean:message key="investigator.home.title"/>
             </c:when>
         </c:choose>
-        <html:base/>
     </head>
     <body>
         <div id="container">
@@ -59,7 +58,7 @@
                                 <bean:message key="admin.home.content" arg0="${currentuser.firstName}"/>
                             </p>
                             <p class="contentclass">
-                                TODO: You have 0 feedbacks.
+                                <bean:message key="admin.home.content.feedbacks" arg0="${newmessages}"/>
                             </p>
                         </c:when>
                         <c:when test="${currentuser.groupId == 1}">
@@ -74,7 +73,7 @@
                                 <bean:message key="investigator.home.content" arg0="${currentuser.firstName}"/>
                             </p>
                             <p class="contentclass">
-                                TODO: Person has 1 sighting(s).
+                                <bean:message key="investigator.home.content.sightings" arg0="${newmessages}"/>
                             </p>
                         </c:when>
                     </c:choose>

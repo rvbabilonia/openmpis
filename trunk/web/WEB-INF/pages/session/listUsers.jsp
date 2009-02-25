@@ -16,10 +16,9 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="<html:rewrite page=""/>/images/favicon.ico"/>
-        <style type="text/css" media="all">@import "<html:rewrite page=""/>/<bean:message key="global.style"/>";</style>
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="user.title"/>
-        <html:base/>
     </head>
     <body>
         <div id="container">
@@ -41,28 +40,32 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="user.list" arg0="${currentpage}" arg1="${totalpages}"/>
-
-                    <div class="table">
-                        <div class="row">
-                            <div class="columnheader"><bean:message key="label.count"/></div>
-                            <div class="columnheader"><bean:message key="label.username"/></div>
-                            <div class="columnheader"><bean:message key="label.group"/></div>
-                            <div class="columnheader"><bean:message key="label.firstname"/></div>
-                            <div class="columnheader"><bean:message key="label.lastname"/></div>
-                            <div class="columnheader"><bean:message key="label.agency"/></div>
-                            <div class="columnheader"><bean:message key="label.designation"/></div>
-                            <div class="columnheader"><bean:message key="label.date.lastlogin"/></div>
-                            <div class="columnheader"><bean:message key="label.email"/></div>
-                            <div class="columnheader"><bean:message key="label.status"/></div>
-                        </div>
-                        <c:forEach items="${userlist}" var="user" varStatus="userCount">
-                            <c:choose>
-                                <c:when test="${userCount.count == 0}">
-                                    <p class="contentclass">
-                                        <bean:message key="user.empty"/>
-                                    </p>
-                                </c:when>
-                                <c:otherwise>
+                    <c:choose>
+                        <c:when test="${usercount == 0}">
+                            <p class="contentclass">
+                                <bean:message key="user.content.empty"/>
+                            </p>
+                            <p class="contentclass">
+                                <c:if test="${currentuser.groupId == 1}">
+                                    <bean:message key="user.new.button"/>
+                                </c:if>
+                            </p>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="table">
+                                <div class="row">
+                                    <div class="columnheader"><bean:message key="label.count"/></div>
+                                    <div class="columnheader"><bean:message key="label.username"/></div>
+                                    <div class="columnheader"><bean:message key="label.group"/></div>
+                                    <div class="columnheader"><bean:message key="label.firstname"/></div>
+                                    <div class="columnheader"><bean:message key="label.lastname"/></div>
+                                    <div class="columnheader"><bean:message key="label.agency"/></div>
+                                    <div class="columnheader"><bean:message key="label.designation"/></div>
+                                    <div class="columnheader"><bean:message key="label.date.lastlogin"/></div>
+                                    <div class="columnheader"><bean:message key="label.email"/></div>
+                                    <div class="columnheader"><bean:message key="label.status"/></div>
+                                </div>
+                                <c:forEach items="${userlist}" var="user" varStatus="userCount">
                                     <div class="row">
                                         <div class="cell">${userCount.count + ((currentpage - 1) * maxresults)}</div>
                                         <c:choose>
@@ -86,55 +89,55 @@
                                         <div class="cell"><html:link href="mailto:${user.email}">${user.email}</html:link></div>
                                         <div class="cell"><bean:message key="status.user.${user.status}"/></div>
                                     </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </div>
-                    <p class="contentclass">
-                        <c:choose>
-                            <c:when test="${currentpage > 1}">
-                                <c:url var="url" scope="page" value="/viewUser.do">
-                                    <c:param name="action" value="list"/>
-                                    <c:param name="page" value="start"/>
-                                </c:url>
-                                <bean:message key="pagination.firstpage.enabled" arg0="${fn:escapeXml(url)}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <bean:message key="pagination.firstpage.disabled"/>
-                            </c:otherwise>
-                        </c:choose>
-                        <c:choose>
-                            <c:when test="${(currentpage - 1) > 0}">
-                                <c:url var="url" scope="page" value="/viewUser.do">
-                                    <c:param name="action" value="list"/>
-                                    <c:param name="page" value="previous"/>
-                                </c:url>
-                                <bean:message key="pagination.previouspage.enabled" arg0="${fn:escapeXml(url)}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <bean:message key="pagination.previouspage.disabled"/>
-                            </c:otherwise>
-                        </c:choose>
-                        <c:choose>
-                            <c:when test="${morepages eq 'true'}">
-                                <c:url var="url" scope="page" value="/viewUser.do">
-                                    <c:param name="action" value="list"/>
-                                    <c:param name="page" value="next"/>
-                                </c:url>
-                                <bean:message key="pagination.nextpage.enabled" arg0="${fn:escapeXml(url)}"/>
-                                <c:url var="url" scope="page" value="/viewUser.do">
-                                    <c:param name="action" value="list"/>
-                                    <c:param name="page" value="end"/>
-                                </c:url>
-                                <bean:message key="pagination.lastpage.enabled" arg0="${fn:escapeXml(url)}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <bean:message key="pagination.nextpage.disabled"/>
-                                <bean:message key="pagination.lastpage.disabled"/>
-                            </c:otherwise>
-                        </c:choose>
-                        <bean:message key="user.new.button"/>
-                    </p>
+                                </c:forEach>
+                            </div>
+                            <p class="contentclass">
+                                <c:choose>
+                                    <c:when test="${currentpage > 1}">
+                                        <c:url var="url" scope="page" value="/viewUser.do">
+                                            <c:param name="action" value="list"/>
+                                            <c:param name="page" value="start"/>
+                                        </c:url>
+                                        <bean:message key="pagination.firstpage.enabled" arg0="${fn:escapeXml(url)}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <bean:message key="pagination.firstpage.disabled"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${(currentpage - 1) > 0}">
+                                        <c:url var="url" scope="page" value="/viewUser.do">
+                                            <c:param name="action" value="list"/>
+                                            <c:param name="page" value="previous"/>
+                                        </c:url>
+                                        <bean:message key="pagination.previouspage.enabled" arg0="${fn:escapeXml(url)}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <bean:message key="pagination.previouspage.disabled"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${morepages eq 'true'}">
+                                        <c:url var="url" scope="page" value="/viewUser.do">
+                                            <c:param name="action" value="list"/>
+                                            <c:param name="page" value="next"/>
+                                        </c:url>
+                                        <bean:message key="pagination.nextpage.enabled" arg0="${fn:escapeXml(url)}"/>
+                                        <c:url var="url" scope="page" value="/viewUser.do">
+                                            <c:param name="action" value="list"/>
+                                            <c:param name="page" value="end"/>
+                                        </c:url>
+                                        <bean:message key="pagination.lastpage.enabled" arg0="${fn:escapeXml(url)}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <bean:message key="pagination.nextpage.disabled"/>
+                                        <bean:message key="pagination.lastpage.disabled"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <bean:message key="user.new.button"/>
+                            </p>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         
