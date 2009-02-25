@@ -100,4 +100,34 @@ public class Validator {
     public boolean isValidNumber(String number) {
         return number.matches("[0-9\\s\\Q+-.\\E()]+(loc\\.\\s|LOC\\.\\s|EXT\\.\\s|ext\\.\\s)?[0-9]+");
     }
+
+    /**
+     * Validates the street name.
+     *
+     * @param street        the street name
+     * @return              <code>true</code> if the street name is valid; <code>false</code> otherwise
+     */
+    public boolean isValidStreet(String street) {
+        return street.matches("[A-Za-z0-9]+(['-,\\.])*([\\s][A-Za-z0-9]+['-,\\.]*)*");
+    }
+
+    /**
+     * Validates the city name.
+     *
+     * @param city          the city name
+     * @return              <code>true</code> if the city name is valid; <code>false</code> otherwise
+     */
+    public boolean isValidCity(String city) {
+        return city.matches("[A-Z][a-z]+([\\s'-][a-zA-Z]+)*");
+    }
+
+    /**
+     * Validates the province name.
+     *
+     * @param province      the province name
+     * @return              <code>true</code> if the province name is valid; <code>false</code> otherwise
+     */
+    public boolean isValidProvince(String province) {
+        return province.matches("[A-Z][a-z]+([\\s'-][a-zA-Z]+)*");
+    }
 }
