@@ -516,24 +516,24 @@ public class PersonDAOImpl implements PersonDAO {
      * Inserts a new person.
      * 
      * @param person        the new person
-     * @return              <code>true</code> if the person was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertPerson(Person person) throws SQLException {
+    public int insertPerson(Person person) throws SQLException {
+        int index = 0;
+
         try {
             sqlMap.startTransaction();
-            sqlMap.insert("insertPerson", person);
+            index = (Integer) sqlMap.insert("insertPerson", person);
             sqlMap.commitTransaction();
-
-            return true;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } finally {
             sqlMap.endTransaction();
         }
 
-        return false;
+        return index;
     }
 
     /**

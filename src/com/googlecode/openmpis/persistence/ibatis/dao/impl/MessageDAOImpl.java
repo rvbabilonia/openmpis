@@ -93,6 +93,58 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     /**
+     * Retrieves all feedbacks.
+     *
+     * @param pagination    the pagination context
+     * @param userId        the user ID
+     * @return              the list of feedbacks
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> getAllFeedbacks(Pagination pagination, Integer userId) throws SQLException {
+        List<Message> messageList = new ArrayList<Message>();
+
+        try {
+            sqlMap.startTransaction();
+            messageList = sqlMap.queryForList("getAllFeedbacks", userId, pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllFeedbacks", userId));
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return messageList;
+    }
+
+    /**
+     * Retrieves all sightings for a given person.
+     *
+     * @param pagination    the pagination context
+     * @param sighting      the sighting
+     * @return              the list of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> getAllSightingsForPerson(Pagination pagination, Message sighting) throws SQLException {
+        List<Message> messageList = new ArrayList<Message>();
+
+        try {
+            sqlMap.startTransaction();
+            messageList = sqlMap.queryForList("getAllSightingsForPerson", sighting, pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllSightingsForPerson", sighting));
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return messageList;
+    }
+
+    /**
      * Retrieves a message given its ID.
      * 
      * @param id            the message ID
@@ -117,17 +169,17 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     /**
-     * Inserts a new message.
+     * Inserts a new sighting.
      * 
-     * @param message       the new message
-     * @return              <code>true</code> if the message was successfully inserted; <code>false</code> otherwise
+     * @param sighting      the new sighting
+     * @return              <code>true</code> if the sighting was successfully inserted; <code>false</code> otherwise
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertMessage(Message message) throws SQLException {
+    public boolean insertSighting(Message sighting) throws SQLException {
         try {
             sqlMap.startTransaction();
-            sqlMap.insert("insertMessage", message);
+            sqlMap.insert("insertSighting", sighting);
             sqlMap.commitTransaction();
 
             return true;
@@ -162,5 +214,125 @@ public class MessageDAOImpl implements MessageDAO {
         }
 
         return false;
+    }
+
+    /**
+     * Returns the total number of feedbacks for the administrator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of feedbacks for the administrator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllFeedbacks(Integer userId) throws SQLException {
+        int feedbackCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            feedbackCount = (Integer) sqlMap.queryForObject("countFeedbacks", userId);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return feedbackCount;
+    }
+
+    /**
+     * Returns the total number of new feedbacks for the administrator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new feedbacks for the administrator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewFeedbacks(Integer userId) throws SQLException {
+        int newFeedbackCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            newFeedbackCount = (Integer) sqlMap.queryForObject("countAllNewFeedbacks", userId);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return newFeedbackCount;
+    }
+
+    /**
+     * Returns the total number of new sightings attributed to the investigator.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new sightings attributed to the investigator
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewSightings(Integer userId) throws SQLException {
+        int newSightingCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            newSightingCount = (Integer) sqlMap.queryForObject("countAllNewSightings", userId);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return newSightingCount;
+    }
+
+    /**
+     * Returns the total number of sightings for a given person.
+     *
+     * @param userId        the user ID
+     * @return              the total number of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSightingsForPerson(Message sighting) throws SQLException {
+        int sightingForPersonCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            sightingForPersonCount = (Integer) sqlMap.queryForObject("countAllSightingsForPerson", sighting);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return sightingForPersonCount;
+    }
+
+    /**
+     * Returns the total number of new sightings for a given person.
+     *
+     * @param userId        the user ID
+     * @return              the total number of new sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllNewSightingsForPerson(Message sighting) throws SQLException {
+        int newSightingForPersonCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            newSightingForPersonCount = (Integer) sqlMap.queryForObject("countAllNewSightingsForPerson", sighting);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return newSightingForPersonCount;
     }
 }

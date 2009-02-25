@@ -97,24 +97,24 @@ public class AbductorDAOImpl implements AbductorDAO {
      * Inserts a new abductor.
      * 
      * @param abductor      the new abductor
-     * @return              <code>true</code> if the abductor was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean insertAbductor(Abductor abductor) throws SQLException {
+    public int insertAbductor(Abductor abductor) throws SQLException {
+        int index = 0;
+
         try {
             sqlMap.startTransaction();
-            sqlMap.insert("insertAbductor", abductor);
+            index = (Integer) sqlMap.insert("insertAbductor", abductor);
             sqlMap.commitTransaction();
-
-            return true;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } finally {
             sqlMap.endTransaction();
         }
 
-        return false;
+        return index;
     }
 
     /**

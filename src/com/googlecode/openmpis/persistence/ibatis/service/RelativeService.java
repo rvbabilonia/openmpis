@@ -42,6 +42,14 @@ public interface RelativeService {
     public List<Relative> getAllRelatives(Pagination pagination) throws SQLException;
 
     /**
+     * Retrieves all relatives according to last name.
+     *
+     * @return              the list of relatives
+     * @throws java.sql.SQLException
+     */
+    public List<Relative> listRelatives() throws SQLException;
+
+    /**
      * Retrieves a relative given his ID.
      * 
      * @param id            the relative ID
@@ -54,10 +62,10 @@ public interface RelativeService {
      * Inserts a new relative.
      * 
      * @param relative      the new relative
-     * @return              <code>true</code> if the relative was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
-    public boolean insertRelative(Relative relative) throws SQLException;
+    public int insertRelative(Relative relative) throws SQLException;
 
     /**
      * Updates an existing relative.
