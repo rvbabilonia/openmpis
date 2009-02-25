@@ -112,8 +112,7 @@ cities['Zamboanga del Norte'] = new Array('Dapitan City', 'Dipolog City', 'Bacun
 cities['Zamboanga del Sur'] = new Array('Pagadian City', 'Zamboanga City', 'Aurora', 'Bayog', 'Dimataling', 'Dinas', 'Dumalinao', 'Dumingag', 'Guipos', 'Josefina', 'Kumalarang', 'Labangan', 'Lakewood', 'Lapuyan', 'Mahayag', 'Margosatubig', 'Midsalip', 'Molave', 'Pitogo', 'Ramon Magsaysay', 'San Miguel', 'San Pablo', 'Sominot', 'Tabina', 'Tambulig', 'Tigbao', 'Tukuran', 'Vincenzo A. Sagun');
 cities['Zamboanga Sibugay'] = new Array('Alicia', 'Buug', 'Diplahan', 'Imelda', 'Ipil', 'Kabasalan', 'Mabuhay', 'Malangas', 'Naga', 'Olutanga', 'Payao', 'Roseller Lim', 'Siay', 'Talusan', 'Titay', 'Tungawan');
 
-function setCities(provinceSelect) {
-    cityField = document.getElementById('cityfield');
+function setCities(provinceSelect, cityField) {
 	cityField.options.length = 0;
 	var province = provinceSelect.options[provinceSelect.selectedIndex].text;
     for (var i = 0; i < cities[province].length; i++) {
@@ -121,30 +120,158 @@ function setCities(provinceSelect) {
     }
 }
 
-function setDefaultCities() {
+function setDefaultCities(province, city) {
+    province = (province != '') ? province : 'Abra';
     cityField = document.getElementById('cityfield');
+    if (document.getElementById('missingfromcityfield') != null)
+        missingFromCityField = document.getElementById('missingfromcityfield');
+    if (document.getElementById('possiblecityfield') != null)
+        possibleCityField = document.getElementById('possiblecityfield');
+    if (document.getElementById('institutioncityfield') != null)
+        institutionCityField = document.getElementById('institutioncityfield');
 	cityField.options.length = 0;
-    for (var j = 0; j < cities['Abra'].length; j++) {
-        cityField.options[cityField.length] = new Option(cities['Abra'][j], cities['Abra'][j]);
-    }
-}
-
-function setProvinces() {
-    provinceField = document.getElementById('provincefield');
-	provinceField.options.length = 0;
-    for (var i = 0; i < provinces.length; i++) {
-        provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
-    }
-}
-
-function setCountries() {
-    countryField = document.getElementById('countryfield');
-	countryField.options.length = 0;
-    for (var i = 0; i < countries.length; i++) {
-        if (countries[i] == 'Philippines') {
-            countryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+    for (var i = 0; i < cities[province].length; i++) {
+        if ((city != '') && (cities[province][i] == city)) {
+            if (document.getElementById('missingfromcityfield') != null)
+                missingFromCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
+            if (document.getElementById('possiblecityfield') != null)
+                possibleCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
+            if (document.getElementById('institutioncityfield') != null)
+                institutionCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
+            cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
         } else {
-            countryField.options[countryField.length] = new Option(countries[i], countries[i]);
+            if (document.getElementById('missingfromcityfield') != null)
+                missingFromCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
+            if (document.getElementById('possiblecityfield') != null)
+                possibleCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
+            if (document.getElementById('institutioncityfield') != null)
+                institutionCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
+            cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
         }
     }
+}
+
+function setProvinces(province) {
+    provinceField = document.getElementById('provincefield');
+    if (document.getElementById('missingfromprovincefield') != null)
+        missingFromProvinceField = document.getElementById('missingfromprovincefield');
+    if (document.getElementById('possibleprovincefield') != null)
+        possibleProvinceField = document.getElementById('possibleprovincefield');
+    if (document.getElementById('institutionprovincefield') != null)
+        institutionProvinceField = document.getElementById('institutionprovincefield');
+	provinceField.options.length = 0;
+	for (var i = 0; i < provinces.length; i++) {
+        if (provinces[i] == province) {
+            if (document.getElementById('missingfromprovincefield') != null)
+                missingFromProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
+            if (document.getElementById('possibleprovincefield') != null)
+                possibleProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
+            if (document.getElementById('institutionprovincefield') != null)
+                institutionProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
+            provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
+        } else {
+            if (document.getElementById('missingfromprovincefield') != null)
+                missingFromProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
+            if (document.getElementById('possibleprovincefield') != null)
+                possibleProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
+            if (document.getElementById('institutionprovincefield') != null)
+                institutionProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
+            provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
+        }
+    }
+}
+
+function setCountries(country) {
+    country = (country != '') ? country : 'Philippines';
+    countryField = document.getElementById('countryfield');
+    if (document.getElementById('missingfromcountryfield') != null)
+        missingFromCountryField = document.getElementById('missingfromcountryfield');
+    if (document.getElementById('possiblecountryfield') != null)
+        possibleCountryField = document.getElementById('possiblecountryfield');
+    if (document.getElementById('institutioncountryfield') != null)
+        institutionCountryField = document.getElementById('institutioncountryfield');
+	countryField.options.length = 0;
+    for (var i = 0; i < countries.length; i++) {
+        if ((country != '') && (countries[i] == country)) {
+            countryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+            if (document.getElementById('missingfromcountryfield') != null)
+                missingFromCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+            if (document.getElementById('possiblecountryfield') != null)
+                possibleCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+            if (document.getElementById('institutioncountryfield') != null)
+                institutionCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+        } else {
+            countryField.options[countryField.length] = new Option(countries[i], countries[i]);
+            if (document.getElementById('missingfromcountryfield') != null)
+                missingFromCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
+            if (document.getElementById('possiblecountryfield') != null)
+                possibleCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
+            if (document.getElementById('institutioncountryfield') != null)
+                institutionCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
+        }
+    }
+}
+
+function toggleCountry(countrySelect, provinceField, provinceTextField, cityField, cityTextField) {
+    var country = countrySelect.options[countrySelect.selectedIndex].text;
+    if (country != 'Philippines') {
+        provinceField.disabled = true;
+        provinceField.style.display = 'none';
+        provinceTextField.disabled = false;
+        provinceTextField.style.display = 'block';
+        cityField.disabled = true;
+        cityField.style.display = 'none';
+        cityTextField.disabled = false;
+        cityTextField.style.display = 'block';
+    } else {
+        provinceField.disabled = false;
+        provinceField.style.display = 'block';
+        provinceTextField.disabled = true;
+        provinceTextField.style.display = 'none';
+        cityField.disabled = false;
+        cityField.style.display = 'block';
+        cityTextField.disabled = true;
+        cityTextField.style.display = 'none';
+    }
+}
+
+function toggleMissingOrFound(type) {
+    if (type <= 4) {
+        document.getElementById('ifmissing').style.display = 'block';
+        document.getElementById('iffound').style.display = 'none';
+    } else {
+        document.getElementById('ifmissing').style.display = 'none';
+        document.getElementById('iffound').style.display = 'block';
+    }
+}
+
+function setAge() {
+    var today = new Date();
+    var currentMonth = today.getMonth();
+    var currentDay = today.getDate();
+    var currentYear = today.getFullYear();
+    var month = document.getElementById('monthfield').value - 1;
+    var day = document.getElementById('dayfield').value;
+    var year = document.getElementById('yearfield').value;
+    ageField = document.getElementById('agefield');
+    if ((currentMonth > month) || ((currentMonth == month) && (currentDay >= day))) {
+        ageField.value = currentYear - year;
+    } else if ((currentMonth < month) || ((currentMonth == month) && (currentDay < day))) {
+        ageField.value = currentYear - year - 1;
+    }
+}
+
+function setCm() {
+    var feet = document.getElementById('feetfield').value;
+    var inches = document.getElementById('inchesfield').value;
+    cmField = document.getElementById('cmfield');
+    cmField.value = ((feet * 12) + (inches * 1)) * 2.54;
+}
+
+function setTimeElapsed(year, month, day, daysField) {
+    var today = new Date();
+    var dateMissing = new Date(year, month - 1, day);
+    var oneDay = 1000 * 60 * 60 * 24; // milliseconds x seconds x minutes x hours
+    var difference = today.getTime() - dateMissing.getTime();
+    daysField.value = Math.floor(difference / oneDay);
 }
