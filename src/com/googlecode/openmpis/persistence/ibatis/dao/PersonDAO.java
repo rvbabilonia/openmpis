@@ -201,10 +201,10 @@ public interface PersonDAO {
      * Inserts a new person.
      * 
      * @param person        the new person
-     * @return              <code>true</code> if the person was successfully inserted; <code>false</code> otherwise
+     * @return              the last index
      * @throws java.sql.SQLException
      */
-    public boolean insertPerson(Person person) throws SQLException;
+    public int insertPerson(Person person) throws SQLException;
 
     /**
      * Updates an existing person.
