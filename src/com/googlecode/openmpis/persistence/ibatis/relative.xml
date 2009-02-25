@@ -17,6 +17,7 @@
     <select id="getRelativeById" parameterClass="java.lang.Integer" resultClass="relative" cacheModel="relativeCache">
         <![CDATA[
         SELECT
+        ID as id,
         FIRSTNAME as firstName,
         MIDDLENAME as middleName,
         LASTNAME as lastName,
@@ -25,8 +26,7 @@
         CITY as city,
         PROVINCE as province,
         COUNTRY as country,
-        NUMBER as number,
-        RELATION as relation
+        NUMBER as number
         FROM RELATIVE
         WHERE ID = #id#
         ]]>
@@ -43,10 +43,25 @@
         CITY as city,
         PROVINCE as province,
         COUNTRY as country,
-        NUMBER as number,
-        RELATION as relation
+        NUMBER as number
         FROM RELATIVE
         ORDER BY ID
+    </select>
+
+    <select id="listRelatives" resultClass="relative" cacheModel="relativeCache">
+        SELECT
+        ID as id,
+        FIRSTNAME as firstName,
+        MIDDLENAME as middleName,
+        LASTNAME as lastName,
+        EMAIL as email,
+        STREET as street,
+        CITY as city,
+        PROVINCE as province,
+        COUNTRY as country,
+        NUMBER as number
+        FROM RELATIVE
+        ORDER BY LASTNAME
     </select>
 
     <select id="countAllRelatives" resultClass="java.lang.Integer" cacheModel="relativeCache">
@@ -60,23 +75,23 @@
         SELECT
         FIRSTNAME as firstName
         FROM RELATIVE
-        WHERE ID != #id# AND FIRSTNAME = #firstName# AND LASTNAME = #lastName#
+        WHERE (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#) OR EMAIL = #email#
         ]]>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertRelative" parameterClass="relative">
-        <selectKey property="id" type="post" resultClass="int">
+        <selectKey type="post" resultClass="int">
             SELECT LAST_INSERT_ID()
         </selectKey>
         <![CDATA[
         INSERT INTO RELATIVE
         (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET,
-        CITY, PROVINCE, COUNTRY, NUMBER, RELATION)
+        CITY, PROVINCE, COUNTRY, NUMBER)
         VALUES
         (#firstName#, #middleName#, #lastName#, #email#, #street#,
-        #city#, #province#, #country#, #number#, #relation#)
+        #city#, #province#, #country#, #number#)
         ]]>
     </insert>
 
@@ -93,8 +108,7 @@
         CITY = #city#,
         PROVINCE = #province#,
         COUNTRY = #country#,
-        NUMBER = #number#,
-        RELATION = #relation#
+        NUMBER = #number#
         WHERE ID = #id#
         ]]>
     </update>

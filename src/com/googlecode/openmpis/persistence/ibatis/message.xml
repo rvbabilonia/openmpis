@@ -11,38 +11,42 @@
         <flushOnExecute statement="deleteMessage"/>
         <flushInterval hours="24"/>
     </cacheModel>
-    
-    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Message object (JavaBean) properties -->
-    <select id="getAllMessages" resultClass="message" cacheModel="messageCache">
-        SELECT
+
+    <sql id="allColumnsFragment">
         ID as id,
         FIRSTNAME as firstName,
         LASTNAME as lastName,
         SUBJECT as subject,
         MESSAGE as message,
+        STATUS as status,
         EMAIL as email,
         IPADDRESS as ipAddress,
         PERSONID as personId,
+        USERID as userId,
         DATE as date,
         FROM MESSAGE
-        ORDER BY ID
-    </select>
-    
-    <select id="getMessageById" parameterClass="java.lang.Integer" resultClass="message" cacheModel="messageCache">
+    </sql>
+
+    <sql id="userFragment">
         <![CDATA[
-        SELECT
-        FIRSTNAME as firstName,
-        LASTNAME as lastName,
-        SUBJECT as subject,
-        MESSAGE as message,
-        EMAIL as email,
-        IPADDRESS as ipAddress,
-        PERSONID as personId,
-        DATE as date,
-        FROM MESSAGE
-        WHERE ID = #id#
+        WHERE USERID = #userId#
         ]]>
+        ORDER BY DATE
+    </sql>
+
+    <sql id="personFragment">
+        <![CDATA[
+        WHERE USERID = #userId# AND PERSONID = #personId#
+        ]]>
+        ORDER BY DATE
+    </sql>
+    
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Message object (JavaBean) properties -->
+    <select id="getAllMessages" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        ORDER BY DATE
     </select>
 
     <select id="countAllMessages" resultClass="java.lang.Integer" cacheModel="messageCache">
@@ -51,24 +55,93 @@
         FROM MESSAGE
     </select>
 
+    <select id="getAllFeedbacks" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <include refid="userFragment"/>
+    </select>
+
+    <select id="countAllFeedbacks" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <include refid="userFragment"/>
+    </select>
+
+    <select id="countAllNewFeedbacks" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <![CDATA[
+        WHERE USERID = #userId# AND STATUS = 0
+        ]]>
+    </select>
+
+    <select id="getAllSightingsForPerson" resultClass="message" parameterClass="message" cacheModel="messageCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <include refid="personFragment"/>
+    </select>
+
+    <select id="countAllSightingsForPerson" resultClass="java.lang.Integer" parameterClass="message" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <include refid="personFragment"/>
+    </select>
+
+    <select id="countAllNewSightingsForPerson" resultClass="java.lang.Integer" parameterClass="message" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <![CDATA[
+        WHERE USERID = #userId# AND PERSONID = #personId# AND STATUS = 0
+        ]]>
+    </select>
+
+    <select id="countAllSightings" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <![CDATA[
+        WHERE USERID = #userId# AND PERSONID > 0
+        ]]>
+    </select>
+
+    <select id="countAllNewSightings" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        COUNT(ID)
+        FROM MESSAGE
+        <![CDATA[
+        WHERE USERID = #userId# AND PERSONID > 0 AND STATUS = 0
+        ]]>
+    </select>
+    
+    <select id="getMessageById" parameterClass="java.lang.Integer" resultClass="message" cacheModel="messageCache">
+        SELECT
+        <include refid="allColumnsFragment"/>
+        <![CDATA[
+        WHERE ID = #id#
+        ]]>
+    </select>
+
     <!-- Use Message object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
-    <insert id="insertMessage" parameterClass="message">
+    <insert id="insertSighting" parameterClass="message">
         <![CDATA[
         INSERT INTO MESSAGE
-        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, DATE)
+        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, STATUS, IPADDRESS, PERSONID, USERID, DATE)
         VALUES
-        (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#,
-        #personId#, #date#)
+        (#firstName#, #lastName#, #email#, #subject#, #message#, #status#, #ipAddress#, #personId#, #userId#, #date#)
         ]]>
     </insert>
     
     <insert id="insertFeedback" parameterClass="message">
         <![CDATA[
         INSERT INTO MESSAGE
-        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, DATE)
+        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, STATUS, USERID, IPADDRESS, DATE)
         VALUES
-        (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#, #date#)
+        (#firstName#, #lastName#, #email#, #subject#, #message#, #userId#, #ipAddress#, #date#)
         ]]>
     </insert>
 

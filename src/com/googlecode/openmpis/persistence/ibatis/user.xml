@@ -14,7 +14,7 @@
         <flushInterval hours="24"/>
     </cacheModel>
 
-    <sql id="publicColumnFragment">
+    <sql id="allColumnsFragment">
         ID as id,
         GROUPID as groupId,
         USERNAME as username,
@@ -29,32 +29,35 @@
         LASTLOGIN as lastLogin,
         DATE as date,
         STATUS as status,
-        CREATORID as creatorId
+        CREATORID as creatorId,
+        QUESTION as question,
+        ANSWER as answer
+        FROM USER
     </sql>
 
     <sql id="administratorFragment">
-        FROM USER
         WHERE GROUPID = 0
+        ORDER BY ID
     </sql>
 
     <sql id="encoderFragment">
-        FROM USER
         WHERE GROUPID = 1
+        ORDER BY ID
     </sql>
 
     <sql id="investigatorFragment">
-        FROM USER
         WHERE GROUPID = 2
+        ORDER BY ID
     </sql>
 
     <sql id="activeFragment">
-        FROM USER
         WHERE STATUS = 0
+        ORDER BY ID
     </sql>
 
     <sql id="suspendedFragment">
-        FROM USER
         WHERE STATUS = 1
+        ORDER BY ID
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -69,7 +72,6 @@
         FIRSTNAME as firstName,
         LASTNAME as lastName,
         EMAIL as email,
-        DATE as date,
         STATUS as status,
         QUESTION as question,
         ANSWER as answer,
@@ -80,30 +82,9 @@
     </select>
     
     <select id="getUserById" parameterClass="java.lang.Integer" resultClass="user" cacheModel="userCache">
-        <![CDATA[
         SELECT
-        ID as id,
-        GROUPID as groupId,
-        USERNAME as username,
-        PASSWORD as password,
-        FIRSTNAME as firstName,
-        MIDDLENAME as middleName,
-        LASTNAME as lastName,
-        BIRTHMONTH as birthMonth,
-        BIRTHDAY as birthDay,
-        BIRTHYEAR as birthYear,
-        EMAIL as email,
-        DESIGNATION as designation,
-        AGENCY as agency,
-        NUMBER as number,
-        IPADDRESS as ipAddress,
-        LASTLOGIN as lastLogin,
-        DATE as date,
-        STATUS as status,
-        CREATORID as creatorId,
-        QUESTION as question,
-        ANSWER as answer
-        FROM USER
+        <include refid="allColumnsFragment"/>
+        <![CDATA[
         WHERE ID = #id#
         ]]>
     </select>
@@ -111,22 +92,7 @@
     <!-- According to user ID -->
     <select id="getAllUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        ID as id,
-        GROUPID as groupId,
-        USERNAME as username,
-        FIRSTNAME as firstName,
-        MIDDLENAME as middleName,
-        LASTNAME as lastName,
-        EMAIL as email,
-        DESIGNATION as designation,
-        AGENCY as agency,
-        NUMBER as number,
-        IPADDRESS as ipAddress,
-        LASTLOGIN as lastLogin,
-        DATE as date,
-        STATUS as status,
-        CREATORID as creatorId
-        FROM USER
+        <include refid="allColumnsFragment"/>
         ORDER BY ID
     </select>
 
@@ -138,9 +104,8 @@
 
     <select id="getAdministrators" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="publicColumnFragment"/>
+        <include refid="allColumnsFragment"/>
         <include refid="administratorFragment"/>
-        ORDER BY ID
     </select>
 
     <select id="countAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
@@ -151,9 +116,8 @@
 
     <select id="getEncoders" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="publicColumnFragment"/>
+        <include refid="allColumnsFragment"/>
         <include refid="encoderFragment"/>
-        ORDER BY ID
     </select>
 
     <select id="countEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
@@ -164,9 +128,8 @@
 
     <select id="getInvestigators" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="publicColumnFragment"/>
+        <include refid="allColumnsFragment"/>
         <include refid="investigatorFragment"/>
-        ORDER BY ID
     </select>
 
     <select id="countInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
@@ -177,9 +140,8 @@
 
     <select id="getActiveUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="publicColumnFragment"/>
+        <include refid="allColumnsFragment"/>
         <include refid="activeFragment"/>
-        ORDER BY ID
     </select>
 
     <select id="countActiveUsers" resultClass="java.lang.Integer" cacheModel="userCache">
@@ -190,9 +152,8 @@
 
     <select id="getSuspendedUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="publicColumnFragment"/>
+        <include refid="allColumnsFragment"/>
         <include refid="suspendedFragment"/>
-        ORDER BY ID
     </select>
 
     <select id="countSuspendedUsers" resultClass="java.lang.Integer" cacheModel="userCache">
