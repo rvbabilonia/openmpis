@@ -14,7 +14,7 @@
         <flushInterval hours="24"/>
     </cacheModel>
 
-    <sql id="allColumnsFragment">
+    <sql id="userColumnsFragment">
         ID as id,
         GROUPID as groupId,
         USERNAME as username,
@@ -83,7 +83,7 @@
     
     <select id="getUserById" parameterClass="java.lang.Integer" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <![CDATA[
         WHERE ID = #id#
         ]]>
@@ -92,7 +92,7 @@
     <!-- According to user ID -->
     <select id="getAllUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         ORDER BY ID
     </select>
 
@@ -104,7 +104,7 @@
 
     <select id="getAdministrators" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <include refid="administratorFragment"/>
     </select>
 
@@ -116,7 +116,7 @@
 
     <select id="getEncoders" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <include refid="encoderFragment"/>
     </select>
 
@@ -128,7 +128,7 @@
 
     <select id="getInvestigators" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <include refid="investigatorFragment"/>
     </select>
 
@@ -140,7 +140,7 @@
 
     <select id="getActiveUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <include refid="activeFragment"/>
     </select>
 
@@ -152,7 +152,7 @@
 
     <select id="getSuspendedUsers" resultClass="user" cacheModel="userCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="userColumnsFragment"/>
         <include refid="suspendedFragment"/>
     </select>
 

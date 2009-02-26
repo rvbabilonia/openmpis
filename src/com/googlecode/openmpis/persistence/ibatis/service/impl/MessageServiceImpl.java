@@ -173,7 +173,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Returns the total number of sightings for a given person.
      *
-     * @param userId        the user ID
+     * @param sighting      the sighting
      * @return              the total number of sightings for a given person
      * @throws java.sql.SQLException
      */
@@ -185,7 +185,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Returns the total number of new sightings for a given person.
      *
-     * @param userId        the user ID
+     * @param sighting      the sighting
      * @return              the total number of new sightings for a given person
      * @throws java.sql.SQLException
      */
