@@ -101,6 +101,7 @@ public class MessageDAOImpl implements MessageDAO {
      * @throws java.sql.SQLException
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<Message> getAllFeedbacks(Pagination pagination, Integer userId) throws SQLException {
         List<Message> messageList = new ArrayList<Message>();
 
@@ -127,6 +128,7 @@ public class MessageDAOImpl implements MessageDAO {
      * @throws java.sql.SQLException
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<Message> getAllSightingsForPerson(Pagination pagination, Message sighting) throws SQLException {
         List<Message> messageList = new ArrayList<Message>();
 
@@ -291,7 +293,7 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Returns the total number of sightings for a given person.
      *
-     * @param userId        the user ID
+     * @param sighting      the sighting
      * @return              the total number of sightings for a given person
      * @throws java.sql.SQLException
      */
@@ -315,7 +317,7 @@ public class MessageDAOImpl implements MessageDAO {
     /**
      * Returns the total number of new sightings for a given person.
      *
-     * @param userId        the user ID
+     * @param sighting      the sighting
      * @return              the total number of new sightings for a given person
      * @throws java.sql.SQLException
      */

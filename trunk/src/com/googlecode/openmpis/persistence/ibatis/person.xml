@@ -15,7 +15,7 @@
         <flushInterval hours="24"/>
     </cacheModel>
 
-    <sql id="allColumnsFragment">
+    <sql id="personColumnsFragment">
         ID as id,
         STATUS as status,
         TYPE as type,
@@ -244,7 +244,7 @@
     be auto-mapped results to Person object (JavaBean) properties -->
     <select id="getPersonById" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <![CDATA[
         WHERE ID = #id#
         ]]>
@@ -252,7 +252,7 @@
 
     <select id="getPersonsByEncoderId" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <![CDATA[
         WHERE ENCODERID = #encoderId#
         ]]>
@@ -269,7 +269,7 @@
 
     <select id="getPersonsByInvestigatorId" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <![CDATA[
         WHERE INVESTIGATORID = #investigatorId#
         ]]>
@@ -287,7 +287,7 @@
     <!-- According to person ID -->
     <select id="getAllPersons" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         ORDER BY ID
     </select>
 
@@ -299,7 +299,7 @@
 
     <select id="getOngoing" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <include refid="ongoingFragment"/>
         ORDER BY ID
     </select>
@@ -312,7 +312,7 @@
 
     <select id="getSolved" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <include refid="solvedFragment"/>
         ORDER BY ID
     </select>
@@ -325,7 +325,7 @@
 
     <select id="getUnsolved" resultClass="person" cacheModel="personCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="personColumnsFragment"/>
         <include refid="unsolvedFragment"/>
         ORDER BY ID
     </select>

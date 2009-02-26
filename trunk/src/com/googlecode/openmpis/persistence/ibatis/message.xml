@@ -6,13 +6,13 @@
     <typeAlias alias="message" type="com.googlecode.openmpis.dto.Message"/>
     
     <cacheModel id="messageCache" type="LRU">
-        <flushOnExecute statement="insertMessage"/>
+        <flushOnExecute statement="insertSighting"/>
         <flushOnExecute statement="insertFeedback"/>
         <flushOnExecute statement="deleteMessage"/>
         <flushInterval hours="24"/>
     </cacheModel>
 
-    <sql id="allColumnsFragment">
+    <sql id="messageColumnsFragment">
         ID as id,
         FIRSTNAME as firstName,
         LASTNAME as lastName,
@@ -45,7 +45,7 @@
     be auto-mapped results to Message object (JavaBean) properties -->
     <select id="getAllMessages" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="messageColumnsFragment"/>
         ORDER BY DATE
     </select>
 
@@ -57,7 +57,7 @@
 
     <select id="getAllFeedbacks" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="messageColumnsFragment"/>
         <include refid="userFragment"/>
     </select>
 
@@ -79,7 +79,7 @@
 
     <select id="getAllSightingsForPerson" resultClass="message" parameterClass="message" cacheModel="messageCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="messageColumnsFragment"/>
         <include refid="personFragment"/>
     </select>
 
@@ -119,7 +119,7 @@
     
     <select id="getMessageById" parameterClass="java.lang.Integer" resultClass="message" cacheModel="messageCache">
         SELECT
-        <include refid="allColumnsFragment"/>
+        <include refid="messageColumnsFragment"/>
         <![CDATA[
         WHERE ID = #id#
         ]]>
@@ -130,16 +130,16 @@
     <insert id="insertSighting" parameterClass="message">
         <![CDATA[
         INSERT INTO MESSAGE
-        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, STATUS, IPADDRESS, PERSONID, USERID, DATE)
+        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, USERID, DATE)
         VALUES
-        (#firstName#, #lastName#, #email#, #subject#, #message#, #status#, #ipAddress#, #personId#, #userId#, #date#)
+        (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#, #personId#, #userId#, #date#)
         ]]>
     </insert>
     
     <insert id="insertFeedback" parameterClass="message">
         <![CDATA[
         INSERT INTO MESSAGE
-        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, STATUS, USERID, IPADDRESS, DATE)
+        (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, USERID, IPADDRESS, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #userId#, #ipAddress#, #date#)
         ]]>
