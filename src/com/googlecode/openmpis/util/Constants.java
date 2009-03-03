@@ -142,6 +142,18 @@ public abstract class Constants {
      */
     public static final String ADD_PERSON_SUCCESS = "add-person-success";
     /**
+     * The logical name of the forwarding instance for editing a person
+     */
+    public static final String EDIT_PERSON = "edit-person";
+    /**
+     * The logical name of the forwarding instance for unsuccessful editing of a person
+     */
+    public static final String EDIT_PERSON_REDO = "edit-person-redo";
+    /**
+     * The logical name of the forwarding instance for successful editing of a person
+     */
+    public static final String EDIT_PERSON_SUCCESS = "edit-person-success";
+    /**
      * The logical name of the forwarding instance for viewing a person's poster
      */
     public static final String VIEW_PERSON_POSTER = "view-person-poster";
@@ -157,6 +169,10 @@ public abstract class Constants {
      * The logical name of the forwarding instance for successful listing of all missing persons
      */
     public static final String LIST_PERSON_UNIDENTIFIED = "list-person-unidentified";
+    /**
+     * The logical name of the forwarding instance for viewing a relative
+     */
+    public static final String VIEW_RELATIVE = "view-relative";
     /**
      * The logical name of the forwarding instance for adding a new relative
      */
@@ -181,4 +197,64 @@ public abstract class Constants {
      * The logical name of the forwarding instance for successful editing of a new relative
      */
     public static final String EDIT_RELATIVE_SUCCESS = "edit-relative-success";
+    /**
+     * The logical name of the forwarding instance for deleting a relative
+     */
+    public static final String DELETE_RELATIVE = "delete-relative";
+    /**
+     * The logical name of the forwarding instance for deletion confirmation code mismatch
+     */
+    public static final String DELETE_RELATIVE_REDO = "delete-relative-redo";
+    /**
+     * The logical name of the forwarding instance for successful deletion
+     */
+    public static final String DELETE_RELATIVE_SUCCESS = "delete-relative-success";
+    /**
+     * The logical name of the forwarding instance for selecting an investigator for a case
+     */
+    public static final String SELECT_INVESTIGATOR = "select-investigator";
+    /**
+     * The logical name of the forwarding instance for assigning an investigator to a case
+     */
+    public static final String ASSIGN_INVESTIGATOR = "assign-investigator";
+    /**
+     * The logical name of the forwarding instance for viewing an abductor
+     */
+    public static final String VIEW_ABDUCTOR = "view-abductor";
+    /**
+     * The logical name of the forwarding instance for adding a new abductor
+     */
+    public static final String ADD_ABDUCTOR = "add-abductor";
+    /**
+     * The logical name of the forwarding instance for unsuccessful adding of a new abductor
+     */
+    public static final String ADD_ABDUCTOR_REDO = "add-abductor-redo";
+    /**
+     * The logical name of the forwarding instance for successful adding of a new abductor
+     */
+    public static final String ADD_ABDUCTOR_SUCCESS = "add-abductor-success";
+    /**
+     * The logical name of the forwarding instance for adding a new abductor
+     */
+    public static final String EDIT_ABDUCTOR = "edit-abductor";
+    /**
+     * The logical name of the forwarding instance for unsuccessful editing of a new abductor
+     */
+    public static final String EDIT_ABDUCTOR_REDO = "edit-abductor-redo";
+    /**
+     * The logical name of the forwarding instance for successful editing of a new abductor
+     */
+    public static final String EDIT_ABDUCTOR_SUCCESS = "edit-abductor-success";
+    /**
+     * The logical name of the forwarding instance for deleting an abductor
+     */
+    public static final String DELETE_ABDUCTOR = "delete-abductor";
+    /**
+     * The logical name of the forwarding instance for deletion confirmation code mismatch
+     */
+    public static final String DELETE_ABDUCTOR_REDO = "delete-abductor-redo";
+    /**
+     * The logical name of the forwarding instance for successful deletion
+     */
+    public static final String DELETE_ABDUCTOR_SUCCESS = "delete-abductor-success";
 }
