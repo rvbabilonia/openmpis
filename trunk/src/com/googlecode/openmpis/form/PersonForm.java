@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 
 /**
- * The Person class is used to represent a missing or found person.
+ * The PersonForm class is used to represent a missing or found person.
  * 
  * @author  <a href="mailto:rvbabilonia@gmail.com">Rey Vincent Babilonia</a>
  * @version 1.0
@@ -203,15 +203,15 @@ public class PersonForm extends ActionForm {
     /**
      * The city of the institution
      */
-    private int institutionCity;
+    private String institutionCity;
     /**
      * The province of the institution
      */
-    private int institutionProvince;
+    private String institutionProvince;
     /**
      * The country of the institution
      */
-    private int institutionCountry;
+    private String institutionCountry;
     /**
      * The email address of the institution
      */
@@ -346,7 +346,7 @@ public class PersonForm extends ActionForm {
      * @param firstName     the first name of the person
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
@@ -364,7 +364,7 @@ public class PersonForm extends ActionForm {
      * @param nickname      the nickname of the person
      */
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname.trim();
     }
 
     /**
@@ -382,7 +382,7 @@ public class PersonForm extends ActionForm {
      * @param middleName    the middle name of the person
      */
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName = middleName.trim();
     }
 
     /**
@@ -400,7 +400,7 @@ public class PersonForm extends ActionForm {
      * @param lastName      the last name of the person
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
@@ -490,7 +490,7 @@ public class PersonForm extends ActionForm {
      * @param street        the street address of the person
      */
     public void setStreet(String street) {
-        this.street = street;
+        this.street = street.trim();
     }
 
     /**
@@ -508,7 +508,7 @@ public class PersonForm extends ActionForm {
      * @param city          the home city of the person
      */
     public void setCity(String city) {
-        this.city = city;
+        this.city = city.trim();
     }
 
     /**
@@ -526,7 +526,7 @@ public class PersonForm extends ActionForm {
      * @param province      the home province of the person
      */
     public void setProvince(String province) {
-        this.province = province;
+        this.province = province.trim();
     }
 
     /**
@@ -544,7 +544,7 @@ public class PersonForm extends ActionForm {
      * @param country       the home country of the person
      */
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country.trim();
     }
 
     /**
@@ -742,7 +742,7 @@ public class PersonForm extends ActionForm {
      * @param medicalCondition      the medical condition of the person
      */
     public void setMedicalCondition(String medicalCondition) {
-        this.medicalCondition = medicalCondition;
+        this.medicalCondition = medicalCondition.trim();
     }
 
     /**
@@ -760,7 +760,7 @@ public class PersonForm extends ActionForm {
      * @param marks         the distinguishing marks of the person
      */
     public void setMarks(String marks) {
-        this.marks = marks;
+        this.marks = marks.trim();
     }
 
     /**
@@ -778,7 +778,7 @@ public class PersonForm extends ActionForm {
      * @param personalEffects the personal effects worn by the person
      */
     public void setPersonalEffects(String personalEffects) {
-        this.personalEffects = personalEffects;
+        this.personalEffects = personalEffects.trim();
     }
 
     /**
@@ -796,7 +796,7 @@ public class PersonForm extends ActionForm {
      * @param remarks       the remarks to the person
      */
     public void setRemarks(String remarks) {
-        this.remarks = remarks;
+        this.remarks = remarks.trim();
     }
 
     /**
@@ -811,7 +811,7 @@ public class PersonForm extends ActionForm {
     /**
      * Sets the month the person has gone missing or was found.
      *
-     * @param monthMissingOrFound the date the person has gone missing or was found
+     * @param monthMissingOrFound the month the person has gone missing or was found
      */
     public void setMonthMissingOrFound(int monthMissingOrFound) {
         this.monthMissingOrFound = monthMissingOrFound;
@@ -841,7 +841,7 @@ public class PersonForm extends ActionForm {
      * @return              the year the person has gone missing or was found
      */
     public int getYearMissingOrFound() {
-        return monthMissingOrFound;
+        return yearMissingOrFound;
     }
 
     /**
@@ -886,7 +886,7 @@ public class PersonForm extends ActionForm {
      * @param missingFromCity the city the person disappeared from
      */
     public void setMissingFromCity(String missingFromCity) {
-        this.missingFromCity = missingFromCity;
+        this.missingFromCity = missingFromCity.trim();
     }
 
     /**
@@ -904,7 +904,7 @@ public class PersonForm extends ActionForm {
      * @param missingFromProvince the province the person disappeared from
      */
     public void setMissingFromProvince(String missingFromProvince) {
-        this.missingFromProvince = missingFromProvince;
+        this.missingFromProvince = missingFromProvince.trim();
     }
 
     /**
@@ -922,7 +922,7 @@ public class PersonForm extends ActionForm {
      * @param missingFromCountry the country the person disappeared from
      */
     public void setMissingFromCountry(String missingFromCountry) {
-        this.missingFromCountry = missingFromCountry;
+        this.missingFromCountry = missingFromCountry.trim();
     }
 
     /**
@@ -940,7 +940,7 @@ public class PersonForm extends ActionForm {
      * @param possibleCity  the possible city the person is in
      */
     public void setPossibleCity(String possibleCity) {
-        this.possibleCity = possibleCity;
+        this.possibleCity = possibleCity.trim();
     }
 
     /**
@@ -958,7 +958,7 @@ public class PersonForm extends ActionForm {
      * @param possibleProvince the possible province the person is in
      */
     public void setPossibleProvince(String possibleProvince) {
-        this.possibleProvince = possibleProvince;
+        this.possibleProvince = possibleProvince.trim();
     }
 
     /**
@@ -976,7 +976,7 @@ public class PersonForm extends ActionForm {
      * @param possibleCountry the possible country the person is in
      */
     public void setPossibleCountry(String possibleCountry) {
-        this.possibleCountry = possibleCountry;
+        this.possibleCountry = possibleCountry.trim();
     }
 
     /**
@@ -994,7 +994,7 @@ public class PersonForm extends ActionForm {
      * @param circumstance  the circumstance of disappearance
      */
     public void setCircumstance(String circumstance) {
-        this.circumstance = circumstance;
+        this.circumstance = circumstance.trim();
     }
 
     /**
@@ -1029,7 +1029,7 @@ public class PersonForm extends ActionForm {
      * @param institution   the institution which has custody of the person
      */
     public void setInstitution(String institution) {
-        this.institution = institution;
+        this.institution = institution.trim();
     }
 
     /**
@@ -1047,7 +1047,7 @@ public class PersonForm extends ActionForm {
      * @param institutionStreet the street address of the institution
      */
     public void setInstitutionStreet(String institutionStreet) {
-        this.institutionStreet = institutionStreet;
+        this.institutionStreet = institutionStreet.trim();
     }
 
     /**
@@ -1055,7 +1055,7 @@ public class PersonForm extends ActionForm {
      *
      * @return              the city of the institution
      */
-    public int getInstitutionCity() {
+    public String getInstitutionCity() {
         return institutionCity;
     }
 
@@ -1064,8 +1064,8 @@ public class PersonForm extends ActionForm {
      *
      * @param institutionCity the city of the institution
      */
-    public void setInstitutionCity(int institutionCity) {
-        this.institutionCity = institutionCity;
+    public void setInstitutionCity(String institutionCity) {
+        this.institutionCity = institutionCity.trim();
     }
 
     /**
@@ -1073,7 +1073,7 @@ public class PersonForm extends ActionForm {
      *
      * @return              the province of the institution
      */
-    public int getInstitutionProvince() {
+    public String getInstitutionProvince() {
         return institutionProvince;
     }
 
@@ -1082,8 +1082,8 @@ public class PersonForm extends ActionForm {
      *
      * @param institutionProvince the province of the institution
      */
-    public void setInstitutionProvince(int institutionProvince) {
-        this.institutionProvince = institutionProvince;
+    public void setInstitutionProvince(String institutionProvince) {
+        this.institutionProvince = institutionProvince.trim();
     }
 
     /**
@@ -1091,7 +1091,7 @@ public class PersonForm extends ActionForm {
      *
      * @return              the country of the institution
      */
-    public int getInstitutionCountry() {
+    public String getInstitutionCountry() {
         return institutionCountry;
     }
 
@@ -1100,8 +1100,8 @@ public class PersonForm extends ActionForm {
      *
      * @param institutionCountry the country of the institution
      */
-    public void setInstitutionCountry(int institutionCountry) {
-        this.institutionCountry = institutionCountry;
+    public void setInstitutionCountry(String institutionCountry) {
+        this.institutionCountry = institutionCountry.trim();
     }
 
     /**
@@ -1119,7 +1119,7 @@ public class PersonForm extends ActionForm {
      * @param institutionEmail the email address of the institution
      */
     public void setInstitutionEmail(String institutionEmail) {
-        this.institutionEmail = institutionEmail;
+        this.institutionEmail = institutionEmail.trim();
     }
 
     /**
@@ -1137,7 +1137,7 @@ public class PersonForm extends ActionForm {
      * @param institutionNumber the contact number of the institution
      */
     public void setInstitutionNumber(String institutionNumber) {
-        this.institutionNumber = institutionNumber;
+        this.institutionNumber = institutionNumber.trim();
     }
 
 
@@ -1156,7 +1156,7 @@ public class PersonForm extends ActionForm {
      * @param photo         the photo of the person
      */
     public void setPhoto(String photo) {
-        this.photo = photo;
+        this.photo = photo.trim();
     }
 
     /**
@@ -1174,7 +1174,7 @@ public class PersonForm extends ActionForm {
      * @param agedPhoto     the optional age-progressed photo of the person
      */
     public void setAgedPhoto(String agedPhoto) {
-        this.agedPhoto = agedPhoto;
+        this.agedPhoto = agedPhoto.trim();
     }
 
     /**
@@ -1192,7 +1192,7 @@ public class PersonForm extends ActionForm {
      * @param codisId       the optional DNA ID of the person
      */
     public void setCodisId(String codisId) {
-        this.codisId = codisId;
+        this.codisId = codisId.trim();
     }
 
     /**
@@ -1210,7 +1210,7 @@ public class PersonForm extends ActionForm {
      * @param afisId        the optional fingerprint ID of the person
      */
     public void setAfisId(String afisId) {
-        this.afisId = afisId;
+        this.afisId = afisId.trim();
     }
 
     /**
@@ -1228,7 +1228,7 @@ public class PersonForm extends ActionForm {
      * @param dentalId      the optional dental ID of the person
      */
     public void setDentalId(String dentalId) {
-        this.dentalId = dentalId;
+        this.dentalId = dentalId.trim();
     }
 
     /**
