@@ -30,14 +30,6 @@ public class Abductor {
      */
     private int id;
     /**
-     * The status of this case
-     */
-    private int status;
-    /**
-     * The type of this case
-     */
-    private int type;
-    /**
      * The first name of the person
      */
     private String firstName;
@@ -162,42 +154,6 @@ public class Abductor {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Gets the status of the case.
-     * 
-     * @return              the status of the case
-     */
-    public int getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets the status of the case.
-     * 
-     * @param status        the status of the case
-     */
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    /**
-     * Gets the type of the case.
-     *
-     * @return              the type of the case
-     */
-    public int getType() {
-        return type;
-    }
-
-    /**
-     * Sets the type of the case.
-     *
-     * @param type          the type of the case
-     */
-    public void setType(int type) {
-        this.type = type;
     }
 
     /**
