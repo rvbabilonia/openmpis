@@ -14,7 +14,7 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="statistics.title"/>
     </head>
@@ -38,7 +38,7 @@
                         <bean:message key="statistics.content.status" arg0="${activecount}" arg1="${suspendedcount}"/>
                     </p>
                     <p class="contentclass">
-                        <bean:message key="statistics.print.userstatistics"/>
+                        <bean:message key="statistics.print.users"/>
                     </p>
                 </div>
             </div>
