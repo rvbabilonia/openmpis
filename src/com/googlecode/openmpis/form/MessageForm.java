@@ -64,9 +64,13 @@ public class MessageForm extends ActionForm {
      */
     private String ipAddress;
     /**
-     * The ID of this message's recipient
+     * The ID of the person attributed with this sighting
      */
     private int personId;
+    /**
+     * The ID of this message's recipient
+     */
+    private int userId;
     /**
      * The generated confirmation code
      */
@@ -127,7 +131,7 @@ public class MessageForm extends ActionForm {
      * @param email         the email address of the sender
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     /**
@@ -145,7 +149,7 @@ public class MessageForm extends ActionForm {
      * @param firstName     the first name of the sender
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
@@ -163,7 +167,7 @@ public class MessageForm extends ActionForm {
      * @param lastName      the last name of the sender
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
@@ -181,7 +185,7 @@ public class MessageForm extends ActionForm {
      * @param subject       the subject of the message
      */
     public void setSubject(String subject) {
-        this.subject = subject;
+        this.subject = subject.trim();
     }
 
     /**
@@ -199,7 +203,7 @@ public class MessageForm extends ActionForm {
      * @param message       the message body
      */
     public void setMessage(String message) {
-        this.message = message;
+        this.message = message.trim();
     }
 
     /**
@@ -239,21 +243,39 @@ public class MessageForm extends ActionForm {
     }
 
     /**
-     * Gets the ID of this message's recipient.
-     * 
-     * @return              the ID of this message's recipient
+     * Gets the ID of the person attributed with this sighting.
+     *
+     * @return              the ID of the person attributed with this sighting
      */
     public int getPersonId() {
         return personId;
     }
 
     /**
-     * Sets the ID of this message's recipient.
-     * 
-     * @param personId      the ID of this message's recipient
+     * Sets the ID of the person attributed with this sighting.
+     *
+     * @param personId      the ID of the person attributed with this sighting
      */
     public void setPersonId(int personId) {
         this.personId = personId;
+    }
+
+    /**
+     * Gets the ID of this message's recipient.
+     *
+     * @return              the ID of this message's recipient
+     */
+    public int getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the ID of this message's recipient.
+     *
+     * @param userId        the ID of this message's recipient
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     /**
@@ -310,6 +332,7 @@ public class MessageForm extends ActionForm {
         content += "\nStatus: " + status;
         content += "\nIP Address: " + ipAddress;
         content += "\nPerson ID: " + personId;
+        content += "\nUser ID: " + userId;
         return content;
     }
 }
