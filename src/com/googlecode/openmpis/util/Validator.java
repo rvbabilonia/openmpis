@@ -37,8 +37,8 @@ public class Validator {
      * @param id            the ID
      * @return              <code>true</code> if ID is valid; <code>false</code> otherwise
      */
-    public boolean isValidID(String id) {
-        return id.matches("[0-9]+");
+    public boolean isValidId(String id) {
+        return id.matches("[A-Za-z0-9]+");
     }
 
     /**
@@ -129,5 +129,25 @@ public class Validator {
      */
     public boolean isValidProvince(String province) {
         return province.matches("[A-Z][a-z]+([\\s'-][a-zA-Z]+)*");
+    }
+
+    /**
+     * Validates the input.
+     *
+     * @param input         the input
+     * @return              <code>true</code> if the input is valid; <code>false</code> otherwise
+     */
+    public boolean isValidInput(String input) {
+        return input.matches(".+");
+    }
+
+    /**
+     * Validates a institution.
+     *
+     * @param institution   the institution
+     * @return              <code>true</code> if the institution is valid; <code>false</code> otherwise
+     */
+    public boolean isValidInstitution(String institution) {
+        return institution.matches("[A-Z][a-z0-9\\.]+([\\s'-][a-zA-Z0-9]+)*");
     }
 }
