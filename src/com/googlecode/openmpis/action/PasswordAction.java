@@ -160,27 +160,19 @@ public class PasswordAction extends Action {
         String username = passwordForm.getUsername();
         String answer = passwordForm.getAnswer();
 
-        if (username == null) {
-            errors.add("username", new ActionMessage(""));
+        if (username.length() < 1) {
+            errors.add("username", new ActionMessage("error.username.required"));
         } else {
-            if (username.length() < 1) {
-                errors.add("username", new ActionMessage("error.username.required"));
-            } else {
-                if (!validator.isValidUsername(username)) {
-                    errors.add("username", new ActionMessage("error.username.invalid"));
-                }
+            if (!validator.isValidUsername(username)) {
+                errors.add("username", new ActionMessage("error.username.invalid"));
             }
         }
 
-        if (answer == null) {
-            errors.add("answer", new ActionMessage(""));
+        if (answer.length() < 1) {
+            errors.add("answer", new ActionMessage("error.answer.required"));
         } else {
-            if (answer.length() < 1) {
-                errors.add("answer", new ActionMessage("error.answer.required"));
-            } else {
-                if (!validator.isValidKeyword(answer)) {
-                    errors.add("answer", new ActionMessage("error.answer.invalid"));
-                }
+            if (!validator.isValidKeyword(answer)) {
+                errors.add("answer", new ActionMessage("error.answer.invalid"));
             }
         }
 

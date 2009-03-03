@@ -17,6 +17,7 @@
  */
 package com.googlecode.openmpis.action;
 
+import com.googlecode.openmpis.dto.Log;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -29,26 +30,42 @@ import org.apache.struts.actions.DispatchAction;
 
 import com.googlecode.openmpis.dto.Person;
 import com.googlecode.openmpis.dto.User;
+import com.googlecode.openmpis.form.InvestigatorForm;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.RelativeDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.UserDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.AbductorService;
+import com.googlecode.openmpis.persistence.ibatis.service.LogService;
 import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
 import com.googlecode.openmpis.persistence.ibatis.service.RelativeService;
+import com.googlecode.openmpis.persistence.ibatis.service.UserService;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.AbductorServiceImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.UserServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Pagination;
 
+import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
 import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import java.awt.Color;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import org.apache.log4j.Logger;
 
 /**
  * The CaseAction class provides the methods to list persons.
@@ -63,6 +80,10 @@ public class CaseAction extends DispatchAction {
      */
     private PersonService personService = new PersonServiceImpl(new PersonDAOImpl());
     /**
+     * The user service
+     */
+    private UserService userService = new UserServiceImpl(new UserDAOImpl());
+    /**
      * The relative service
      */
     private RelativeService relativeService = new RelativeServiceImpl(new RelativeDAOImpl());
@@ -74,6 +95,18 @@ public class CaseAction extends DispatchAction {
      * The pagination context
      */
     private Pagination pagination = new Pagination();
+    /**
+     * The log service
+     */
+    private LogService logService = new LogServiceImpl(new LogDAOImpl());
+    /**
+     * The file logger
+     */
+    private Logger logger = Logger.getLogger(this.getClass());
+    /**
+     * The format for date (e.g. 2009-02-28)
+     */
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Lists all cases. Administrators and the general public can view all cases.
@@ -108,10 +141,14 @@ public class CaseAction extends DispatchAction {
         List<Person> personList = null;
 
         // Retrieve list of persons
-        if (currentUser.getGroupId() == 1) {
-            personList = personService.getPersonsByEncoderId(pagination, currentUser.getId());
-        } else if (currentUser.getGroupId() == 2) {
-            personList = personService.getPersonsByInvestigatorId(pagination, currentUser.getId());
+        if (currentUser != null) {
+            if (currentUser.getGroupId() == 1) {
+                personList = personService.getPersonsByEncoderId(pagination, currentUser.getId());
+            } else if (currentUser.getGroupId() == 2) {
+                personList = personService.getPersonsByInvestigatorId(pagination, currentUser.getId());
+            } else {
+                personList = personService.getAllPersons(pagination);
+            }
         } else {
             personList = personService.getAllPersons(pagination);
         }
@@ -711,7 +748,7 @@ public class CaseAction extends DispatchAction {
     }
 
     /**
-     * Prints the case statistics in PDF file.
+     * Lists investigators for selection.
      *
      * @param mapping       the ActionMapping used to select this instance
      * @param form          the optional ActionForm bean for this request
@@ -720,7 +757,90 @@ public class CaseAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    public ActionForward printCaseStatistics(ActionMapping mapping, ActionForm form,
+    public ActionForward selectInvestigator(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
+
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is an encoder
+        if (currentUser.getGroupId() == 1) {
+            List<User> investigatorList = userService.listActiveInvestigators();
+            request.setAttribute("investigatorlist", investigatorList);
+
+            InvestigatorForm investigatorForm = (InvestigatorForm) form;
+            Person person = personService.getPersonById(Integer.parseInt(request.getAttribute("personid").toString()));
+
+            investigatorForm.setId(person.getInvestigatorId());
+
+            return mapping.findForward(Constants.ASSIGN_INVESTIGATOR);
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * Assigns an investigator and saves everything in the database.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward assignInvestigator(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
+
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is an encoder
+        if (currentUser.getGroupId() == 1) {
+            InvestigatorForm investigatorForm = (InvestigatorForm) form;
+            Person person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+            User investigator = userService.getUserById(investigatorForm.getId());
+            person.setInvestigatorId(investigator.getId());
+            personService.updatePersonInvestigator(person);
+
+            // Log person modification event
+            Log assignLog = new Log();
+            assignLog.setLog("Person " + person.getNickname() + " was assigned to " + investigator.getUsername() + " by " + currentUser.getUsername() + ".");
+
+            assignLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+            logService.insertLog(assignLog);
+            logger.info(assignLog.toString());
+
+            request.setAttribute("person", person);
+            request.setAttribute("investigator", investigator);
+
+            return mapping.findForward(Constants.EDIT_PERSON_SUCCESS);
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * Writes the cases to a PDF file.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward printCases(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         // Set the paper size and margins
         Document document = new Document(PageSize.LETTER.rotate(), 50, 50, 50, 50);
@@ -739,7 +859,6 @@ public class CaseAction extends DispatchAction {
         document.addCreator("OpenMPIS version " + Constants.VERSION);
 
         // Set the header
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(System.currentTimeMillis());
         document.setHeader(new HeaderFooter(new Phrase("Statistics for cases as of " + date), false));
 
@@ -750,20 +869,127 @@ public class CaseAction extends DispatchAction {
 
         // Open the document for writing
         document.open();
-        document.add(new Paragraph("There is a total of " + personService.countAllPersons() + " reported case(s)."));
-        document.add(new Paragraph("There are " + personService.countOngoing() + " ongoing case(s)."));
-        document.add(new Paragraph("There are " + personService.countSolved() + " solved case(s)."));
-        document.add(new Paragraph("There are " + personService.countUnsolved() + " unsolved case(s)."));
-        document.add(new Paragraph("There are " + personService.countMissing() + " missing person(s)."));
-        document.add(new Paragraph("There are " + personService.countFamilyAbduction() + " family abduction(s)."));
-        document.add(new Paragraph("There are " + personService.countNonFamilyAbduction() + " non-family abduction(s)."));
-        document.add(new Paragraph("There are " + personService.countRunaway() + " runaway person(s)."));
-        document.add(new Paragraph("There are " + personService.countUnknown() + " unknown case(s)."));
-        document.add(new Paragraph("There are " + personService.countAbandoned() + " abandoned person(s)."));
-        document.add(new Paragraph("There are " + personService.countThrowaway() + " throwaway person(s)."));
-        document.add(new Paragraph("There are " + personService.countUnidentified() + " unidentified person(s)."));
-        document.add(new Paragraph("There are " + relativeService.countAllRelatives() + " relative(s)."));
-        document.add(new Paragraph("There are " + abductorService.countAllAbductors() + " abductor(s)."));
+        Table table = new Table(2);
+        table.setBorderWidth(1);
+        table.setBorderColor(new Color(0, 0, 0));
+        table.setPadding(2);
+        table.setSpacing(0);
+        Paragraph paragraph = new Paragraph("Cases", FontFactory.getFont(FontFactory.HELVETICA, 24, Font.BOLD, new Color(0, 0, 0)));
+        paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+        Cell cell = new Cell(paragraph);
+        cell.setHeader(true);
+        cell.setColspan(2);
+        table.addCell(cell);
+        table.endHeaders();
+        table.addCell("Total On-going Cases");
+        table.addCell("" + personService.countOngoing());
+        table.addCell("\t\t\t\t\tMissing Persons");
+        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\tFamily Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\tNon-Family Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\tRunaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\tUnknown");
+        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\tAbandoned Persons");
+        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\tThrowaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\tUnidentified");
+        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("Total Solved Cases");
+        table.addCell("" + personService.countSolved());
+        table.addCell("\t\t\t\t\tMissing Persons");
+        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\tFamily Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\tNon-Family Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\tRunaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\tUnknown");
+        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\tAbandoned Persons");
+        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\tThrowaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\tUnidentified");
+        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("Total Unsolved Cases");
+        table.addCell("" + personService.countUnsolved());
+        table.addCell("\t\t\t\t\tMissing Persons");
+        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\tFamily Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\tNon-Family Abductions");
+        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\tRunaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\tUnknown");
+        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\tAbandoned Persons");
+        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\tThrowaway Persons");
+        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\tUnidentified");
+        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("Total Cases");
+        table.addCell("" + personService.countAllPersons());
+        table.addCell("\t\t\t\t\tTotal Missing Persons");
+        table.addCell("\t\t\t\t\t" + personService.countAllMissing());
+        table.addCell("\t\t\t\t\tTotal Found Persons");
+        table.addCell("\t\t\t\t\t" + personService.countAllFound());
+        table.addCell("\t\t\t\t\tTotal Unidentified Persons");
+        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("Total Relatives");
+        table.addCell("" + relativeService.countAllRelatives());
+        table.addCell("Total Abductors");
+        table.addCell("" + abductorService.countAllAbductors());
+        document.add(table);
+
+            document.setHeader(new HeaderFooter(new Phrase("List of administrators as of " + date), false));
+            document.newPage();
+            float[] widths = {0.03f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
+            PdfPTable pdfptable = new PdfPTable(widths);
+            pdfptable.setWidthPercentage(100);
+            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Nickname", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Middle Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Case Type", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            List<Person> personList = null;//personService.listMissing();
+            for (Person person : personList) {
+                // Process the photo
+                String tokens[] = person.getPhoto().split("\\/");
+                String defaultPhotoBasename = "";
+                for (int i = 0; i < tokens.length - 1; i++) {
+                    defaultPhotoBasename += tokens[i] + File.separator;
+                }
+                defaultPhotoBasename += tokens[tokens.length - 1];
+                String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+                Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+                image.scaleAbsolute(200, 300);
+                image.setAlignment(Image.ALIGN_CENTER);
+
+                pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(person.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(person.getNickname(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(person.getMiddleName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                pdfptable.addCell(image);
+            }
+            document.add(pdfptable);
+
         document.close();
 
         // Set the response to return the poster (PDF file)
@@ -775,6 +1001,6 @@ public class CaseAction extends DispatchAction {
         baos.writeTo(response.getOutputStream());
         response.getOutputStream().flush();
 
-        return mapping.findForward(Constants.VIEW_PERSON_POSTER);
+        return null;
     }
 }

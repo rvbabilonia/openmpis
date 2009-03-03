@@ -904,6 +904,6 @@ public class InvestigatorAction extends DispatchAction {
         baos.writeTo(response.getOutputStream());
         response.getOutputStream().flush();
 
-        return mapping.findForward(Constants.VIEW_PERSON_POSTER);
+        return null;
     }
 }

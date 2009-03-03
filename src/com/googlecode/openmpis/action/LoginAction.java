@@ -33,13 +33,10 @@ import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.LoginForm;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
-import com.googlecode.openmpis.persistence.ibatis.dao.impl.MessageDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.UserDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
-import com.googlecode.openmpis.persistence.ibatis.service.MessageService;
 import com.googlecode.openmpis.persistence.ibatis.service.UserService;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
-import com.googlecode.openmpis.persistence.ibatis.service.impl.MessageServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.UserServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
@@ -89,14 +86,6 @@ public class LoginAction extends Action {
             if ((user != null) && (user.getPassword().equals(loginForm.getJ_password()))) {
                 // Store the user on the session
                 request.getSession().setAttribute("currentuser", user);
-
-                // Check for new feedbacks or sightings
-                MessageService messageService = new MessageServiceImpl(new MessageDAOImpl());
-                if (user.getGroupId() == 0) {
-                    request.setAttribute("newmessages", messageService.countAllNewFeedbacks(user.getId()));
-                } else if (user.getGroupId() == 2) {
-                    request.setAttribute("newmessages", messageService.countAllNewSightings(user.getId()));
-                }
                 
                 // Set user's new login date and IP address
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -151,29 +140,19 @@ public class LoginAction extends Action {
         String j_username = loginForm.getJ_username();
         String j_password = loginForm.getJ_password();
 
-        // Check if j_username is null
-        if (j_username == null) {
-            errors.add("j_username", new ActionMessage(""));
+        // Check if j_username is empty
+        if (j_username.length() < 1) {
+            errors.add("j_username", new ActionMessage("error.username.required"));
         } else {
-            // Check if j_username is empty
-            if (j_username.length() < 1) {
-                errors.add("j_username", new ActionMessage("error.username.required"));
-            } else {
-                // Check if j_username consists of 5 or 6 alphanumeric characters
-                if ((!validator.isValidUsername(j_username))) {
-                    errors.add("j_username", new ActionMessage("error.username.invalid"));
-                }
+            // Check if j_username consists of 5 or 6 alphanumeric characters
+            if ((!validator.isValidUsername(j_username))) {
+                errors.add("j_username", new ActionMessage("error.username.invalid"));
             }
         }
 
-        // Check if j_username is null
-        if (j_username == null) {
-            errors.add("j_username", new ActionMessage(""));
-        } else {
-            // Check if the MD5-encrypted j_password is empty
-            if (j_password.equals("d41d8cd98f00b204e9800998ecf8427e")) {
-                errors.add("j_password", new ActionMessage("error.password.required"));
-            }
+        // Check if the MD5-encrypted j_password is empty
+        if (j_password.equals("d41d8cd98f00b204e9800998ecf8427e")) {
+            errors.add("j_password", new ActionMessage("error.password.required"));
         }
 
         if (!errors.isEmpty()) {

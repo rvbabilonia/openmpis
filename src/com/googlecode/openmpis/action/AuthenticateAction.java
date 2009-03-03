@@ -17,6 +17,10 @@
  */
 package com.googlecode.openmpis.action;
 
+import com.googlecode.openmpis.dto.User;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.MessageDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.MessageService;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.MessageServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,11 +50,21 @@ public class AuthenticateAction extends Action {
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
         // Check if there exists a session
         if (request.getSession().getAttribute("currentuser") == null) {
             return mapping.findForward(Constants.EXPIRED);
         } else {
+            User user = (User) request.getSession().getAttribute("currentuser");
+
+            // Check for new feedbacks or sightings
+            MessageService messageService = new MessageServiceImpl(new MessageDAOImpl());
+            if (user.getGroupId() == 0) {
+                request.setAttribute("newmessages", messageService.countAllNewFeedbacks(user.getId()));
+            } else if (user.getGroupId() == 2) {
+                request.setAttribute("newmessages", messageService.countAllNewSightings(user.getId()));
+            }
+            
             return mapping.findForward(Constants.AUTHENTICATED);
         }
     }
