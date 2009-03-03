@@ -16,12 +16,23 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
         <bean:message key="case.title"/>
     </head>
-    <body onload="javascript: setDefaultCities('${personForm.province}', '${personForm.city}'); setProvinces('${personForm.province}'); setCountries('${personForm.country}');">
+    <body onload="javascript: setCities('${personForm.country}', '${personForm.province}', '${personForm.city}');
+        setMissingFromCities('${personForm.missingFromCountry}', '${personForm.missingFromProvince}', '${personForm.missingFromCity}');
+        setPossibleCities('${personForm.possibleCountry}', '${personForm.possibleProvince}', '${personForm.possibleCity}');
+        setInstitutionCities('${personForm.institutionCountry}', '${personForm.institutionProvince}', '${personForm.institutionCity}');
+        setProvinces('${personForm.country}', '${personForm.province}');
+        setMissingFromProvinces('${personForm.missingFromCountry}', '${personForm.missingFromProvince}');
+        setPossibleProvinces('${personForm.possibleCountry}', '${personForm.possibleProvince}');
+        setInstitutionProvinces('${personForm.institutionCountry}', '${personForm.institutionProvince}');
+        setCountry('${personForm.country}');
+        setMissingFromCountry('${personForm.missingFromCountry}');
+        setPossibleCountry('${personForm.possibleCountry}');
+        setInstitutionCountry('${personForm.institutionCountry}');">
         <div id="container">
             <tag:header/>
 
@@ -40,14 +51,11 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${action eq 'newPerson'}">
+                                <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
                                     <bean:message key="case.add"/>
                                 </c:when>
-                                <c:when test="${action eq 'editPerson'}">
+                                <c:when test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
                                     <bean:message key="case.edit"/>
-                                </c:when>
-                                <c:when test="${action eq 'erasePerson'}">
-                                    <bean:message key="case.delete"/>
                                 </c:when>
                             </c:choose>
                         </c:when>
@@ -58,9 +66,21 @@
                     <noscript>
                         <bean:message key="error.javascript.disabled"/>
                     </noscript>
+                    
                     <html:form method="post" action="viewPerson" styleClass="adduserclass" enctype="multipart/form-data">
                         <p class="contentclass">
-                            <html:hidden property="action" value="addPerson"/>
+                            <c:choose>
+                                <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
+                                    <html:hidden property="action" value="addPerson"/>
+                                    <html:hidden property="personid" value="${personid}"/>
+                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
+                                </c:when>
+                                <c:when test="${(action eq 'viewPerson') || (action eq 'editPerson')}">
+                                    <html:hidden property="action" value="editPerson"/>
+                                    <html:hidden property="personid" value="${personid}"/>
+                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
+                                </c:when>
+                            </c:choose>
                         </p>
                         <c:if test="${personForm.id != 0}">
                             <p class="contentclass">
@@ -70,21 +90,25 @@
                                 <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
                             </p>
                         </c:if>
-                        <p class="contentclass">
-                            <html:img styleClass="photoclass" src="${personForm.photo eq null ? '/photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
-                            <html:img styleClass="photoclass" src="${personForm.agedPhoto eq null ? '/photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
-                        </p>
+                        <c:if test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
+                            <p class="contentclass">
+                                <html:img styleClass="photoclass" src="${personForm.photo eq null ? 'photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
+                                <html:img styleClass="photoclass" src="${personForm.agedPhoto eq null ? 'photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
+                            </p>
+                        </c:if>
                         <p class="contentclass">
                             <label id="photolabel" class="labelclass" for="photofile">
                                 * <bean:message key="label.photo"/>
                             </label>
-                            <html:file styleId="photofile" property="photoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="35"/>
+                            <html:file styleId="photofile" property="photoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
+                            <html:errors property="photofile"/>
                         </p>
                         <p class="contentclass">
                             <label id="agedphotolabel" class="labelclass" for="agedphotofile">
                                 <bean:message key="label.agedphoto"/>
                             </label>
-                            <html:file styleId="agedphotofile" property="agedPhotoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="35"/>
+                            <html:file styleId="agedphotofile" property="agedPhotoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
+                            <html:errors property="agedphotofile"/>
                         </p>
                         <p class="contentclass">
                             <label id="statuslabel" class="labelclass" for="statusfield">
@@ -140,32 +164,33 @@
                             <label id="birthdatelabel" class="labelclass" for="monthfield">
                                 <bean:message key="label.date.birth"/>
                             </label>
-                            <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth"
-                                onchange="javascript: setAge();"
-                                onkeyup="javascript: setAge();">
-                                <c:forEach begin="1" end="12" step="1" var="i">
-                                    <html:option value="${i}" styleId="monthfield${i}" styleClass="monthoptionclass"><bean:message key="month.${i}"/></html:option>
-                                </c:forEach>
-                            </html:select>
-                            <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay"
-                                onchange="javascript: setAge();"
-                                onkeyup="javascript: setAge();">
-                                <c:forEach begin="1" end="31" step="1" var="i">
-                                    <html:option value="${i}" styleId="dayfield${i}" styleClass="dayoptionclass">${i}</html:option>
-                                </c:forEach>
-                            </html:select>
-                            <jsp:useBean id="currentDate" class="java.util.Date"/>
-                            <fmt:formatDate var="currentYear" value="${currentDate}" pattern="yyyy"/>
-                            <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear"
-                                onchange="javascript: setAge();"
-                                onkeyup="javascript: setAge();">
-                                <c:forEach begin="${currentYear - 80}" end="${currentYear}" step="1" var="i">
-                                    <html:option value="${i}" styleId="yearfield${i}" styleClass="yearoptionclass">${i}</html:option>
-                                </c:forEach>
-                            </html:select>
-                            <bean:message key="label.age"/>
-                            <html:text styleId="agefield" styleClass="ageinputclass" property="age" disabled="true"/>
-                            <html:errors property="birthdate"/>
+                                <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth"
+                                    onchange="javascript: setAge();"
+                                    onkeyup="javascript: setAge();">
+                                    <c:forEach begin="1" end="12" step="1" var="i">
+                                        <html:option value="${i}" styleId="monthfield${i}" styleClass="monthoptionclass"><bean:message key="month.${i}"/></html:option>
+                                    </c:forEach>
+                                </html:select>
+                                <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay"
+                                    onchange="javascript: setAge();"
+                                    onkeyup="javascript: setAge();">
+                                    <c:forEach begin="1" end="31" step="1" var="i">
+                                        <html:option value="${i}" styleId="dayfield${i}" styleClass="dayoptionclass">${i}</html:option>
+                                    </c:forEach>
+                                </html:select>
+                                <jsp:useBean id="currentDate" class="java.util.Date"/>
+                                <fmt:formatDate var="currentYear" value="${currentDate}" pattern="yyyy"/>
+                                <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear"
+                                    onchange="javascript: setAge();"
+                                    onkeyup="javascript: setAge();">
+                                    <c:forEach begin="${currentYear - 80}" end="${currentYear}" step="1" var="i">
+                                        <html:option value="${i}" styleId="yearfield${i}" styleClass="yearoptionclass">${i}</html:option>
+                                    </c:forEach>
+                                </html:select>
+                                <bean:message key="label.age"/>
+                                <html:text styleId="agefield" styleClass="ageinputclass" property="age" disabled="true"/>
+                                <html:errors property="birthdate"/>
+                                [birth date is uknown]
                         </p>
                         <p class="contentclass">
                             <label id="streetlabel" class="labelclass" for="streetfield">
@@ -178,7 +203,7 @@
                             <label id="citylabel" class="labelclass" for="cityfield">
                                 <bean:message key="label.address.city"/>
                             </label>
-                            <html:select styleId="cityfield" styleClass="selectclass" property="city" >
+                            <html:select styleId="cityfield" styleClass="selectclass" property="city">
                             </html:select>
                             <html:text styleId="citytextfield" styleClass="hiddeninputclass" property="city" maxlength="30" disabled="true"/>
                         </p>
@@ -187,8 +212,8 @@
                                 <bean:message key="label.address.province"/>
                             </label>
                             <html:select styleId="provincefield" styleClass="selectclass" property="province"
-                                onchange="javascript: setCities(this, cityfield);"
-                                onkeyup="javascript: setCities(this, cityfield);">
+                                onchange="javascript: setCitiesOnProvinceChange(this, cityfield);"
+                                onkeyup="javascript: setCitiesOnProvinceChange(this, cityfield);">
                             </html:select>
                             <html:text styleId="provincetextfield" styleClass="hiddeninputclass" property="province" maxlength="30" disabled="true"/>
                         </p>
@@ -197,8 +222,8 @@
                                 <bean:message key="label.address.country"/>
                             </label>
                             <html:select styleId="countryfield" styleClass="selectclass" property="country"
-                                onchange="javascript: toggleCountry(this, provincefield, provincetextfield, cityfield, citytextfield);"
-                                onkeyup="javascript: toggleCountry(this, provincefield, provincetextfield, cityfield, citytextfield);">
+                                onchange="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);"
+                                onkeyup="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);">
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -206,8 +231,8 @@
                                 * <bean:message key="label.sex"/>
                             </label>
                             <html:select styleId="sexfield" styleClass="selectclass" property="sex">
-                                <html:option value="0" styleId="sexfield0" styleClass="optionclass"><bean:message key="sex.0"/></html:option>
                                 <html:option value="1" styleId="sexfield1" styleClass="optionclass"><bean:message key="sex.1"/></html:option>
+                                <html:option value="2" styleId="sexfield2" styleClass="optionclass"><bean:message key="sex.2"/></html:option>
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -362,8 +387,8 @@
                                     * <bean:message key="label.address.province"/>
                                 </label>
                                 <html:select styleId="missingfromprovincefield" styleClass="selectclass" property="missingFromProvince"
-                                    onchange="javascript: setCities(this, missingfromcityfield);"
-                                    onkeyup="javascript: setCities(this, missingfromcityfield);">
+                                    onchange="javascript: setCitiesOnProvinceChange(this, missingfromcityfield);"
+                                    onkeyup="javascript: setCitiesOnProvinceChange(this, missingfromcityfield);">
                                 </html:select>
                                 <html:text styleId="missingfromprovincetextfield" styleClass="hiddeninputclass" property="missingFromProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="missingfromprovince"/>
@@ -373,8 +398,8 @@
                                     * <bean:message key="label.address.country"/>
                                 </label>
                                 <html:select styleId="missingfromcountryfield" styleClass="selectclass" property="missingFromCountry"
-                                    onchange="javascript: toggleCountry(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);"
-                                    onkeyup="javascript: toggleCountry(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);">
+                                    onchange="javascript: toggleSelectOrText(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);"
+                                    onkeyup="javascript: toggleSelectOrText(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);">
                                 </html:select>
                             </p>
                             <p class="contentclass">
@@ -394,8 +419,8 @@
                                     <bean:message key="label.address.province"/>
                                 </label>
                                 <html:select styleId="possibleprovincefield" styleClass="selectclass" property="possibleProvince"
-                                    onchange="javascript: setCities(this, possiblecityfield);"
-                                    onkeyup="javascript: setCities(this, possiblecityfield);">
+                                    onchange="javascript: setCitiesOnProvinceChange(this, possiblecityfield);"
+                                    onkeyup="javascript: setCitiesOnProvinceChange(this, possiblecityfield);">
                                 </html:select>
                                 <html:text styleId="possibleprovincetextfield" styleClass="hiddeninputclass" property="possibleProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="possibleprovince"/>
@@ -405,8 +430,8 @@
                                     <bean:message key="label.address.country"/>
                                 </label>
                                 <html:select styleId="possiblecountryfield" styleClass="selectclass" property="possibleCountry"
-                                onchange="javascript: toggleCountry(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);"
-                                onkeyup="javascript: toggleCountry(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);">
+                                onchange="javascript: toggleSelectOrText(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);"
+                                onkeyup="javascript: toggleSelectOrText(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);">
                                 </html:select>
                             </p>
                             <p class="contentclass">
@@ -477,8 +502,8 @@
                                     * <bean:message key="label.address.province"/>
                                 </label>
                                 <html:select styleId="institutionprovincefield" styleClass="selectclass" property="institutionProvince"
-                                    onchange="javascript: setCities(this, institutioncityfield);"
-                                    onkeyup="javascript: setCities(this, institutioncityfield);">
+                                    onchange="javascript: setCitiesOnProvinceChange(this, institutioncityfield);"
+                                    onkeyup="javascript: setCitiesOnProvinceChange(this, institutioncityfield);">
                                 </html:select>
                                 <html:text styleId="institutionprovincetextfield" styleClass="hiddeninputclass" property="institutionProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="institutionprovince"/>
@@ -488,8 +513,8 @@
                                     * <bean:message key="label.address.country"/>
                                 </label>
                                 <html:select styleId="institutioncountryfield" styleClass="selectclass" property="institutionCountry"
-                                    onchange="javascript: toggleCountry(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);"
-                                    onkeyup="javascript: toggleCountry(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);">
+                                    onchange="javascript: toggleSelectOrText(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);"
+                                    onkeyup="javascript: toggleSelectOrText(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);">
                                 </html:select>
                             </p>
                             <p class="contentclass">
@@ -528,23 +553,44 @@
                             <html:text styleId="dentalidfield" styleClass="inputclass" property="dentalId" maxlength="30"/>
                             <html:errors property="dentalid"/>
                         </p>
+                        <c:if test="${personForm.relativeId > 0}">
+                            <p class="contentclass">
+                                <label id="relativeidlabel" class="labelclass">
+                                    <bean:message key="label.relative.id"/>
+                                </label>
+                                <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeId}</html:link>
+                            </p>
+                        </c:if>
+                        <c:if test="${personForm.abductorId > 0}">
+                            <p class="contentclass">
+                                <label id="abductoridlabel" class="labelclass">
+                                    <bean:message key="label.relative.id"/>
+                                </label>
+                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorId}</html:link>
+                            </p>
+                        </c:if>
+                        <c:if test="${personForm.investigatorId > 0}">
+                            <p class="contentclass">
+                                <label id="investigatoridlabel" class="labelclass">
+                                    <bean:message key="label.investigator.id"/>
+                                </label>
+                                <html:link action="viewUser.do?action=viewUser" paramName="personForm" paramId="id" paramProperty="investigatorId">${personForm.investigatorId}</html:link>
+                            </p>
+                        </c:if>
                         <p class="contentclass">
                             <c:if test="${currentuser.groupId == 1}">
                                 <c:choose>
-                                    <c:when test="${action eq 'newPerson'}">
+                                    <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
                                         <bean:message key="case.add.buttons"/>
                                     </c:when>
-                                    <c:when test="${action eq 'editPerson'}">
-                                        <bean:message key="case.edit.buttons"/>
-                                    </c:when>
-                                    <c:when test="${action eq 'erasePerson'}">
+                                    <c:when test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
                                         <bean:message key="case.delete.buttons"/>
                                     </c:when>
                                 </c:choose>
                             </c:if>
                         </p>
                     </html:form>
-                    
+
                 </div>
             </div>
         
