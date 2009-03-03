@@ -75,7 +75,7 @@
         SELECT
         FIRSTNAME as firstName
         FROM RELATIVE
-        WHERE (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#) OR EMAIL = #email#
+        WHERE ID != #id# AND ((FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#) OR EMAIL = #email#)
         ]]>
     </select>
 

@@ -21,6 +21,9 @@
         FIRSTNAME as firstName,
         MIDDLENAME as middleName,
         LASTNAME as lastName,
+        BIRTHMONTH as birthMonth,
+        BIRTHDAY as birthDay,
+        BIRTHYEAR as birthYear,
         EMAIL as email,
         DESIGNATION as designation,
         AGENCY as agency,
@@ -36,28 +39,58 @@
     </sql>
 
     <sql id="administratorFragment">
-        WHERE GROUPID = 0
-        ORDER BY ID
+        WHERE GROUPID = '0'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="activeAdministratorFragment">
+        WHERE GROUPID = '0' AND STATUS = '0'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="suspendedAdministratorFragment">
+        WHERE GROUPID = '0' AND STATUS = '1'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
     </sql>
 
     <sql id="encoderFragment">
-        WHERE GROUPID = 1
-        ORDER BY ID
+        WHERE GROUPID = '1'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="activeEncoderFragment">
+        WHERE GROUPID = '1' AND STATUS = '0'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="suspendedEncoderFragment">
+        WHERE GROUPID = '1' AND STATUS = '1'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
     </sql>
 
     <sql id="investigatorFragment">
-        WHERE GROUPID = 2
-        ORDER BY ID
+        WHERE GROUPID = '2'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="activeInvestigatorFragment">
+        WHERE GROUPID = '2' AND STATUS = '0'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
+    </sql>
+
+    <sql id="suspendedInvestigatorFragment">
+        WHERE GROUPID = '2' AND STATUS = '1'
+        ORDER BY AGENCY, STATUS, LASTNAME, ID
     </sql>
 
     <sql id="activeFragment">
-        WHERE STATUS = 0
-        ORDER BY ID
+        WHERE STATUS = '0'
+        ORDER BY AGENCY, GROUPID, LASTNAME, ID
     </sql>
 
     <sql id="suspendedFragment">
-        WHERE STATUS = 1
-        ORDER BY ID
+        WHERE STATUS = '1'
+        ORDER BY AGENCY, GROUPID, LASTNAME, ID
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -111,7 +144,34 @@
     <select id="countAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
+        FROM USER
         <include refid="administratorFragment"/>
+    </select>
+
+    <select id="getActiveAdministrators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="activeAdministratorFragment"/>
+    </select>
+
+    <select id="countActiveAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="activeAdministratorFragment"/>
+    </select>
+
+    <select id="getSuspendedAdministrators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="suspendedAdministratorFragment"/>
+    </select>
+
+    <select id="countSuspendedAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="suspendedAdministratorFragment"/>
     </select>
 
     <select id="getEncoders" resultClass="user" cacheModel="userCache">
@@ -123,7 +183,34 @@
     <select id="countEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
+        FROM USER
         <include refid="encoderFragment"/>
+    </select>
+
+    <select id="getActiveEncoders" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="activeEncoderFragment"/>
+    </select>
+
+    <select id="countActiveEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="activeEncoderFragment"/>
+    </select>
+
+    <select id="getSuspendedEncoders" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="suspendedEncoderFragment"/>
+    </select>
+
+    <select id="countSuspendedEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="suspendedEncoderFragment"/>
     </select>
 
     <select id="getInvestigators" resultClass="user" cacheModel="userCache">
@@ -135,7 +222,34 @@
     <select id="countInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
+        FROM USER
         <include refid="investigatorFragment"/>
+    </select>
+
+    <select id="getActiveInvestigators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="activeInvestigatorFragment"/>
+    </select>
+
+    <select id="countActiveInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="activeInvestigatorFragment"/>
+    </select>
+
+    <select id="getSuspendedInvestigators" resultClass="user" cacheModel="userCache">
+        SELECT
+        <include refid="userColumnsFragment"/>
+        <include refid="suspendedInvestigatorFragment"/>
+    </select>
+
+    <select id="countSuspendedInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
+        SELECT
+        COUNT(ID)
+        FROM USER
+        <include refid="suspendedInvestigatorFragment"/>
     </select>
 
     <select id="getActiveUsers" resultClass="user" cacheModel="userCache">
@@ -147,6 +261,7 @@
     <select id="countActiveUsers" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
+        FROM USER
         <include refid="activeFragment"/>
     </select>
 
@@ -159,7 +274,17 @@
     <select id="countSuspendedUsers" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
+        FROM USER
         <include refid="suspendedFragment"/>
+    </select>
+
+    <select id="countEncodedUsers" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="userCache">
+        <![CDATA[
+        SELECT
+        COUNT(ID)
+        FROM USER
+        WHERE CREATORID = #creatorId#
+        ]]>
     </select>
         
     <select id="checkUsername" parameterClass="user" resultClass="user" cacheModel="userCache">
