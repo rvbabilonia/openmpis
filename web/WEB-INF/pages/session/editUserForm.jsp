@@ -16,7 +16,7 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/md5.js"></script>
         <bean:message key="user.title"/>
@@ -47,6 +47,7 @@
                     <noscript>
                         <bean:message key="error.javascript.disabled"/>
                     </noscript>
+                    
                     <html:form method="post" action="viewUser" styleClass="adduserclass"
                         onsubmit="javascript: password.value = hex_md5(password.value); retype.value = hex_md5(retype.value); ">
                         <p class="contentclass">
@@ -238,7 +239,30 @@
                                 </c:choose>
                             </html:select>
                         </p>
-                        [cases handled or encoded]
+                        <c:if test="${userForm.groupId == 2}">
+                            <p class="contentclass">
+                                <label id="caseshandledlabel" class="labelclass">
+                                    <bean:message key="label.cases.handled"/>
+                                </label>
+                                ${caseshandled}
+                            </p>
+                        </c:if>
+                        <c:if test="${userForm.groupId == 1}">
+                            <p class="contentclass">
+                                <label id="casesencodedlabel" class="labelclass">
+                                    <bean:message key="label.cases.encoded"/>
+                                </label>
+                                ${casesencoded}
+                            </p>
+                        </c:if>
+                        <c:if test="${(userForm.groupId == 1) || (userForm.groupId == 0)}">
+                            <p class="contentclass">
+                                <label id="usersencodedlabel" class="labelclass">
+                                    <bean:message key="label.users.encoded"/>
+                                </label>
+                                ${usersencoded}
+                            </p>
+                        </c:if>
                         <p class="contentclass">
                             <c:choose>
                                 <c:when test="${(currentuser.id == userForm.creatorId)}">
