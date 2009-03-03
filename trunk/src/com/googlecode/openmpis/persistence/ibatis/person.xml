@@ -76,18 +76,15 @@
     </sql>
 
     <sql id="ongoingFragment">
-        FROM PERSON
-        WHERE STATUS = 0
+        WHERE STATUS = '0'
     </sql>
 
     <sql id="solvedFragment">
-        FROM PERSON
-        WHERE STATUS = 1
+        WHERE STATUS = '1'
     </sql>
 
     <sql id="unsolvedFragment">
-        FROM PERSON
-        WHERE STATUS = 2
+        WHERE STATUS = '2'
     </sql>
 
     <sql id="missingColumnsFragment">
@@ -140,6 +137,7 @@
         RELATIONTOABDUCTOR as relationToAbductor,
         DATE as date,
         ENCODERID as encoderId
+        FROM PERSON
     </sql>
 
     <sql id="foundColumnsFragment">
@@ -187,57 +185,47 @@
         INVESTIGATORID as investigatorId,
         DATE as date,
         ENCODERID as encoderId
+        FROM PERSON
     </sql>
 
     <sql id="allMissingFragment">
-        FROM PERSON
-        WHERE TYPE = 0 OR TYPE = 1 OR TYPE = 2 OR TYPE = 3 OR TYPE = 4
+        WHERE TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4'
     </sql>
 
     <sql id="missingFragment">
-        FROM PERSON
-        WHERE TYPE = 0
+        WHERE TYPE = '0'
     </sql>
 
     <sql id="familyAbductionFragment">
-        FROM PERSON
-        WHERE TYPE = 1
+        WHERE TYPE = '1'
     </sql>
 
     <sql id="nonFamilyAbductionFragment">
-        FROM PERSON
-        WHERE TYPE = 2
+        WHERE TYPE = '2'
     </sql>
 
     <sql id="runawayFragment">
-        FROM PERSON
-        WHERE TYPE = 3
+        WHERE TYPE = '3'
     </sql>
 
     <sql id="unknownFragment">
-        FROM PERSON
-        WHERE TYPE = 4
+        WHERE TYPE = '4'
     </sql>
 
     <sql id="allFoundFragment">
-        FROM PERSON
-        WHERE TYPE = 5 OR TYPE = 6
-        ORDER BY TYPE
+        WHERE TYPE = '5' OR TYPE = '6'
     </sql>
 
     <sql id="abandonedFragment">
-        FROM PERSON
-        WHERE TYPE = 5
+        WHERE TYPE = '5'
     </sql>
 
     <sql id="throwawayFragment">
-        FROM PERSON
-        WHERE TYPE = 6
+        WHERE TYPE = '6'
     </sql>
 
     <sql id="unidentifiedFragment">
-        FROM PERSON
-        WHERE TYPE = 7
+        WHERE TYPE = '7'
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -418,7 +406,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="allFoundFragment"/>
-        ORDER BY TYPE, ID
+        ORDER BY TYPE
     </select>
 
     <select id="countAllFound" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -470,10 +458,9 @@
         <![CDATA[
         SELECT
         FIRSTNAME as firstName,
-        LASTNAME as lastName,
-        NICKNAME as nickname
+        LASTNAME as lastName
         FROM PERSON
-        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND LASTNAME = #lastName#) OR NICKNAME = #nickname#
+        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND LASTNAME = #lastName#)
         ]]>
     </select>
 
