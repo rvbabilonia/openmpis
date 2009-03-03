@@ -112,7 +112,7 @@ cities['Zamboanga del Norte'] = new Array('Dapitan City', 'Dipolog City', 'Bacun
 cities['Zamboanga del Sur'] = new Array('Pagadian City', 'Zamboanga City', 'Aurora', 'Bayog', 'Dimataling', 'Dinas', 'Dumalinao', 'Dumingag', 'Guipos', 'Josefina', 'Kumalarang', 'Labangan', 'Lakewood', 'Lapuyan', 'Mahayag', 'Margosatubig', 'Midsalip', 'Molave', 'Pitogo', 'Ramon Magsaysay', 'San Miguel', 'San Pablo', 'Sominot', 'Tabina', 'Tambulig', 'Tigbao', 'Tukuran', 'Vincenzo A. Sagun');
 cities['Zamboanga Sibugay'] = new Array('Alicia', 'Buug', 'Diplahan', 'Imelda', 'Ipil', 'Kabasalan', 'Mabuhay', 'Malangas', 'Naga', 'Olutanga', 'Payao', 'Roseller Lim', 'Siay', 'Talusan', 'Titay', 'Tungawan');
 
-function setCities(provinceSelect, cityField) {
+function setCitiesOnProvinceChange(provinceSelect, cityField) {
 	cityField.options.length = 0;
 	var province = provinceSelect.options[provinceSelect.selectedIndex].text;
     for (var i = 0; i < cities[province].length; i++) {
@@ -120,99 +120,279 @@ function setCities(provinceSelect, cityField) {
     }
 }
 
-function setDefaultCities(province, city) {
-    province = (province != '') ? province : 'Abra';
-    cityField = document.getElementById('cityfield');
-    if (document.getElementById('missingfromcityfield') != null)
-        missingFromCityField = document.getElementById('missingfromcityfield');
-    if (document.getElementById('possiblecityfield') != null)
-        possibleCityField = document.getElementById('possiblecityfield');
-    if (document.getElementById('institutioncityfield') != null)
-        institutionCityField = document.getElementById('institutioncityfield');
-	cityField.options.length = 0;
-    for (var i = 0; i < cities[province].length; i++) {
-        if ((city != '') && (cities[province][i] == city)) {
-            if (document.getElementById('missingfromcityfield') != null)
-                missingFromCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
-            if (document.getElementById('possiblecityfield') != null)
-                possibleCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
-            if (document.getElementById('institutioncityfield') != null)
-                institutionCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
-            cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
-        } else {
-            if (document.getElementById('missingfromcityfield') != null)
-                missingFromCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
-            if (document.getElementById('possiblecityfield') != null)
-                possibleCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
-            if (document.getElementById('institutioncityfield') != null)
-                institutionCityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
-            cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
-        }
-    }
-}
-
-function setProvinces(province) {
-    provinceField = document.getElementById('provincefield');
-    if (document.getElementById('missingfromprovincefield') != null)
-        missingFromProvinceField = document.getElementById('missingfromprovincefield');
-    if (document.getElementById('possibleprovincefield') != null)
-        possibleProvinceField = document.getElementById('possibleprovincefield');
-    if (document.getElementById('institutionprovincefield') != null)
-        institutionProvinceField = document.getElementById('institutionprovincefield');
-	provinceField.options.length = 0;
-	for (var i = 0; i < provinces.length; i++) {
-        if (provinces[i] == province) {
-            if (document.getElementById('missingfromprovincefield') != null)
-                missingFromProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
-            if (document.getElementById('possibleprovincefield') != null)
-                possibleProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
-            if (document.getElementById('institutionprovincefield') != null)
-                institutionProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
-            provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
-        } else {
-            if (document.getElementById('missingfromprovincefield') != null)
-                missingFromProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
-            if (document.getElementById('possibleprovincefield') != null)
-                possibleProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
-            if (document.getElementById('institutionprovincefield') != null)
-                institutionProvinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
-            provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
-        }
-    }
-}
-
-function setCountries(country) {
+function setCities(country, province, city) {
     country = (country != '') ? country : 'Philippines';
-    countryField = document.getElementById('countryfield');
-    if (document.getElementById('missingfromcountryfield') != null)
-        missingFromCountryField = document.getElementById('missingfromcountryfield');
-    if (document.getElementById('possiblecountryfield') != null)
-        possibleCountryField = document.getElementById('possiblecountryfield');
-    if (document.getElementById('institutioncountryfield') != null)
-        institutionCountryField = document.getElementById('institutioncountryfield');
-	countryField.options.length = 0;
-    for (var i = 0; i < countries.length; i++) {
-        if ((country != '') && (countries[i] == country)) {
-            countryField.options[countryField.length] = new Option(countries[i], countries[i], true);
-            if (document.getElementById('missingfromcountryfield') != null)
-                missingFromCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
-            if (document.getElementById('possiblecountryfield') != null)
-                possibleCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
-            if (document.getElementById('institutioncountryfield') != null)
-                institutionCountryField.options[countryField.length] = new Option(countries[i], countries[i], true);
-        } else {
-            countryField.options[countryField.length] = new Option(countries[i], countries[i]);
-            if (document.getElementById('missingfromcountryfield') != null)
-                missingFromCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
-            if (document.getElementById('possiblecountryfield') != null)
-                possibleCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
-            if (document.getElementById('institutioncountryfield') != null)
-                institutionCountryField.options[countryField.length] = new Option(countries[i], countries[i]);
+    if (country == 'Philippines') {
+        province = (province != '') ? province : 'Abra';
+        if (document.getElementById('cityfield') != null) {
+            cityField = document.getElementById('cityfield');
+            cityField.options.length = 0;
+            for (var i = 0; i < cities[province].length; i++) {
+                if ((city != '') && (cities[province][i] == city)) {
+                    cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i], true);
+                } else {
+                    cityField.options[cityField.length] = new Option(cities[province][i], cities[province][i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('cityfield') != null) {
+            document.getElementById('cityfield').style.display = 'none';
+            document.getElementById('cityfield').disabled = true;
+        }
+        if (document.getElementById('citytextfield') != null) {
+            document.getElementById('citytextfield').style.display = 'block';
+            document.getElementById('citytextfield').disabled = false;
         }
     }
 }
 
-function toggleCountry(countrySelect, provinceField, provinceTextField, cityField, cityTextField) {
+function setMissingFromCities(country, province, city) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        province = (province != '') ? province : 'Abra';
+        if (document.getElementById('missingfromcityfield') != null) {
+            missingFromCityField = document.getElementById('missingfromcityfield');
+            missingFromCityField.options.length = 0;
+            for (var i = 0; i < cities[province].length; i++) {
+                if ((city != '') && (cities[province][i] == city)) {
+                    missingFromCityField.options[missingFromCityField.length] = new Option(cities[province][i], cities[province][i], true);
+                } else {
+                    missingFromCityField.options[missingFromCityField.length] = new Option(cities[province][i], cities[province][i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('missingfromcityfield') != null) {
+            document.getElementById('missingfromcityfield').style.display = 'none';
+            document.getElementById('missingfromcityfield').disabled = true;
+        }
+        if (document.getElementById('missingfromcitytextfield') != null) {
+            document.getElementById('missingfromcitytextfield').style.display = 'block';
+            document.getElementById('missingfromcitytextfield').disabled = false;
+        }
+    }
+}
+
+function setPossibleCities(country, province, city) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        province = (province != '') ? province : 'Abra';
+        if (document.getElementById('possiblecityfield') != null) {
+            possibleCityField = document.getElementById('possiblecityfield');
+            possibleCityField.options.length = 0;
+            for (var i = 0; i < cities[province].length; i++) {
+                if ((city != '') && (cities[province][i] == city)) {
+                    possibleCityField.options[possibleCityField.length] = new Option(cities[province][i], cities[province][i], true);
+                } else {
+                    possibleCityField.options[possibleCityField.length] = new Option(cities[province][i], cities[province][i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('possiblecityfield') != null) {
+            document.getElementById('possiblecityfield').style.display = 'none';
+            document.getElementById('possiblecityfield').disabled = true;
+        }
+        if (document.getElementById('possiblecitytextfield') != null) {
+            document.getElementById('possiblecitytextfield').style.display = 'block';
+            document.getElementById('possiblecitytextfield').disabled = false;
+        }
+    }
+}
+
+function setInstitutionCities(country, province, city) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        province = (province != '') ? province : 'Abra';
+        if (document.getElementById('institutioncityfield') != null) {
+            institutionCityField = document.getElementById('institutioncityfield');
+            institutionCityField.options.length = 0;
+            for (var i = 0; i < cities[province].length; i++) {
+                if ((city != '') && (cities[province][i] == city)) {
+                    institutionCityField.options[institutionCityField.length] = new Option(cities[province][i], cities[province][i], true);
+                } else {
+                    institutionCityField.options[institutionCityField.length] = new Option(cities[province][i], cities[province][i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('institutioncityfield') != null) {
+            document.getElementById('institutioncityfield').style.display = 'none';
+            document.getElementById('institutioncityfield').disabled = true;
+        }
+        if (document.getElementById('institutioncitytextfield') != null) {
+            document.getElementById('institutioncitytextfield').style.display = 'block';
+            document.getElementById('institutioncitytextfield').disabled = false;
+        }
+    }
+}
+
+function setProvinces(country, province) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        if (document.getElementById('provincefield') != null) {
+            provinceField = document.getElementById('provincefield');
+            provinceField.options.length = 0;
+            for (var i = 0; i < provinces.length; i++) {
+                if (provinces[i] == province) {
+                    provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i], true);
+                } else {
+                    provinceField.options[provinceField.length] = new Option(provinces[i], provinces[i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('provincefield') != null) {
+            document.getElementById('provincefield').style.display = 'none';
+            document.getElementById('provincefield').disabled = true;
+        }
+        if (document.getElementById('provincetextfield') != null) {
+            document.getElementById('provincetextfield').style.display = 'block';
+            document.getElementById('provincetextfield').disabled = false;
+        }
+    }
+}
+
+function setMissingFromProvinces(country, province) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        if (document.getElementById('missingfromprovincefield') != null) {
+            missingFromProvinceField = document.getElementById('missingfromprovincefield');
+            missingFromProvinceField.options.length = 0;
+            for (var i = 0; i < provinces.length; i++) {
+                if (provinces[i] == province) {
+                    missingFromProvinceField.options[missingFromProvinceField.length] = new Option(provinces[i], provinces[i], true);
+                } else {
+                    missingFromProvinceField.options[missingFromProvinceField.length] = new Option(provinces[i], provinces[i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('missingfromprovincefield') != null) {
+            document.getElementById('missingfromprovincefield').style.display = 'none';
+            document.getElementById('missingfromprovincefield').disabled = true;
+        }
+        if (document.getElementById('missingfromprovincetextfield') != null) {
+            document.getElementById('missingfromprovincetextfield').style.display = 'block';
+            document.getElementById('missingfromprovincetextfield').disabled = false;
+        }
+    }
+}
+
+function setPossibleProvinces(country, province) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        if (document.getElementById('possibleprovincefield') != null) {
+            possibleProvinceField = document.getElementById('possibleprovincefield');
+            possibleProvinceField.options.length = 0;
+            for (var i = 0; i < provinces.length; i++) {
+                if (provinces[i] == province) {
+                    possibleProvinceField.options[possibleProvinceField.length] = new Option(provinces[i], provinces[i], true);
+                } else {
+                    possibleProvinceField.options[possibleProvinceField.length] = new Option(provinces[i], provinces[i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('possibleprovincefield') != null) {
+            document.getElementById('possibleprovincefield').style.display = 'none';
+            document.getElementById('possibleprovincefield').disabled = true;
+        }
+        if (document.getElementById('possibleprovincetextfield') != null) {
+            document.getElementById('possibleprovincetextfield').style.display = 'block';
+            document.getElementById('possibleprovincetextfield').disabled = false;
+        }
+    }
+}
+
+function setInstitutionProvinces(country, province) {
+    country = (country != '') ? country : 'Philippines';
+    if (country == 'Philippines') {
+        if (document.getElementById('institutionprovincefield') != null) {
+            institutionProvinceField = document.getElementById('institutionprovincefield');
+            institutionProvinceField.options.length = 0;
+            for (var i = 0; i < provinces.length; i++) {
+                if (provinces[i] == province) {
+                    institutionProvinceField.options[institutionProvinceField.length] = new Option(provinces[i], provinces[i], true);
+                } else {
+                    institutionProvinceField.options[institutionProvinceField.length] = new Option(provinces[i], provinces[i]);
+                }
+            }
+        }
+    } else {
+        if (document.getElementById('institutionprovincefield') != null) {
+            document.getElementById('institutionprovincefield').style.display = 'none';
+            document.getElementById('institutionprovincefield').disabled = true;
+        }
+        if (document.getElementById('institutionprovincetextfield') != null) {
+            document.getElementById('institutionprovincetextfield').style.display = 'block';
+            document.getElementById('institutionprovincetextfield').disabled = false;
+        }
+    }
+}
+
+function setCountry(country) {
+    country = (country != '') ? country : 'Philippines';
+    if (document.getElementById('countryfield') != null) {
+        countryField = document.getElementById('countryfield');
+        countryField.options.length = 0;
+        for (var i = 0; i < countries.length; i++) {
+            if ((country != '') && (countries[i] == country)) {
+                countryField.options[countryField.length] = new Option(countries[i], countries[i], true);
+            } else {
+                countryField.options[countryField.length] = new Option(countries[i], countries[i]);
+            }
+        }
+    }
+}
+
+function setMissingFromCountry(country) {
+    country = (country != '') ? country : 'Philippines';
+    if (document.getElementById('missingfromcountryfield') != null) {
+        missingFromCountryField = document.getElementById('missingfromcountryfield');
+        missingFromCountryField.options.length = 0;
+        for (var i = 0; i < countries.length; i++) {
+            if ((country != '') && (countries[i] == country)) {
+                missingFromCountryField.options[missingFromCountryField.length] = new Option(countries[i], countries[i], true);
+            } else {
+                missingFromCountryField.options[missingFromCountryField.length] = new Option(countries[i], countries[i]);
+            }
+        }
+    }
+}
+
+function setPossibleCountry(country) {
+    country = (country != '') ? country : 'Philippines';
+    if (document.getElementById('possiblecountryfield') != null) {
+        possibleCountryField = document.getElementById('possiblecountryfield');
+        possibleCountryField.options.length = 0;
+        for (var i = 0; i < countries.length; i++) {
+            if ((country != '') && (countries[i] == country)) {
+                possibleCountryField.options[possibleCountryField.length] = new Option(countries[i], countries[i], true);
+            } else {
+                possibleCountryField.options[possibleCountryField.length] = new Option(countries[i], countries[i]);
+            }
+        }
+    }
+}
+
+function setInstitutionCountry(country) {
+    country = (country != '') ? country : 'Philippines';
+    if (document.getElementById('institutioncountryfield') != null) {
+        institutionCountryField = document.getElementById('institutioncountryfield');
+        institutionCountryField.options.length = 0;
+        for (var i = 0; i < countries.length; i++) {
+            if ((country != '') && (countries[i] == country)) {
+                institutionCountryField.options[institutionCountryField.length] = new Option(countries[i], countries[i], true);
+            } else {
+                institutionCountryField.options[institutionCountryField.length] = new Option(countries[i], countries[i]);
+            }
+        }
+    }
+}
+
+function toggleSelectOrText(countrySelect, provinceField, provinceTextField, cityField, cityTextField) {
     var country = countrySelect.options[countrySelect.selectedIndex].text;
     if (country != 'Philippines') {
         provinceField.disabled = true;
