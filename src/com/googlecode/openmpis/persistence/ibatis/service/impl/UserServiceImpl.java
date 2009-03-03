@@ -74,6 +74,105 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Retrieves all investigators according to agency then last name.
+     *
+     * @return              the list of investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listInvestigators() throws SQLException {
+        return userDAO.listInvestigators();
+    }
+
+    /**
+     * Retrieves all active investigators according to agency then last name.
+     *
+     * @return              the list of active investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listActiveInvestigators() throws SQLException {
+        return userDAO.listActiveInvestigators();
+    }
+
+    /**
+     * Retrieves all suspended investigators according to agency then last name.
+     *
+     * @return              the list of suspended investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listSuspendedInvestigators() throws SQLException {
+        return userDAO.listSuspendedInvestigators();
+    }
+
+    /**
+     * Retrieves all administrators according to agency then last name.
+     *
+     * @return              the list of administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listAdministrators() throws SQLException {
+        return userDAO.listAdministrators();
+    }
+
+    /**
+     * Retrieves all active administrators according to agency then last name.
+     *
+     * @return              the list of active administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listActiveAdministrators() throws SQLException {
+        return userDAO.listActiveAdministrators();
+    }
+
+    /**
+     * Retrieves all suspended administrators according to agency then last name.
+     *
+     * @return              the list of suspended administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listSuspendedAdministrators() throws SQLException {
+        return userDAO.listSuspendedAdministrators();
+    }
+
+    /**
+     * Retrieves all encoders according to agency then last name.
+     *
+     * @return              the list of encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listEncoders() throws SQLException {
+        return userDAO.listEncoders();
+    }
+
+    /**
+     * Retrieves all active encoders according to agency then last name.
+     *
+     * @return              the list of active encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listActiveEncoders() throws SQLException {
+        return userDAO.listActiveEncoders();
+    }
+
+    /**
+     * Retrieves all suspended encoders according to agency then last name.
+     *
+     * @return              the list of suspended encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<User> listSuspendedEncoders() throws SQLException {
+        return userDAO.listSuspendedEncoders();
+    }
+
+    /**
      * Retrieves a user given his ID.
      * 
      * @param id            the user ID
@@ -192,6 +291,28 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Returns the total number of active administrators.
+     *
+     * @return              the total number of active administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveAdministrators() throws SQLException {
+        return userDAO.countActiveAdministrators();
+    }
+
+    /**
+     * Returns the total number of suspended administrators.
+     *
+     * @return              the total number of suspended administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedAdministrators() throws SQLException {
+        return userDAO.countSuspendedAdministrators();
+    }
+
+    /**
      * Returns the total number of encoders.
      *
      * @return              the total number of encoders
@@ -203,6 +324,28 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Returns the total number of active encoders.
+     *
+     * @return              the total number of active encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveEncoders() throws SQLException {
+        return userDAO.countActiveEncoders();
+    }
+
+    /**
+     * Returns the total number of suspended encoders.
+     *
+     * @return              the total number of suspended encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedEncoders() throws SQLException {
+        return userDAO.countSuspendedEncoders();
+    }
+
+    /**
      * Returns the total number of investigators.
      *
      * @return              the total number of investigators
@@ -211,6 +354,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public int countInvestigators() throws SQLException {
         return userDAO.countInvestigators();
+    }
+
+    /**
+     * Returns the total number of active investigators.
+     *
+     * @return              the total number of active investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveInvestigators() throws SQLException {
+        return userDAO.countActiveInvestigators();
+    }
+
+    /**
+     * Returns the total number of suspended investigators.
+     *
+     * @return              the total number of suspended investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedInvestigators() throws SQLException {
+        return userDAO.countSuspendedInvestigators();
     }
 
     /**
@@ -233,5 +398,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public int countSuspendedUsers() throws SQLException {
         return userDAO.countSuspendedUsers();
+    }
+
+    /**
+     * Returns the total number of users encoded by a given user.
+     *
+     * @param creatorId     the user ID
+     * @return              the total number of users encoded by a given user
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countEncodedUsers(Integer creatorId) throws SQLException {
+        return userDAO.countEncodedUsers(creatorId);
     }
 }
