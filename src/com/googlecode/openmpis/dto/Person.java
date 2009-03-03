@@ -172,7 +172,7 @@ public class Person {
     /**
      * The reward money
      */
-    private int reward;
+    private Integer reward;
     /**
      * The institution which has custody of the person
      */
@@ -184,15 +184,15 @@ public class Person {
     /**
      * The city of the institution
      */
-    private int institutionCity;
+    private String institutionCity;
     /**
      * The province of the institution
      */
-    private int institutionProvince;
+    private String institutionProvince;
     /**
      * The country of the institution
      */
-    private int institutionCountry;
+    private String institutionCountry;
     /**
      * The email address of the institution
      */
@@ -224,15 +224,15 @@ public class Person {
     /**
      * The ID of the relative
      */
-    private int relativeId;
+    private Integer relativeId;
     /**
      * The ID of the investigator
      */
-    private int investigatorId;
+    private Integer investigatorId;
     /**
      * The ID of the abductor
      */
-    private int abductorId;
+    private Integer abductorId;
     /**
      * The date this case was created
      */
@@ -244,11 +244,11 @@ public class Person {
     /**
      * The relationship of the relative to the person
      */
-    private int relationToRelative;
+    private Integer relationToRelative;
     /**
      * The relationship of the abductor to the person
      */
-    private int relationToAbductor;
+    private Integer relationToAbductor;
 
     /**
      * Gets the ID of the person.
@@ -719,6 +719,24 @@ public class Person {
     }
 
     /**
+     * Gets the month the person has gone missing or was found.
+     *
+     * @return              the month the person has gone missing or was found
+     */
+    public int getMonthMissingOrFound() {
+        return monthMissingOrFound;
+    }
+
+    /**
+     * Sets the month the person has gone missing or was found.
+     *
+     * @param monthMissingOrFound the month the person has gone missing or was found
+     */
+    public void setMonthMissingOrFound(int monthMissingOrFound) {
+        this.monthMissingOrFound = monthMissingOrFound;
+    }
+
+    /**
      * Gets the day the person has gone missing or was found.
      *
      * @return              the day the person has gone missing or was found
@@ -742,7 +760,7 @@ public class Person {
      * @return              the year the person has gone missing or was found
      */
     public int getYearMissingOrFound() {
-        return monthMissingOrFound;
+        return yearMissingOrFound;
     }
 
     /**
@@ -885,7 +903,7 @@ public class Person {
      *
      * @return              the reward money
      */
-    public int getReward() {
+    public Integer getReward() {
         return reward;
     }
 
@@ -894,7 +912,7 @@ public class Person {
      *
      * @param reward        the reward money
      */
-    public void setReward(int reward) {
+    public void setReward(Integer reward) {
         this.reward = reward;
     }
 
@@ -938,7 +956,7 @@ public class Person {
      *
      * @return              the city of the institution
      */
-    public int getInstitutionCity() {
+    public String getInstitutionCity() {
         return institutionCity;
     }
 
@@ -947,7 +965,7 @@ public class Person {
      *
      * @param institutionCity the city of the institution
      */
-    public void setInstitutionCity(int institutionCity) {
+    public void setInstitutionCity(String institutionCity) {
         this.institutionCity = institutionCity;
     }
 
@@ -956,7 +974,7 @@ public class Person {
      *
      * @return              the province of the institution
      */
-    public int getInstitutionProvince() {
+    public String getInstitutionProvince() {
         return institutionProvince;
     }
 
@@ -965,7 +983,7 @@ public class Person {
      *
      * @param institutionProvince the province of the institution
      */
-    public void setInstitutionProvince(int institutionProvince) {
+    public void setInstitutionProvince(String institutionProvince) {
         this.institutionProvince = institutionProvince;
     }
 
@@ -974,7 +992,7 @@ public class Person {
      *
      * @return              the country of the institution
      */
-    public int getInstitutionCountry() {
+    public String getInstitutionCountry() {
         return institutionCountry;
     }
 
@@ -983,7 +1001,7 @@ public class Person {
      *
      * @param institutionCountry the country of the institution
      */
-    public void setInstitutionCountry(int institutionCountry) {
+    public void setInstitutionCountry(String institutionCountry) {
         this.institutionCountry = institutionCountry;
     }
 
@@ -1119,7 +1137,7 @@ public class Person {
      *
      * @return              the ID of the relative
      */
-    public int getRelativeId() {
+    public Integer getRelativeId() {
         return relativeId;
     }
 
@@ -1128,7 +1146,7 @@ public class Person {
      *
      * @param relativeId    the ID of the relative
      */
-    public void setRelativeId(int relativeId) {
+    public void setRelativeId(Integer relativeId) {
         this.relativeId = relativeId;
     }
 
@@ -1137,7 +1155,7 @@ public class Person {
      *
      * @return              the ID of the investigator
      */
-    public int getInvestigatorId() {
+    public Integer getInvestigatorId() {
         return investigatorId;
     }
 
@@ -1146,7 +1164,7 @@ public class Person {
      *
      * @param investigatorId the ID of the investigator
      */
-    public void setInvestigatorId(int investigatorId) {
+    public void setInvestigatorId(Integer investigatorId) {
         this.investigatorId = investigatorId;
     }
 
@@ -1155,7 +1173,7 @@ public class Person {
      *
      * @return              the ID of the abductor
      */
-    public int getAbductorId() {
+    public Integer getAbductorId() {
         return abductorId;
     }
 
@@ -1164,7 +1182,7 @@ public class Person {
      *
      * @param abductorId    the ID of the abductor
      */
-    public void setAbductorId(int abductorId) {
+    public void setAbductorId(Integer abductorId) {
         this.abductorId = abductorId;
     }
 
@@ -1209,7 +1227,7 @@ public class Person {
      *
      * @return              the relationship of the relative to the person
      */
-    public int getRelationToRelative() {
+    public Integer getRelationToRelative() {
         return relationToRelative;
     }
 
@@ -1218,7 +1236,7 @@ public class Person {
      *
      * @param relationToRelative the relationship of the relative to the person
      */
-    public void setRelationToRelative(int relationToRelative) {
+    public void setRelationToRelative(Integer relationToRelative) {
         this.relationToRelative = relationToRelative;
     }
 
@@ -1227,7 +1245,7 @@ public class Person {
      *
      * @return              the relationship of the abductor to the person
      */
-    public int getRelationToAbductor() {
+    public Integer getRelationToAbductor() {
         return relationToAbductor;
     }
 
@@ -1236,7 +1254,7 @@ public class Person {
      *
      * @param relationToAbductor the relationship of the abductor to the person
      */
-    public void setRelationToAbductor(int relationToAbductor) {
+    public void setRelationToAbductor(Integer relationToAbductor) {
         this.relationToAbductor = relationToAbductor;
     }
 
@@ -1300,6 +1318,8 @@ public class Person {
         content += "\nRelative ID: " + relativeId;
         content += "\nInvestigator ID: " + investigatorId;
         content += "\nAbductor ID: " + abductorId;
+        content += "\nRelation to Relative: " + relationToRelative;
+        content += "\nRelation to Abductor: " + relationToAbductor;
         content += "\nDate: " + date;
         content += "\nEncoder ID: " + encoderId;
         return content;
