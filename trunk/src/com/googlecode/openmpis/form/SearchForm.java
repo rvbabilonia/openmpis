@@ -53,7 +53,7 @@ public class SearchForm extends ActionForm {
      * @param   keyword  the keyword to be searched
      */
     public void setKeyword(String keyword) {
-        this.keyword = keyword;
+        this.keyword = keyword.trim();
     }
 
     /**
