@@ -62,9 +62,13 @@ public class Message {
      */
     private String ipAddress;
     /**
+     * The ID of the person attributed with this sighting
+     */
+    private Integer personId;
+    /**
      * The ID of this message's recipient
      */
-    private int personId;
+    private int userId;
 
     /**
      * Gets the message ID.
@@ -229,21 +233,39 @@ public class Message {
     }
 
     /**
-     * Gets the ID of this message's recipient.
+     * Gets the ID of the person attributed with this sighting.
      * 
-     * @return              the ID of this message's recipient
+     * @return              the ID of the person attributed with this sighting
      */
-    public int getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
     /**
-     * Sets the ID of this message's recipient.
+     * Sets the ID of the person attributed with this sighting.
      * 
-     * @param personId      the ID of this message's recipient
+     * @param personId      the ID of the person attributed with this sighting
      */
-    public void setPersonId(int personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
+    }
+
+    /**
+     * Gets the ID of this message's recipient.
+     *
+     * @return              the ID of this message's recipient
+     */
+    public int getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the ID of this message's recipient.
+     *
+     * @param userId        the ID of this message's recipient
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     /**
@@ -264,6 +286,7 @@ public class Message {
         content += "\nStatus: " + status;
         content += "\nIP Address: " + ipAddress;
         content += "\nPerson ID: " + personId;
+        content += "\nUser ID: " + userId;
         return content;
     }
 }
