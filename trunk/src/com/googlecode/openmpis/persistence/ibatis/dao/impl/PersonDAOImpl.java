@@ -1041,7 +1041,7 @@ public class PersonDAOImpl implements PersonDAO {
 
         try {
             sqlMap.startTransaction();
-            personCount = (Integer) sqlMap.queryForObject("countPersonsByEncoderId", investigatorId);
+            personCount = (Integer) sqlMap.queryForObject("countPersonsByInvestigatorId", investigatorId);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();

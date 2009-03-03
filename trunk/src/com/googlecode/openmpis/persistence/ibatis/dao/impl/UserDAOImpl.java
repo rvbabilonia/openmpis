@@ -94,6 +94,222 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
+     * Retrieves all investigators according to agency then last name.
+     *
+     * @return              the list of investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listInvestigators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all active investigators according to agency then last name.
+     *
+     * @return              the list of active investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listActiveInvestigators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getActiveInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all suspended investigators according to agency then last name.
+     *
+     * @return              the list of suspended investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listSuspendedInvestigators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getSuspendedInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all administrators according to agency then last name.
+     *
+     * @return              the list of administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listAdministrators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all active administrators according to agency then last name.
+     *
+     * @return              the list of active administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listActiveAdministrators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getActiveAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all suspended administrators according to agency then last name.
+     *
+     * @return              the list of suspended administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listSuspendedAdministrators() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getSuspendedAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all encoders according to agency then last name.
+     *
+     * @return              the list of encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listEncoders() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all active encoders according to agency then last name.
+     *
+     * @return              the list of active encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listActiveEncoders() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getActiveEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
+     * Retrieves all suspended encoders according to agency then last name.
+     *
+     * @return              the list of suspended encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listSuspendedEncoders() throws SQLException {
+        List<User> investigatorList = new ArrayList<User>();
+
+        try {
+            sqlMap.startTransaction();
+            investigatorList = sqlMap.queryForList("getSuspendedEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorList;
+    }
+
+    /**
      * Retrieves a user given his ID.
      * 
      * @param id            the user ID
@@ -336,6 +552,52 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
+     * Returns the total number of active administrators.
+     *
+     * @return              the total number of active administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveAdministrators() throws SQLException {
+        int userCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            userCount = (Integer) sqlMap.queryForObject("countActiveAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return userCount;
+    }
+
+    /**
+     * Returns the total number of suspended administrators.
+     *
+     * @return              the total number of suspended administrators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedAdministrators() throws SQLException {
+        int userCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            userCount = (Integer) sqlMap.queryForObject("countSuspendedAdministrators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return userCount;
+    }
+
+    /**
      * Returns the total number of encoders.
      *
      * @return              the total number of encoders
@@ -359,6 +621,52 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
+     * Returns the total number of active encoders.
+     *
+     * @return              the total number of active encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveEncoders() throws SQLException {
+        int encoderCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            encoderCount = (Integer) sqlMap.queryForObject("countActiveEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return encoderCount;
+    }
+
+    /**
+     * Returns the total number of suspended encoders.
+     *
+     * @return              the total number of suspended encoders
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedEncoders() throws SQLException {
+        int encoderCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            encoderCount = (Integer) sqlMap.queryForObject("countSuspendedEncoders");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return encoderCount;
+    }
+
+    /**
      * Returns the total number of investigators.
      *
      * @return              the total number of investigators
@@ -371,6 +679,52 @@ public class UserDAOImpl implements UserDAO {
         try {
             sqlMap.startTransaction();
             investigatorCount = (Integer) sqlMap.queryForObject("countInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorCount;
+    }
+
+    /**
+     * Returns the total number of active investigators.
+     *
+     * @return              the total number of active investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countActiveInvestigators() throws SQLException {
+        int investigatorCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            investigatorCount = (Integer) sqlMap.queryForObject("countActiveInvestigators");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return investigatorCount;
+    }
+
+    /**
+     * Returns the total number of suspended investigators.
+     *
+     * @return              the total number of suspended investigators
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSuspendedInvestigators() throws SQLException {
+        int investigatorCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            investigatorCount = (Integer) sqlMap.queryForObject("countSuspendedInvestigators");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -425,5 +779,29 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return suspendedCount;
+    }
+
+    /**
+     * Returns the total number of users encoded by a given user.
+     *
+     * @param creatorId     the user ID
+     * @return              the total number of users encoded by a given user
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countEncodedUsers(Integer creatorId) throws SQLException {
+        int encodedCount = 0;
+
+        try {
+            sqlMap.startTransaction();
+            encodedCount = (Integer) sqlMap.queryForObject("countEncodedUsers", creatorId);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return encodedCount;
     }
 }
