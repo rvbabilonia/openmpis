@@ -100,7 +100,6 @@ public class Log {
     @Override
     public String toString() {
         String content = "";
-        content += "\nID: " + id;
         content += "\nLog: " + log;
         content += "\nDate: " + date;
         return content;
