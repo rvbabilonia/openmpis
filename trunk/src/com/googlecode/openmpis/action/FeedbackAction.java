@@ -75,6 +75,9 @@ public class FeedbackAction extends Action {
 
         // Check if form is valid
         if (isValidFeedback(request, form)) {
+            // Retrieve mail properties
+            Configuration config = new Configuration("mail.properties");
+
             // Create message
             Message message = new Message();
             message.setFirstName(feedbackForm.getFirstName());
@@ -85,6 +88,7 @@ public class FeedbackAction extends Action {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date = sdf.format(System.currentTimeMillis());
             message.setDate(date);
+            message.setUserId(Integer.parseInt(config.getProperty("id.administrator")));
             message.setIpAddress(request.getRemoteAddr());
 
             // Log message receipt
@@ -93,22 +97,24 @@ public class FeedbackAction extends Action {
             feedbackLog.setDate(date);
 
             // Insert feedback and log
-            messageService.insertFeedback(message);
+            boolean isInserted = messageService.insertFeedback(message);
             logService.insertLog(feedbackLog);
             logger.info(feedbackLog.toString());
 
-            // Retrieve mail properties
-            Configuration config = new Configuration("mail.properties");
-            // Check if email sending is enabled
-            if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
-                Mail mail = new Mail();
+            if (isInserted) {
+                // Check if email sending is enabled
+                if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
+                    Mail mail = new Mail();
 
-                // Send email
-                mail.send(feedbackForm.getFirstName(), feedbackForm.getLastName(), feedbackForm.getEmail(),
-                        config.getProperty("mail.administrator"), feedbackForm.getSubject(), feedbackForm.getMessage());
+                    // Send email
+                    mail.send(feedbackForm.getFirstName(), feedbackForm.getLastName(), feedbackForm.getEmail(),
+                            config.getProperty("mail.administrator"), feedbackForm.getSubject(), feedbackForm.getMessage());
+                }
+
+                return mapping.findForward(Constants.FEEDBACK_SUCCESS);
+            } else {
+                return mapping.findForward(Constants.FEEDBACK_REDO);
             }
-
-            return mapping.findForward(Constants.FEEDBACK_SUCCESS);
         } else {
             logger.info("Invalid feedback from " + request.getRemoteAddr() + ".");
 
@@ -135,56 +141,36 @@ public class FeedbackAction extends Action {
         String subject = feedbackForm.getSubject();
         String message = feedbackForm.getMessage();
 
-        if (firstName == null) {
-            errors.add("firstname", new ActionMessage(""));
+        if (firstName.length() < 1) {
+            errors.add("firstname", new ActionMessage("error.firstname.required"));
         } else {
-            if (firstName.length() < 1) {
-                errors.add("firstname", new ActionMessage("error.firstname.required"));
-            } else {
-                if ((!validator.isValidFirstName(firstName))) {
-                    errors.add("firstname", new ActionMessage("error.firstname.invalid"));
-                }
+            if ((!validator.isValidFirstName(firstName))) {
+                errors.add("firstname", new ActionMessage("error.firstname.invalid"));
             }
         }
 
-        if (lastName == null) {
-            errors.add("lastname", new ActionMessage(""));
+        if (lastName.length() < 1) {
+            errors.add("lastname", new ActionMessage("error.lastname.required"));
         } else {
-            if (lastName.length() < 1) {
-                errors.add("lastname", new ActionMessage("error.lastname.required"));
-            } else {
-                if ((!validator.isValidLastName(lastName))) {
-                    errors.add("lastname", new ActionMessage("error.lastname.invalid"));
-                }
+            if ((!validator.isValidLastName(lastName))) {
+                errors.add("lastname", new ActionMessage("error.lastname.invalid"));
             }
         }
 
-        if (email == null) {
-            errors.add("email", new ActionMessage(""));
+        if (email.length() < 1) {
+            errors.add("email", new ActionMessage("error.email.required"));
         } else {
-            if (email.length() < 1) {
-                errors.add("email", new ActionMessage("error.email.required"));
-            } else {
-                if (!validator.isValidEmailAddress(email)) {
-                    errors.add("email", new ActionMessage("error.email.invalid"));
-                }
+            if (!validator.isValidEmailAddress(email)) {
+                errors.add("email", new ActionMessage("error.email.invalid"));
             }
         }
 
-        if (subject == null) {
-            errors.add("subject", new ActionMessage(""));
-        } else {
-            if (subject.length() < 2) {
-                errors.add("subject", new ActionMessage("error.subject.invalid"));
-            }
+        if (subject.length() < 2) {
+            errors.add("subject", new ActionMessage("error.subject.invalid"));
         }
 
-        if (message == null) {
-            errors.add("message", new ActionMessage(""));
-        } else {
-            if (message.length() < 10) {
-                errors.add("message", new ActionMessage("error.message.invalid"));
-            }
+        if (message.length() < 10) {
+            errors.add("message", new ActionMessage("error.message.invalid"));
         }
 
         if (!errors.isEmpty()) {

@@ -584,8 +584,6 @@ public class AbductorAction extends DispatchAction {
         System.out.println(photoFile.getContentType());
          */
 
-        // TODO error if birth date and date missingorfound are greater than current date
-
         if (firstName == null) {
             errors.add("firstname", new ActionMessage(""));
         } else {

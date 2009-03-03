@@ -100,9 +100,26 @@ public class RelativeAction extends DispatchAction {
 
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
-            request.setAttribute("action", request.getParameter("action"));
             List<Relative> relativeList = relativeService.listRelatives();
             request.setAttribute("relativelist", relativeList);
+
+            if (request.getAttribute("relativeid") != null) {
+                RelativeForm relativeForm = (RelativeForm) form;
+                Relative relative = (Relative) relativeService.getRelativeById((Integer) request.getAttribute("relativeid"));
+
+                // Return relative
+                relativeForm.setId(relative.getId());
+                relativeForm.setFirstName(relative.getFirstName());
+                relativeForm.setMiddleName(relative.getMiddleName());
+                relativeForm.setLastName(relative.getLastName());
+                relativeForm.setEmail(relative.getEmail());
+                relativeForm.setNumber(relative.getNumber());
+                relativeForm.setStreet(relative.getStreet());
+                relativeForm.setCity(relative.getCity());
+                relativeForm.setProvince(relative.getProvince());
+                relativeForm.setCountry(relative.getCountry());
+                relativeForm.setRelationToRelative((Integer) request.getAttribute("relationtorelative"));
+            }
 
             return mapping.findForward(Constants.ADD_RELATIVE);
         } else {
@@ -144,12 +161,14 @@ public class RelativeAction extends DispatchAction {
             if (relativeForm.getId() > 0) {
                 // Update relative ID in person
                 Person person = new Person();
-                person.setId(Integer.parseInt((String) request.getParameter("personid")));
+                person.setId(Integer.parseInt(request.getParameter("personid")));
                 person.setRelativeId(relativeForm.getId());
                 person.setRelationToRelative(relativeForm.getRelationToRelative());
-                //personService.updatePersonRelative(person);
+                personService.updatePersonRelative(person);
+                request.setAttribute("personid", request.getParameter("personid"));
 
-                return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
             } else {
                 // Check if form is valid
                 if (isValidRelative(request, form)) {
@@ -157,9 +176,11 @@ public class RelativeAction extends DispatchAction {
                     String firstName = relativeForm.getFirstName();
                     String middleName = relativeForm.getMiddleName();
                     String lastName = relativeForm.getLastName();
+                    checker.setId(relativeForm.getId());
                     checker.setFirstName(firstName);
                     checker.setMiddleName(middleName);
                     checker.setLastName(lastName);
+                    checker.setEmail(relativeForm.getEmail());
 
                     // Check if relative is unique
                     if (relativeService.isUniqueRelative(checker)) {
@@ -179,25 +200,26 @@ public class RelativeAction extends DispatchAction {
                         if (generatedId > 0) {
                             // Update relative ID in person
                             Person person = new Person();
-                            //person.setId(Integer.parseInt((String) request.getParameter("personid")));
+                            person.setId(Integer.parseInt((String) request.getParameter("personid")));
                             person.setRelativeId(generatedId);
                             person.setRelationToRelative(relativeForm.getRelationToRelative());
-                            //personService.updatePersonRelative(person);
+                            personService.updatePersonRelative(person);
 
                             // Log relative creation event
                             Log addLog = new Log();
                             addLog.setLog(firstName + " " + lastName + " was encoded by " + currentUser.getUsername() + ".");
-                            addLog.setLog("Relative " + generatedId + " was attributed to person " + "" + ".");
+                            addLog.setLog("Relative " + generatedId + " was attributed to person " + person.getId() + ".");
                             addLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
                             logService.insertLog(addLog);
                             logger.info(addLog.toString());
 
                             // Return relative and operation type
-                            relative.setId(generatedId);
-                            request.setAttribute("relative", relative);
-                            request.setAttribute("operation", "add");
+                            //relative.setId(generatedId);
+                            //request.setAttribute("relative", relative);
+                            //request.setAttribute("operation", "add");
 
-                            return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                            //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
@@ -248,9 +270,34 @@ public class RelativeAction extends DispatchAction {
             List<Relative> relativeList = relativeService.listRelatives();
             request.setAttribute("relativelist", relativeList);
 
-            // greater than 0
+
+            int personId = 0;
+            try {
+                if (request.getParameter("personid") != null) {
+                    personId = Integer.parseInt(request.getParameter("id"));
+                    request.setAttribute("personid", personId);
+                    Person person = personService.getPersonById(personId);
+                    request.setAttribute("relativeid", person.getRelativeId());
+                    request.setAttribute("relationtorelative", person.getRelationToRelative());
+                } else {
+                    //return mapping.findForward(Constants.LIST_PERSON);
+                }
+            } catch (NumberFormatException nfe) {
+                //return mapping.findForward(Constants.LIST_PERSON);
+            }
+
             // Retrieve relative
-            Relative relative = (Relative) relativeService.getRelativeById(new Integer(request.getParameter("id")));
+            int id = 0;
+            try {
+                if (request.getParameter("id") != null) {
+                    id = Integer.parseInt(request.getParameter("id"));
+                } else {
+                    return mapping.findForward(Constants.LIST_PERSON);
+                }
+            } catch (NumberFormatException nfe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+            Relative relative = (Relative) relativeService.getRelativeById(id);
 
             // Return relative
             relativeForm.setId(relative.getId());
@@ -298,6 +345,7 @@ public class RelativeAction extends DispatchAction {
             request.setAttribute("action", request.getParameter("action"));
             List<Relative> relativeList = relativeService.listRelatives();
             request.setAttribute("relativelist", relativeList);
+            request.setAttribute("personid", request.getParameter("personid"));
 
             // Check if form is valid
             if (isValidRelative(request, form)) {
@@ -305,9 +353,11 @@ public class RelativeAction extends DispatchAction {
                     String firstName = relativeForm.getFirstName();
                     String middleName = relativeForm.getMiddleName();
                     String lastName = relativeForm.getLastName();
+                    checker.setId(relativeForm.getId());
                     checker.setFirstName(firstName);
                     checker.setMiddleName(middleName);
                     checker.setLastName(lastName);
+                    checker.setEmail(relativeForm.getEmail());
 
                 // Check if relative is unique
                 if (relativeService.isUniqueRelative(checker)) {
@@ -328,24 +378,28 @@ public class RelativeAction extends DispatchAction {
                         if (isUpdated) {
                             // Update relative ID in person
                             Person person = new Person();
-                            //person.setId(Integer.parseInt((String) request.getParameter("personid")));
+                            person.setId(Integer.parseInt(request.getParameter("personid")));
                             person.setRelativeId(relativeForm.getId());
                             person.setRelationToRelative(relativeForm.getRelationToRelative());
-                            //personService.updatePersonRelative(person);
+                            personService.updatePersonRelative(person);
 
                             // Log relative modification event
                             Log editLog = new Log();
                             editLog.setLog(firstName + " " + lastName + " with ID " + relativeForm.getId() + " was updated by " + currentUser.getUsername() + ".");
-                            editLog.setLog("Relative " + relativeForm.getId() + " was attributed to person " + "" + ".");
+                            editLog.setLog("Relative " + relativeForm.getId() + " was attributed to person " + person.getId() + ".");
                             editLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
                             logService.insertLog(editLog);
                             logger.info(editLog.toString());
 
                             // Return relative and operation type
-                            request.setAttribute("relative", relative);
-                            request.setAttribute("operation", "edit");
+                            //request.setAttribute("relative", relative);
+                            //request.setAttribute("operation", "edit");
+                            request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
+                            //System.out.println("editrelative investigator id attribute: " + request.getAttribute("investigatorid"));
+                            //System.out.println("editrelative investigator id parameter: " + request.getParameter("investigatorid"));
 
-                            return mapping.findForward(Constants.EDIT_RELATIVE_SUCCESS);
+                            //return mapping.findForward(Constants.EDIT_RELATIVE_SUCCESS);
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
@@ -521,99 +575,63 @@ public class RelativeAction extends DispatchAction {
         String email = relativeForm.getEmail();
         String number = relativeForm.getNumber();
 
-        if (firstName == null) {
-            errors.add("firstname", new ActionMessage(""));
+        if (firstName.length() < 1) {
+            errors.add("firstname", new ActionMessage("error.firstname.required"));
         } else {
-            if (firstName.length() < 1) {
-                errors.add("firstname", new ActionMessage("error.firstname.required"));
-            } else {
-                if (!validator.isValidFirstName(firstName)) {
-                    errors.add("firstname", new ActionMessage("error.firstname.invalid"));
-                }
+            if (!validator.isValidFirstName(firstName)) {
+                errors.add("firstname", new ActionMessage("error.firstname.invalid"));
             }
         }
 
-        if (middleName == null) {
-            errors.add("middlename", new ActionMessage(""));
+        if (middleName.length() < 1) {
+            errors.add("middlename", new ActionMessage("error.middlename.required"));
         } else {
-            if (middleName.length() < 1) {
-                errors.add("middlename", new ActionMessage("error.middlename.required"));
-            } else {
-                if (!validator.isValidLastName(middleName)) {
-                    errors.add("middlename", new ActionMessage("error.middlename.invalid"));
-                }
+            if (!validator.isValidLastName(middleName)) {
+                errors.add("middlename", new ActionMessage("error.middlename.invalid"));
             }
         }
 
-        if (lastName == null) {
-            errors.add("lastname", new ActionMessage(""));
+        if (lastName.length() < 1) {
+            errors.add("lastname", new ActionMessage("error.lastname.required"));
         } else {
-            if (lastName.length() < 1) {
-                errors.add("lastname", new ActionMessage("error.lastname.required"));
-            } else {
-                if (!validator.isValidLastName(lastName)) {
-                    errors.add("lastname", new ActionMessage("error.lastname.invalid"));
-                }
+            if (!validator.isValidLastName(lastName)) {
+                errors.add("lastname", new ActionMessage("error.lastname.invalid"));
             }
         }
 
-        if (email == null) {
-            errors.add("email", new ActionMessage(""));
+        if ((email.length() > 0) && (!validator.isValidEmailAddress(email))) {
+            errors.add("email", new ActionMessage("error.email.invalid"));
+        }
+
+        if (number.length() < 1) {
+            errors.add("number", new ActionMessage("error.number.required"));
         } else {
-            if (email.length() < 1) {
-                errors.add("email", new ActionMessage("error.email.required"));
-            } else {
-                if (!validator.isValidEmailAddress(email)) {
-                    errors.add("email", new ActionMessage("error.email.invalid"));
-                }
+            if (!validator.isValidNumber(number)) {
+                errors.add("number", new ActionMessage("error.number.invalid"));
             }
         }
 
-        if (number == null) {
-            errors.add("number", new ActionMessage(""));
+        if (street.length() < 1) {
+            errors.add("street", new ActionMessage("error.street.required"));
         } else {
-            if (number.length() < 1) {
-                errors.add("number", new ActionMessage("error.number.required"));
-            } else {
-                if (!validator.isValidNumber(number)) {
-                    errors.add("number", new ActionMessage("error.number.invalid"));
-                }
+            if (!validator.isValidStreet(street)) {
+                errors.add("street", new ActionMessage("error.street.invalid"));
             }
         }
 
-        if (street == null) {
-            errors.add("street", new ActionMessage(""));
+        if (city.length() < 1) {
+            errors.add("city", new ActionMessage("error.city.required"));
         } else {
-            if (street.length() < 1) {
-                errors.add("street", new ActionMessage("error.street.required"));
-            } else {
-                if (!validator.isValidStreet(street)) {
-                    errors.add("street", new ActionMessage("error.street.invalid"));
-                }
+            if (!validator.isValidProvince(city)) {
+                errors.add("city", new ActionMessage("error.city.invalid"));
             }
         }
 
-        if (city == null) {
-            errors.add("city", new ActionMessage(""));
+        if (province.length() < 1) {
+            errors.add("province", new ActionMessage("error.province.required"));
         } else {
-            if (city.length() < 1) {
-                errors.add("city", new ActionMessage("error.city.required"));
-            } else {
-                if (!validator.isValidProvince(city)) {
-                    errors.add("city", new ActionMessage("error.city.invalid"));
-                }
-            }
-        }
-
-        if (province == null) {
-            errors.add("province", new ActionMessage(""));
-        } else {
-            if (province.length() < 1) {
-                errors.add("province", new ActionMessage("error.province.required"));
-            } else {
-                if (!validator.isValidProvince(province)) {
-                    errors.add("province", new ActionMessage("error.province.invalid"));
-                }
+            if (!validator.isValidProvince(province)) {
+                errors.add("province", new ActionMessage("error.province.invalid"));
             }
         }
 

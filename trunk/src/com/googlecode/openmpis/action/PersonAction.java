@@ -58,9 +58,18 @@ import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfWriter;
+import java.awt.Color;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 
 /**
  * The PersonAction class provides the methods to list, add, edit, delete and view
@@ -157,60 +166,182 @@ public class PersonAction extends DispatchAction {
         if (currentUser.getGroupId() == 1) {
             PersonForm personForm = (PersonForm) form;
             ActionMessages errors = new ActionMessages();
+            request.setAttribute("action", request.getParameter("action"));
 
             // Check if form is valid
-            if (isValidNewPerson(request, form)) {
+            if (isValidPerson(request, form)) {
                 // Check if updated person is unique
                 // and if the rest of the form is valid
                 Person checker = new Person();
                 String firstName = personForm.getFirstName();
-                String nickname = personForm.getNickname();
                 String lastName = personForm.getLastName();
                 checker.setId(personForm.getId());
                 checker.setFirstName(firstName);
-                checker.setNickname(nickname);
                 checker.setLastName(lastName);
 
                 // Check if person is unique
                 if (personService.isUniquePerson(checker)) {
 
+                    // Process uploaded photos
+                    FormFile photoFile = personForm.getPhotoFile();
+                    FormFile agedPhotoFile = personForm.getAgedPhotoFile();
+
+                    // Set default context-relative photo filename
+                    String contextUnknownPhotoFilename = "photo/unknown.png";
+                    String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
+                    String contextAgedPhotoFilename = contextUnknownPhotoFilename;
+
+                    // Split the filename to get the extension name
+                    if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
+                        String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
+                        String extensionName = tokens[1];
+                        tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                        extensionName = tokens[1];
+
+                        // Create directories for person
+                        String directoryName = createDirectoryName(personForm.getNickname());
+
+                        // Calculate age
+                        // TODO what if birth date is unknown?
+                        int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
+
+                        // Create context-relative directories
+                        String contextPhotoDirectory = "photo/" + directoryName;
+                        String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
+                        String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
+
+                        // Create absolute directories
+                        String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
+                        String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
+                        String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
+                        File photoDirectory = new File(absolutePhotoDirectory);
+                        File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
+                        File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
+                        if (!photoDirectory.exists()) {
+                            photoDirectory.mkdir();
+                            defaultPhotoDirectory.mkdir();
+                            agedPhotoDirectory.mkdir();
+                        } else {
+                            if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
+                                defaultPhotoDirectory.mkdir();
+                                agedPhotoDirectory.mkdir();
+                            }
+                        }
+
+                        // Prepare filenames and upload photo
+                        String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                        contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                        File file = new File(absoluteDefaultPhotoFilename);
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(photoFile.getFileData());
+                        fos.close();
+                        fos.flush();
+                        if (agedPhotoFile.getFileName().length() > 0) {
+                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                            contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
+                            file = new File(absoluteAgedPhotoFilename);
+                            fos = new FileOutputStream(file);
+                            fos.write(photoFile.getFileData());
+                            fos.close();
+                            fos.flush();
+                        }
+                    }
+
                     // Insert person
                     Person person = new Person();
+                    person.setPhoto(contextDefaultPhotoFilename);
+                    if (agedPhotoFile.getFileName().length() > 0) {
+                        person.setAgedPhoto(contextAgedPhotoFilename);
+                    } else {
+                        person.setAgedPhoto(contextUnknownPhotoFilename);
+                    }
+                    person.setStatus(personForm.getStatus());
+                    person.setType(personForm.getType());
                     person.setFirstName(firstName);
-                    person.setNickname(nickname);
-                    person.setLastName(lastName);
+                    person.setNickname(personForm.getNickname());
                     person.setMiddleName(personForm.getMiddleName());
+                    person.setLastName(lastName);
                     person.setBirthMonth(personForm.getBirthMonth());
                     person.setBirthDay(personForm.getBirthDay());
                     person.setBirthYear(personForm.getBirthYear());
                     person.setStreet(personForm.getStreet());
+                    person.setCity(personForm.getCity());
+                    person.setProvince(personForm.getProvince());
+                    person.setCountry(personForm.getCountry());
+                    person.setSex(personForm.getSex());
+                    person.setFeet(personForm.getFeet());
+                    person.setInches(personForm.getInches());
+                    person.setWeight(personForm.getWeight());
+                    person.setReligion(personForm.getReligion());
+                    person.setRace(personForm.getRace());
+                    person.setEyeColor(personForm.getEyeColor());
+                    person.setHairColor(personForm.getHairColor());
+                    person.setMedicalCondition(personForm.getMedicalCondition());
+                    person.setMarks(personForm.getMarks());
+                    person.setPersonalEffects(personForm.getPersonalEffects());
+                    person.setRemarks(personForm.getRemarks());
+                    person.setMonthMissingOrFound(personForm.getMonthMissingOrFound());
+                    person.setDayMissingOrFound(personForm.getDayMissingOrFound());
+                    person.setYearMissingOrFound(personForm.getYearMissingOrFound());
+                    if (person.getType() <= 4) {
+                        person.setMissingFromCity(personForm.getMissingFromCity());
+                        person.setMissingFromProvince(personForm.getMissingFromProvince());
+                        person.setMissingFromCountry(personForm.getMissingFromCountry());
+                        person.setPossibleCity(personForm.getPossibleCity());
+                        person.setPossibleProvince(personForm.getPossibleProvince());
+                        person.setPossibleCountry(personForm.getPossibleCountry());
+                        person.setCircumstance(personForm.getCircumstance());
+                        person.setReward(personForm.getReward());
+                    } else {
+                        person.setInstitution(personForm.getInstitution());
+                        person.setInstitutionStreet(personForm.getInstitutionStreet());
+                        person.setInstitutionCity(personForm.getInstitutionCity());
+                        person.setInstitutionProvince(personForm.getInstitutionProvince());
+                        person.setInstitutionCountry(personForm.getInstitutionCountry());
+                        person.setInstitutionEmail(personForm.getInstitutionEmail());
+                        person.setInstitutionNumber(personForm.getInstitutionNumber());
+                    }
+                    if (!personForm.getCodisId().isEmpty()) {
+                        person.setCodisId(personForm.getCodisId());
+                    }
+                    if (!personForm.getAfisId().isEmpty()) {
+                        person.setAfisId(personForm.getAfisId());
+                    }
+                    if (!personForm.getDentalId().isEmpty()) {
+                        person.setDentalId(personForm.getDentalId());
+                    }
                     String date = simpleDateFormat.format(System.currentTimeMillis());
                     person.setDate(date);
                     person.setEncoderId(currentUser.getId());
-                    person.setStatus(personForm.getStatus());
-                    if (person.getType() <= 4)
-                        person.setMissingFromCity(personForm.getMissingFromCity());
-                    else
-                        person.setInstitution(personForm.getInstitution());
-                    int isInserted = personService.insertPerson(person);
-                    //int generatedId = personService.insertPerson(person);
+                    int generatedId = personService.insertPerson(person);
 
-                    if (isInserted > 0) {
+                    if (generatedId > 0) {
                         // Log person creation event
                         Log addLog = new Log();
-                        if ((!firstName.isEmpty()) && (!lastName.isEmpty()))
-                            addLog.setLog(firstName + " '" + nickname + "' " + lastName + " was encoded by " + currentUser.getUsername() + ".");
-                        else
-                            addLog.setLog("' " + nickname + " '" + " was encoded by " + currentUser.getUsername() + ".");
+                        if ((!firstName.isEmpty()) && (!lastName.isEmpty())) {
+                            addLog.setLog(firstName + " '" + personForm.getNickname() + "' " + lastName + " was encoded by " + currentUser.getUsername() + ".");
+                        } else {
+                            addLog.setLog("' " + personForm.getNickname() + " '" + " was encoded by " + currentUser.getUsername() + ".");
+                        }
                         addLog.setDate(date);
                         logService.insertLog(addLog);
                         logger.info(addLog.toString());
 
-                        // Return person and operation type
-                        request.setAttribute("person", person);
-                        request.setAttribute("operation", "add");
+                        // Check if person is abandoned, throwaway or unidentified
+                        if (person.getType() > 4) {
+                            // Return person and operation type
+                            request.setAttribute("personid", generatedId);
+                            //request.setAttribute("operation", "assignInvestigator");
 
-                        return mapping.findForward(Constants.ADD_PERSON_SUCCESS);
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                        } else {
+                            // Check if missing
+                            // Return person and operation type
+                            request.setAttribute("personid", generatedId);
+                            //request.setAttribute("operation", "add");
+
+                            return mapping.findForward(Constants.ADD_RELATIVE);
+                        }
                     } else {
                         return mapping.findForward(Constants.FAILURE);
                     }
@@ -233,6 +364,7 @@ public class PersonAction extends DispatchAction {
     }
 
     /**
+     * Retrieves a person from the database.
      * This is the view person action called from the Struts framework.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -242,63 +374,147 @@ public class PersonAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward viewPerson(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
-    PersonForm personForm = (PersonForm) form;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
+        PersonForm personForm = (PersonForm) form;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Retrieve person
+        int id = 0;
+        try {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id"));
+            } else {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        }
+        Person person = (Person) personService.getPersonById(id);
+
+        // Return person
+        personForm.setPhoto(person.getPhoto());
+        if (person.getAgedPhoto() != null) {
+            personForm.setAgedPhoto(person.getAgedPhoto());
+        }
+        personForm.setId(person.getId());
+        personForm.setStatus(person.getStatus());
+        personForm.setType(person.getType());
+        personForm.setFirstName(person.getFirstName());
+        personForm.setNickname(person.getNickname());
+        personForm.setMiddleName(person.getMiddleName());
+        personForm.setLastName(person.getLastName());
+        personForm.setBirthMonth(person.getBirthMonth());
+        personForm.setBirthDay(person.getBirthDay());
+        personForm.setBirthYear(person.getBirthYear());
+        personForm.setAge(getAge(person.getBirthMonth() - 1, person.getBirthDay(), person.getBirthYear()));
+        personForm.setStreet(person.getStreet());
+        personForm.setCity(person.getCity());
+        personForm.setProvince(person.getProvince());
+        personForm.setCountry(person.getCountry());
+        personForm.setSex(person.getSex());
+        personForm.setFeet(person.getFeet());
+        personForm.setInches(person.getInches());
+        personForm.setWeight(person.getWeight());
+        personForm.setReligion(person.getReligion());
+        personForm.setRace(person.getRace());
+        personForm.setEyeColor(person.getEyeColor());
+        personForm.setHairColor(person.getHairColor());
+        personForm.setMedicalCondition(person.getMedicalCondition());
+        personForm.setMarks(person.getMarks());
+        personForm.setPersonalEffects(person.getPersonalEffects());
+        personForm.setRemarks(person.getRemarks());
+        personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
+        personForm.setDayMissingOrFound(person.getDayMissingOrFound());
+        personForm.setYearMissingOrFound(person.getYearMissingOrFound());
+        if (person.getMissingFromCity() != null) {
+            personForm.setMissingFromCity(person.getMissingFromCity());
+        }
+        if (person.getMissingFromProvince() != null) {
+            personForm.setMissingFromProvince(person.getMissingFromProvince());
+        }
+        if (person.getMissingFromCountry() != null) {
+            personForm.setMissingFromCountry(person.getMissingFromCountry());
+        }
+        if (person.getPossibleCity() != null) {
+            personForm.setPossibleCity(person.getPossibleCity());
+        }
+        if (person.getPossibleProvince() != null) {
+            personForm.setPossibleProvince(person.getPossibleProvince());
+        }
+        if (person.getPossibleCountry() != null) {
+            personForm.setPossibleCountry(person.getPossibleCountry());
+        }
+        if (person.getCircumstance() != null) {
+            personForm.setCircumstance(person.getCircumstance());
+        }
+        if (person.getReward() != null) {
+            personForm.setReward(person.getReward());
+        }
+        if (person.getInstitution() != null) {
+            personForm.setInstitution(person.getInstitution());
+        }
+        if (person.getInstitutionStreet() != null) {
+            personForm.setInstitutionStreet(person.getInstitutionStreet());
+        }
+        if (person.getInstitutionCity() != null) {
+            personForm.setInstitutionCity(person.getInstitutionCity());
+        }
+        if (person.getInstitutionProvince() != null) {
+            personForm.setInstitutionProvince(person.getInstitutionProvince());
+        }
+        if (person.getInstitutionCountry() != null) {
+            personForm.setInstitutionCountry(person.getInstitutionCountry());
+        }
+        if (person.getInstitutionEmail() != null) {
+            personForm.setInstitutionEmail(person.getInstitutionEmail());
+        }
+        if (person.getInstitutionNumber() != null) {
+            personForm.setInstitutionNumber(person.getInstitutionNumber());
+        }
+        if (person.getCodisId() != null) {
+            personForm.setCodisId(person.getCodisId());
+        }
+        if (person.getAfisId() != null) {
+            personForm.setAfisId(person.getAfisId());
+        }
+        if (person.getDentalId() != null) {
+            personForm.setDentalId(person.getDentalId());
+        }
+        if (person.getRelativeId() != null) {
+            personForm.setRelativeId(person.getRelativeId());
+        }
+        if (person.getAbductorId() != null) {
+            personForm.setAbductorId(person.getAbductorId());
+        }
+        if (person.getInvestigatorId() != null) {
+            personForm.setInvestigatorId(person.getInvestigatorId());
+        }
+
+        // Return progress report count
+        request.setAttribute("reportcount", countReportsForPerson(person.getId()));
+
+
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") != null) {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+            request.setAttribute("action", request.getParameter("action"));
+
+            // Edit what you created/encoded
+            // Edit your profile
+            // Administrator can edit all except administrators
+            if (currentUser.getId() == person.getEncoderId()) {
+                return mapping.findForward(Constants.EDIT_PERSON);
+            } else {
+                return mapping.findForward(Constants.VIEW_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.VIEW_PERSON);
+        }
     }
 
-    // Check if current person is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
-    // Retrieve person
-    Person person = (User) personService.getPersonById(new Integer(request.getParameter("id")));
-
-    // Return person
-    personForm.setId(person.getId());
-    personForm.setGroupId(person.getGroupId());
-    personForm.setPersonname(person.getPersonname());
-    personForm.setFirstName(person.getFirstName());
-    personForm.setMiddleName(person.getMiddleName());
-    personForm.setLastName(person.getLastName());
-    personForm.setBirthMonth(person.getBirthMonth());
-    personForm.setBirthDay(person.getBirthDay());
-    personForm.setBirthYear(person.getBirthYear());
-    personForm.setDesignation(person.getDesignation());
-    personForm.setAgency(person.getAgency());
-    personForm.setEmail(person.getEmail());
-    personForm.setNumber(person.getNumber());
-    personForm.setIpAddress(person.getIpAddress());
-    personForm.setLastLogin(person.getLastLogin());
-    personForm.setDate(person.getDate());
-    personForm.setCreatorId(person.getCreatorId());
-    personForm.setStatus(person.getStatus());
-    personForm.setQuestion(person.getQuestion());
-    personForm.setAnswer((person.getAnswer() != null) ? person.getAnswer() : "");
-     * countReportsForPerson(person.getId)
-
-    // Edit what you created/encoded
-    // Edit your profile
-    // Administrator can edit all except administrators
-    if ((currentUser.getId() == person.getCreatorId()) ||
-    (currentUser.getId() == person.getId()) ||
-    ((currentUser.getGroupId() == 0) && (person.getGroupId() > 0))) {
-    return mapping.findForward(Constants.EDIT_USER);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
+     * Updates a person.
      * This is the edit person action called from the HTML form.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -308,112 +524,231 @@ public class PersonAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward editPerson(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is an encoder
+        if (currentUser.getGroupId() == 1) {
+            PersonForm personForm = (PersonForm) form;
+            ActionMessages errors = new ActionMessages();
+            request.setAttribute("action", request.getParameter("action"));
+
+            // Check if form is valid
+            if (isValidPerson(request, form)) {
+                // Check if updated person is unique
+                // and if the rest of the form is valid
+                Person checker = new Person();
+                String firstName = personForm.getFirstName();
+                String lastName = personForm.getLastName();
+                checker.setId(personForm.getId());
+                checker.setFirstName(firstName);
+                checker.setLastName(lastName);
+
+                // Check if person is unique
+                if (personService.isUniquePerson(checker)) {
+
+                    // Process uploaded photos
+                    FormFile photoFile = personForm.getPhotoFile();
+                    FormFile agedPhotoFile = personForm.getAgedPhotoFile();
+
+                    // Set default context-relative photo filename
+                    String contextUnknownPhotoFilename = "photo/unknown.png";
+                    String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
+                    String contextAgedPhotoFilename = contextUnknownPhotoFilename;
+
+                    // Split the filename to get the extension name
+                    if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
+                        String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
+                        String extensionName = tokens[1];
+                        tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                        extensionName = tokens[1];
+
+                        // Create directories for person
+                        String directoryName = createDirectoryName(personForm.getNickname());
+
+                        // Calculate age
+                        // TODO what if birth date is unknown?
+                        int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
+
+                        // Create context-relative directories
+                        String contextPhotoDirectory = "photo/" + directoryName;
+                        String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
+                        String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
+
+                        // Create absolute directories
+                        String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
+                        String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
+                        String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
+                        File photoDirectory = new File(absolutePhotoDirectory);
+                        File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
+                        File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
+                        if (!photoDirectory.exists()) {
+                            photoDirectory.mkdir();
+                            defaultPhotoDirectory.mkdir();
+                            agedPhotoDirectory.mkdir();
+                        } else {
+                            if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
+                                defaultPhotoDirectory.mkdir();
+                                agedPhotoDirectory.mkdir();
+                            }
+                        }
+
+                        // Prepare filenames and upload photo
+                        String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                        contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                        File file = new File(absoluteDefaultPhotoFilename);
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(photoFile.getFileData());
+                        fos.close();
+                        fos.flush();
+                        if (agedPhotoFile.getFileName().length() > 0) {
+                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                            contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
+                            file = new File(absoluteAgedPhotoFilename);
+                            fos = new FileOutputStream(file);
+                            fos.write(photoFile.getFileData());
+                            fos.close();
+                            fos.flush();
+                        }
+                    }
+
+                    // Insert person
+                    Person person = new Person();
+                    person.setId(personForm.getId());
+                    if (agedPhotoFile.getFileName().length() > 0) {
+                        person.setPhoto(contextDefaultPhotoFilename);
+                    } else {
+                        person.setPhoto(personForm.getPhoto());
+                    }
+                    if (agedPhotoFile.getFileName().length() > 0) {
+                        person.setAgedPhoto(contextAgedPhotoFilename);
+                    }
+                    person.setStatus(personForm.getStatus());
+                    person.setType(personForm.getType());
+                    person.setFirstName(firstName);
+                    person.setNickname(personForm.getNickname());
+                    person.setMiddleName(personForm.getMiddleName());
+                    person.setLastName(lastName);
+                    person.setBirthMonth(personForm.getBirthMonth());
+                    person.setBirthDay(personForm.getBirthDay());
+                    person.setBirthYear(personForm.getBirthYear());
+                    person.setStreet(personForm.getStreet());
+                    person.setCity(personForm.getCity());
+                    person.setProvince(personForm.getProvince());
+                    person.setCountry(personForm.getCountry());
+                    person.setSex(personForm.getSex());
+                    person.setFeet(personForm.getFeet());
+                    person.setInches(personForm.getInches());
+                    person.setWeight(personForm.getWeight());
+                    person.setReligion(personForm.getReligion());
+                    person.setRace(personForm.getRace());
+                    person.setEyeColor(personForm.getEyeColor());
+                    person.setHairColor(personForm.getHairColor());
+                    person.setMedicalCondition(personForm.getMedicalCondition());
+                    person.setMarks(personForm.getMarks());
+                    person.setPersonalEffects(personForm.getPersonalEffects());
+                    person.setRemarks(personForm.getRemarks());
+                    person.setMonthMissingOrFound(personForm.getMonthMissingOrFound());
+                    person.setDayMissingOrFound(personForm.getDayMissingOrFound());
+                    person.setYearMissingOrFound(personForm.getYearMissingOrFound());
+                    if (person.getType() <= 4) {
+                        person.setMissingFromCity(personForm.getMissingFromCity());
+                        person.setMissingFromProvince(personForm.getMissingFromProvince());
+                        person.setMissingFromCountry(personForm.getMissingFromCountry());
+                        person.setPossibleCity(personForm.getPossibleCity());
+                        person.setPossibleProvince(personForm.getPossibleProvince());
+                        person.setPossibleCountry(personForm.getPossibleCountry());
+                        person.setCircumstance(personForm.getCircumstance());
+                        person.setReward(personForm.getReward());
+                    } else {
+                        person.setInstitution(personForm.getInstitution());
+                        person.setInstitutionStreet(personForm.getInstitutionStreet());
+                        person.setInstitutionCity(personForm.getInstitutionCity());
+                        person.setInstitutionProvince(personForm.getInstitutionProvince());
+                        person.setInstitutionCountry(personForm.getInstitutionCountry());
+                        person.setInstitutionEmail(personForm.getInstitutionEmail());
+                        person.setInstitutionNumber(personForm.getInstitutionNumber());
+                    }
+                    if (!personForm.getCodisId().isEmpty()) {
+                        person.setCodisId(personForm.getCodisId());
+                    }
+                    if (!personForm.getAfisId().isEmpty()) {
+                        person.setAfisId(personForm.getAfisId());
+                    }
+                    if (!personForm.getDentalId().isEmpty()) {
+                        person.setDentalId(personForm.getDentalId());
+                    }
+                    boolean isUpdated = personService.updatePerson(person);
+                    
+                    // Retrieve updated person
+                    person = personService.getPersonById(person.getId());
+
+                    if (isUpdated) {
+                        // Log person modification event
+                        Log editLog = new Log();
+                        if ((person.getFirstName().equals(personForm.getFirstName())) &&
+                                (person.getNickname().equals(personForm.getNickname())) &&
+                                (person.getMiddleName().equals(personForm.getMiddleName())) &&
+                                (person.getLastName().equals(personForm.getLastName()))) {
+                            editLog.setLog("Person " + person.getNickname() + " was updated by " + currentUser.getUsername() + ".");
+                        } else {
+                            editLog.setLog("Person " + person.getFirstName() + " '" + person.getNickname() + "' " + person.getLastName() +
+                                    " was renamed to " + firstName + " '" + personForm.getNickname() + "' " + lastName + " by " + currentUser.getUsername() + ".");
+                        }
+                        editLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                        logService.insertLog(editLog);
+                        logger.info(editLog.toString());
+
+                        // Check if person is abandoned, throwaway or unidentified
+                        if (person.getType() > 4) {
+                            // Return person ID
+                            request.setAttribute("personid", person.getId());
+                            request.setAttribute("investigatorid", person.getInvestigatorId());
+
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                        } else {
+                            // Check if missing
+                            // Return person ID, relative ID and relation to relative
+                            request.setAttribute("personid", person.getId());
+                            request.setAttribute("relativeid", person.getRelativeId());
+                            request.setAttribute("relationtorelative", person.getRelationToRelative());
+                            request.setAttribute("abductorid", person.getAbductorId());
+                            request.setAttribute("relationtoabductor", person.getRelationToAbductor());
+                            request.setAttribute("investigatorid", person.getInvestigatorId());
+
+                            return mapping.findForward(Constants.ADD_RELATIVE);
+                        }
+                    } else {
+                        return mapping.findForward(Constants.FAILURE);
+                    }
+                } else {
+                    // Return duplicate personname error
+                    errors.add("person", new ActionMessage("error.person.duplicate"));
+                    saveErrors(request, errors);
+
+                    logger.error("Duplicate person.");
+
+                    return mapping.findForward(Constants.ADD_PERSON_REDO);
+                }
+            } else {
+                // Return form validation errors
+                return mapping.findForward(Constants.ADD_PERSON_REDO);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current person is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
-    PersonForm personForm = (PersonForm) form;
-    ActionMessages errors = new ActionMessages();
-
-    // Check if form is valid
-    if (isValidExistingPerson(request, form)) {
-    // Check if updated person has unique personname and nickname, if passwords match
-    // and if the rest of the form is valid
-    Person checker = new Person();
-    checker.setId(personForm.getId());
-    checker.setEmail(personForm.getEmail());
-    String personname = createPersonname(personForm);
-    checker.setPersonname(personname);
-
-    // Check if personname is unique
-    if (personService.isUniquePersonname(checker)) {
-    // Check if nickname address is unique
-    if (personService.isUniqueEmail(checker)) {
-    // Update person
-    Person person = new Person();
-    person.setId(personForm.getId());
-    person.setGroupId(personForm.getGroupId());
-    person.setPersonname(personname);
-    person.setFirstName(personForm.getFirstName());
-    person.setMiddleName(personForm.getMiddleName());
-    person.setLastName(personForm.getLastName());
-    person.setBirthMonth(personForm.getBirthMonth());
-    person.setBirthDay(personForm.getBirthDay());
-    person.setBirthYear(personForm.getBirthYear());
-    person.setDesignation(personForm.getDesignation());
-    person.setAgency(personForm.getAgency());
-    person.setEmail(personForm.getEmail());
-    person.setNumber(personForm.getNumber());
-    person.setStatus(personForm.getStatus());
-    person.setQuestion(personForm.getQuestion());
-    person.setAnswer(personForm.getAnswer());
-    // Check if password is also being updated
-    if ((personForm.getPassword() != null) &&
-    (personForm.getRetype() != null) &&
-    (personForm.getPassword().equals(personForm.getRetype()))) {
-    person.setPassword(personForm.getPassword());
-    personService.updatePassword(person);
-    }
-    boolean isUpdated = personService.updatePerson(person);
-
-    if (isUpdated) {
-    // Log person modification event
-    Log editLog = new Log();
-    if (personname.equals(personForm.getPersonname())) {
-    editLog.setLog("Person " + personname + " was updated by " + currentUser.getPersonname() + ".");
-    } else {
-    editLog.setLog("Person " + personForm.getPersonname() + " was renamed to " + personname + " by " + currentUser.getPersonname() + ".");
-    }
-    editLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-    logService.insertLog(editLog);
-    logger.info(editLog.toString());
-
-    // Return personname and operation type
-    request.setAttribute("personname", personname);
-    request.setAttribute("operation", "edit");
-
-    return mapping.findForward(Constants.EDIT_SUCCESS);
-    } else {
-    return mapping.findForward(Constants.FAILURE);
-    }
-    } else {
-    // Return duplicate nickname error
-    errors.add("nickname", new ActionMessage("error.nickname.duplicate"));
-    saveErrors(request, errors);
-
-    logger.error("Duplicate nickname.");
-
-    return mapping.findForward(Constants.EDIT_REDO);
-    }
-    } else {
-    // Return duplicate person error
-    errors.add("firstname", new ActionMessage("error.firstname.duplicate"));
-    saveErrors(request, errors);
-
-    logger.error("Duplicate personname.");
-
-    return mapping.findForward(Constants.EDIT_REDO);
-    }
-    } else {
-    // Return form validation errors
-    return mapping.findForward(Constants.EDIT_REDO);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
+     * Prepares the form for deleting a person.
      * This is the erase person action called from the Struts framework.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -459,6 +794,7 @@ public class PersonAction extends DispatchAction {
     }
      */
     /**
+     * Deletes a person from the database.
      * This is the delete person action called from the HTML form.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -552,293 +888,242 @@ public class PersonAction extends DispatchAction {
      * @param form          the ActionForm bean for this request
      * @return              <code>true</code> if there are no errors in the form; <code>false</code> otherwise
      */
-    private boolean isValidNewPerson(HttpServletRequest request, ActionForm form) throws Exception {
+    private boolean isValidPerson(HttpServletRequest request, ActionForm form) throws Exception {
         ActionMessages errors = new ActionMessages();
         Validator validator = new Validator();
         boolean isValid = true;
+        Calendar calendar = Calendar.getInstance();
 
         PersonForm personForm = (PersonForm) form;
+        FormFile photoFile = personForm.getPhotoFile();
+        FormFile agedPhotoFile = personForm.getAgedPhotoFile();
         String firstName = personForm.getFirstName();
         String nickname = personForm.getNickname();
         String middleName = personForm.getMiddleName();
         String lastName = personForm.getLastName();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(personForm.getBirthYear(), (personForm.getBirthMonth() - 1), personForm.getBirthDay());
+        int birthDay = personForm.getBirthDay();
+        int birthMonth = personForm.getBirthMonth() - 1;
         String street = personForm.getStreet();
         String city = personForm.getCity();
         String province = personForm.getProvince();
-        FormFile photoFile = personForm.getPhotoFile();
-        /*
-        String hashcode = "test";
-        File directory = new File("D:" + File.separator + hashcode);
-        directory.mkdir();
-        directory = new File("D:" + File.separator + hashcode + File.separator + "default");
-        directory.mkdir();
-        directory = new File("D:" + File.separator + hashcode + File.separator + "aged");
-        directory.mkdir();
-        File file = new File("D:" + File.separator + hashcode + File.separator + "default" + File.separator + photoFile.getFileName());
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(photoFile.getFileData());
-        fos.close();
-        fos.flush();
-        System.out.println(photoFile.getContentType());
-         */
+        double weight = personForm.getWeight();
+        String marks = personForm.getMarks();
+        String personalEffects = personForm.getPersonalEffects();
+        int dayMissingOrFound = personForm.getDayMissingOrFound();
+        int monthMissingOrFound = personForm.getMonthMissingOrFound() - 1;
 
-        // TODO error if birth date and date missingorfound are greater than current date
+        String missingFromCity = personForm.getMissingFromCity();
+        String missingFromProvince = personForm.getMissingFromProvince();
+        String possibleCity = personForm.getPossibleCity();
+        String possibleProvince = personForm.getPossibleProvince();
+        String circumstance = personForm.getCircumstance();
 
-        if (firstName == null) {
-            errors.add("firstname", new ActionMessage(""));
-        } else {
-            if (firstName.length() < 1) {
-                errors.add("firstname", new ActionMessage("error.firstname.required"));
+        String institution = personForm.getInstitution();
+        String institutionStreet = personForm.getInstitutionStreet();
+        String institutionCity = personForm.getInstitutionCity();
+        String institutionProvince = personForm.getInstitutionProvince();
+        String institutionEmail = personForm.getInstitutionEmail();
+        String institutionNumber = personForm.getInstitutionNumber();
+
+        String codisId = personForm.getCodisId();
+        String afisId = personForm.getAfisId();
+        String dentalId = personForm.getDentalId();
+
+        Person existingPerson = new Person();
+        if (personForm.getId() > 0) {
+            existingPerson = personService.getPersonById(personForm.getId());
+            if (existingPerson.getPhoto() != null) {
+                personForm.setPhoto(existingPerson.getPhoto());
+            }
+            if (existingPerson.getAgedPhoto() != null) {
+                personForm.setAgedPhoto(existingPerson.getAgedPhoto());
+            }
+        }
+
+        if ((existingPerson.getPhoto() == null) || (existingPerson.getPhoto().equals("photo/unknown.png"))) {
+            if (photoFile.getFileName().length() < 1) {
+                errors.add("photofile", new ActionMessage("error.photo.required"));
             } else {
-                if (!validator.isValidFirstName(firstName)) {
-                    errors.add("firstname", new ActionMessage("error.firstname.invalid"));
+                if (!((photoFile.getContentType().equals("image/png")) ||
+                        (photoFile.getContentType().equals("image/jpeg")) ||
+                        (photoFile.getContentType().equals("image/gif")))) {
+                    errors.add("photofile", new ActionMessage("error.photo.invalid"));
+                }
+
+            }
+        }
+
+        if ((agedPhotoFile.getFileName().length() > 1) && ((!photoFile.getContentType().equals("image/png")) ||
+                (!photoFile.getContentType().equals("image/jpeg")) ||
+                (!photoFile.getContentType().equals("image/gif")))) {
+            errors.add("photofile", new ActionMessage("error.photo.invalid"));
+        }
+
+        if ((firstName.length() > 1) && (!validator.isValidFirstName(firstName))) {
+            errors.add("firstname", new ActionMessage("error.firstname.invalid"));
+        }
+
+        if (nickname.length() < 1) {
+            errors.add("nickname", new ActionMessage("error.nickname.required"));
+        } else {
+            if (!validator.isValidFirstName(nickname)) {
+                errors.add("nickname", new ActionMessage("error.nickname.invalid"));
+            }
+
+        }
+
+        if ((middleName.length() > 1) && (!validator.isValidLastName(middleName))) {
+            errors.add("middlename", new ActionMessage("error.middlename.invalid"));
+        }
+
+        if ((lastName.length() > 1) && (!validator.isValidLastName(lastName))) {
+            errors.add("lastname", new ActionMessage("error.lastname.invalid"));
+        }
+
+        if (birthMonth > calendar.get(Calendar.MONTH)) {
+            errors.add("birthdate", new ActionMessage("error.birthmonth.invalid"));
+        }
+
+        if ((birthMonth == calendar.get(Calendar.MONTH)) && (birthDay > calendar.get(Calendar.DATE))) {
+            errors.add("birthdate", new ActionMessage("error.birthday.invalid"));
+        }
+
+        if ((street.length() > 1) && (!validator.isValidStreet(street))) {
+            errors.add("street", new ActionMessage("error.street.invalid"));
+        }
+
+        if ((city.length() > 1) && (!validator.isValidCity(city))) {
+            errors.add("city", new ActionMessage("error.city.invalid"));
+        }
+
+        if ((province.length() > 1) && (!validator.isValidProvince(province))) {
+            errors.add("province", new ActionMessage("error.province.invalid"));
+        }
+
+        if (weight < 1) {
+            errors.add("weight", new ActionMessage("error.weight.required"));
+        }
+
+        if (marks.length() < 1) {
+            errors.add("marks", new ActionMessage("error.marks.required"));
+        }
+
+        if (personalEffects.length() < 1) {
+            errors.add("personaleffects", new ActionMessage("error.personaleffects.required"));
+        }
+
+        if (monthMissingOrFound > calendar.get(Calendar.MONTH)) {
+            errors.add("datemissingorfound", new ActionMessage("error.monthmissingorfound.invalid"));
+        }
+
+        if ((monthMissingOrFound == calendar.get(Calendar.MONTH)) && (dayMissingOrFound > calendar.get(Calendar.DATE))) {
+            errors.add("datemissingorfound", new ActionMessage("error.daymissingorfound.invalid"));
+        }
+
+        if (missingFromCity.length() < 1) {
+            errors.add("missingfromcity", new ActionMessage("error.city.required"));
+        } else {
+            if (!validator.isValidCity(missingFromCity)) {
+                errors.add("missingfromcity", new ActionMessage("error.city.invalid"));
+            }
+
+        }
+
+        if (missingFromProvince.length() < 1) {
+            errors.add("missingfromprovince", new ActionMessage("error.province.required"));
+        } else {
+            if (!validator.isValidProvince(missingFromProvince)) {
+                errors.add("missingfromprovince", new ActionMessage("error.province.invalid"));
+            }
+
+        }
+
+        if ((possibleCity.length() > 1) && (!validator.isValidCity(possibleCity))) {
+            errors.add("possiblecity", new ActionMessage("error.city.invalid"));
+        }
+
+        if ((possibleProvince.length() > 1) && (!validator.isValidProvince(possibleProvince))) {
+            errors.add("possibleprovince", new ActionMessage("error.province.invalid"));
+        }
+
+        if (personForm.getType() < 5) {
+            if (circumstance.length() < 1) {
+                errors.add("circumstance", new ActionMessage("error.circumstance.required"));
+            }
+        }
+
+        if (personForm.getType() > 4) {
+            if (institution.length() < 1) {
+                errors.add("institution", new ActionMessage("error.institution.required"));
+            } else {
+                if (!validator.isValidInstitution(institution)) {
+                    errors.add("institution", new ActionMessage("error.institution.invalid"));
+                }
+            }
+
+            if (institutionStreet.length() < 1) {
+                errors.add("institutionstreet", new ActionMessage("error.street.required"));
+            } else {
+                if (!validator.isValidStreet(institutionStreet)) {
+                    errors.add("institutionstreet", new ActionMessage("error.street.invalid"));
+                }
+            }
+
+            if (institutionCity.length() < 1) {
+                errors.add("institutioncity", new ActionMessage("error.city.required"));
+            } else {
+                if (!validator.isValidCity(institutionCity)) {
+                    errors.add("institutioncity", new ActionMessage("error.city.invalid"));
+                }
+            }
+
+            if (institutionProvince.length() < 1) {
+                errors.add("institutionprovince", new ActionMessage("error.province.required"));
+            } else {
+                if (!validator.isValidProvince(institutionProvince)) {
+                    errors.add("institutionprovince", new ActionMessage("error.province.invalid"));
+                }
+            }
+
+            if ((institutionEmail.length() > 1) && (!validator.isValidEmailAddress(institutionEmail))) {
+                errors.add("institutionemail", new ActionMessage("error.email.invalid"));
+            }
+
+            if (institutionNumber.length() < 1) {
+                errors.add("institutionnumber", new ActionMessage("error.number.required"));
+            } else {
+                if (!validator.isValidNumber(institutionNumber)) {
+                    errors.add("institutionnumber", new ActionMessage("error.number.invalid"));
                 }
             }
         }
 
-        if (middleName == null) {
-            errors.add("middlename", new ActionMessage(""));
-        } else {
-            if (middleName.length() < 1) {
-                errors.add("middlename", new ActionMessage("error.middlename.required"));
-            } else {
-                if (!validator.isValidLastName(middleName)) {
-                    errors.add("middlename", new ActionMessage("error.middlename.invalid"));
-                }
-            }
+        if ((codisId.length() > 1) && (!validator.isValidId(codisId))) {
+            errors.add("codisid", new ActionMessage("error.codisid.invalid"));
         }
 
-        if (lastName == null) {
-            errors.add("lastname", new ActionMessage(""));
-        } else {
-            if (lastName.length() < 1) {
-                errors.add("lastname", new ActionMessage("error.lastname.required"));
-            } else {
-                if (!validator.isValidLastName(lastName)) {
-                    errors.add("lastname", new ActionMessage("error.lastname.invalid"));
-                }
-            }
+        if ((afisId.length() > 1) && (!validator.isValidId(afisId))) {
+            errors.add("afisid", new ActionMessage("error.afisid.invalid"));
         }
 
-        if (personForm.getBirthMonth() == calendar.get(Calendar.MONTH)) {
-            errors.add("birthdate", new ActionMessage("error.birthdate.invalid"));
-        }
-
-        if (nickname == null) {
-            errors.add("nickname", new ActionMessage(""));
-        } else {
-            if (nickname.length() < 1) {
-                errors.add("nickname", new ActionMessage("error.nickname.required"));
-            } else {
-                if (!validator.isValidEmailAddress(nickname)) {
-                    errors.add("nickname", new ActionMessage("error.nickname.invalid"));
-                }
-            }
-        }
-
-        if (city == null) {
-            errors.add("city", new ActionMessage(""));
-        } else {
-            if (city.length() < 1) {
-                errors.add("city", new ActionMessage("error.city.required"));
-            } else {
-                if (!validator.isValidKeyword(city)) {
-                    errors.add("city", new ActionMessage("error.city.invalid"));
-                }
-            }
-        }
-
-        if (street == null) {
-            errors.add("street", new ActionMessage(""));
-        } else {
-            if (street.length() < 1) {
-                errors.add("street", new ActionMessage("error.street.required"));
-            } else {
-                if (!validator.isValidKeyword(street)) {
-                    errors.add("street", new ActionMessage("error.street.invalid"));
-                }
-            }
-        }
-
-        if (province == null) {
-            errors.add("province", new ActionMessage(""));
-        } else {
-            if (province.length() < 1) {
-                errors.add("province", new ActionMessage("error.province.required"));
-            } else {
-                if (!validator.isValidNumber(province)) {
-                    errors.add("province", new ActionMessage("error.province.invalid"));
-                }
-            }
+        if ((dentalId.length() > 1) && (!validator.isValidId(dentalId))) {
+            errors.add("dentalid", new ActionMessage("error.dentalid.invalid"));
         }
 
         if (!errors.isEmpty()) {
             saveErrors(request, errors);
-            isValid = false;
+            isValid =
+                    false;
+        }
+
+        Iterator i = errors.get();
+        while (i.hasNext()) {
+            System.out.println("errors: " + i.next());
         }
 
         return isValid;
     }
 
-    /**
-     * Validates the inputs from the person form.
-     *
-     * @param request       the HTTP Request we are processing
-     * @param form          the ActionForm bean for this request
-     * @return              <code>true</code> if there are no errors in the form; <code>false</code> otherwise
-     */
-    /*
-    private boolean isValidExistingPerson(HttpServletRequest request, ActionForm form) {
-    ActionMessages errors = new ActionMessages();
-    Validator validator = new Validator();
-    boolean isValid = true;
-    User currentUser = (User) request.getSession().getAttribute("currentuser");
-
-    PersonForm personForm = (PersonForm) form;
-    String firstName = personForm.getFirstName();
-    String middleName = personForm.getMiddleName();
-    String lastName = personForm.getLastName();
-    Calendar calendar = Calendar.getInstance();
-    calendar.set(personForm.getBirthYear(), (personForm.getBirthMonth() - 1), personForm.getBirthDay());
-    String street = personForm.getAgency();
-    String city = personForm.getDesignation();
-    String nickname = personForm.getEmail();
-    String province = personForm.getNumber();
-    String password = personForm.getPassword();
-    String retype = personForm.getRetype();
-    String answer = personForm.getAnswer();
-
-    // Check if current person is editing his profile
-    // Password and security answer are required
-    if (currentUser.getId() == personForm.getId()) {
-    // Check if retyped password exists
-    if ((retype != null) && (retype.length() > 0)) {
-    if (password == null) {
-    errors.add("password", new ActionMessage(""));
-    } else {
-    if (password.length() < 1) {
-    errors.add("password", new ActionMessage("error.password.required"));
-    } else {
-    if (!validator.isValidPassword(password)) {
-    errors.add("password", new ActionMessage("error.password.invalid"));
-    } else if (!password.equals(retype)) {
-    errors.add("password", new ActionMessage("error.password.mismatch"));
-    }
-    }
-    }
-    }
-
-    if (answer == null) {
-    errors.add("answer", new ActionMessage(""));
-    } else {
-    if (answer.length() < 1) {
-    errors.add("answer", new ActionMessage("error.answer.required"));
-    } else {
-    if (!validator.isValidKeyword(answer)) {
-    errors.add("answer", new ActionMessage("error.answer.invalid"));
-    }
-    }
-    }
-    }
-
-    if (firstName == null) {
-    errors.add("firstname", new ActionMessage(""));
-    } else {
-    if (firstName.length() < 1) {
-    errors.add("firstname", new ActionMessage("error.firstname.required"));
-    } else {
-    if (!validator.isValidFirstName(firstName)) {
-    errors.add("firstname", new ActionMessage("error.firstname.invalid"));
-    }
-    }
-    }
-
-    if (middleName == null) {
-    errors.add("middlename", new ActionMessage(""));
-    } else {
-    if (middleName.length() < 1) {
-    errors.add("middlename", new ActionMessage("error.middlename.required"));
-    } else {
-    if (!validator.isValidLastName(middleName)) {
-    errors.add("middlename", new ActionMessage("error.middlename.invalid"));
-    }
-    }
-    }
-
-    if (lastName == null) {
-    errors.add("lastname", new ActionMessage(""));
-    } else {
-    if (lastName.length() < 1) {
-    errors.add("lastname", new ActionMessage("error.lastname.required"));
-    } else {
-    if (!validator.isValidLastName(lastName)) {
-    errors.add("lastname", new ActionMessage("error.lastname.invalid"));
-    }
-    }
-    }
-
-    if (personForm.getBirthMonth() == calendar.get(Calendar.MONTH)) {
-    errors.add("birthdate", new ActionMessage("error.birthdate.invalid"));
-    }
-
-    if (nickname == null) {
-    errors.add("nickname", new ActionMessage(""));
-    } else {
-    if (nickname.length() < 1) {
-    errors.add("nickname", new ActionMessage("error.nickname.required"));
-    } else {
-    if (!validator.isValidEmailAddress(nickname)) {
-    errors.add("nickname", new ActionMessage("error.nickname.invalid"));
-    }
-    }
-    }
-
-    if (city == null) {
-    errors.add("city", new ActionMessage(""));
-    } else {
-    if (city.length() < 1) {
-    errors.add("city", new ActionMessage("error.city.required"));
-    } else {
-    if (!validator.isValidKeyword(city)) {
-    errors.add("city", new ActionMessage("error.city.invalid"));
-    }
-    }
-    }
-
-    if (street == null) {
-    errors.add("street", new ActionMessage(""));
-    } else {
-    if (street.length() < 1) {
-    errors.add("street", new ActionMessage("error.street.required"));
-    } else {
-    if (!validator.isValidKeyword(street)) {
-    errors.add("street", new ActionMessage("error.street.invalid"));
-    }
-    }
-    }
-
-    if (province == null) {
-    errors.add("province", new ActionMessage(""));
-    } else {
-    if (province.length() < 1) {
-    errors.add("province", new ActionMessage("error.province.required"));
-    } else {
-    if (!validator.isValidNumber(province)) {
-    errors.add("province", new ActionMessage("error.province.invalid"));
-    }
-    }
-    }
-
-    if (!errors.isEmpty()) {
-    saveErrors(request, errors);
-    isValid = false;
-    }
-
-    return isValid;
-    }
-     */
     /**
      * Counts the province of reports for a given person.
      *
@@ -868,10 +1153,32 @@ public class PersonAction extends DispatchAction {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, baos);
 
+        // Retrieve the person
+        int id = 0;
+        try {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id"));
+            } else {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        }
+        Person person = (Person) personService.getPersonById(id);
+
+        // Process the photo
+        String tokens[] = person.getPhoto().split("\\/");
+        String defaultPhotoBasename = "";
+        for (int i = 0; i < tokens.length - 1; i++) {
+            defaultPhotoBasename += tokens[i] + File.separator;
+        }
+        defaultPhotoBasename += tokens[tokens.length - 1];
+        String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+
         // Add some meta information to the document
-        document.addTitle("Case Statistics");
+        document.addTitle("Poster");
         document.addAuthor("OpenMPIS");
-        document.addSubject("Statistics for All Cases");
+        document.addSubject("Poster for " + person.getNickname());
         document.addKeywords("OpenMPIS, missing, found, unidentified");
         document.addProducer();
         document.addCreationDate();
@@ -879,20 +1186,29 @@ public class PersonAction extends DispatchAction {
 
         // Open the document for writing
         document.open();
-        document.add(new Paragraph("There is a total of " + personService.countAllPersons() + " reported case(s)."));
-        document.add(new Paragraph("There are " + personService.countOngoing() + " ongoing case(s)."));
-        document.add(new Paragraph("There are " + personService.countSolved() + " solved case(s)."));
-        document.add(new Paragraph("There are " + personService.countUnsolved() + " unsolved case(s)."));
-        document.add(new Paragraph("There are " + personService.countMissing() + " missing person(s)."));
-        document.add(new Paragraph("There are " + personService.countFamilyAbduction() + " family abduction(s)."));
-        document.add(new Paragraph("There are " + personService.countNonFamilyAbduction() + " non-family abduction(s)."));
-        document.add(new Paragraph("There are " + personService.countRunaway() + " runaway person(s)."));
-        document.add(new Paragraph("There are " + personService.countUnknown() + " unknown case(s)."));
-        document.add(new Paragraph("There are " + personService.countAbandoned() + " abandoned person(s)."));
-        document.add(new Paragraph("There are " + personService.countThrowaway() + " throwaway person(s)."));
-        document.add(new Paragraph("There are " + personService.countUnidentified() + " unidentified person(s)."));
-        document.add(new Paragraph("There are " + relativeService.countAllRelatives() + " relative(s)."));
-        document.add(new Paragraph("There are " + abductorService.countAllAbductors() + " abductor(s)."));
+
+        // Set the header
+        if (person.getType() > 4) {
+            Paragraph foundParagraph = new Paragraph("F O U N D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(0, 0, 0)));
+            foundParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(foundParagraph);
+        } else {
+            Paragraph missingParagraph = new Paragraph("M I S S I N G", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(0, 0, 0)));
+            missingParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(missingParagraph);
+        }
+
+        Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+        image.scaleAbsolute(200, 300);
+        image.setAlignment(Image.ALIGN_CENTER);
+        document.add(image);
+        Paragraph nameParagraph = new Paragraph(person.getFirstName() + " '" + person.getNickname() + "' " + person.getLastName());
+        nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(nameParagraph);
+        if (person.getRelativeId() != null) {
+            document.add(new Paragraph(person.getRelativeId()));
+            // TODO other information, refer to sample FBI posters
+        }
         document.close();
 
         // Set the response to return the poster (PDF file)
@@ -904,6 +1220,49 @@ public class PersonAction extends DispatchAction {
         baos.writeTo(response.getOutputStream());
         response.getOutputStream().flush();
 
-        return mapping.findForward(Constants.VIEW_PERSON_POSTER);
+        return null;
+    }
+
+    /**
+     * Creates a unique directory name for the person's uploaded photos.
+     * Adapted from http://snipplr.com/view/4321/generate-md5-hash-from-string/.
+     *
+     * @param nickname      the nickname of the person on which the directory name is based
+     * @return              the 32 alphanumeric-equivalent of the nickname
+     * @throws java.security.NoSuchAlgorithmException
+     */
+    private String createDirectoryName(
+            String nickname) throws NoSuchAlgorithmException {
+        StringBuffer uniqueDirectoryName = new StringBuffer();
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.reset();
+        md5.update(nickname.getBytes());
+        byte digest[] = md5.digest();
+        for (int i = 0; i < digest.length; i++) {
+            uniqueDirectoryName.append(Integer.toHexString(0xFF & digest[i]));
+        }
+
+        return uniqueDirectoryName.toString();
+    }
+
+    /**
+     * Calculates the age of a person.
+     * Adapted from http://www.coderanch.com/t/391834/Java-General-beginner/java/there-better-way-calculate-age
+     *
+     * @param birthMonth    the person's birth month
+     * @param birthDay      the person's birth day
+     * @param birthYear     the person's birth year
+     * @return              the person's age
+     */
+    private int getAge(int birthMonth, int birthDay, int birthYear) {
+        Calendar birthDate = Calendar.getInstance();
+        birthDate.set(birthYear, birthMonth, birthDay);
+        Calendar today = Calendar.getInstance();
+        int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+        if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        return age;
     }
 }
