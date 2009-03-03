@@ -16,51 +16,40 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="case.title"/>
     </head>
-    <body onload="javascript: setDefaultCities(); setProvinces(); setCountries();">
+    <body>
         <div id="container">
             <tag:header/>
 
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
+                    <c:when test="${currentuser.groupId == 0}">
+                        <bean:message key="admin.case.menu"/>
+                    </c:when>
                     <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.case.menu"/>
                     </c:when>
+                    <c:when test="${currentuser.groupId == 2}">
+                        <bean:message key="investigator.case.menu" arg0="${currentuser.id}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <bean:message key="global.menu"/>
+                    </c:otherwise>
                 </c:choose>
             </div>
 
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    <c:choose>
-                        <c:when test="${currentuser.groupId == 1}">
-                            <c:choose>
-                                <c:when test="${action eq 'newPerson'}">
-                                    <bean:message key="case.add"/>
-                                </c:when>
-                                <c:when test="${action eq 'editPerson'}">
-                                    <bean:message key="case.edit"/>
-                                </c:when>
-                                <c:when test="${action eq 'erasePerson'}">
-                                    <bean:message key="case.delete"/>
-                                </c:when>
-                            </c:choose>
-                        </c:when>
-                        <c:otherwise>
-                            <bean:message key="case.view"/>
-                        </c:otherwise>
-                    </c:choose>
+                    <div id="casemenu">
+                        <bean:message key="case.menu"/>
+                    </div>
+                    <bean:message key="case.view"/>
 
-                    <p class="contentclass">
-                        <label id="idlabel" class="labelclass">
-                            <bean:message key="label.id"/>
-                        </label>
-                        ${personForm.id}
-                    </p>
                     <p class="contentclass">
                         <html:img styleClass="photoclass" src="${personForm.photo eq null ? '/photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
                         <html:img styleClass="photoclass" src="${personForm.agedPhoto eq null ? '/photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
@@ -69,7 +58,7 @@
                         <label id="statuslabel" class="labelclass">
                             <bean:message key="label.status"/>
                         </label>
-                        <bean:message key="status.${personForm.status}"/>
+                        <bean:message key="status.case.${personForm.status}"/>
                     </p>
                     <p class="contentclass">
                         <label id="typelabel" class="labelclass">
@@ -106,8 +95,7 @@
                             <bean:message key="label.date.birth"/>
                         </label>
                         <bean:message key="month.${personForm.birthMonth}"/>&nbsp;${personForm.birthDay},&nbsp;${personForm.birthYear}
-                        <bean:message key="label.age"/>
-                        ${personForm.age}
+                        <bean:message key="label.age"/>${personForm.age}
                     </p>
                     <p class="contentclass">
                         <label id="streetlabel" class="labelclass">
@@ -343,6 +331,14 @@
                             <bean:message key="label.dental.id"/>
                         </label>
                         ${personForm.dentalId}
+                    </p>
+                    <p class="contentclass">
+                        <c:if test="${currentuser.groupId == 2}">
+                            <bean:message key="case.report" arg0="${reportcount}" arg1="${personForm.id}"/>
+                        </c:if>
+                    </p>
+                    <p class="contentclass">
+                        <bean:message key="case.print.poster" arg0="${personForm.id}"/>
                     </p>
 
                 </div>
