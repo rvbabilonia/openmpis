@@ -137,4 +137,20 @@ public class FeedbackForm extends ActionForm {
     public void setSubject(String subject) {
         this.subject = subject.trim();
     }
+
+    /**
+     * Returns a String representation of this data transfer object.
+     *
+     * @return              the String representation of this data transfer object
+     */
+    @Override
+    public String toString() {
+        String content = "";
+        content += "\nEmail Address: " + email;
+        content += "\nFirst Name: " + firstName;
+        content += "\nLast Name: " + lastName;
+        content += "\nSubject: " + subject;
+        content += "\nMessage: " + message;
+        return content;
+    }
 }
