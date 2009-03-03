@@ -16,7 +16,7 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="case.title"/>
     </head>
@@ -98,35 +98,32 @@
                             </p>
                         </c:when>
                         <c:otherwise>
+                            [fix layout]
+                            [${personcount}]
                             <div class="table">
-                                <div class="row">
-                                    <div class="columnheader"><bean:message key="label.count"/></div>
-                                    <div class="columnheader"><bean:message key="label.case.id"/></div>
-                                    <div class="columnheader"><bean:message key="label.case.type"/></div>
-                                    <div class="columnheader"><bean:message key="label.status"/></div>
-                                    <div class="columnheader"><bean:message key="label.firstname"/></div>
-                                    <div class="columnheader"><bean:message key="label.lastname"/></div>
-                                    <div class="columnheader"></div>
-                                    <div class="columnheader"></div>
-                                    <div class="columnheader"></div>
-                                    <div class="columnheader"></div>
-                                </div>
-                                <c:forEach items="${personlist}" var="person" varStatus="personCount">
+                                <c:forEach begin="0" end="${(personcount - (personcount % 4)) / 4}" step="1" var="i">
                                     <div class="row">
-                                        <div class="cell">${personCount.count + ((currentpage - 1) * maxresults)}</div>
-                                        <c:url var="url" scope="page" value="/viewCase.do">
-                                            <c:param name="action" value="viewPerson"/>
-                                            <c:param name="id" value="${user.id}"/>
-                                        </c:url>
-                                        <div class="cell"><html:link href="${fn:escapeXml(url)}">${person.id}</html:link></div>
-                                        <div class="cell"><bean:message key="group.${person.type}"/></div>
-                                        <div class="cell"><bean:message key="status.case.${person.status}"/></div>
-                                        <div class="cell">${person.firstName}</div>
-                                        <div class="cell">${person.lastName}</div>
-                                        <div class="cell"></div>
-                                        <div class="cell"></div>
-                                        <div class="cell"></div>
-                                        <div class="cell"></div>
+                                        <c:forEach items="${personlist}" var="person" varStatus="personCount">
+                                            <c:forEach begin="1" end="1" step="1" var="j">
+                                                <div class="cell" style="width: 25%;">
+                                                    <c:url var="url" scope="page" value="/viewPerson.do">
+                                                        <c:param name="action" value="viewPerson"/>
+                                                        <c:param name="id" value="${person.id}"/>
+                                                    </c:url>
+                                                    <p style="text-align: center;">
+                                                        <html:link href="${fn:escapeXml(url)}">
+                                                            <html:img styleClass="photoclass" src="${person.photo}" alt="The person's photo" title="Photo"/>
+                                                        </html:link>
+                                                    </p>
+                                                    <p style="text-align: center;">
+                                                        <html:link href="${fn:escapeXml(url)}">${person.lastName}, ${person.firstName}</html:link>
+                                                    </p>
+                                                    <p style="text-align: center;">
+                                                        <bean:message key="type.${person.type}"/>
+                                                    </p>
+                                                </div>
+                                            </c:forEach>
+                                        </c:forEach>
                                     </div>
                                 </c:forEach>
                             </div>
