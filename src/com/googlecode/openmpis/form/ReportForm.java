@@ -125,7 +125,7 @@ public class ReportForm extends ActionForm {
      * @param report        the investigator's report
      */
     public void setReport(String report) {
-        this.report = report;
+        this.report = report.trim();
     }
 
     /**
