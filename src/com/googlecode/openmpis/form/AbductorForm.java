@@ -237,7 +237,7 @@ public class AbductorForm extends ActionForm {
      * @param firstName     the first name of the person
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
@@ -255,7 +255,7 @@ public class AbductorForm extends ActionForm {
      * @param nickname      the nickname of the person
      */
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname.trim();
     }
 
     /**
@@ -273,7 +273,7 @@ public class AbductorForm extends ActionForm {
      * @param middleName    the middle name of the person
      */
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName = middleName.trim();
     }
 
     /**
@@ -291,7 +291,7 @@ public class AbductorForm extends ActionForm {
      * @param lastName      the last name of the person
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
@@ -363,7 +363,7 @@ public class AbductorForm extends ActionForm {
      * @param street        the street address of the person
      */
     public void setStreet(String street) {
-        this.street = street;
+        this.street = street.trim();
     }
 
     /**
@@ -381,7 +381,7 @@ public class AbductorForm extends ActionForm {
      * @param city          the home city of the person
      */
     public void setCity(String city) {
-        this.city = city;
+        this.city = city.trim();
     }
 
     /**
@@ -399,7 +399,7 @@ public class AbductorForm extends ActionForm {
      * @param province      the home province of the person
      */
     public void setProvince(String province) {
-        this.province = province;
+        this.province = province.trim();
     }
 
     /**
@@ -417,7 +417,7 @@ public class AbductorForm extends ActionForm {
      * @param country       the home country of the person
      */
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country.trim();
     }
 
     /**
@@ -615,7 +615,7 @@ public class AbductorForm extends ActionForm {
      * @param marks         the distinguishing marks of the person
      */
     public void setMarks(String marks) {
-        this.marks = marks;
+        this.marks = marks.trim();
     }
 
     /**
@@ -651,7 +651,7 @@ public class AbductorForm extends ActionForm {
      * @param personalEffects the personal effects worn by the person
      */
     public void setPersonalEffects(String personalEffects) {
-        this.personalEffects = personalEffects;
+        this.personalEffects = personalEffects.trim();
     }
 
     /**
@@ -669,7 +669,7 @@ public class AbductorForm extends ActionForm {
      * @param remarks       the remarks to the person
      */
     public void setRemarks(String remarks) {
-        this.remarks = remarks;
+        this.remarks = remarks.trim();
     }
 
     /**
@@ -687,7 +687,7 @@ public class AbductorForm extends ActionForm {
      * @param photo         the photo of the person
      */
     public void setPhoto(String photo) {
-        this.photo = photo;
+        this.photo = photo.trim();
     }
 
     /**
@@ -705,7 +705,7 @@ public class AbductorForm extends ActionForm {
      * @param agedPhoto     the optional age-progressed photo of the person
      */
     public void setAgedPhoto(String agedPhoto) {
-        this.agedPhoto = agedPhoto;
+        this.agedPhoto = agedPhoto.trim();
     }
 
     /**
@@ -723,7 +723,7 @@ public class AbductorForm extends ActionForm {
      * @param codisId       the optional DNA ID of the person
      */
     public void setCodisId(String codisId) {
-        this.codisId = codisId;
+        this.codisId = codisId.trim();
     }
 
     /**
@@ -741,7 +741,7 @@ public class AbductorForm extends ActionForm {
      * @param afisId        the optional fingerprint ID of the person
      */
     public void setAfisId(String afisId) {
-        this.afisId = afisId;
+        this.afisId = afisId.trim();
     }
 
     /**
@@ -759,7 +759,7 @@ public class AbductorForm extends ActionForm {
      * @param dentalId      the optional dental ID of the person
      */
     public void setDentalId(String dentalId) {
-        this.dentalId = dentalId;
+        this.dentalId = dentalId.trim();
     }
 
     /**
