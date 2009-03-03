@@ -140,6 +140,9 @@
                 path="/viewCase"
                 type="com.googlecode.openmpis.action.CaseAction"
                 scope="request"
+                name="investigatorForm"
+                input="/WEB-INF/pages/session/investigatorForm.jsp"
+                validate="false"
                 parameter="action">
             <forward name="list-person" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="list-person-all-missing" path="/WEB-INF/pages/person/listPersons.jsp"/>
@@ -152,6 +155,29 @@
             <forward name="list-person-unidentified" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="list-abductor" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="case-statistics" path="/WEB-INF/pages/statistics/caseStatistics.jsp"/>
+            <forward name="assign-investigator" path="/WEB-INF/pages/session/investigatorForm.jsp"/>
+            <forward name="add-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+            <forward name="edit-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+        </action>
+        <!-- Add, view, edit and delete persons -->
+        <action
+                path="/viewPerson"
+                type="com.googlecode.openmpis.action.PersonAction"
+                scope="request"
+                name="personForm"
+                input="/WEB-INF/pages/session/personForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="view-person" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
+            <forward name="add-person"  path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="add-person-redo"  path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="edit-person" path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="edit-person-redo" path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="delete-person" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
+            <forward name="delete-person-redo" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
+            <forward name="delete-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+            <forward name="select-investigator" path="/viewCase.do?action=selectInvestigator"/>
+            <forward name="add-relative" path="/viewRelative.do?action=newRelative"/>
         </action>
         <!-- Add, view, edit and delete relatives -->
         <action
@@ -162,6 +188,7 @@
                 input="/WEB-INF/pages/session/relativeForm.jsp"
                 validate="false"
                 parameter="action">
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="view-relative" path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative-redo"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
@@ -172,6 +199,8 @@
             <forward name="delete-relative" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
             <forward name="delete-relative-redo" path="/WEB-INF/pages/session/deleteRelativeForm.jsp"/>
             <forward name="delete-relative-success" path="/WEB-INF/pages/session/relativeSuccess.jsp"/>
+            <forward name="select-investigator" path="/viewCase.do?action=selectInvestigator"/>
+            <forward name="add-abductor" path="/viewAbductor.do?action=newAbductor"/>
         </action>
         <!-- Add, view, edit and delete abductors -->
         <action
@@ -192,26 +221,7 @@
             <forward name="delete-abductor" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
             <forward name="delete-abductor-redo" path="/WEB-INF/pages/session/deleteAbductorForm.jsp"/>
             <forward name="delete-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
-        </action>
-        <!-- Add, view, edit and delete persons -->
-        <action
-                path="/viewPerson"
-                type="com.googlecode.openmpis.action.PersonAction"
-                scope="request"
-                name="personForm"
-                input="/WEB-INF/pages/session/personForm.jsp"
-                validate="false"
-                parameter="action">
-            <forward name="view-person" path="/WEB-INF/pages/person/personForm.jsp"/>
-            <forward name="add-person"  path="/WEB-INF/pages/session/personForm.jsp"/>
-            <forward name="add-person-redo"  path="/WEB-INF/pages/session/personForm.jsp"/>
-            <forward name="add-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
-            <forward name="edit-person" path="/WEB-INF/pages/session/personForm.jsp"/>
-            <forward name="edit-person-redo" path="/WEB-INF/pages/session/personForm.jsp"/>
-            <forward name="edit-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
-            <forward name="delete-person" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
-            <forward name="delete-person-redo" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
-            <forward name="delete-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
+            <forward name="select-investigator" path="/viewCase.do?action=selectInvestigator"/>
         </action>
         <!-- Add, view, edit and delete reports -->
         <action
@@ -233,16 +243,16 @@
             <forward name="delete-report-redo" path="/WEB-INF/pages/session/deleteReportForm.jsp"/>
             <forward name="delete-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
         </action>
-        <!-- Add, view, edit and delete reports -->
+        <!-- Selects and assigns investigator -->
         <action
                 path="/viewInvestigator"
                 type="com.googlecode.openmpis.action.InvestigatorAction"
                 scope="request"
                 name="investigatorForm"
-                input="/WEB-INF/pages/session/assignInvestigatorForm.jsp"
+                input="/WEB-INF/pages/session/investigatorForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="assign-investigator"  path="/WEB-INF/pages/session/assignInvestigatorForm.jsp"/>
+            <forward name="assign-investigator"  path="/WEB-INF/pages/session/investigatorForm.jsp"/>
             <forward name="assign-investigator-success" path="/WEB-INF/pages/session/investigatorSuccess.jsp"/>
         </action>
         <!-- User home page -->
