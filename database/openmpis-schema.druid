@@ -2,8 +2,8 @@
 
 <project version="2">
 	<attribs>
-		<attrib name="build">124</attrib>
-		<attrib name="serial">43750</attrib>
+		<attrib name="build">134</attrib>
+		<attrib name="serial">45052</attrib>
 	</attribs>
 	<database>
 		<attribs>
@@ -212,9 +212,19 @@ COMMIT;</attrib>
 					<elem>Added status to message</elem>
 				</row>
 				<row>
-					<elem>1.0</elem>
+					<elem>0.36</elem>
 					<elem>2009-02-25 13:12:55</elem>
 					<elem>Added user ID to message</elem>
+				</row>
+				<row>
+					<elem>0.37</elem>
+					<elem>2009-02-26 21:30:36</elem>
+					<elem>Changed photo and aged photo from varchar(30) to text</elem>
+				</row>
+				<row>
+					<elem>1.0</elem>
+					<elem>2009-03-05 13:57:53</elem>
+					<elem>Fixed columns in abductor</elem>
 				</row>
 			</list>
 		</revisions>
@@ -1834,7 +1844,7 @@ COMMIT;
 				<field>
 					<fieldAttribs>
 						<attribs>
-							<attrib name="17">true</attrib>
+							<attrib name="17">false</attrib>
 							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
 							<attrib name="339"/>
@@ -1882,7 +1892,7 @@ COMMIT;
 				<field>
 					<fieldAttribs>
 						<attribs>
-							<attrib name="17">false</attrib>
+							<attrib name="17">true</attrib>
 							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
 							<attrib name="339"/>
@@ -1906,10 +1916,10 @@ COMMIT;
 				<field>
 					<fieldAttribs>
 						<attribs>
-							<attrib name="17">true</attrib>
-							<attrib name="16">true</attrib>
+							<attrib name="17">false</attrib>
+							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
-							<attrib name="339">'../photo/unknown.png'</attrib>
+							<attrib name="339"/>
 							<attrib name="338">false</attrib>
 							<attrib name="340">false</attrib>
 						</attribs>
@@ -1923,7 +1933,7 @@ COMMIT;
 						<attrib name="onDelete">n</attrib>
 						<attrib name="onUpdate">n</attrib>
 						<attrib name="refTable">0</attrib>
-						<attrib name="type">19918</attrib>
+						<attrib name="type">403</attrib>
 					</attribs>
 					<modsConfig/>
 				</field>
@@ -1931,9 +1941,9 @@ COMMIT;
 					<fieldAttribs>
 						<attribs>
 							<attrib name="17">false</attrib>
-							<attrib name="16">true</attrib>
+							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
-							<attrib name="339">'../photo/unknown.png'</attrib>
+							<attrib name="339"/>
 							<attrib name="338">false</attrib>
 							<attrib name="340">false</attrib>
 						</attribs>
@@ -1947,7 +1957,7 @@ COMMIT;
 						<attrib name="onDelete">n</attrib>
 						<attrib name="onUpdate">n</attrib>
 						<attrib name="refTable">0</attrib>
-						<attrib name="type">19918</attrib>
+						<attrib name="type">403</attrib>
 					</attribs>
 					<modsConfig/>
 				</field>
@@ -2590,7 +2600,7 @@ COMMIT;
 				<field>
 					<fieldAttribs>
 						<attribs>
-							<attrib name="17">true</attrib>
+							<attrib name="17">false</attrib>
 							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
 							<attrib name="339"/>
@@ -3550,10 +3560,10 @@ COMMIT;
 				<field>
 					<fieldAttribs>
 						<attribs>
-							<attrib name="17">true</attrib>
-							<attrib name="16">true</attrib>
+							<attrib name="17">false</attrib>
+							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
-							<attrib name="339">'../photo/unknown.png'</attrib>
+							<attrib name="339"/>
 							<attrib name="338">false</attrib>
 							<attrib name="340">false</attrib>
 						</attribs>
@@ -3567,7 +3577,7 @@ COMMIT;
 						<attrib name="onDelete">n</attrib>
 						<attrib name="onUpdate">n</attrib>
 						<attrib name="refTable">0</attrib>
-						<attrib name="type">19918</attrib>
+						<attrib name="type">403</attrib>
 					</attribs>
 					<modsConfig/>
 				</field>
@@ -3575,9 +3585,9 @@ COMMIT;
 					<fieldAttribs>
 						<attribs>
 							<attrib name="17">false</attrib>
-							<attrib name="16">true</attrib>
+							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
-							<attrib name="339">'../photo/unknown.png'</attrib>
+							<attrib name="339"/>
 							<attrib name="338">false</attrib>
 							<attrib name="340">false</attrib>
 						</attribs>
@@ -3591,7 +3601,7 @@ COMMIT;
 						<attrib name="onDelete">n</attrib>
 						<attrib name="onUpdate">n</attrib>
 						<attrib name="refTable">0</attrib>
-						<attrib name="type">19918</attrib>
+						<attrib name="type">403</attrib>
 					</attribs>
 					<modsConfig/>
 				</field>
@@ -4075,7 +4085,7 @@ COMMIT;
 					<fieldAttribs>
 						<attribs>
 							<attrib name="17">false</attrib>
-							<attrib name="16">true</attrib>
+							<attrib name="16">false</attrib>
 							<attrib name="15">false</attrib>
 							<attrib name="339"/>
 							<attrib name="338">false</attrib>

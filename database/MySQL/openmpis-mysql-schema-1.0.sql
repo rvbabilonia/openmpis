@@ -1,7 +1,7 @@
 -- ======================================================================
 -- ===   Sql Script for Database : OpenMPIS
 -- ===
--- === Build : 124
+-- === Build : 134
 -- ======================================================================
 
 BEGIN WORK;
@@ -33,11 +33,11 @@ CREATE TABLE abductor
     race             int2          not null default 0,
     eyeColor         int2          not null default 0,
     hairColor        int2          not null default 0,
-    marks            text          not null,
+    marks            text,
     personalEffects  text,
-    remarks          text,
-    photo            varchar(30)   unique not null default '../photo/unknown.png',
-    agedPhoto        varchar(30)   unique default '../photo/unknown.png',
+    remarks          text          not null,
+    photo            text,
+    agedPhoto        text,
     codisID          varchar(30)   unique,
     afisID           varchar(30)   unique,
     dentalID         varchar(30)   unique,
@@ -92,7 +92,7 @@ CREATE TABLE person
     status               int2          not null default 0,
     type                 int2          not null,
     firstName            varchar(30),
-    nickname             varchar(30)   not null,
+    nickname             varchar(30),
     middleName           varchar(30),
     lastName             varchar(30),
     birthMonth           int2,
@@ -132,8 +132,8 @@ CREATE TABLE person
     institutionCountry   varchar(30),
     institutionEmail     varchar(60),
     institutionNumber    varchar(30),
-    photo                varchar(30)   unique not null default '../photo/unknown.png',
-    agedPhoto            varchar(30)   unique default '../photo/unknown.png',
+    photo                text,
+    agedPhoto            text,
     codisID              varchar(30)   unique,
     afisID               varchar(30)   unique,
     dentalID             varchar(30)   unique,
@@ -163,7 +163,7 @@ CREATE TABLE relative
     city        varchar(30)   not null,
     province    varchar(30)   not null,
     country     varchar(30)   not null,
-    email       varchar(60)   unique,
+    email       varchar(60),
     number      varchar(30)   unique not null,
 
     primary key(id)
