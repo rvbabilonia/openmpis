@@ -15,7 +15,7 @@
         <meta name="keywords" content="missing, filipino, person, openmpis"/>
         <meta name="description" content="This is the Web page for the OpenMPIS."/>
         <meta name="robots" content="all"/>
-        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <bean:message key="user.title"/>
     </head>
@@ -43,15 +43,21 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${operation eq 'add'}">
-                                <bean:message key="user.content.created" arg0="${user.username}" arg1="${user.id}" arg2="${user.date}"/>
+                            <c:when test="${(person.type == 1) || (person.type == 2)}">
+                                <bean:message key="case.content.created.person" arg0="${person.id}" arg1="${person.date}"/>
+                                <bean:message key="case.content.created.relative" arg0="${person.relativeId}"/>
+                                <bean:message key="case.content.created.abductor" arg0="${person.abductorId}"/>
+                                <bean:message key="case.content.created.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
                             </c:when>
-                            <c:when test="${operation eq 'edit'}">
-                                <bean:message key="user.content.updated" arg0="${username}"/>
+                            <c:when test="${person.type > 4}">
+                                <bean:message key="case.content.created.person" arg0="${person.id}" arg1="${person.date}"/>
+                                <bean:message key="case.content.created.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
                             </c:when>
-                            <c:when test="${operation eq 'delete'}">
-                                <bean:message key="user.content.deleted" arg0="${username}"/>
-                            </c:when>
+                            <c:otherwise>
+                                <bean:message key="case.content.created.person" arg0="${person.id}" arg1="${person.date}"/>
+                                <bean:message key="case.content.created.relative" arg0="${person.relativeId}"/>
+                                <bean:message key="case.content.created.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                            </c:otherwise>
                         </c:choose>
                     </p>
                 </div>

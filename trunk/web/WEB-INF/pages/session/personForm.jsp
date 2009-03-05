@@ -92,8 +92,8 @@
                         </c:if>
                         <c:if test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
                             <p class="contentclass">
-                                <html:img styleClass="photoclass" src="${personForm.photo eq null ? 'photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
-                                <html:img styleClass="photoclass" src="${personForm.agedPhoto eq null ? 'photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
+                                <html:img styleClass="photoclass" src="${personForm.photo == null ? 'photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
+                                <html:img styleClass="photoclass" src="${personForm.agedPhoto == null ? 'photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
                             </p>
                         </c:if>
                         <p class="contentclass">
@@ -564,7 +564,7 @@
                         <c:if test="${personForm.abductorId > 0}">
                             <p class="contentclass">
                                 <label id="abductoridlabel" class="labelclass">
-                                    <bean:message key="label.relative.id"/>
+                                    <bean:message key="label.abductor.id"/>
                                 </label>
                                 <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorId}</html:link>
                             </p>
@@ -577,6 +577,12 @@
                                 <html:link action="viewUser.do?action=viewUser" paramName="personForm" paramId="id" paramProperty="investigatorId">${personForm.investigatorId}</html:link>
                             </p>
                         </c:if>
+                        <p class="contentclass">
+                            <label id="progresslabel" class="labelclass">
+                                <bean:message key="label.progress"/>
+                            </label>
+                            <html:link action="viewProgress.do?action=list" paramName="personForm" paramId="id" paramProperty="id">${reportcount}</html:link>
+                        </p>
                         <p class="contentclass">
                             <c:if test="${currentuser.groupId == 1}">
                                 <c:choose>
