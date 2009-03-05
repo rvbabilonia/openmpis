@@ -776,7 +776,9 @@ public class CaseAction extends DispatchAction {
             InvestigatorForm investigatorForm = (InvestigatorForm) form;
             Person person = personService.getPersonById(Integer.parseInt(request.getAttribute("personid").toString()));
 
-            investigatorForm.setId(person.getInvestigatorId());
+            if (person.getInvestigatorId() != null) {
+                investigatorForm.setId(person.getInvestigatorId());
+            }
 
             return mapping.findForward(Constants.ASSIGN_INVESTIGATOR);
         } else {

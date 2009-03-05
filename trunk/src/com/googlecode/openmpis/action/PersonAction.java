@@ -39,20 +39,14 @@ import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Person;
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.PersonForm;
-import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.ReportDAOImpl;
-import com.googlecode.openmpis.persistence.ibatis.dao.impl.RelativeDAOImpl;
-import com.googlecode.openmpis.persistence.ibatis.service.AbductorService;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
 import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
-import com.googlecode.openmpis.persistence.ibatis.service.RelativeService;
 import com.googlecode.openmpis.persistence.ibatis.service.ReportService;
-import com.googlecode.openmpis.persistence.ibatis.service.impl.AbductorServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
-import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.ReportServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
@@ -60,16 +54,15 @@ import com.googlecode.openmpis.util.Validator;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
-import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
 
 /**
  * The PersonAction class provides the methods to list, add, edit, delete and view
@@ -85,17 +78,9 @@ public class PersonAction extends DispatchAction {
      */
     private PersonService personService = new PersonServiceImpl(new PersonDAOImpl());
     /**
-     * The relative service
-     */
-    private RelativeService relativeService = new RelativeServiceImpl(new RelativeDAOImpl());
-    /**
      * The report service
      */
     private ReportService reportService = new ReportServiceImpl(new ReportDAOImpl());
-    /**
-     * The abductor service
-     */
-    private AbductorService abductorService = new AbductorServiceImpl(new AbductorDAOImpl());
     /**
      * The log service
      */
@@ -182,79 +167,8 @@ public class PersonAction extends DispatchAction {
                 // Check if person is unique
                 if (personService.isUniquePerson(checker)) {
 
-                    // Process uploaded photos
-                    FormFile photoFile = personForm.getPhotoFile();
-                    FormFile agedPhotoFile = personForm.getAgedPhotoFile();
-
-                    // Set default context-relative photo filename
-                    String contextUnknownPhotoFilename = "photo/unknown.png";
-                    String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
-                    String contextAgedPhotoFilename = contextUnknownPhotoFilename;
-
-                    // Split the filename to get the extension name
-                    if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
-                        String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
-                        String extensionName = tokens[1];
-                        tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
-                        extensionName = tokens[1];
-
-                        // Create directories for person
-                        String directoryName = createDirectoryName(personForm.getNickname());
-
-                        // Calculate age
-                        // TODO what if birth date is unknown?
-                        int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
-
-                        // Create context-relative directories
-                        String contextPhotoDirectory = "photo/" + directoryName;
-                        String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
-                        String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
-
-                        // Create absolute directories
-                        String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
-                        String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
-                        String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
-                        File photoDirectory = new File(absolutePhotoDirectory);
-                        File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
-                        File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
-                        if (!photoDirectory.exists()) {
-                            photoDirectory.mkdir();
-                            defaultPhotoDirectory.mkdir();
-                            agedPhotoDirectory.mkdir();
-                        } else {
-                            if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
-                                defaultPhotoDirectory.mkdir();
-                                agedPhotoDirectory.mkdir();
-                            }
-                        }
-
-                        // Prepare filenames and upload photo
-                        String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
-                        contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
-                        File file = new File(absoluteDefaultPhotoFilename);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(photoFile.getFileData());
-                        fos.close();
-                        fos.flush();
-                        if (agedPhotoFile.getFileName().length() > 0) {
-                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
-                            contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
-                            file = new File(absoluteAgedPhotoFilename);
-                            fos = new FileOutputStream(file);
-                            fos.write(photoFile.getFileData());
-                            fos.close();
-                            fos.flush();
-                        }
-                    }
-
                     // Insert person
                     Person person = new Person();
-                    person.setPhoto(contextDefaultPhotoFilename);
-                    if (agedPhotoFile.getFileName().length() > 0) {
-                        person.setAgedPhoto(contextAgedPhotoFilename);
-                    } else {
-                        person.setAgedPhoto(contextUnknownPhotoFilename);
-                    }
                     person.setStatus(personForm.getStatus());
                     person.setType(personForm.getType());
                     person.setFirstName(firstName);
@@ -316,6 +230,86 @@ public class PersonAction extends DispatchAction {
                     int generatedId = personService.insertPerson(person);
 
                     if (generatedId > 0) {
+
+                        // Process uploaded photos
+                        FormFile photoFile = personForm.getPhotoFile();
+                        FormFile agedPhotoFile = personForm.getAgedPhotoFile();
+
+                        // Split the filename to get the extension name
+                        if ((photoFile.getFileName().length() > 0) ||
+                                (agedPhotoFile.getFileName().length() > 0)) {
+
+                            // Set default context-relative photo filename
+                            String contextUnknownPhotoFilename = "photo/unknown.png";
+                            String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
+                            String contextAgedPhotoFilename = contextUnknownPhotoFilename;
+
+                            String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
+                            String extensionName = tokens[1];
+                            if (agedPhotoFile.getFileName().length() > 0) {
+                                tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                                extensionName = tokens[1];
+                            }
+
+                            // Create directories for person
+                            String directoryName = createDirectoryName(generatedId);
+
+                            // Calculate age
+                            // TODO what if birth date is unknown?
+                            int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
+
+                            // Create context-relative directories
+                            String contextPhotoDirectory = "photo/" + directoryName;
+                            String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
+                            String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
+
+                            // Create absolute directories
+                            String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
+                            String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
+                            String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
+                            File photoDirectory = new File(absolutePhotoDirectory);
+                            File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
+                            File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
+                            if (!photoDirectory.exists()) {
+                                photoDirectory.mkdir();
+                                defaultPhotoDirectory.mkdir();
+                                agedPhotoDirectory.mkdir();
+                            } else {
+                                if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
+                                    defaultPhotoDirectory.mkdir();
+                                    agedPhotoDirectory.mkdir();
+                                }
+                            }
+
+                            // Prepare filenames and upload photo
+                            String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                            contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                            File file = new File(absoluteDefaultPhotoFilename);
+                            FileOutputStream fos = new FileOutputStream(file);
+                            fos.write(photoFile.getFileData());
+                            fos.close();
+                            fos.flush();
+                            if (agedPhotoFile.getFileName().length() > 0) {
+                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                                contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
+                                file = new File(absoluteAgedPhotoFilename);
+                                fos = new FileOutputStream(file);
+                                fos.write(photoFile.getFileData());
+                                fos.close();
+                                fos.flush();
+                            }
+
+                            person.setId(generatedId);
+                            person.setPhoto(contextDefaultPhotoFilename);
+                            if (agedPhotoFile.getFileName().length() > 0) {
+                                person.setAgedPhoto(contextAgedPhotoFilename);
+                            } else {
+                                person.setAgedPhoto(contextUnknownPhotoFilename);
+                            }
+
+                            personService.updatePerson(person);
+                        }
+
                         // Log person creation event
                         Log addLog = new Log();
                         if ((!firstName.isEmpty()) && (!lastName.isEmpty())) {
@@ -327,18 +321,16 @@ public class PersonAction extends DispatchAction {
                         logService.insertLog(addLog);
                         logger.info(addLog.toString());
 
-                        // Check if person is abandoned, throwaway or unidentified
                         if (person.getType() > 4) {
-                            // Return person and operation type
+                            // Check if person is abandoned, throwaway or unidentified
+                            // Return person ID
                             request.setAttribute("personid", generatedId);
-                            //request.setAttribute("operation", "assignInvestigator");
 
                             return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             // Check if missing
-                            // Return person and operation type
+                            // Return person ID
                             request.setAttribute("personid", generatedId);
-                            //request.setAttribute("operation", "add");
 
                             return mapping.findForward(Constants.ADD_RELATIVE);
                         }
@@ -393,7 +385,9 @@ public class PersonAction extends DispatchAction {
         Person person = (Person) personService.getPersonById(id);
 
         // Return person
-        personForm.setPhoto(person.getPhoto());
+        if (person.getPhoto() != null) {
+            personForm.setPhoto(person.getPhoto());
+        }
         if (person.getAgedPhoto() != null) {
             personForm.setAgedPhoto(person.getAgedPhoto());
         }
@@ -424,9 +418,11 @@ public class PersonAction extends DispatchAction {
         personForm.setMarks(person.getMarks());
         personForm.setPersonalEffects(person.getPersonalEffects());
         personForm.setRemarks(person.getRemarks());
-        personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
-        personForm.setDayMissingOrFound(person.getDayMissingOrFound());
-        personForm.setYearMissingOrFound(person.getYearMissingOrFound());
+        // TODO what if birth date is unknown?
+            personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
+            personForm.setDayMissingOrFound(person.getDayMissingOrFound());
+            personForm.setYearMissingOrFound(person.getYearMissingOrFound());
+            personForm.setDaysMissing(getDaysMissing(person.getMonthMissingOrFound() - 1, person.getDayMissingOrFound(), person.getYearMissingOrFound()));
         if (person.getMissingFromCity() != null) {
             personForm.setMissingFromCity(person.getMissingFromCity());
         }
@@ -565,14 +561,16 @@ public class PersonAction extends DispatchAction {
                     String contextAgedPhotoFilename = contextUnknownPhotoFilename;
 
                     // Split the filename to get the extension name
-                    if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
+                    if (photoFile.getFileName().length() > 0) {
                         String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
                         String extensionName = tokens[1];
-                        tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
-                        extensionName = tokens[1];
+                        if (agedPhotoFile.getFileName().length() > 0) {
+                            tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                            extensionName = tokens[1];
+                        }
 
                         // Create directories for person
-                        String directoryName = createDirectoryName(personForm.getNickname());
+                        String directoryName = createDirectoryName(personForm.getId());
 
                         // Calculate age
                         // TODO what if birth date is unknown?
@@ -620,10 +618,10 @@ public class PersonAction extends DispatchAction {
                         }
                     }
 
-                    // Insert person
+                    // Update person
                     Person person = new Person();
                     person.setId(personForm.getId());
-                    if (agedPhotoFile.getFileName().length() > 0) {
+                    if (photoFile.getFileName().length() > 0) {
                         person.setPhoto(contextDefaultPhotoFilename);
                     } else {
                         person.setPhoto(personForm.getPhoto());
@@ -707,9 +705,9 @@ public class PersonAction extends DispatchAction {
                         logService.insertLog(editLog);
                         logger.info(editLog.toString());
 
-                        // Check if person is abandoned, throwaway or unidentified
                         if (person.getType() > 4) {
-                            // Return person ID
+                            // Check if person is abandoned, throwaway or unidentified
+                            // Return person ID and investigator ID
                             request.setAttribute("personid", person.getId());
                             request.setAttribute("investigatorid", person.getInvestigatorId());
 
@@ -730,8 +728,8 @@ public class PersonAction extends DispatchAction {
                         return mapping.findForward(Constants.FAILURE);
                     }
                 } else {
-                    // Return duplicate personname error
-                    errors.add("person", new ActionMessage("error.person.duplicate"));
+                    // Return duplicate person error
+                    errors.add("nickname", new ActionMessage("error.person.duplicate"));
                     saveErrors(request, errors);
 
                     logger.error("Duplicate person.");
@@ -881,6 +879,140 @@ public class PersonAction extends DispatchAction {
     }
     }
      */
+
+    /**
+     * Prints the person's poster in PDF file.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward printPoster(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // Set the paper size and margins
+        Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
+
+        // Create the PDF writer
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, baos);
+
+        // Retrieve the person
+        int id = 0;
+        try {
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id"));
+            } else {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        }
+        Person person = (Person) personService.getPersonById(id);
+
+        // Process the photo
+        String tokens[] = person.getPhoto().split("\\/");
+        String defaultPhotoBasename = "";
+        for (int i = 0; i < tokens.length - 1; i++) {
+            defaultPhotoBasename += tokens[i] + File.separator;
+        }
+        defaultPhotoBasename += tokens[tokens.length - 1];
+        String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+
+        // Add some meta information to the document
+        document.addTitle("Poster");
+        document.addAuthor("OpenMPIS");
+        document.addSubject("Poster for " + person.getNickname());
+        document.addKeywords("OpenMPIS, missing, found, unidentified");
+        document.addProducer();
+        document.addCreationDate();
+        document.addCreator("OpenMPIS version " + Constants.VERSION);
+
+        // Open the document for writing
+        document.open();
+        // Add the banner
+        if (person.getType() > 4) {
+            Paragraph foundParagraph = new Paragraph("F O U N D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
+            foundParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(foundParagraph);
+        } else {
+            Paragraph missingParagraph = new Paragraph("M I S S I N G", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
+            missingParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(missingParagraph);
+        }
+        // Add date missing or found
+        Paragraph blackParagraph = new Paragraph(getResources(request).getMessage("month." + person.getMonthMissingOrFound()) + " " + person.getDayMissingOrFound() + ", " + person.getYearMissingOrFound(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
+        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(blackParagraph);
+        // Add missing from location
+        if (person.getType() < 5) {
+            blackParagraph = new Paragraph(person.getMissingFromCity() + ", " + person.getMissingFromProvince(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+        }
+        // Add name
+        Paragraph redParagraph;
+        if (!person.getNickname().isEmpty()) {
+            redParagraph = new Paragraph(person.getFirstName() + " \"" + person.getNickname() + "\" " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+        } else {
+            redParagraph = new Paragraph(person.getFirstName() + " " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+        }
+        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(redParagraph);
+        // Add the photo
+        Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+        image.scaleAbsolute(200, 300);
+        image.setAlignment(Image.ALIGN_CENTER);
+        document.add(image);
+        // Add description
+        redParagraph = new Paragraph("Description", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(redParagraph);
+        float[] widths = {0.5f, 0.5f};
+        PdfPTable pdfptable = new PdfPTable(widths);
+        pdfptable.setWidthPercentage(100);
+        if (person.getType() < 5) {
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.date.birth") + ": " + getResources(request).getMessage("month." + person.getBirthMonth()) + " " + person.getBirthDay() + ", " + person.getBirthYear(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.address.city") + ": " + person.getCity(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        }
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.sex") + ": " + getResources(request).getMessage("sex." + person.getSex()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.hair") + ": " + getResources(request).getMessage("color.hair." + person.getHairColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.height") + ": " + person.getFeet() + "' " + person.getInches() + "\"", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.eye") + ": " + getResources(request).getMessage("color.eye." + person.getEyeColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.weight") + ": " + person.getWeight() + " " + getResources(request).getMessage("label.weight.lbs"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.race") + ": " + getResources(request).getMessage("race." + person.getRace()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        document.add(pdfptable);
+        // Add circumstance
+        redParagraph = new Paragraph(getResources(request).getMessage("label.circumstance"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(redParagraph);
+        blackParagraph = new Paragraph(person.getCircumstance(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL));
+        blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+        document.add(blackParagraph);
+        // Add line
+        blackParagraph = new Paragraph("------------------------------------------------------------------------------");
+        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(blackParagraph);
+        // Add contact
+        blackParagraph = new Paragraph(getResources(request).getMessage("global.contact"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL));
+        blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+        document.add(blackParagraph);
+        document.close();
+
+        // Set the response to return the poster (PDF file)
+        response.setContentType("application/pdf");
+        response.setContentLength(baos.size());
+        response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
+
+        // Close the output stream
+        baos.writeTo(response.getOutputStream());
+        response.getOutputStream().flush();
+
+        return null;
+    }
+
     /**
      * Validates the inputs from the person form.
      *
@@ -903,6 +1035,7 @@ public class PersonAction extends DispatchAction {
         String lastName = personForm.getLastName();
         int birthDay = personForm.getBirthDay();
         int birthMonth = personForm.getBirthMonth() - 1;
+        int birthYear = personForm.getBirthYear();
         String street = personForm.getStreet();
         String city = personForm.getCity();
         String province = personForm.getProvince();
@@ -911,6 +1044,7 @@ public class PersonAction extends DispatchAction {
         String personalEffects = personForm.getPersonalEffects();
         int dayMissingOrFound = personForm.getDayMissingOrFound();
         int monthMissingOrFound = personForm.getMonthMissingOrFound() - 1;
+        int yearMissingOrFound = personForm.getYearMissingOrFound();
 
         String missingFromCity = personForm.getMissingFromCity();
         String missingFromProvince = personForm.getMissingFromProvince();
@@ -949,27 +1083,27 @@ public class PersonAction extends DispatchAction {
                         (photoFile.getContentType().equals("image/gif")))) {
                     errors.add("photofile", new ActionMessage("error.photo.invalid"));
                 }
-
             }
         }
 
-        if ((agedPhotoFile.getFileName().length() > 1) && ((!photoFile.getContentType().equals("image/png")) ||
-                (!photoFile.getContentType().equals("image/jpeg")) ||
-                (!photoFile.getContentType().equals("image/gif")))) {
-            errors.add("photofile", new ActionMessage("error.photo.invalid"));
+        if ((agedPhotoFile.getFileName().length() > 1) && ((!agedPhotoFile.getContentType().equals("image/png")) ||
+                (!agedPhotoFile.getContentType().equals("image/jpeg")) ||
+                (!agedPhotoFile.getContentType().equals("image/gif")))) {
+            errors.add("agedphotofile", new ActionMessage("error.photo.invalid"));
         }
 
         if ((firstName.length() > 1) && (!validator.isValidFirstName(firstName))) {
             errors.add("firstname", new ActionMessage("error.firstname.invalid"));
         }
 
-        if (nickname.length() < 1) {
-            errors.add("nickname", new ActionMessage("error.nickname.required"));
-        } else {
-            if (!validator.isValidFirstName(nickname)) {
-                errors.add("nickname", new ActionMessage("error.nickname.invalid"));
+        if (firstName.length() < 1) {
+            if (nickname.length() < 1) {
+                errors.add("nickname", new ActionMessage("error.nickname.required"));
+            } else {
+                if (!validator.isValidFirstName(nickname)) {
+                    errors.add("nickname", new ActionMessage("error.nickname.invalid"));
+                }
             }
-
         }
 
         if ((middleName.length() > 1) && (!validator.isValidLastName(middleName))) {
@@ -980,11 +1114,11 @@ public class PersonAction extends DispatchAction {
             errors.add("lastname", new ActionMessage("error.lastname.invalid"));
         }
 
-        if (birthMonth > calendar.get(Calendar.MONTH)) {
+        if (birthMonth > calendar.get(Calendar.MONTH) && (birthYear == calendar.get(Calendar.YEAR))) {
             errors.add("birthdate", new ActionMessage("error.birthmonth.invalid"));
         }
 
-        if ((birthMonth == calendar.get(Calendar.MONTH)) && (birthDay > calendar.get(Calendar.DATE))) {
+        if ((birthMonth == calendar.get(Calendar.MONTH)) && (birthDay > calendar.get(Calendar.DATE)) && (birthYear == calendar.get(Calendar.YEAR))) {
             errors.add("birthdate", new ActionMessage("error.birthday.invalid"));
         }
 
@@ -1012,11 +1146,11 @@ public class PersonAction extends DispatchAction {
             errors.add("personaleffects", new ActionMessage("error.personaleffects.required"));
         }
 
-        if (monthMissingOrFound > calendar.get(Calendar.MONTH)) {
+        if ((monthMissingOrFound > calendar.get(Calendar.MONTH)) && (yearMissingOrFound == calendar.get(Calendar.YEAR))) {
             errors.add("datemissingorfound", new ActionMessage("error.monthmissingorfound.invalid"));
         }
 
-        if ((monthMissingOrFound == calendar.get(Calendar.MONTH)) && (dayMissingOrFound > calendar.get(Calendar.DATE))) {
+        if ((monthMissingOrFound == calendar.get(Calendar.MONTH)) && (dayMissingOrFound > calendar.get(Calendar.DATE)) && (yearMissingOrFound == calendar.get(Calendar.YEAR))) {
             errors.add("datemissingorfound", new ActionMessage("error.daymissingorfound.invalid"));
         }
 
@@ -1026,7 +1160,6 @@ public class PersonAction extends DispatchAction {
             if (!validator.isValidCity(missingFromCity)) {
                 errors.add("missingfromcity", new ActionMessage("error.city.invalid"));
             }
-
         }
 
         if (missingFromProvince.length() < 1) {
@@ -1035,7 +1168,6 @@ public class PersonAction extends DispatchAction {
             if (!validator.isValidProvince(missingFromProvince)) {
                 errors.add("missingfromprovince", new ActionMessage("error.province.invalid"));
             }
-
         }
 
         if ((possibleCity.length() > 1) && (!validator.isValidCity(possibleCity))) {
@@ -1116,11 +1248,6 @@ public class PersonAction extends DispatchAction {
                     false;
         }
 
-        Iterator i = errors.get();
-        while (i.hasNext()) {
-            System.out.println("errors: " + i.next());
-        }
-
         return isValid;
     }
 
@@ -1135,108 +1262,18 @@ public class PersonAction extends DispatchAction {
     }
 
     /**
-     * Prints the person's poster in PDF file.
-     *
-     * @param mapping       the ActionMapping used to select this instance
-     * @param form          the optional ActionForm bean for this request
-     * @param request       the HTTP Request we are processing
-     * @param response      the HTTP Response we are processing
-     * @return              the forwarding instance
-     * @throws java.lang.Exception
-     */
-    public ActionForward printPoster(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // Set the paper size and margins
-        Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
-
-        // Create the PDF writer
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PdfWriter.getInstance(document, baos);
-
-        // Retrieve the person
-        int id = 0;
-        try {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id"));
-            } else {
-                return mapping.findForward(Constants.LIST_PERSON);
-            }
-        } catch (NumberFormatException nfe) {
-            return mapping.findForward(Constants.LIST_PERSON);
-        }
-        Person person = (Person) personService.getPersonById(id);
-
-        // Process the photo
-        String tokens[] = person.getPhoto().split("\\/");
-        String defaultPhotoBasename = "";
-        for (int i = 0; i < tokens.length - 1; i++) {
-            defaultPhotoBasename += tokens[i] + File.separator;
-        }
-        defaultPhotoBasename += tokens[tokens.length - 1];
-        String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
-
-        // Add some meta information to the document
-        document.addTitle("Poster");
-        document.addAuthor("OpenMPIS");
-        document.addSubject("Poster for " + person.getNickname());
-        document.addKeywords("OpenMPIS, missing, found, unidentified");
-        document.addProducer();
-        document.addCreationDate();
-        document.addCreator("OpenMPIS version " + Constants.VERSION);
-
-        // Open the document for writing
-        document.open();
-
-        // Set the header
-        if (person.getType() > 4) {
-            Paragraph foundParagraph = new Paragraph("F O U N D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(0, 0, 0)));
-            foundParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(foundParagraph);
-        } else {
-            Paragraph missingParagraph = new Paragraph("M I S S I N G", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(0, 0, 0)));
-            missingParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(missingParagraph);
-        }
-
-        Image image = Image.getInstance(absoluteDefaultPhotoFilename);
-        image.scaleAbsolute(200, 300);
-        image.setAlignment(Image.ALIGN_CENTER);
-        document.add(image);
-        Paragraph nameParagraph = new Paragraph(person.getFirstName() + " '" + person.getNickname() + "' " + person.getLastName());
-        nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(nameParagraph);
-        if (person.getRelativeId() != null) {
-            document.add(new Paragraph(person.getRelativeId()));
-            // TODO other information, refer to sample FBI posters
-        }
-        document.close();
-
-        // Set the response to return the poster (PDF file)
-        response.setContentType("application/pdf");
-        response.setContentLength(baos.size());
-        response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
-
-        // Close the output stream
-        baos.writeTo(response.getOutputStream());
-        response.getOutputStream().flush();
-
-        return null;
-    }
-
-    /**
      * Creates a unique directory name for the person's uploaded photos.
      * Adapted from http://snipplr.com/view/4321/generate-md5-hash-from-string/.
      *
-     * @param nickname      the nickname of the person on which the directory name is based
+     * @param id            the id of the person on which the directory name is based
      * @return              the 32 alphanumeric-equivalent of the nickname
      * @throws java.security.NoSuchAlgorithmException
      */
-    private String createDirectoryName(
-            String nickname) throws NoSuchAlgorithmException {
+    private String createDirectoryName(Integer id) throws NoSuchAlgorithmException {
         StringBuffer uniqueDirectoryName = new StringBuffer();
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         md5.reset();
-        md5.update(nickname.getBytes());
+        md5.update(id.byteValue());
         byte digest[] = md5.digest();
         for (int i = 0; i < digest.length; i++) {
             uniqueDirectoryName.append(Integer.toHexString(0xFF & digest[i]));
@@ -1264,5 +1301,23 @@ public class PersonAction extends DispatchAction {
         }
 
         return age;
+    }
+
+    /**
+     * Calculates the number of days missing.
+     *
+     * @param birthMonth    the person's birth month
+     * @param birthDay      the person's birth day
+     * @param birthYear     the person's birth year
+     * @return              the number of days missing
+     */
+    private int getDaysMissing(int birthMonth, int birthDay, int birthYear) {
+        Calendar birthDate = Calendar.getInstance();
+        birthDate.set(birthYear, birthMonth, birthDay);
+        Calendar today = Calendar.getInstance();
+        long ms = today.getTimeInMillis() - birthDate.getTimeInMillis();
+        long days = ms / (1000 * 60 * 60 * 24);
+
+        return Long.valueOf(days).intValue();
     }
 }

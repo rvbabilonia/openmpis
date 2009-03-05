@@ -18,6 +18,7 @@
 package com.googlecode.openmpis.action;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,7 +46,6 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl
 import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
-import java.util.List;
 
 /**
  * The RelativeAction class provides the methods to list, add, edit, delete and view
@@ -100,8 +100,14 @@ public class RelativeAction extends DispatchAction {
 
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
-            List<Relative> relativeList = relativeService.listRelatives();
+            List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
+            request.setAttribute("action", request.getParameter("action"));
+            if (request.getAttribute("personid") != null) {
+                request.setAttribute("personid", request.getAttribute("personid"));
+            } else {
+                request.setAttribute("personid", request.getParameter("personid"));
+            }
 
             if (request.getAttribute("relativeid") != null) {
                 RelativeForm relativeForm = (RelativeForm) form;
@@ -153,8 +159,7 @@ public class RelativeAction extends DispatchAction {
         if (currentUser.getGroupId() == 1) {
             RelativeForm relativeForm = (RelativeForm) form;
             ActionMessages errors = new ActionMessages();
-            request.setAttribute("action", request.getParameter("action"));
-            List<Relative> relativeList = relativeService.listRelatives();
+            List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
 
             // Check if relative is selected from list
@@ -165,11 +170,31 @@ public class RelativeAction extends DispatchAction {
                 person.setRelativeId(relativeForm.getId());
                 person.setRelationToRelative(relativeForm.getRelationToRelative());
                 personService.updatePersonRelative(person);
-                request.setAttribute("personid", request.getParameter("personid"));
 
+                // Log relative assignment event
+                Log addLog = new Log();
+                addLog.setLog("Relative " + relativeForm.getId() + " was attributed to person " + person.getId() + ".");
+                addLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                logService.insertLog(addLog);
+                logger.info(addLog.toString());
+
+                person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
                 //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
-                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                if ((person.getType() == 1) || (person.getType() == 2)) {
+                    // Check if abducted by a family member or kidnappers
+                    // Return person ID
+                    request.setAttribute("personid", person.getId());
+                    request.setAttribute("abductorid", person.getAbductorId());
+
+                    return mapping.findForward(Constants.ADD_ABDUCTOR);
+                } else {
+                    request.setAttribute("personid", person.getId());
+
+                    //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                    return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                }
             } else {
+                request.setAttribute("action", request.getParameter("action"));
                 // Check if form is valid
                 if (isValidRelative(request, form)) {
                     Relative checker = new Relative();
@@ -180,7 +205,6 @@ public class RelativeAction extends DispatchAction {
                     checker.setFirstName(firstName);
                     checker.setMiddleName(middleName);
                     checker.setLastName(lastName);
-                    checker.setEmail(relativeForm.getEmail());
 
                     // Check if relative is unique
                     if (relativeService.isUniqueRelative(checker)) {
@@ -217,13 +241,26 @@ public class RelativeAction extends DispatchAction {
                             //relative.setId(generatedId);
                             //request.setAttribute("relative", relative);
                             //request.setAttribute("operation", "add");
-
+                            person = personService.getPersonById(generatedId);
                             //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
-                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                            if ((person.getType() == 1) || (person.getType() == 2)) {
+                                // Check if abducted by a family member or kidnappers
+                                // Return person ID
+                                request.setAttribute("personid", person.getId());
+                                request.setAttribute("abductorid", person.getAbductorId());
+
+                                return mapping.findForward(Constants.ADD_ABDUCTOR);
+                            } else {
+                                request.setAttribute("personid", person.getId());
+
+                                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                            }
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
                     } else {
+                        request.setAttribute("personid", request.getParameter("personid"));
+
                         // Return duplicate relative error
                         errors.add("firstname", new ActionMessage("error.relative.duplicate", firstName + " " + middleName + " " + lastName));
                         saveErrors(request, errors);
@@ -233,6 +270,8 @@ public class RelativeAction extends DispatchAction {
                         return mapping.findForward(Constants.ADD_RELATIVE_REDO);
                     }
                 } else {
+                    request.setAttribute("personid", request.getParameter("personid"));
+
                     // Return form validation errors
                     return mapping.findForward(Constants.ADD_RELATIVE_REDO);
                 }
@@ -267,14 +306,13 @@ public class RelativeAction extends DispatchAction {
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
             request.setAttribute("action", request.getParameter("action"));
-            List<Relative> relativeList = relativeService.listRelatives();
+            List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
-
 
             int personId = 0;
             try {
                 if (request.getParameter("personid") != null) {
-                    personId = Integer.parseInt(request.getParameter("id"));
+                    personId = Integer.parseInt(request.getParameter("personid"));
                     request.setAttribute("personid", personId);
                     Person person = personService.getPersonById(personId);
                     request.setAttribute("relativeid", person.getRelativeId());
@@ -343,7 +381,7 @@ public class RelativeAction extends DispatchAction {
             RelativeForm relativeForm = (RelativeForm) form;
             ActionMessages errors = new ActionMessages();
             request.setAttribute("action", request.getParameter("action"));
-            List<Relative> relativeList = relativeService.listRelatives();
+            List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
             request.setAttribute("personid", request.getParameter("personid"));
 
@@ -391,15 +429,28 @@ public class RelativeAction extends DispatchAction {
                             logService.insertLog(editLog);
                             logger.info(editLog.toString());
 
+                            person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
                             // Return relative and operation type
+                            if ((person.getType() == 1) || (person.getType() == 2)) {
+                                // Check if abducted by a family member or kidnappers
+                                // Return person ID
+                                request.setAttribute("personid", person.getId());
+                                request.setAttribute("abductorid", person.getAbductorId());
+
+                                return mapping.findForward(Constants.ADD_ABDUCTOR);
+                            } else {
+                                request.setAttribute("personid", person.getId());
+                                request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
+
+                                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+                            }
                             //request.setAttribute("relative", relative);
                             //request.setAttribute("operation", "edit");
-                            request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
+                            //request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
                             //System.out.println("editrelative investigator id attribute: " + request.getAttribute("investigatorid"));
                             //System.out.println("editrelative investigator id parameter: " + request.getParameter("investigatorid"));
 
                             //return mapping.findForward(Constants.EDIT_RELATIVE_SUCCESS);
-                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
