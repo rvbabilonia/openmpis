@@ -11,12 +11,8 @@
         <flushOnExecute statement="deleteAbductor"/>
         <flushInterval hours="24"/>
     </cacheModel>
-    
-    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getAbductorById" parameterClass="java.lang.Integer" resultClass="abductor" cacheModel="abductorCache">
-        <![CDATA[
-        SELECT
+
+    <sql id="abductorColumnsFragment">
         FIRSTNAME as firstName,
         NICKNAME as nickname,
         MIDDLENAME as middleName,
@@ -45,42 +41,28 @@
         AFISID as afisId,
         DENTALID as dentalId
         FROM ABDUCTOR
+    </sql>
+    
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getAbductorById" parameterClass="java.lang.Integer" resultClass="abductor" cacheModel="abductorCache">
+        SELECT
+        <include refid="abductorColumnsFragment"/>
+        <![CDATA[
         WHERE ID = #id#
         ]]>
     </select>
 
     <select id="getAllAbductors" parameterClass="java.lang.Integer" resultClass="abductor" cacheModel="abductorCache">
         SELECT
-        ID as id,
-        FIRSTNAME as firstName,
-        NICKNAME as nickname,
-        MIDDLENAME as middleName,
-        LASTNAME as lastName,
-        BIRTHMONTH as birthMonth,
-        BIRTHDAY as birthDay,
-        BIRTHYEAR as birthYear,
-        STREET as street,
-        CITY as city,
-        PROVINCE as province,
-        COUNTRY as country,
-        SEX as sex,
-        FEET as feet,
-        INCHES as inches,
-        WEIGHT as weight,
-        RELIGION as religion,
-        RACE as race,
-        EYECOLOR as eyeColor,
-        HAIRCOLOR as hairColor,
-        MARKS as marks,
-        PERSONALEFFECTS as personalEffects,
-        REMARKS as remarks,
-        PHOTO as photo,
-        AGEDPHOTO as agedPhoto,
-        CODISID as codisId,
-        AFISID as afisId,
-        DENTALID as dentalId
-        FROM ABDUCTOR
+        <include refid="abductorColumnsFragment"/>
         ORDER BY ID
+    </select>
+
+    <select id="listAllAbductors" parameterClass="java.lang.Integer" resultClass="abductor" cacheModel="abductorCache">
+        SELECT
+        <include refid="abductorColumnsFragment"/>
+        ORDER BY LASTNAME, FIRSTNAME
     </select>
 
     <select id="countAllAbductors" resultClass="java.lang.Integer" cacheModel="abductorCache">
