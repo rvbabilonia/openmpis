@@ -17,7 +17,11 @@
  */
 package com.googlecode.openmpis.form;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 
 /**
  * The AbductorForm class is used to represent an abductor.
@@ -140,13 +144,21 @@ public class AbductorForm extends ActionForm {
      */
     private String remarks;
     /**
-     * The photo of the person
+     * The filename of the photo of the person
      */
     private String photo;
     /**
-     * The optional age-progressed photo of the person
+     * The photo of the person
+     */
+    private FormFile photoFile;
+    /**
+     * The filename of the optional age-progressed photo of the person
      */
     private String agedPhoto;
+    /**
+     * The optional age-progressed photo of the person
+     */
+    private FormFile agedPhotoFile;
     /**
      * The optional DNA ID of the person
      */
@@ -167,6 +179,10 @@ public class AbductorForm extends ActionForm {
      * The user-inputted confirmation code
      */
     private int userCode;
+    /**
+     * The current age
+     */
+    private int age;
 
     /**
      * Gets the ID of the person.
@@ -796,6 +812,144 @@ public class AbductorForm extends ActionForm {
      */
     public void setUserCode(int userCode) {
         this.userCode = userCode;
+    }
+
+    /**
+     * Gets the uploaded optional age-progressed photo.
+     *
+     * @return              the uploaded optional age-progressed photo
+     */
+    public FormFile getAgedPhotoFile() {
+        return agedPhotoFile;
+    }
+
+    /**
+     * Sets the optional age-progressed photo.
+     *
+     * @param agedPhotoFile the optional age-progressed photo
+     */
+    public void setAgedPhotoFile(FormFile agedPhotoFile) {
+        this.agedPhotoFile = agedPhotoFile;
+    }
+
+    /**
+     * Gets the uploaded photo of the person.
+     *
+     * @return              the uploaded photo of the person
+     */
+    public FormFile getPhotoFile() {
+        return photoFile;
+    }
+
+    /**
+     * Sets the uploaded photo of the person.
+     *
+     * @param photoFile     the uploaded photo of the person
+     */
+    public void setPhotoFile(FormFile photoFile) {
+        this.photoFile = photoFile;
+    }
+
+    /**
+     * Gets the current age.
+     *
+     * @return              the current age
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
+     * Sets the current age.
+     *
+     * @param age           the current age
+     */
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public void reset(ActionMapping mapping, ServletRequest request) {
+        super.reset(mapping, request);
+
+        this.id = 0;
+        this.status = 0;
+        this.type = 0;
+        this.firstName = "";
+        this.nickname = "";
+        this.middleName = "";
+        this.lastName = "";
+        this.birthMonth = 1;
+        this.birthDay = 1;
+        this.birthYear = 1929;
+        this.street = "";
+        this.city = "";
+        this.province = "";
+        this.country = "";
+        this.sex = 0;
+        this.feet = 1;
+        this.inches = 0;
+        this.cm = 0;
+        this.weight = 0;
+        this.mass = 0;
+        this.religion = 0;
+        this.race = 0;
+        this.eyeColor = 0;
+        this.hairColor = 0;
+        this.relationToAbductor = 0;
+        this.marks = "";
+        this.personalEffects = "";
+        this.remarks = "";
+        this.photo = "";
+        this.photoFile = null;
+        this.agedPhoto = "";
+        this.agedPhotoFile = null;
+        this.codisId = "";
+        this.afisId = "";
+        this.dentalId = "";
+        this.age = 0;
+    }
+
+    @Override
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        super.reset(mapping, request);
+
+        this.id = 0;
+        this.status = 0;
+        this.type = 0;
+        this.firstName = "";
+        this.nickname = "";
+        this.middleName = "";
+        this.lastName = "";
+        this.birthMonth = 1;
+        this.birthDay = 1;
+        this.birthYear = 1929;
+        this.street = "";
+        this.city = "";
+        this.province = "";
+        this.country = "";
+        this.sex = 0;
+        this.feet = 1;
+        this.inches = 0;
+        this.cm = 0;
+        this.weight = 0;
+        this.mass = 0;
+        this.religion = 0;
+        this.race = 0;
+        this.eyeColor = 0;
+        this.hairColor = 0;
+        this.relationToAbductor = 0;
+        this.marks = "";
+        this.personalEffects = "";
+        this.remarks = "";
+        this.photo = "";
+        this.photoFile = null;
+        this.agedPhoto = "";
+        this.agedPhotoFile = null;
+        this.codisId = "";
+        this.afisId = "";
+        this.dentalId = "";
+        this.age = 0;
     }
 
     /**
