@@ -98,31 +98,54 @@
                             </p>
                         </c:when>
                         <c:otherwise>
-                            [fix layout]
-                            [${personcount}]
                             <div class="table">
                                 <c:forEach begin="0" end="${(personcount - (personcount % 4)) / 4}" step="1" var="i">
                                     <div class="row">
-                                        <c:forEach items="${personlist}" var="person" varStatus="personCount">
-                                            <c:forEach begin="1" end="1" step="1" var="j">
-                                                <div class="cell" style="width: 25%;">
-                                                    <c:url var="url" scope="page" value="/viewPerson.do">
-                                                        <c:param name="action" value="viewPerson"/>
-                                                        <c:param name="id" value="${person.id}"/>
-                                                    </c:url>
-                                                    <p style="text-align: center;">
-                                                        <html:link href="${fn:escapeXml(url)}">
-                                                            <html:img styleClass="photoclass" src="${person.photo}" alt="The person's photo" title="Photo"/>
-                                                        </html:link>
-                                                    </p>
-                                                    <p style="text-align: center;">
-                                                        <html:link href="${fn:escapeXml(url)}">${person.lastName}, ${person.firstName}</html:link>
-                                                    </p>
-                                                    <p style="text-align: center;">
-                                                        <bean:message key="type.${person.type}"/>
-                                                    </p>
-                                                </div>
-                                            </c:forEach>
+                                        <c:forEach begin="0" end="3" step="1" var="j">
+                                            <c:choose>
+                                                <c:when test="${personlist[(4 * i) + j].id != null}">
+                                                    <div class="cell" style="width: 25%;">
+                                                        <c:url var="url" scope="page" value="/viewPerson.do">
+                                                            <c:param name="action" value="viewPerson"/>
+                                                            <c:param name="id" value="${personlist[(4 * i) + j].id}"/>
+                                                        </c:url>
+                                                        <p style="text-align: center;">
+                                                            <html:link href="${fn:escapeXml(url)}">
+                                                                <html:img styleClass="photoclass" src="${personlist[(4 * i) + j].photo}" alt="The person's photo" title="Photo"/>
+                                                            </html:link>
+                                                        </p>
+                                                        <p style="text-align: center;">
+                                                            <c:choose>
+                                                                <c:when test="${personlist[(4 * i) + j].nickname eq ''}">
+                                                                    <html:link href="${fn:escapeXml(url)}">${personlist[(4 * i) + j].firstName} ${personlist[(4 * i) + j].lastName}</html:link>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <html:link href="${fn:escapeXml(url)}">${personlist[(4 * i) + j].firstName} "${personlist[(4 * i) + j].nickname}" ${personlist[(4 * i) + j].lastName}</html:link>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </p>
+                                                        <p style="text-align: center;">
+                                                            <c:choose>
+                                                                <c:when test="${personlist[(4 * i) + j].type < 5}">
+                                                                    <bean:message key="label.date.missing"/>: <bean:message key="month.${personlist[(4 * i) + j].monthMissingOrFound}"/> ${personlist[(4 * i) + j].dayMissingOrFound}, ${personlist[(4 * i) + j].yearMissingOrFound}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <bean:message key="label.date.found"/>: ${personlist[(4 * i) + j].monthMissingOrFound} ${personlist[(4 * i) + j].dayMissingOrFound}, ${personlist[(4 * i) + j].yearMissingOrFound}
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </p>
+                                                        <p style="text-align: center;">
+                                                            ${personlist[(4 * i) + j].missingFromCity}, ${personlist[(4 * i) + j].missingFromProvince}
+                                                        </p>
+                                                        <p style="text-align: center;">
+                                                            <bean:message key="type.${personlist[(4 * i) + j].type}"/>
+                                                        </p>
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div class="cell" style="width: 25%;"></div>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:forEach>
                                     </div>
                                 </c:forEach>
