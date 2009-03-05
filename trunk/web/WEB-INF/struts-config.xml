@@ -135,7 +135,7 @@
             <forward name="delete-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
             <forward name="user-statistics" path="/WEB-INF/pages/statistics/userStatistics.jsp"/>
         </action>
-        <!-- List and count persons and abductors -->
+        <!-- List and count persons, relatives and abductors -->
         <action
                 path="/viewCase"
                 type="com.googlecode.openmpis.action.CaseAction"
