@@ -295,6 +295,7 @@
     <select id="countOngoing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="ongoingFragment"/>
     </select>
 
@@ -308,6 +309,7 @@
     <select id="countSolved" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="solvedFragment"/>
     </select>
 
@@ -321,6 +323,7 @@
     <select id="countUnsolved" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="unsolvedFragment"/>
     </select>
 
@@ -334,6 +337,7 @@
     <select id="countAllMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="allMissingFragment"/>
     </select>
 
@@ -347,6 +351,7 @@
     <select id="countMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="missingFragment"/>
     </select>
 
@@ -360,6 +365,7 @@
     <select id="countFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="familyAbductionFragment"/>
     </select>
 
@@ -373,6 +379,7 @@
     <select id="countNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="nonFamilyAbductionFragment"/>
     </select>
 
@@ -386,6 +393,7 @@
     <select id="countRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="runawayFragment"/>
     </select>
 
@@ -399,6 +407,7 @@
     <select id="countUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="unknownFragment"/>
     </select>
 
@@ -412,6 +421,7 @@
     <select id="countAllFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="allFoundFragment"/>
     </select>
 
@@ -425,6 +435,7 @@
     <select id="countAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="abandonedFragment"/>
     </select>
 
@@ -438,6 +449,7 @@
     <select id="countThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="throwawayFragment"/>
     </select>
 
@@ -451,6 +463,7 @@
     <select id="countUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
+        FROM PERSON
         <include refid="unidentifiedFragment"/>
     </select>
 
