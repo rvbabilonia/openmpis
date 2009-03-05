@@ -11,12 +11,8 @@
         <flushOnExecute statement="deleteRelative"/>
         <flushInterval hours="24"/>
     </cacheModel>
-    
-    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
-    <select id="getRelativeById" parameterClass="java.lang.Integer" resultClass="relative" cacheModel="relativeCache">
-        <![CDATA[
-        SELECT
+
+    <sql id="relativeColumnsFragment">
         ID as id,
         FIRSTNAME as firstName,
         MIDDLENAME as middleName,
@@ -28,40 +24,28 @@
         COUNTRY as country,
         NUMBER as number
         FROM RELATIVE
+    </sql>
+    
+    <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
+    be auto-mapped results to Person object (JavaBean) properties -->
+    <select id="getRelativeById" parameterClass="java.lang.Integer" resultClass="relative" cacheModel="relativeCache">
+        SELECT
+        <include refid="relativeColumnsFragment"/>
+        <![CDATA[
         WHERE ID = #id#
         ]]>
     </select>
 
     <select id="getAllRelatives" resultClass="relative" cacheModel="relativeCache">
         SELECT
-        ID as id,
-        FIRSTNAME as firstName,
-        MIDDLENAME as middleName,
-        LASTNAME as lastName,
-        EMAIL as email,
-        STREET as street,
-        CITY as city,
-        PROVINCE as province,
-        COUNTRY as country,
-        NUMBER as number
-        FROM RELATIVE
+        <include refid="relativeColumnsFragment"/>
         ORDER BY ID
     </select>
 
-    <select id="listRelatives" resultClass="relative" cacheModel="relativeCache">
+    <select id="listAllRelatives" resultClass="relative" cacheModel="relativeCache">
         SELECT
-        ID as id,
-        FIRSTNAME as firstName,
-        MIDDLENAME as middleName,
-        LASTNAME as lastName,
-        EMAIL as email,
-        STREET as street,
-        CITY as city,
-        PROVINCE as province,
-        COUNTRY as country,
-        NUMBER as number
-        FROM RELATIVE
-        ORDER BY LASTNAME
+        <include refid="relativeColumnsFragment"/>
+        ORDER BY LASTNAME, FIRSTNAME
     </select>
 
     <select id="countAllRelatives" resultClass="java.lang.Integer" cacheModel="relativeCache">
@@ -75,7 +59,7 @@
         SELECT
         FIRSTNAME as firstName
         FROM RELATIVE
-        WHERE ID != #id# AND ((FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#) OR EMAIL = #email#)
+        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
         ]]>
     </select>
 
