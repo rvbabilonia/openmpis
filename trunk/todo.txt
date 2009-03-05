@@ -1,11 +1,11 @@
-ar9gV5fH6gx7
-
 missingfilipinos.css
     buttons
     layout
 
 validation
     xhtml
+
+sitemap
 
 database
     backup
@@ -24,131 +24,83 @@ documentation
     system administrator manual
 
 manuscript
+    abstract
 
-case
-    person
-    relative
-    abductor
-    investigator
-    encoder
-    calculate number of years missing
-    calculate current age from birth date
-    convert weight in pounds to kilograms
-    convert height in feet and inches to meters
-    inches: 0-11
-
-        http://javascript.internet.com/forms/country-state-city-drop-down-list.html
-        http://www.sitepoint.com/forums/showthread.php?t=350291
-        <c:forEach begin="1" end="27" step="1" var="i">
-            <c:set var="cityname"><bean:message key="city.1.${i}"/></c:set>
-            <html:option value="${cityname}" styleId="cityfield${i}" styleClass="optionclass">${cityname}</html:option>
-        </c:forEach>
-        <c:forEach begin="1" end="82" step="1" var="i">
-            <c:set var="provincename"><bean:message key="province.${i}"/></c:set>
-            <html:option value="${provincename}" styleId="provincefield${i}" styleClass="optionclass">${provincename}</html:option>
-        </c:forEach>
-        <c:forEach begin="1" end="229" step="1" var="i">
-            <c:set var="countryname"><bean:message key="country.${i}"/></c:set>
-            <html:option value="${countryname}" styleId="countryfield${i}" styleClass="optionclass">${countryname}</html:option>
-        </c:forEach>
-
-    encoder
-        /viewCase.do?action=list
-            getPersonsByEncoderId(request.getAttribute(currentuser.getId))
-        /viewCase.do?action=newPerson
-            upload photo
-        /viewCase.do?action=addPerson (form action)
-        /viewCase.do?action=viewPerson&id=
-            upload photo
-        /viewCase.do?action=editPerson (form action)
-        /viewCase.do?action=erasePerson&id=
-        /viewCase.do?action=deletePerson (form action)
-        /viewUser.do
-            getUsersByEncoderId(request.getAttribute(currentuser.getId))
-    investigator
-        /viewCase.do?action=viewPerson&id=
-        /viewCase.do?action=list
-            getPersonsByInvestigatorId(request.getAttribute(currentuser.getId))
-    public
-        /viewCase.do?action=viewPerson&id=
-        /viewCase.do?action=viewPoster&id=
-
-    encoder
-        /viewCase.do?action=newRelative
-        /viewCase.do?action=addRelative (form action)
-        /viewCase.do?action=viewRelative&id=
-        /viewCase.do?action=editRelative (form action)
-        /viewCase.do?action=eraseRelative&id=
-        /viewCase.do?action=deleteRelative (form action)
-    investigator and public
-        /viewCase.do?action=viewRelative&id=
-
-    encoder
-        /viewCase.do?action=newAbductor
-            upload photo
-        /viewCase.do?action=addAbductor (form action)
-        /viewCase.do?action=viewAbductor&id=
-            upload photo
-        /viewCase.do?action=editAbductor (form action)
-        /viewCase.do?action=eraseAdbuctor&id=
-        /viewCase.do?action=deleteAbductor (form action)
-    investigator and public
-        /viewCase.do?action=viewAbductor&id=
-
-    investigator
-        /viewCase.do?action=listReport&id=
-        /viewCase.do?action=newReport
-        /viewCase.do?action=addReport
-        /viewCase.do?action=viewReport&id=
-        /viewCase.do?action=downloadReport&id=
-        /viewCase.do?action=editReport
-        /viewCase.do?action=eraseReport&id=
-        /viewCase.do?action=deleteReport
-
-    all
-        /viewCase.do?action=list
-            pagination
-        /viewCase.do?action=listSolved
-            pagination
-        /viewCase.do?action=listUnsolved
-            pagination
-        /viewCase.do?action=listAllMissing
-            pagination
-        /viewCase.do?action=listAllFound
-            pagination
-        /viewCase.do?action=listUnidentified
-            pagination
+public
+    search
         /viewCase.do?action=search&query=
             pagination
             table joining
             query validation
+    case
+        /viewCase.do?action=list*
+            layout
+        /viewCase.do?action=viewAbductor&id=
 
 administrator
-    home
-        feedbacks (message)
+    feedbacks
+        /viewMessage.do?action=listAllFeedbacks
+    case
+        /viewCase.do?action=list*
+            layout
     reports using itext
         list of users
         list of feedbacks
         list of logs
 
 encoder
-    users
-        reminder (username, user id, case id, relative id, abductor id, investigator id, investigator username, date encoded, printed name, signature, designation)
-    cases
+    case
+        person
+            /viewCase.do?action=list*
+                layout
+            /viewPerson.do?action=erasePerson&id=
+            /viewPerson.do?action=deletePerson (form action)
+                remove relative
+                remove abductor
+                remove from database
+                delete photos
+        relative
+            /viewRelative.do?action=eraseRelative&id=
+            /viewRelative.do?action=deleteRelative (form action)
+                remove from person
+                remove from database
+        abductor
+            /viewAbductor.do?action=newAbductor
+            /viewAbductor.do?action=addAbductor (form action)
+                upload photo
+                assign to person
+            /viewAbductor.do?action=viewAbductor&id=
+            /viewAbductor.do?action=editAbductor (form action)
+                upload photo
+                assign to person
+            /viewAbductor.do?action=eraseAdbuctor&id=
+            /viewAbductor.do?action=deleteAbductor (form action)
+                remove from person
+                remove from database
+                delete photos
     reports using itext
         list of users
         list of cases
-        list of feedbacks from administrator
 
 investigator
-    home
-        sightings (message)
-    profile view
-    cases
+    case
+        /viewCase.do?action=list*
+            layout
+        /viewCase.do?action=viewRelative&id=
+        /viewCase.do?action=viewAbductor&id=
+        /viewProgress.do?action=listReport&id=
+        /viewProgress.do?action=newReport
+        /viewProgress.do?action=addReport
+        /viewProgress.do?action=viewReport&id=
+        /viewProgress.do?action=downloadReport&id=
+        /viewProgress.do?action=editReport
+        /viewProgress.do?action=eraseReport&id=
+        /viewProgress.do?action=deleteReport
+    sightings
+        /viewMessage.do?action=listAllSightings
     reports using itext
-        list of reports
-        list of feedbacks from administrator and encoder
-        list of messages from the public
+        list of progress reports
+        list of sightings from the public
 
 directory structure
     com
@@ -158,18 +110,30 @@ directory structure
                 mail.properties
                 sqlmapconfig.properties
                 action
-                    AuthenticateAction.java
-                    * CaseAction.java
-                        person
-                        relative
-                        abductor
-                        investigator
+                    * AbductorAction.java
+                        add
+                        edit
+                        view
+                        list
+                        delete
                         poster
-                        report
+                    AuthenticateAction.java
+                    CaseAction.java
                     FeedbackAction.java
                     LoginAction.java
                     LogoutAction.java
                     PasswordAction.java
+                    * PersonAction.java
+                        report
+                        delete
+                    * RelativeAction.java
+                        delete
+                    * ReportAction.java
+                        add
+                        edit
+                        view
+                        list
+                        delete
                     * SearchAction.java
                         regular search
                         advanced search
@@ -274,3 +238,116 @@ your creator/encoder
 
 you are the creator/encoder
     (currentuser.id == editUserForm.creatorId)
+
+INSERT INTO `user` (`id`,`groupID`,`username`,`password`,`firstName`,`middleName`,`lastName`,`birthMonth`,`birthDay`,`birthYear`,`email`,`designation`,`agency`,`number`,`ipAddress`,`lastLogin`,`date`,`creatorID`,`status`,`question`,`answer`) VALUES
+ (2,1,'MO0916','148332b694fc60c7dac7ef37f3d2b34d','Marvic','Brizuela','Orejo',9,16,1981,'marvic.orejo@thomsonreuters.com','QC Lead','Thomson Reuters','+639175584603','127.0.0.1','2009-02-16','2009-02-16',1,0,0,'blue'),
+ (3,2,'GB1116','b7463760284fd06773ac2a48e29b0acf','Giovanni','Potencio','Babilonia',11,16,1982,'babski@yahoo.com','CSR','Sitel','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (4,2,'HB1214','b7463760284fd06773ac2a48e29b0acf','Hadji','Potencio','Babilonia',12,14,1986,'boboy@yahoo.com','RN','Home','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (5,2,'DU0101','b7463760284fd06773ac2a48e29b0acf','Diana Marie','Marie','Miano-Uy',1,1,1949,'dmiano@yahoo.com','Lawyer','Bunag-Uy','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (6,2,'EC0202','b7463760284fd06773ac2a48e29b0acf','Elyzabeth','Policarpio','Cureg',2,2,1950,'ely_cureg@yahoo.com','Political Analyst','NCPAG','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (7,2,'GF0303','b7463760284fd06773ac2a48e29b0acf','Glaiza','Flores','Fabayos',3,3,1951,'glaiza.fabayos@thomsonreuters.com','Research  Analyst','Thomson Reuters','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (8,2,'HM0404','b7463760284fd06773ac2a48e29b0acf','Hanzel','Leveriza','Monforte',4,4,1952,'don_hamon40@yahoo.com','Tutor','iTouch','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (9,2,'BB0106','b7463760284fd06773ac2a48e29b0acf','Bemboy','Potencio','Babilonia',1,6,1982,'rvincent@asti.dost.gov.ph','SRSI','ASTI','+63 2 426 9760 ext. 1302',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (10,2,'MB0916','b7463760284fd06773ac2a48e29b0acf','Marcella Victoria','Brizuela','Babilonia',9,16,1981,'t_d916@yahoo.com','QC Team Leader','Thomson Reuters','+63 2 426 9760','127.0.0.1','2009-02-16','2009-02-16',2,0,0,NULL),
+ (11,2,'LP0808','b7463760284fd06773ac2a48e29b0acf','Lynne','Clemeno','Potencio',8,8,1956,'lynne@yahoo.com','Teacher','RNTVS','1234567',NULL,NULL,'2009-02-16',2,0,0,NULL),
+ (12,2,'JC0114','b7463760284fd06773ac2a48e29b0acf','Juan','Santos','de la Cruz',1,14,1960,'jdc@gmail.com','Streetkid','MMDA','028886666',NULL,NULL,'2009-02-16',2,0,0,NULL);
+
+
+http://telebisyon.net/Reunions/series/comments/
+http://www.fbi.gov/wanted/kidnap/kidmiss.htm
+http://www.missingkids.com/missingkids/servlet/PublicHomeServlet?LanguageCountry=en_US
+
+
+
+Ma. Ysabelle Sim, a two year old girl was snatched while playing in the front of
+their house' gate located in  336 Kaingin St., cor. Labores Extension, Pandacan,
+Manila, Brgy. 858, Zone 93.  She's last seen wearing pink sando and white pajamas
+on November 23, 2006
+this tough story was aired on 'Sanay muling makapiling' by Jessica Sojo on QTV.
+The program helped the grand mother, Ms. Gilda Sim, search for the little girl.
+They roamed in Manila and Baclaran area.  Sadly, they did not succeed.
+December 2007, the family was informed that 'Ysa' was found somewhere in Surigao.
+This was indeed a good news, so the grand mother and her father named Jomar went
+to the province.  Hoping to see the kid and be with her before Christmas.
+Like a piece of bread, Maria Ysabelle Sim was allegedly sold to a childless
+couple in Surigao del Sur. Ysa, now turning four found in the care of an adoptive family.
+If you want to help/support, please call:
+Ms. Gilda Sim / Ester Rosales / Chairman Elvin " Allan " Patao
+Tel. No. 563 00 11 / 563 38 12 / 589 02 16
+Add: 336 Kaingin St., cor. Labores Extension, Pandacan, Manila, Brgy. 858, Zone 93
+
+
+Dear Miss Jessica Soho,
+Magandang araw po sa inyong lahat. Ako po si Jessica Javier tubong Bacoor, Cavite. Ako po ay humahanga sa inyong programa na &ldquo;Reunions&rdquo; sa QTV Channel 11. Palagi po kaming nanunuod ng inyong programa. Humahanga po ako sa kadahilanang marami po kayong natutulungan na mga pamilya na magkasama-sama pong muli. Ang adhikain nyo po sa inyong palabas ay nagdudulot ng magandang halimbawa ng ating pagka-Filipino, sapagkat ipinapakita po ng inyong programa ang isa po sa pinakaimportanteng Filipino Values ang &ldquo;Closed Family ties&rdquo;. Dahil po sa inyong programa, marami pong pamilya ang nabubuo at nagiging masaya.
+Isa po sa dahilan kung bakit po ako sumulat ay gusto ko po sanang tulungan ang aking asawa na si JOSH LEANDER SAN MIGUEL LO na mahanap po ang kanyang ina na si CARLA SIASON SAN MIGUEL. Tatlong taon gulang po sya nung naulila sa ina sa kadahilanang inilayo po sya ng kanyang ama na si Joseph Valeros Lo ngunit ang tunay nyang pangalan ay Joseph Lo Pajarillo. Ang huling address po na natatandaan nyang nakatira ang kanyang ina ay sa EL NINO APARTELLE, N. DOMINGO STREET, QUEZON CITY. Sya po ay pinanganak sa Capitol Medical Center nuong March 5, 1984 at ang attending physician ay si Dra. Rosalinda Arceo. Ang Medical Records Clerk nuong 1984 sa Capitol Medical Center ay si Ms. Beverly P. Panganiban. Yan lamang po ang impormasyon na alam ni Josh tungkol sa kanyang ina. Nawa'y matulungan nyo po kaming mahanap ang kanyang ina upang mabuo na po ang pagkatao nang aking asawa at para po maramdaman nya po ang pagmamahal ng isang tunay na ina.
+Maraming maraming salamat po sa inyong lahat. Nawa'y matulungan nyo po kami.
+More Power to your Program! God bless all of You!
+Lubos na umaasa,
+Jessica Javier
+Ito po ang aming address:
+213B San Nicolas, Bacoor, Cavite
+Contact Numbers: (046) 417 61 47 / 0906 370 3274
+Email address: jessica_javier22@yahoo.com
+Impormasyon:
+Hinahanap: Carla Siason San Miguel
+Huling tirahan: El Nino Apartelle, N. Domingo Street, Quezon City
+Naghahanap: Josh Leander San Miguel Lo
+Araw ng kapanganakan: March 5, 1984
+Lugar ng kapanganakan: Capitol Medical Center, Quezon City
+Attending Physician: Dra. Rosalinda Arceo
+Medical Records Clerk: Beverly P. Panganiban
+Pangalan ng Ama: Joseph Valeros Lo/Joseph Lo Pajarillo
+
+
+Good day!
+I saw this ad in GMA7 that there is a tv program for people like me.Call me Lorna Layantes Beduya,36 from Cebu City.Im a teacher in a public high school.At this age,I thought my life is complete; having a family and a stable job.Hindi pala. I have not known and meet my biological father since I was born.So, 36 yrs ago na di ko pa nakilala tatay ko.
+I hope through your program you can help me.
+All i learned is my father's name is Jaime Layantes,my Mom said his town is somewhere in Mindoro.Wala akong mga evidences ng pagkatao ng father ko.i don't have anything kahit pictures man lang.all i have is my birth certificate na malabo rin.
+Sana matulungan nyo ako.
+Gumagalang,
+Lorna
+37-k C. J.Cuizon St. Tinago Cebu City6000
+Tel no.238-62-32/09077362794
+
+
+
+
+UNLAWFUL FLIGHT TO AVOID PROSECUTION - PARENTAL KIDNAPPING
+ELIZABETH ANN STRATTON
+Aliases: 	Elizabeth Ann Gould, Elizabeth Ann Mahon, Elizabeth Ann Pugh, Elizabeth Ann Smith, Beth Ann Smith, "Betty", "Beth"
+Date of Birth Used:  	November 3, 1958
+Hair: 	Blonde
+Place of Birth: 	Inglewood, California
+Eyes: 	Blue
+Height: 	5'7"
+Sex: 	Female
+Weight: 	140 pounds
+Race: 	White
+Occupation: 	Lab Technician
+Remarks: 	Stratton was a heavy smoker at the time of her disappearance. She may wear glasses. Stratton may have dyed her hair red or bleached it blonder. Stratton and her two children were all issued United States passports in August of 1997. She should be considered a flight risk.
+THE CRIME
+On December 16, 1997, Elizabeth Ann Stratton fled her Antioch, California, home with her two non-custodial children, then 9-year-old Zachary Stratton Smith and then 6-year-old Chelsea Paige Smith. On December 19, 1997, a letter written by Stratton arrived at the Contra Costa County District Attorney's Office stating that she had taken the children, left California, and did not want anyone to find her or the children. Stratton was in the middle of a child custody dispute with her ex-husband at the time.
+Her vehicle was later found parked at the Sacramento International Airport in Sacramento, California. It is believed that Stratton and her children may have made contact with a group in Atlanta, Georgia, which assists women and children who claim to need protection from abusive husbands and parents.
+A local complaint and arrest warrant for Stratton were issued by the Municipal Court in December of 1997 and she was charged with parental kidnapping. A federal warrant for Stratton for unlawful flight to avoid prosecution was obtained in the Northern District of California on January 12, 1998.
+
+VICTIM - Zachary Stratton Smith
+Date of Birth Used:  	August 16, 1998
+Hair: 	Blond
+Place of Birth: 	Berkeley, California
+Eyes: 	Blue
+Height: 	4'8" (at the time of his disappearance)
+Sex: 	Male
+Weight: 	71 pounds (at the time of his disappearance)
+Race: 	White
+Remarks: 	Zachary would now be twenty years old. He may also use the first names of Zachariah or Zach. He has a small surgical scar on his neck. At the time of his disappearance, Zachary had braces on his teeth, wore glasses, and had a pierced left ear.
+
+VICTIM - Chelsea Paige Smith
+Date of Birth Used:  	July 14, 1991
+Hair: 	Blonde
+Place of Birth: 	Oakland, California
+Eyes: 	Blue
+Height: 	4'1" (at the time of her disappearance)
+Sex: 	Female
+Weight: 	55 pounds (at the time of her disappearance)
+Race: 	White
+Remarks: 	Chelsea would now be 17 years old. She has two small surgical scars on her neck. She has pierced ears and curly hair.
