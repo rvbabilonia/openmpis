@@ -42,14 +42,14 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${(personid == null)}">
-                                    <bean:message key="relative.view"/>
-                                </c:when>
                                 <c:when test="${(action eq 'newRelative') || (action eq 'addRelative')}">
                                     <bean:message key="relative.add"/>
                                 </c:when>
-                                <c:when test="${(action eq 'viewRelative') || (action eq 'editRelative') || (action eq 'editPerson') || (action eq 'addPerson')}">
+                                <c:when test="${((action eq 'viewRelative') && (personid != null)) || (action eq 'editRelative') || (action eq 'editPerson') || (action eq 'addPerson')}">
                                     <bean:message key="relative.edit"/>
+                                </c:when>
+                                <c:when test="${(action eq 'viewRelative') && (personid == null)}">
+                                    <bean:message key="relative.view"/>
                                 </c:when>
                             </c:choose>
                         </c:when>
@@ -60,7 +60,7 @@
                     <noscript>
                         <bean:message key="error.javascript.disabled"/>
                     </noscript>
-
+                    
                     <html:form method="post" action="viewRelative" styleClass="adduserclass">
                         <p class="contentclass">
                             <c:choose>
@@ -84,9 +84,7 @@
                                 <html:select styleId="relativelistfield" styleClass="selectclass" property="id"
                                     onchange="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${personid};}"
                                     onkeyup="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${personid};}">
-                                    <c:if test="${personid == null}">
-                                        <html:option value="0" styleId="relativefield0" styleClass="optionclass">----------</html:option>
-                                    </c:if>
+                                    <html:option value="0" styleId="relativefield0" styleClass="optionclass">----------</html:option>
                                     <c:forEach items="${relativelist}" var="relative">
                                         <html:option value="${relative.id}" styleId="relativefield${i}" styleClass="optionclass">${relative.lastName}, ${relative.firstName}</html:option>
                                     </c:forEach>
