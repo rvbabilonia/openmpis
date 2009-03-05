@@ -61,6 +61,17 @@ public class AbductorServiceImpl implements AbductorService {
     }
 
     /**
+     * Retrieves all abductors according to last name.
+     *
+     * @return              the list of abductors
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Abductor> listAllAbductors() throws SQLException {
+        return abductorDAO.listAllAbductors();
+    }
+
+    /**
      * Retrieves an abductor given his ID.
      * 
      * @param id            the abductor ID

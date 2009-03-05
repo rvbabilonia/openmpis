@@ -42,6 +42,14 @@ public interface AbductorDAO {
     public List<Abductor> getAllAbductors(Pagination pagination) throws SQLException;
 
     /**
+     * Retrieves all abductors according to last name.
+     *
+     * @return              the list of abductors
+     * @throws java.sql.SQLException
+     */
+    public List<Abductor> listAllAbductors() throws SQLException;
+
+    /**
      * Retrieves an abductor given his ID.
      * 
      * @param id            the abductor ID

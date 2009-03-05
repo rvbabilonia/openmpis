@@ -70,6 +70,30 @@ public class AbductorDAOImpl implements AbductorDAO {
     }
 
     /**
+     * Retrieves all abductors according to last name.
+     *
+     * @return              the list of abductors
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Abductor> listAllAbductors() throws SQLException {
+        List<Abductor> abductorList = new ArrayList<Abductor>();
+
+        try {
+            sqlMap.startTransaction();
+            abductorList = sqlMap.queryForList("listAllAbductors");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return abductorList;
+    }
+
+    /**
      * Retrieves an abductor given his ID.
      * 
      * @param id            the abductor ID
