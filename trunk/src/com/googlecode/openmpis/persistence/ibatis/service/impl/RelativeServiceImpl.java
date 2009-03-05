@@ -67,8 +67,8 @@ public class RelativeServiceImpl implements RelativeService {
      * @throws java.sql.SQLException
      */
     @Override
-    public List<Relative> listRelatives() throws SQLException {
-        return relativeDAO.listRelatives();
+    public List<Relative> listAllRelatives() throws SQLException {
+        return relativeDAO.listAllRelatives();
     }
 
     /**

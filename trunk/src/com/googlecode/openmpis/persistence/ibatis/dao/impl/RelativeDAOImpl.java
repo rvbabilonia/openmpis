@@ -77,12 +77,12 @@ public class RelativeDAOImpl implements RelativeDAO {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<Relative> listRelatives() throws SQLException {
+    public List<Relative> listAllRelatives() throws SQLException {
         List<Relative> relativeList = new ArrayList<Relative>();
 
         try {
             sqlMap.startTransaction();
-            relativeList = sqlMap.queryForList("listRelatives");
+            relativeList = sqlMap.queryForList("listAllRelatives");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();

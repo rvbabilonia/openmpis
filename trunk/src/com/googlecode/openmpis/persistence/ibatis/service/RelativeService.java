@@ -47,7 +47,7 @@ public interface RelativeService {
      * @return              the list of relatives
      * @throws java.sql.SQLException
      */
-    public List<Relative> listRelatives() throws SQLException;
+    public List<Relative> listAllRelatives() throws SQLException;
 
     /**
      * Retrieves a relative given his ID.
