@@ -1,33 +1,39 @@
 /*
  * This file is part of OpenMPIS, the Open Source Missing Persons Information System.
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.googlecode.openmpis.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.googlecode.openmpis.dto.Person;
+import com.googlecode.openmpis.form.SearchForm;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
+import com.googlecode.openmpis.util.Constants;
+import com.googlecode.openmpis.util.Pagination;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForward;
 
-import com.googlecode.openmpis.form.SearchForm;
-
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * The SearchAction class provides the method to pass queries and results.
@@ -37,9 +43,13 @@ import java.util.List;
 public class SearchAction extends Action {
 
     /**
-     * The forwarding instance
+     * The person service
      */
-    private final static String SUCCESS = "success";
+    private PersonService personService = new PersonServiceImpl(new PersonDAOImpl());
+    /**
+     * The pagination context
+     */
+    private Pagination pagination = new Pagination();
 
     /**
      * This is the action called from the Struts framework.
@@ -53,20 +63,49 @@ public class SearchAction extends Action {
      */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) {
-        SearchForm sf = (SearchForm) form;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        SearchForm searchForm = (SearchForm) form;
+        String page = (String) request.getParameter("page");
 
-        int pageNumber = request.getParameter("pn") != null ? Integer.parseInt(request.getParameter("pn")) : 1;
+        // Set pagination direction
+        if (page != null) {
+            if (page.equals("next")) {
+                pagination.nextPage();
+            } else if (page.equals("previous")) {
+                pagination.previousPage();
+            } else if (page.equals("start")) {
+                pagination.firstPage();
+            } else if (page.equals("end")) {
+                pagination.lastPage();
+            }
+        }
 
-        //List<String[]> sequenceList = e.getSequences(sf.getKeyword(), pageNumber);
+        List<Person> personList = null;
 
-        //int pageCount;
+        // Retrieve list of persons
+        personList = personService.simpleSearch(pagination, searchForm.getKeyword());
 
-        //request.setAttribute("sequencelist", sequenceList);
-        request.setAttribute("currentpage", pageNumber);
-        //request.setAttribute("pagecount", pageCount);
-        request.setAttribute("keyword", sf.getKeyword());
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
 
-        return mapping.findForward(SUCCESS);
+        // Return list of persons
+        request.setAttribute("personlist", personList);
+
+        // Return current page
+        request.setAttribute("currentpage", pagination.getCurrentPage());
+
+        // Return total number of pages
+        request.setAttribute("totalpages", pagination.getTotalPages());
+
+        // Return total results
+        request.setAttribute("totalresults", pagination.getTotalResults());
+
+        // Return max results
+        request.setAttribute("maxresults", pagination.getMaxResults());
+
+        // Return condition if there are more pages
+        request.setAttribute("morepages", pagination.hasMorePages());
+
+        return mapping.findForward(Constants.SEARCH_SUCCESS);
     }
 }

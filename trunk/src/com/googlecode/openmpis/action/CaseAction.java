@@ -3,8 +3,8 @@
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -12,8 +12,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.googlecode.openmpis.action;
 
@@ -715,6 +716,114 @@ public class CaseAction extends DispatchAction {
         request.setAttribute("morepages", pagination.hasMorePages());
 
         return mapping.findForward(Constants.LIST_PERSON_UNIDENTIFIED);
+    }
+
+    /**
+     * Lists all solved cases.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward listSolved(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String page = (String) request.getParameter("page");
+
+        // Set pagination direction
+        if (page != null) {
+            if (page.equals("next")) {
+                pagination.nextPage();
+            } else if (page.equals("previous")) {
+                pagination.previousPage();
+            } else if (page.equals("start")) {
+                pagination.firstPage();
+            } else if (page.equals("end")) {
+                pagination.lastPage();
+            }
+        }
+
+        // Retrieve list of persons
+        List<Person> personList = personService.getSolved(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
+        // Return list of persons
+        request.setAttribute("personlist", personList);
+
+        // Return current page
+        request.setAttribute("currentpage", pagination.getCurrentPage());
+
+        // Return total number of pages
+        request.setAttribute("totalpages", pagination.getTotalPages());
+
+        // Return total results
+        request.setAttribute("totalresults", pagination.getTotalResults());
+
+        // Return max results
+        request.setAttribute("maxresults", pagination.getMaxResults());
+
+        // Return condition if there are more pages
+        request.setAttribute("morepages", pagination.hasMorePages());
+
+        return mapping.findForward(Constants.LIST_PERSON_SOLVED);
+    }
+
+    /**
+     * Lists all unsolved cases.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward listUnsolved(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String page = (String) request.getParameter("page");
+
+        // Set pagination direction
+        if (page != null) {
+            if (page.equals("next")) {
+                pagination.nextPage();
+            } else if (page.equals("previous")) {
+                pagination.previousPage();
+            } else if (page.equals("start")) {
+                pagination.firstPage();
+            } else if (page.equals("end")) {
+                pagination.lastPage();
+            }
+        }
+
+        // Retrieve list of persons
+        List<Person> personList = personService.getUnsolved(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
+        // Return list of persons
+        request.setAttribute("personlist", personList);
+
+        // Return current page
+        request.setAttribute("currentpage", pagination.getCurrentPage());
+
+        // Return total number of pages
+        request.setAttribute("totalpages", pagination.getTotalPages());
+
+        // Return total results
+        request.setAttribute("totalresults", pagination.getTotalResults());
+
+        // Return max results
+        request.setAttribute("maxresults", pagination.getMaxResults());
+
+        // Return condition if there are more pages
+        request.setAttribute("morepages", pagination.hasMorePages());
+
+        return mapping.findForward(Constants.LIST_PERSON_UNSOLVED);
     }
 
     /**
