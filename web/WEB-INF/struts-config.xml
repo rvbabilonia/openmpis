@@ -35,6 +35,9 @@
         <form-bean
                 name="investigatorForm"
                 type="com.googlecode.openmpis.form.InvestigatorForm"/>
+        <form-bean
+                name="messageForm"
+                type="com.googlecode.openmpis.form.MessageForm"/>
     </form-beans>
     <global-exceptions>
     </global-exceptions>
@@ -153,6 +156,8 @@
             <forward name="list-person-abandoned" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="list-person-throwaway" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="list-person-unidentified" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-solved" path="/WEB-INF/pages/person/listPersons.jsp"/>
+            <forward name="list-person-unsolved" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="list-abductor" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="case-statistics" path="/WEB-INF/pages/statistics/caseStatistics.jsp"/>
             <forward name="assign-investigator" path="/WEB-INF/pages/session/investigatorForm.jsp"/>
@@ -188,7 +193,7 @@
                 input="/WEB-INF/pages/session/relativeForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=listAllMissing"/>
             <forward name="view-relative" path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative-redo"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
@@ -223,25 +228,43 @@
             <forward name="delete-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
             <forward name="select-investigator" path="/viewCase.do?action=selectInvestigator"/>
         </action>
-        <!-- Add, view, edit and delete reports -->
+        <!-- Add, view, edit and delete progress reports -->
         <action
                 path="/viewReport"
                 type="com.googlecode.openmpis.action.ReportAction"
                 scope="request"
                 name="reportForm"
-                input="/WEB-INF/pages/session/addReportForm.jsp"
+                input="/WEB-INF/pages/session/reportForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="view-report" path="/WEB-INF/pages/report/viewReportForm.jsp"/>
-            <forward name="add-report"  path="/WEB-INF/pages/session/addReportForm.jsp"/>
-            <forward name="add-report-redo"  path="/WEB-INF/pages/session/addReportForm.jsp"/>
+            <forward name="list-report" path="/WEB-INF/pages/session/listReports.jsp"/>
+            <forward name="view-report" path="/WEB-INF/pages/session/reportForm.jsp"/>
+            <forward name="add-report"  path="/WEB-INF/pages/session/reportForm.jsp"/>
+            <forward name="add-report-redo"  path="/WEB-INF/pages/session/reportForm.jsp"/>
             <forward name="add-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
-            <forward name="edit-report" path="/WEB-INF/pages/session/editReportForm.jsp"/>
-            <forward name="edit-report-redo" path="/WEB-INF/pages/session/editReportForm.jsp"/>
+            <forward name="edit-report" path="/WEB-INF/pages/session/reportForm.jsp"/>
+            <forward name="edit-report-redo" path="/WEB-INF/pages/session/reportForm.jsp"/>
             <forward name="edit-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
             <forward name="delete-report" path="/WEB-INF/pages/session/deleteReportForm.jsp"/>
             <forward name="delete-report-redo" path="/WEB-INF/pages/session/deleteReportForm.jsp"/>
             <forward name="delete-report-success" path="/WEB-INF/pages/session/reportSuccess.jsp"/>
+        </action>
+        <!-- List, add, edit, view and delete sightings and feedbacks -->
+        <action
+                path="/viewMessage"
+                type="com.googlecode.openmpis.action.MessageAction"
+                scope="request"
+                name="messageForm"
+                input="/WEB-INF/pages/sighting/sightingForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="list-feedback" path="/WEB-INF/pages/session/listMessages.jsp"/>
+            <forward name="list-sighting" path="/WEB-INF/pages/session/listMessages.jsp"/>
+            <forward name="view-message" path="/WEB-INF/pages/session/viewMessageForm.jsp"/>
+            <forward name="add-sighting" path="/WEB-INF/pages/sighting/sightingForm.jsp"/>
+            <forward name="add-sighting-redo" path="/WEB-INF/pages/sighting/sightingForm.jsp"/>
+            <forward name="add-sighting-success" path="/WEB-INF/pages/sighting/sightingSuccess.jsp"/>
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=listAllMissing"/>
         </action>
         <!-- Selects and assigns investigator -->
         <action
@@ -311,7 +334,7 @@
                 name="searchForm"
                 input="/WEB-INF/pages/search/searchForm.jsp"
                 validate="true">
-            <forward name="success" path="/WEB-INF/pages/search/searchSuccess.jsp"/>
+            <forward name="search-success" path="/WEB-INF/pages/search/searchSuccess.jsp"/>
         </action>
     </action-mappings>
     <controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" nocache="true"/>
