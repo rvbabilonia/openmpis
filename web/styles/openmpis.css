@@ -306,6 +306,10 @@ div#pagination a {
     text-decoration: none;
 }
 
+div#casemenu {
+    text-align: center;
+}
+
 div#casemenu li {
     display: inline;
     list-style-type: none;
