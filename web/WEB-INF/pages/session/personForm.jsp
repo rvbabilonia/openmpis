@@ -581,7 +581,7 @@
                             <label id="progresslabel" class="labelclass">
                                 <bean:message key="label.progress"/>
                             </label>
-                            <html:link action="viewProgress.do?action=list" paramName="personForm" paramId="id" paramProperty="id">${reportcount}</html:link>
+                            <html:link action="viewReport.do?action=viewReport" paramName="personForm" paramId="id" paramProperty="id">${reportcount}</html:link>
                         </p>
                         <p class="contentclass">
                             <c:if test="${currentuser.groupId == 1}">
