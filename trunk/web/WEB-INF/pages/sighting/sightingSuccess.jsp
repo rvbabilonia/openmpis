@@ -27,15 +27,15 @@ package WEB-INF.pages.feedback_1;
 
             <!-- Menu -->
             <div id="menu">
-                <bean:message key="feedback.menu"/>
+                <bean:message key="sighting.menu"/>
             </div>
         
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    <bean:message key="feedback.heading"/>
+                    <bean:message key="sighting.heading"/>
                     <p class="contentclass">
-                        <bean:message key="feedback.content"/>
+                        <bean:message key="sighting.content"/>
                     </p>
                 </div>
             </div>
