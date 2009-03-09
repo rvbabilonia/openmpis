@@ -2,7 +2,7 @@
 body {
     background-color: #bbbbbb;
     width: 100%;
-    color: #f7f7f7;
+    color: #000000;
     font: normal normal normal 9pt sans-serif;
     text-align: center;
     margin: 0px 0px 0px 0px;
@@ -166,7 +166,7 @@ div#container {
 div#header {
     height: 100px;
     background-color: #bbbbbb;
-    background: url(/images/openmpis.png) no-repeat center center;
+    background: url(../images/openmpis.png) no-repeat center center;
 }
 
 div#header img {
@@ -190,7 +190,7 @@ div#menu a {
     text-decoration: none;
     display: inline-block;
     font: normal normal normal 14pt sans-serif;
-    background: url(/images/oval-dark.png) no-repeat center center;
+    background: url(../images/oval-dark.png) no-repeat center center;
     height: 40px;
     width: 150px;
     padding-top: 10px;
@@ -203,7 +203,7 @@ div#menu a:hover, div#menu a.chosen {
     text-decoration: none;
     display: inline-block;
     font: normal normal normal 14pt sans-serif;
-    background: url(/images/oval-light.png) no-repeat center center;
+    background: url(../images/oval-light.png) no-repeat center center;
     height: 40px;
     width: 150px;
     padding-top: 10px;
@@ -304,6 +304,10 @@ div#pagination a {
     color: #000000;
     font: normal normal normal 9pt sans-serif;
     text-decoration: none;
+}
+
+div#casemenu {
+    text-align: center;
 }
 
 div#casemenu li {
