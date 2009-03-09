@@ -17,12 +17,36 @@
     <select id="getReportById" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
         <![CDATA[
         SELECT
+        ID as id,
         REPORT as report,
         DATE as date,
         PERSONID as personId,
-        INVESTIGATORID as investigatorId,
+        INVESTIGATORID as investigatorId
         FROM REPORT
         WHERE ID = #id#
+        ]]>
+    </select>
+
+    <select id="getAllReportsByInvestigator" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
+        <![CDATA[
+        SELECT
+        ID as id,
+        REPORT as report,
+        DATE as date,
+        INVESTIGATORID as investigatorId,
+        PERSONID as personId
+        FROM REPORT
+        WHERE INVESTIGATORID = #investigatorId#
+        ORDER BY PERSONID, ID
+        ]]>
+    </select>
+
+    <select id="countAllReportsByInvestigator" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="reportCache">
+        <![CDATA[
+        SELECT
+        COUNT(ID)
+        FROM REPORT
+        WHERE INVESTIGATORID = #investigatorId#
         ]]>
     </select>
 
@@ -35,7 +59,7 @@
         PERSONID as personId,
         INVESTIGATORID as investigatorId,
         FROM REPORT
-        WHERE PERSONID = #id#
+        WHERE PERSONID = #personId#
         ]]>
     </select>
 
@@ -44,7 +68,7 @@
         SELECT
         COUNT(ID)
         FROM REPORT
-        WHERE PERSONID = #id#
+        WHERE PERSONID = #personId#
         ]]>
     </select>
 

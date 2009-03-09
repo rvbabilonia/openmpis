@@ -1,19 +1,20 @@
 /*
  * This file is part of OpenMPIS, the Open Source Missing Persons Information System.
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.googlecode.openmpis.persistence.ibatis.service.impl;
 
@@ -253,6 +254,18 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> getPersonsByAbductorId(Pagination pagination, Integer abductorId) throws SQLException {
         return personDAO.getPersonsByAbductorId(pagination, abductorId);
+    }
+
+    /**
+     * Searches for persons.
+     *
+     * @param pagination    the pagination context
+     * @param keyword       the search keyword
+     * @return              the list of matching persons
+     */
+    @Override
+    public List<Person> simpleSearch(Pagination pagination, String keyword) throws SQLException {
+        return personDAO.simpleSearch(pagination, keyword);
     }
 
     /**

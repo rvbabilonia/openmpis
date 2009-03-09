@@ -1,19 +1,20 @@
 /*
  * This file is part of OpenMPIS, the Open Source Missing Persons Information System.
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.googlecode.openmpis.util;
 
@@ -170,6 +171,14 @@ public abstract class Constants {
      */
     public static final String LIST_PERSON_UNIDENTIFIED = "list-person-unidentified";
     /**
+     * The logical name of the forwarding instance for successful listing of all solved cases
+     */
+    public static final String LIST_PERSON_SOLVED = "list-person-solved";
+    /**
+     * The logical name of the forwarding instance for successful listing of all unsolved cases
+     */
+    public static final String LIST_PERSON_UNSOLVED = "list-person-unsolved";
+    /**
      * The logical name of the forwarding instance for viewing a relative
      */
     public static final String VIEW_RELATIVE = "view-relative";
@@ -257,4 +266,72 @@ public abstract class Constants {
      * The logical name of the forwarding instance for successful deletion
      */
     public static final String DELETE_ABDUCTOR_SUCCESS = "delete-abductor-success";
+    /**
+     * The logical name of the forwarding instance for successful listing of all feedbacks
+     */
+    public static final String LIST_FEEDBACK = "list-feedback";
+    /**
+     * The logical name of the forwarding instance for successful listing of all sightings
+     */
+    public static final String LIST_SIGHTING = "list-sighting";
+    /**
+     * The logical name of the forwarding instance for viewing a message (sighting or feedback)
+     */
+    public static final String VIEW_MESSAGE = "view-message";
+    /**
+     * The logical name of the forwarding instance for adding a new sighting
+     */
+    public static final String ADD_SIGHTING = "add-sighting";
+    /**
+     * The logical name of the forwarding instance for unsuccessful adding of a new sighting
+     */
+    public static final String ADD_SIGHTING_REDO = "add-sighting-redo";
+    /**
+     * The logical name of the forwarding instance for successful adding of a new sighting
+     */
+    public static final String ADD_SIGHTING_SUCCESS = "add-sighting-success";
+    /**
+     * The logical name of the forwarding instance for successful progress report listing
+     */
+    public static final String LIST_REPORT = "list-report";
+    /**
+     * The logical name of the forwarding instance for adding new progress report
+     */
+    public static final String ADD_REPORT = "add-report";
+    /**
+     * The logical name of the forwarding instance for unsuccessful adding of new progress report
+     */
+    public static final String ADD_REPORT_REDO = "add-report-redo";
+    /**
+     * The logical name of the forwarding instance for successful adding of new progress report
+     */
+    public static final String ADD_REPORT_SUCCESS = "add-report-success";
+    /**
+     * The logical name of the forwarding instance for viewing and editing progress report
+     */
+    public static final String EDIT_REPORT = "edit-report";
+    /**
+     * The logical name of the forwarding instance for unsuccessful editing of progress report
+     */
+    public static final String EDIT_REPORT_REDO = "edit-report-redo";
+    /**
+     * The logical name of the forwarding instance for successful editing of progress report
+     */
+    public static final String EDIT_REPORT_SUCCESS = "edit-report-success";
+    /**
+     * The logical name of the forwarding instance for deleting a progress report
+     */
+    public static final String DELETE_REPORT = "delete-report";
+    /**
+     * The logical name of the forwarding instance for deletion confirmation code mismatch
+     */
+    public static final String DELETE_REPORT_REDO = "delete-report-redo";
+    /**
+     * The logical name of the forwarding instance for successful deletion
+     */
+    public static final String DELETE_REPORT_SUCCESS = "delete-report-success";
+    /**
+     * The logical name of the forwarding instance for successful searching
+     */
+    public static final String SEARCH_SUCCESS = "search-success";
 }

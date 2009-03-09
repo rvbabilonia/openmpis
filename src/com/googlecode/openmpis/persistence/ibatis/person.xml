@@ -189,43 +189,43 @@
     </sql>
 
     <sql id="allMissingFragment">
-        WHERE TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4'
+        WHERE (TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4') AND STATUS = '0'
     </sql>
 
     <sql id="missingFragment">
-        WHERE TYPE = '0'
+        WHERE TYPE = '0' AND STATUS = '0'
     </sql>
 
     <sql id="familyAbductionFragment">
-        WHERE TYPE = '1'
+        WHERE TYPE = '1' AND STATUS = '0'
     </sql>
 
     <sql id="nonFamilyAbductionFragment">
-        WHERE TYPE = '2'
+        WHERE TYPE = '2' AND STATUS = '0'
     </sql>
 
     <sql id="runawayFragment">
-        WHERE TYPE = '3'
+        WHERE TYPE = '3' AND STATUS = '0'
     </sql>
 
     <sql id="unknownFragment">
-        WHERE TYPE = '4'
+        WHERE TYPE = '4' AND STATUS = '0'
     </sql>
 
     <sql id="allFoundFragment">
-        WHERE TYPE = '5' OR TYPE = '6'
+        WHERE (TYPE = '5' OR TYPE = '6') AND STATUS = '0'
     </sql>
 
     <sql id="abandonedFragment">
-        WHERE TYPE = '5'
+        WHERE TYPE = '5' AND STATUS = '0'
     </sql>
 
     <sql id="throwawayFragment">
-        WHERE TYPE = '6'
+        WHERE TYPE = '6' AND STATUS = '0'
     </sql>
 
     <sql id="unidentifiedFragment">
-        WHERE TYPE = '7'
+        WHERE TYPE = '7' AND STATUS = '0'
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -475,6 +475,18 @@
         FROM PERSON
         WHERE ID != #id# AND (FIRSTNAME = #firstName# AND LASTNAME = #lastName#)
         ]]>
+    </select>
+
+    <select id="simpleSearchPerson" parameterClass="java.lang.String" resultClass="person" cacheModel="personCache">
+        SELECT *
+        FROM PERSON
+        WHERE
+        FIRSTNAME LIKE "%$keyword$%"
+        OR NICKNAME LIKE "%$keyword$%"
+        OR MIDDLENAME LIKE "%$keyword$%"
+        OR LASTNAME LIKE "%$keyword$%"
+        OR CIRCUMSTANCE LIKE "%$keyword$%"
+        OR REMARKS LIKE "%$keyword$%"
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the

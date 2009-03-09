@@ -1,19 +1,20 @@
 /*
  * This file is part of OpenMPIS, the Open Source Missing Persons Information System.
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package com.googlecode.openmpis.persistence.ibatis.service;
 
@@ -35,12 +36,22 @@ public interface ReportService {
     /**
      * Retrieves all reports for a given person.
      *
-     * @param id            the ID of the person
      * @param pagination    the pagination context
+     * @param id            the ID of the person
      * @return              the list of reports for a given person
      * @throws java.sql.SQLException
      */
-    public List<Report> getAllReportsForPerson(Integer id, Pagination pagination) throws SQLException;
+    public List<Report> getAllReportsForPerson(Pagination pagination, Integer id) throws SQLException;
+
+    /**
+     * Retrieves all reports written by a given investigator.
+     *
+     * @param pagination    the pagination context
+     * @param investigatorId the ID of the investigator
+     * @return              the list of reports written by a given investigator
+     * @throws java.sql.SQLException
+     */
+    public List<Report> getAllReportsByInvestigator(Pagination pagination, Integer investigatorId) throws SQLException;
 
     /**
      * Retrieves a report given its ID.
@@ -86,4 +97,13 @@ public interface ReportService {
      * @throws java.sql.SQLException
      */
     public int countAllReportsForPerson(Integer id) throws SQLException;
+
+    /**
+     * Returns the total number of reports written by a given investigator.
+     *
+     * @param investigatorId the ID of the investigator
+     * @return              the total number of reports written by a given investigator
+     * @throws java.sql.SQLException
+     */
+    public int countAllReportsByInvestigator(Integer investigatorId) throws SQLException;
 }

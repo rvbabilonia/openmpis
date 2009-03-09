@@ -23,7 +23,7 @@
         IPADDRESS as ipAddress,
         PERSONID as personId,
         USERID as userId,
-        DATE as date,
+        DATE as date
         FROM MESSAGE
     </sql>
 
@@ -73,7 +73,7 @@
         COUNT(ID)
         FROM MESSAGE
         <![CDATA[
-        WHERE USERID = #userId# AND STATUS = 0
+        WHERE USERID = #userId# AND STATUS = '0'
         ]]>
     </select>
 
@@ -95,7 +95,7 @@
         COUNT(ID)
         FROM MESSAGE
         <![CDATA[
-        WHERE USERID = #userId# AND PERSONID = #personId# AND STATUS = 0
+        WHERE USERID = #userId# AND PERSONID = #personId# AND STATUS = '0'
         ]]>
     </select>
 
@@ -104,7 +104,7 @@
         COUNT(ID)
         FROM MESSAGE
         <![CDATA[
-        WHERE USERID = #userId# AND PERSONID > 0
+        WHERE USERID = #userId# AND PERSONID > '0'
         ]]>
     </select>
 
@@ -113,7 +113,7 @@
         COUNT(ID)
         FROM MESSAGE
         <![CDATA[
-        WHERE USERID = #userId# AND PERSONID > 0 AND STATUS = 0
+        WHERE USERID = #userId# AND PERSONID > '0' AND STATUS = '0'
         ]]>
     </select>
     
@@ -144,6 +144,16 @@
         (#firstName#, #lastName#, #email#, #subject#, #message#, #userId#, #ipAddress#, #date#)
         ]]>
     </insert>
+
+    <!-- Use Message object (JavaBean) properties as parameters for update. Each of the
+    parameters in the #hash# symbols is a JavaBeans property. -->
+    <update id="updateMessage" parameterClass="java.lang.Integer">
+        <![CDATA[
+        UPDATE MESSAGE SET
+        STATUS = '1'
+        WHERE ID = #id#
+        ]]>
+    </update>
 
     <!-- Use Message object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
