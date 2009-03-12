@@ -109,7 +109,7 @@ public class Validator {
      * @return              <code>true</code> if the street name is valid; <code>false</code> otherwise
      */
     public boolean isValidStreet(String street) {
-        return street.matches("[A-Za-z0-9]+(['-,\\.])*([\\s][A-Za-z0-9]+['-,\\.]*)*");
+        return street.matches("[A-Za-z0-9]+(['-,\\.A-Za-z0-9])*([\\s][A-Za-z0-9]+['-,\\.]*)*");
     }
 
     /**
