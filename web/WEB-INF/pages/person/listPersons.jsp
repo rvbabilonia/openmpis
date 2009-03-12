@@ -49,31 +49,31 @@
                         <bean:message key="case.menu"/>
                     </div>
                     <c:choose>
-                        <c:when test="${type eq 'allmissing'}">
+                        <c:when test="${type == 'allmissing'}">
                             <bean:message key="case.list.allmissing" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'missing'}">
+                        <c:when test="${type == 'missing'}">
                             <bean:message key="case.list.missing" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'familyabduction'}">
+                        <c:when test="${type == 'familyabduction'}">
                             <bean:message key="case.list.familyabduction" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'nonfamilyabduction'}">
+                        <c:when test="${type == 'nonfamilyabduction'}">
                             <bean:message key="case.list.nonfamily" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'runaway'}">
+                        <c:when test="${type == 'runaway'}">
                             <bean:message key="case.list.runaway" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'unknown'}">
+                        <c:when test="${type == 'unknown'}">
                             <bean:message key="case.list.unknown" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'abandoned'}">
+                        <c:when test="${type == 'abandoned'}">
                             <bean:message key="case.list.abandoned" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'throwaway'}">
+                        <c:when test="${type == 'throwaway'}">
                             <bean:message key="case.list.throwaway" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type eq 'unidentified'}">
+                        <c:when test="${type == 'unidentified'}">
                             <bean:message key="case.list.unidentified" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
                         <c:when test="${currentuser.groupId == 1}">
@@ -116,7 +116,7 @@
                                                         </p>
                                                         <p style="text-align: center;">
                                                             <c:choose>
-                                                                <c:when test="${personlist[(4 * i) + j].nickname eq ''}">
+                                                                <c:when test="${personlist[(4 * i) + j].nickname == ''}">
                                                                     <html:link href="${fn:escapeXml(url)}">${personlist[(4 * i) + j].firstName} ${personlist[(4 * i) + j].lastName}</html:link>
                                                                 </c:when>
                                                                 <c:otherwise>
@@ -143,7 +143,7 @@
                                                     </div>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <div class="cell" style="width: 25%;"></div>
+                                                    <div class="hiddencell" style="width: 25%;"></div>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>
@@ -176,7 +176,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
-                                    <c:when test="${morepages eq 'true'}">
+                                    <c:when test="${morepages == 'true'}">
                                         <c:url var="url" scope="page" value="/viewCase.do">
                                             <c:param name="action" value="list"/>
                                             <c:param name="page" value="next"/>
