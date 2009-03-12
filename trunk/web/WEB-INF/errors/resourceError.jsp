@@ -27,13 +27,13 @@
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
-                    <c:when test="${currentuser.groupId eq '0'}">
+                    <c:when test="${currentuser.groupId == 0}">
                         <bean:message key="admin.home.menu"/>
                     </c:when>
-                    <c:when test="${currentuser.groupId eq '1'}">
+                    <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.home.menu"/>
                     </c:when>
-                    <c:when test="${currentuser.groupId eq '2'}">
+                    <c:when test="${currentuser.groupId == 2}">
                         <bean:message key="investigator.home.menu"/>
                     </c:when>
                     <c:otherwise>
