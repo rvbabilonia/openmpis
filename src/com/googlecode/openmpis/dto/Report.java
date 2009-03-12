@@ -35,6 +35,18 @@ public class Report {
      */
     private int personId;
     /**
+     * The person's first name
+     */
+    private String firstName;
+    /**
+     * The person's nickname
+     */
+    private String nickname;
+    /**
+     * The person's last name
+     */
+    private String lastName;
+    /**
      * The investigator ID
      */
     private int investigatorId;
@@ -81,6 +93,60 @@ public class Report {
      */
     public void setPersonId(int personId) {
         this.personId = personId;
+    }
+
+    /**
+     * Gets the person's first name.
+     *
+     * @return              the person's first name
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Sets the person's first name.
+     *
+     * @param firstName     the person's first name
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Gets the person's last name.
+     *
+     * @return              the person's last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Sets the person's last name.
+     *
+     * @param lastName     the person's last name
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * Gets the person's nickname.
+     *
+     * @return              the person's nickname
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * Sets the person's nickname.
+     *
+     * @param nickname     the person's nickname
+     */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     /**
