@@ -52,7 +52,7 @@
                         <li>Search</li>
                         <li>Feedback</li>
                         <li>Statistics</li>
-                        <li>Download</li>
+                        <li>Forms</li>
                         <li>Safety Tips</li>
                         <li>Log In</li>
                         <li>Missing Persons</li>
@@ -71,7 +71,7 @@
                         <li>Search</li>
                         <li>Feedback</li>
                         <li>Statistics</li>
-                        <li>Download</li>
+                        <li>Forms</li>
                         <li>Safety Tips</li>
                         <li>Log In</li>
                         <li>Password Retrieval</li>
@@ -85,7 +85,7 @@
                     <ul>
                         <li>Home</li>
                         <li>Users</li>
-                        <li>Reports</li>
+                        <li>Statistics</li>
                         <li>Feedbacks</li>
                         <li>Log Out</li>
                         <li>Privacy Policy</li>
@@ -99,7 +99,8 @@
                         <li>Home</li>
                         <li>Users</li>
                         <li>Cases</li>
-                        <li>Reports</li>
+                        <li>Progress</li>
+                        <li>Statistics</li>
                         <li>Log Out</li>
                         <li>Privacy Policy</li>
                         <li>Terms and Conditions</li>
@@ -113,7 +114,8 @@
                         <li>Profile</li>
                         <li>Cases</li>
                         <li>Sightings</li>
-                        <li>Reports</li>
+                        <li>Progress</li>
+                        <li>Statistics</li>
                         <li>Log Out</li>
                         <li>Privacy Policy</li>
                         <li>Terms and Conditions</li>
