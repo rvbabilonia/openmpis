@@ -275,6 +275,14 @@ public abstract class Constants {
      */
     public static final String LIST_SIGHTING = "list-sighting";
     /**
+     * The logical name of the forwarding instance for unsuccessful listing of all feedbacks
+     */
+    public static final String LIST_FEEDBACK_REDO = "list-feedback-redo";
+    /**
+     * The logical name of the forwarding instance for unsuccessful listing of all sightings
+     */
+    public static final String LIST_SIGHTING_REDO = "list-sighting-redo";
+    /**
      * The logical name of the forwarding instance for viewing a message (sighting or feedback)
      */
     public static final String VIEW_MESSAGE = "view-message";
