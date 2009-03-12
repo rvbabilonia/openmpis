@@ -37,8 +37,8 @@
                     The manifest file
         conf/META-INF/context.xml
                     The context file
-        database/   The directory containing the database schemas for MySQL and
-                    PostgreSQL databases and the Druid file
+        database/   The directory containing the database schema for MySQL
+                    database and the Druid file
         dist/       The directory containing the deployable openmpis.war file
                     and javadocs/ directory (generated upon running ant)
         manuals/    The directory containing the user, developer, system
