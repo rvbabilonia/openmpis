@@ -173,6 +173,7 @@
                 input="/WEB-INF/pages/session/personForm.jsp"
                 validate="false"
                 parameter="action">
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="view-person" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
             <forward name="add-person"  path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="add-person-redo"  path="/WEB-INF/pages/session/personForm.jsp"/>
@@ -237,6 +238,7 @@
                 input="/WEB-INF/pages/session/reportForm.jsp"
                 validate="false"
                 parameter="action">
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="list-report" path="/WEB-INF/pages/session/listReports.jsp"/>
             <forward name="view-report" path="/WEB-INF/pages/session/reportForm.jsp"/>
             <forward name="add-report"  path="/WEB-INF/pages/session/reportForm.jsp"/>
@@ -260,6 +262,8 @@
                 parameter="action">
             <forward name="list-feedback" path="/WEB-INF/pages/session/listMessages.jsp"/>
             <forward name="list-sighting" path="/WEB-INF/pages/session/listMessages.jsp"/>
+            <forward name="list-feedback-redo" path="/viewMessage.do?action=listFeedback"/>
+            <forward name="list-sighting-redo" path="/viewMessage.do?action=listSighting"/>
             <forward name="view-message" path="/WEB-INF/pages/session/viewMessageForm.jsp"/>
             <forward name="add-sighting" path="/WEB-INF/pages/sighting/sightingForm.jsp"/>
             <forward name="add-sighting-redo" path="/WEB-INF/pages/sighting/sightingForm.jsp"/>
@@ -325,8 +329,6 @@
             <forward name="password-success" path="/WEB-INF/pages/password/passwordSuccess.jsp"/>
             <forward name="password-redo" path="/WEB-INF/pages/password/passwordForm.jsp"/>
         </action>
-        
-        <!-- Not yet implemented -->
         <!-- Search -->
         <action
                 path="/search"
