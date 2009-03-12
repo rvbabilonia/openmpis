@@ -80,6 +80,10 @@ public class RelativeForm extends ActionForm {
      * The user-inputted confirmation code
      */
     private int userCode;
+    /**
+     * The ID of the person
+     */
+    private int personId;
 
     /**
      * Gets the ID of the relative.
@@ -313,6 +317,24 @@ public class RelativeForm extends ActionForm {
      */
     public void setUserCode(int userCode) {
         this.userCode = userCode;
+    }
+
+    /**
+     * Gets the ID of the person.
+     *
+     * @return              the ID of the person
+     */
+    public int getPersonId() {
+        return personId;
+    }
+
+    /**
+     * Sets the ID of the person.
+     *
+     * @param personId      the ID of the person
+     */
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     /**

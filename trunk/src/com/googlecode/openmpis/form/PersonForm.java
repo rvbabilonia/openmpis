@@ -254,13 +254,37 @@ public class PersonForm extends ActionForm {
      */
     private int relativeId;
     /**
+     * The first name of the relative
+     */
+    private String relativeFirstName;
+    /**
+     * The last name of the relative
+     */
+    private String relativeLastName;
+    /**
      * The ID of the investigator
      */
     private int investigatorId;
     /**
+     * The username of the investigator
+     */
+    private String investigatorUsername;
+    /**
      * The ID of the abductor
      */
     private int abductorId;
+    /**
+     * The first name of the abductor
+     */
+    private String abductorFirstName;
+    /**
+     * The last name of the abductor
+     */
+    private String abductorLastName;
+    /**
+     * The number of progress reports for this person
+     */
+    private int progressReports;
     /**
      * The date this case was created
      */
@@ -277,6 +301,14 @@ public class PersonForm extends ActionForm {
      * The user-inputted confirmation code
      */
     private int userCode;
+    /**
+     * The relationship of the relative to the person
+     */
+    private Integer relationToRelative;
+    /**
+     * The relationship of the abductor to the person
+     */
+    private Integer relationToAbductor;
 
     /**
      * Gets the ID of the person.
@@ -1251,6 +1283,42 @@ public class PersonForm extends ActionForm {
     }
 
     /**
+     * Gets the first name of the relative.
+     * 
+     * @return              the first name of the relative
+     */
+    public String getRelativeFirstName() {
+        return relativeFirstName;
+    }
+
+    /**
+     * Sets the first name of the relative.
+     *
+     * @param relativeFirstName the first name of the relative
+     */
+    public void setRelativeFirstName(String relativeFirstName) {
+        this.relativeFirstName = relativeFirstName;
+    }
+
+    /**
+     * Gets the last name of the relative.
+     *
+     * @return              the last name of the relative
+     */
+    public String getRelativeLastName() {
+        return relativeLastName;
+    }
+
+    /**
+     * Sets the last name of the relative.
+     *
+     * @param relativeLastName the last name of the relative
+     */
+    public void setRelativeLastName(String relativeLastName) {
+        this.relativeLastName = relativeLastName;
+    }
+
+    /**
      * Gets the ID of the investigator.
      *
      * @return              the ID of the investigator
@@ -1269,6 +1337,24 @@ public class PersonForm extends ActionForm {
     }
 
     /**
+     * Gets the username of the investigator.
+     *
+     * @return              the username of the investigator
+     */
+    public String getInvestigatorUsername() {
+        return investigatorUsername;
+    }
+
+    /**
+     * Sets the username of the investigator.
+     *
+     * @param investigatorUsername the username of the investigator
+     */
+    public void setInvestigatorUsername(String investigatorUsername) {
+        this.investigatorUsername = investigatorUsername;
+    }
+
+    /**
      * Gets the ID of the abductor.
      *
      * @return              the ID of the abductor
@@ -1284,6 +1370,42 @@ public class PersonForm extends ActionForm {
      */
     public void setAbductorId(int abductorId) {
         this.abductorId = abductorId;
+    }
+
+    /**
+     * Gets the first name of the abductor.
+     *
+     * @return              the first name of the abductor
+     */
+    public String getAbductorFirstName() {
+        return abductorFirstName;
+    }
+
+    /**
+     * Sets the first name of the abductor.
+     *
+     * @param abductorFirstName the first name of the abductor
+     */
+    public void setAbductorFirstName(String abductorFirstName) {
+        this.abductorFirstName = abductorFirstName;
+    }
+
+    /**
+     * Gets the last name of the abductor.
+     *
+     * @return              the last name of the abductor
+     */
+    public String getAbductorLastName() {
+        return abductorLastName;
+    }
+
+    /**
+     * Sets the last name of the abductor.
+     *
+     * @param abductorLastName the last name of the abductor
+     */
+    public void setAbductorLastName(String abductorLastName) {
+        this.abductorLastName = abductorLastName;
     }
 
     /**
@@ -1392,6 +1514,60 @@ public class PersonForm extends ActionForm {
      */
     public void setPhotoFile(FormFile photoFile) {
         this.photoFile = photoFile;
+    }
+
+    /**
+     * Gets the number of progress reports.
+     *
+     * @return              the number of progress reports
+     */
+    public int getProgressReports() {
+        return progressReports;
+    }
+
+    /**
+     * Sets the number of progress reports.
+     *
+     * @param progressReports the number of progress reports
+     */
+    public void setProgressReports(int progressReports) {
+        this.progressReports = progressReports;
+    }
+
+    /**
+     * Gets the relationship of the relative to the person.
+     *
+     * @return              the relationship of the relative to the person
+     */
+    public Integer getRelationToRelative() {
+        return relationToRelative;
+    }
+
+    /**
+     * Sets the relationship of the relative to the person.
+     *
+     * @param relationToRelative the relationship of the relative to the person
+     */
+    public void setRelationToRelative(Integer relationToRelative) {
+        this.relationToRelative = relationToRelative;
+    }
+
+    /**
+     * Gets the relationship of the abductor to the person.
+     *
+     * @return              the relationship of the abductor to the person
+     */
+    public Integer getRelationToAbductor() {
+        return relationToAbductor;
+    }
+
+    /**
+     * Sets the relationship of the abductor to the person.
+     *
+     * @param relationToAbductor the relationship of the abductor to the person
+     */
+    public void setRelationToAbductor(Integer relationToAbductor) {
+        this.relationToAbductor = relationToAbductor;
     }
 
     /**
