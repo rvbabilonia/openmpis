@@ -74,7 +74,14 @@
                                 <c:forEach items="${messagelist}" var="message" varStatus="messageCount">
                                     <div class="row">
                                         <div class="cell">${messageCount.count}</div>
-                                        <div class="cell"><html:link action="viewMessage.do?action=viewSighting" paramName="message" paramId="id" paramProperty="id">${message.subject}</html:link></div>
+                                        <c:choose>
+                                            <c:when test="${currentuser.groupId == 2}">
+                                                <div class="cell"><html:link action="viewMessage.do?action=viewSighting" paramName="message" paramId="id" paramProperty="id">${message.subject}</html:link></div>
+                                            </c:when>
+                                            <c:when test="${currentuser.groupId == 0}">
+                                                <div class="cell"><html:link action="viewMessage.do?action=viewFeedback" paramName="message" paramId="id" paramProperty="id">${message.subject}</html:link></div>
+                                            </c:when>
+                                        </c:choose>
                                         <div class="cell"><html:link href="mailto:${message.email}">${message.firstName} ${message.lastName}</html:link></div>
                                         <div class="cell">${message.date}</div>
                                         <div class="cell"><bean:message key="status.message.${message.status}"/></div>
@@ -107,7 +114,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
-                                    <c:when test="${morepages eq 'true'}">
+                                    <c:when test="${morepages == 'true'}">
                                         <c:url var="url" scope="page" value="/viewmessage.do">
                                             <c:param name="action" value="list"/>
                                             <c:param name="page" value="next"/>

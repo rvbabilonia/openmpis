@@ -27,6 +27,9 @@
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
+                    <c:when test="${currentuser.groupId == 1}">
+                        <bean:message key="encoder.report.menu"/>
+                    </c:when>
                     <c:when test="${currentuser.groupId == 2}">
                         <bean:message key="investigator.report.menu"/>
                     </c:when>
@@ -48,7 +51,7 @@
                                 <div class="row">
                                     <div class="columnheader"><bean:message key="label.count"/></div>
                                     <div class="columnheader"><bean:message key="label.for"/></div>
-                                    <div class="columnheader"><bean:message key="label.date.encoded"/></div>
+                                    <div class="columnheader"><bean:message key="label.date.reported"/></div>
                                 </div>
                                 <c:forEach items="${reportlist}" var="report" varStatus="reportCount">
                                     <div class="row">
@@ -57,7 +60,15 @@
                                             <c:param name="action" value="viewReport"/>
                                             <c:param name="id" value="${report.id}"/>
                                         </c:url>
-                                        <div class="cell"><html:link href="${fn:escapeXml(url)}">${report.personId}</html:link></div>
+                                        <div class="cell">
+                                            <html:link href="${fn:escapeXml(url)}">
+                                                ${report.firstName}
+                                                <c:if test="${report.nickname != null}">
+                                                    "${report.nickname}"
+                                                </c:if>
+                                                ${report.lastName}
+                                            </html:link>
+                                        </div>
                                         <div class="cell">${report.date}</div>
                                     </div>
                                 </c:forEach>
@@ -88,7 +99,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
-                                    <c:when test="${morepages eq 'true'}">
+                                    <c:when test="${morepages == 'true'}">
                                         <c:url var="url" scope="page" value="/viewreport.do">
                                             <c:param name="action" value="list"/>
                                             <c:param name="page" value="next"/>

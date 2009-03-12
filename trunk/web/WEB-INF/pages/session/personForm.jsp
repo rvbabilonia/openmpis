@@ -51,10 +51,10 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
+                                <c:when test="${(action == 'newPerson') || (action == 'addPerson')}">
                                     <bean:message key="case.add"/>
                                 </c:when>
-                                <c:when test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
+                                <c:when test="${(action == 'editPerson') || (action == 'viewPerson')}">
                                     <bean:message key="case.edit"/>
                                 </c:when>
                             </c:choose>
@@ -70,12 +70,12 @@
                     <html:form method="post" action="viewPerson" styleClass="adduserclass" enctype="multipart/form-data">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
+                                <c:when test="${(action == 'newPerson') || (action == 'addPerson')}">
                                     <html:hidden property="action" value="addPerson"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                     <html:hidden property="investigatorid" value="${investigatorid}"/>
                                 </c:when>
-                                <c:when test="${(action eq 'viewPerson') || (action eq 'editPerson')}">
+                                <c:when test="${(action == 'viewPerson') || (action == 'editPerson')}">
                                     <html:hidden property="action" value="editPerson"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                     <html:hidden property="investigatorid" value="${investigatorid}"/>
@@ -90,7 +90,7 @@
                                 <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
                             </p>
                         </c:if>
-                        <c:if test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
+                        <c:if test="${(action == 'editPerson') || (action == 'viewPerson')}">
                             <p class="contentclass">
                                 <html:img styleClass="photoclass" src="${personForm.photo == null ? 'photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
                                 <html:img styleClass="photoclass" src="${personForm.agedPhoto == null ? 'photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
@@ -558,7 +558,7 @@
                                 <label id="relativeidlabel" class="labelclass">
                                     <bean:message key="label.relative.id"/>
                                 </label>
-                                <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeId}</html:link>
+                                <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeFirstName} ${personForm.relativeLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.abductorId > 0}">
@@ -566,7 +566,7 @@
                                 <label id="abductoridlabel" class="labelclass">
                                     <bean:message key="label.abductor.id"/>
                                 </label>
-                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorId}</html:link>
+                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.investigatorId > 0}">
@@ -574,27 +574,30 @@
                                 <label id="investigatoridlabel" class="labelclass">
                                     <bean:message key="label.investigator.id"/>
                                 </label>
-                                <html:link action="viewUser.do?action=viewUser" paramName="personForm" paramId="id" paramProperty="investigatorId">${personForm.investigatorId}</html:link>
+                                <html:link action="viewUser.do?action=viewUser" paramName="personForm" paramId="id" paramProperty="investigatorId">${personForm.investigatorUsername}</html:link>
                             </p>
                         </c:if>
-                        <p class="contentclass">
-                            <label id="progresslabel" class="labelclass">
-                                <bean:message key="label.progress"/>
-                            </label>
-                            <html:link action="viewReport.do?action=viewReport" paramName="personForm" paramId="id" paramProperty="id">${reportcount}</html:link>
-                        </p>
-                        <p class="contentclass">
-                            <c:if test="${currentuser.groupId == 1}">
+                        <c:if test="${(action == 'viewPerson') || (action == 'editPerson')}">
+                            <p class="contentclass">
+                                <label id="progresslabel" class="labelclass">
+                                    <bean:message key="label.progress"/>
+                                </label>
+                                <html:link action="viewReport.do?action=listReport" paramName="personForm" paramId="personid" paramProperty="id">${personForm.progressReports}</html:link>
+                            </p>
+                        </c:if>
+                        <c:if test="${currentuser.groupId == 1}">
+                            <p class="contentclass">
                                 <c:choose>
-                                    <c:when test="${(action eq 'newPerson') || (action eq 'addPerson')}">
+                                    <c:when test="${(action == 'newPerson') || (action == 'addPerson')}">
                                         <bean:message key="case.add.buttons"/>
                                     </c:when>
-                                    <c:when test="${(action eq 'editPerson') || (action eq 'viewPerson')}">
+                                    <c:when test="${(action == 'editPerson') || (action == 'viewPerson')}">
                                         <bean:message key="case.delete.buttons"/>
                                     </c:when>
                                 </c:choose>
-                            </c:if>
-                        </p>
+                                <bean:message key="case.print.progress.buttons" arg0="${personForm.id}"/>
+                            </p>
+                        </c:if>
                     </html:form>
 
                 </div>

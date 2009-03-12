@@ -35,7 +35,7 @@
                         <bean:message key="encoder.user.menu"/>
                     </c:when>
                     <c:when test="${currentuser.groupId == 2}">
-                        <bean:message key="investigator.user.menu" arg0="${currentuser.id}"/>
+                        <bean:message key="investigator.user.menu"/>
                     </c:when>
                 </c:choose>
             </div>

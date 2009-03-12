@@ -33,6 +33,9 @@
                     <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.case.menu"/>
                     </c:when>
+                    <c:when test="${currentuser.groupId == 2}">
+                        <bean:message key="investigator.case.menu"/>
+                    </c:when>
                 </c:choose>
             </div>
 
@@ -42,13 +45,13 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${(action eq 'newRelative') || (action eq 'addRelative')}">
+                                <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
                                     <bean:message key="relative.add"/>
                                 </c:when>
-                                <c:when test="${((action eq 'viewRelative') && (personid != null)) || (action eq 'editRelative') || (action eq 'editPerson') || (action eq 'addPerson')}">
+                                <c:when test="${((action == 'viewRelative') && (personid != null)) || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
                                     <bean:message key="relative.edit"/>
                                 </c:when>
-                                <c:when test="${(action eq 'viewRelative') && (personid == null)}">
+                                <c:when test="${(action == 'viewRelative') && (personid == null)}">
                                     <bean:message key="relative.view"/>
                                 </c:when>
                             </c:choose>
@@ -64,12 +67,12 @@
                     <html:form method="post" action="viewRelative" styleClass="adduserclass">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action eq 'newRelative') || (action eq 'addRelative')}">
+                                <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
                                     <html:hidden property="action" value="addRelative"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                     <html:hidden property="investigatorid" value="${investigatorid}"/>
                                 </c:when>
-                                <c:when test="${(action eq 'viewRelative') || (action eq 'editRelative') || (action eq 'editPerson') || (action eq 'addPerson')}">
+                                <c:when test="${(action == 'viewRelative') || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
                                     <html:hidden property="action" value="editRelative"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                     <html:hidden property="investigatorid" value="${investigatorid}"/>
@@ -182,10 +185,10 @@
                             <p class="contentclass">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
-                                        <c:when test="${(action eq 'newRelative') || (action eq 'addRelative')}">
+                                        <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
                                             <bean:message key="relative.add.buttons"/>
                                         </c:when>
-                                        <c:when test="${(action eq 'viewRelative') || (action eq 'editRelative') || (action eq 'editPerson') || (action eq 'addPerson')}">
+                                        <c:when test="${(action == 'viewRelative') || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
                                             <bean:message key="relative.delete.buttons"/>
                                         </c:when>
                                     </c:choose>

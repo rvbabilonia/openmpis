@@ -117,7 +117,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
-                                    <c:when test="${morepages eq 'true'}">
+                                    <c:when test="${morepages == 'true'}">
                                         <c:url var="url" scope="page" value="/viewUser.do">
                                             <c:param name="action" value="list"/>
                                             <c:param name="page" value="next"/>
