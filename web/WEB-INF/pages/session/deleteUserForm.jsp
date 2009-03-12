@@ -43,7 +43,7 @@
                     <html:form method="post" action="viewUser" styleClass="adduserclass">
                         <p class="contentclass">
                             <html:hidden property="action" value="deleteUser"/>
-                            <html:hidden property="id" value="${userForm.id}"/>
+                            <html:hidden property="id"/>
                         </p>
                         <p class="contentclass">
                             <bean:message key="user.content.confirm" arg0="${userForm.username}"/>

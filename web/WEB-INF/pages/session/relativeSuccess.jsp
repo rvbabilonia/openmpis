@@ -37,13 +37,13 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${operation eq 'add'}">
+                            <c:when test="${operation == 'add'}">
                                 <bean:message key="relative.content.created" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
                             </c:when>
-                            <c:when test="${operation eq 'edit'}">
+                            <c:when test="${operation == 'edit'}">
                                 <bean:message key="relative.content.updated" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
                             </c:when>
-                            <c:when test="${operation eq 'delete'}">
+                            <c:when test="${operation == 'delete'}">
                                 <bean:message key="relative.content.deleted" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
                             </c:when>
                         </c:choose>

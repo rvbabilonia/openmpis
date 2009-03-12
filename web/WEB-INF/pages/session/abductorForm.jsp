@@ -42,13 +42,13 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${(action eq 'newAbductor') || (action eq 'addAbductor') || (action eq 'addRelative') || (action == null)}">
+                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
                                     <bean:message key="abductor.add"/>
                                 </c:when>
-                                <c:when test="${action eq 'editAbductor'}">
+                                <c:when test="${action == 'editAbductor'}">
                                     <bean:message key="abductor.edit"/>
                                 </c:when>
-                                <c:when test="${action eq 'viewAbductor'}">
+                                <c:when test="${action == 'viewAbductor'}">
                                     <bean:message key="abductor.view"/>
                                 </c:when>
                             </c:choose>
@@ -64,11 +64,11 @@
                     <html:form method="post" action="viewAbductor" styleClass="adduserclass" enctype="multipart/form-data">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action eq 'newAbductor') || (action eq 'addAbductor') || (action eq '') || (action eq null)}">
+                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == '') || (action == null)}">
                                     <html:hidden property="action" value="addAbductor"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                 </c:when>
-                                <c:when test="${(action eq 'viewAbductor') || (action eq 'editAbductor')}">
+                                <c:when test="${(action == 'viewAbductor') || (action == 'editAbductor')}">
                                     <html:hidden property="action" value="editAbductor"/>
                                     <html:hidden property="personid" value="${personid}"/>
                                 </c:when>
@@ -95,7 +95,7 @@
                             </label>
                             <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
                         </p>
-                        <c:if test="${(action eq 'editAbductor') || (action eq 'viewAbductor')}">
+                        <c:if test="${(action == 'editAbductor') || (action == 'viewAbductor')}">
                             <p class="contentclass">
                                 <html:img styleClass="photoclass" src="${abductorForm.photo == '' ? 'photo/unknown.png' : abductorForm.photo}" alt="The person's photo" title="Photo"/>
                                 <html:img styleClass="photoclass" src="${abductorForm.agedPhoto == '' ? 'photo/unknown.png' : abductorForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
@@ -342,10 +342,10 @@
                             <p class="contentclass">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
-                                        <c:when test="${(action eq 'newAbductor') || (action eq 'addAbductor') || (action eq 'addRelative') || (action == null)}">
+                                        <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
                                             <bean:message key="case.add.buttons"/>
                                         </c:when>
-                                        <c:when test="${(action eq 'editAbductor') || (action eq 'viewAbductor')}">
+                                        <c:when test="${(action == 'editAbductor') || (action == 'viewAbductor')}">
                                             <bean:message key="case.delete.buttons"/>
                                         </c:when>
                                     </c:choose>

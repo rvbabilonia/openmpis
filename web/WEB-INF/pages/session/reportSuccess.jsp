@@ -37,13 +37,13 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${action eq 'addReport'}">
-                                <bean:message key="report.content.created" arg0="${report.id}" arg1="${report.personId}" arg2="${report.date}"/>
+                            <c:when test="${action == 'addReport'}">
+                                <bean:message key="report.content.created" arg0="${report.firstName}" arg1="${report.nickname}" arg2="${report.lastName}" arg3="${report.date}"/>
                             </c:when>
-                            <c:when test="${action eq 'editReport'}">
+                            <c:when test="${action == 'editReport'}">
                                 <bean:message key="report.content.updated" arg0="${id}"/>
                             </c:when>
-                            <c:when test="${action eq 'deleteReport'}">
+                            <c:when test="${action == 'deleteReport'}">
                                 <bean:message key="report.content.deleted" arg0="${id}"/>
                             </c:when>
                         </c:choose>

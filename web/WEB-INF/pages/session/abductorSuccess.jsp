@@ -33,7 +33,7 @@
                         <bean:message key="encoder.user.menu"/>
                     </c:when>
                     <c:when test="${currentuser.groupId == 2}">
-                        <bean:message key="investigator.user.menu" arg0="${currentuser.id}"/>
+                        <bean:message key="investigator.user.menu"/>
                     </c:when>
                 </c:choose>
             </div>
@@ -43,13 +43,13 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${operation eq 'add'}">
+                            <c:when test="${operation == 'add'}">
                                 <bean:message key="user.content.created" arg0="${user.username}" arg1="${user.id}" arg2="${user.date}"/>
                             </c:when>
-                            <c:when test="${operation eq 'edit'}">
+                            <c:when test="${operation == 'edit'}">
                                 <bean:message key="user.content.updated" arg0="${username}"/>
                             </c:when>
-                            <c:when test="${operation eq 'delete'}">
+                            <c:when test="${operation == 'delete'}">
                                 <bean:message key="user.content.deleted" arg0="${username}"/>
                             </c:when>
                         </c:choose>
