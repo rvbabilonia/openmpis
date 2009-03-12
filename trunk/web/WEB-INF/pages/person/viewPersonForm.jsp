@@ -60,19 +60,19 @@
                     </h2>
                     <div class="table">
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p style="text-align: right;">
-                                    <html:img styleClass="photoclass" src="${personForm.photo eq null ? '/photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
+                                    <html:img styleClass="photoclass" src="${personForm.photo == null ? '/photo/unknown.png' : personForm.photo}" alt="The person's photo" title="Photo"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p style="text-align: left;">
-                                    <html:img styleClass="photoclass" src="${personForm.agedPhoto eq null ? '/photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
+                                    <html:img styleClass="photoclass" src="${personForm.agedPhoto == null ? '/photo/unknown.png' : personForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="statuslabel" class="labelclass">
                                         <bean:message key="label.status"/>
@@ -80,7 +80,7 @@
                                     <bean:message key="status.case.${personForm.status}"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="typelabel" class="labelclass">
                                         <bean:message key="label.case.type"/>
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="birthdatelabel" class="labelclass">
                                         <bean:message key="label.date.birth"/>
@@ -99,7 +99,7 @@
                                     
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="agelabel" class="labelclass">
                                         <bean:message key="label.age"/>
@@ -109,7 +109,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="addresslabel" class="labelclass">
                                         <bean:message key="label.address"/>
@@ -117,14 +117,14 @@
                                     ${personForm.street}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     ${personForm.city}, ${personForm.province}, ${personForm.country}
                                 </p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="sexlabel" class="labelclass">
                                         <bean:message key="label.sex"/>
@@ -132,7 +132,7 @@
                                     <bean:message key="sex.${personForm.sex}"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="haircolorlabel" class="labelclass">
                                         <bean:message key="label.color.hair"/>
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="heightlabel" class="labelclass">
                                         <bean:message key="label.height"/>
@@ -151,7 +151,7 @@
                                     ${personForm.inches}&nbsp;<bean:message key="label.height.in"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="eyecolorlabel" class="labelclass">
                                         <bean:message key="label.color.eye"/>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="weightlabel" class="labelclass">
                                         <bean:message key="label.weight"/>
@@ -169,7 +169,7 @@
                                     ${personForm.weight}&nbsp;<bean:message key="label.weight.lbs"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="racelabel" class="labelclass">
                                         <bean:message key="label.race"/>
@@ -179,7 +179,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="religionlabel" class="labelclass">
                                         <bean:message key="label.religion"/>
@@ -187,7 +187,7 @@
                                     <bean:message key="religion.${personForm.religion}"/>
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="medicalconditionlabel" class="labelclass">
                                         <bean:message key="label.condition"/>
@@ -197,7 +197,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="markslabel" class="labelclass">
                                         <bean:message key="label.marks"/>
@@ -205,7 +205,7 @@
                                     ${personForm.marks}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="personaleffectslabel" class="labelclass">
                                         <bean:message key="label.personaleffects"/>
@@ -215,7 +215,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="remarkslabel" class="labelclass">
                                         <bean:message key="label.remarks"/>
@@ -223,7 +223,7 @@
                                     ${personForm.remarks}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="codisidlabel" class="labelclass">
                                         <bean:message key="label.codis.id"/>
@@ -233,7 +233,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="afisidlabel" class="labelclass">
                                         <bean:message key="label.afis.id"/>
@@ -241,7 +241,7 @@
                                     ${personForm.afisId}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="dentalidlabel" class="labelclass">
                                         <bean:message key="label.dental.id"/>
@@ -250,20 +250,32 @@
                                 </p>
                             </div>
                         </div>
+                        <c:if test="${currentuser.groupId == 2}">
+                            <div class="row">
+                                <div class="hiddencell" style="width: 50%;">
+                                    <p class="contentclass">
+                                        <label id="relativelabel" class="labelclass">
+                                            <bean:message key="label.relative.name"/>
+                                        </label>
+                                        <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeFirstName} ${personForm.relativeLastName}</html:link>
+                                    </p>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                     <c:choose>
                         <c:when test="${personForm.type > 4}">
                             <c:set var="missing" value="display: none;"/>
-                            <c:set var="found" value="display: table;"/>
+                            <c:set var="found" value="display: table; width: 100%; border-spacing: 1px;"/>
                         </c:when>
                         <c:otherwise>
-                            <c:set var="missing" value="display: table;"/>
+                            <c:set var="missing" value="display: table; width: 100%; border-spacing: 1px;"/>
                             <c:set var="found" value="display: none;"/>
                         </c:otherwise>
                     </c:choose>
                     <div id="ifmissing" style="${missing}">
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="datemissinglabel" class="labelclass">
                                         <bean:message key="label.date.missing"/>
@@ -271,14 +283,14 @@
                                     <bean:message key="month.${personForm.monthMissingOrFound}"/>&nbsp;${personForm.dayMissingOrFound},&nbsp;${personForm.yearMissingOrFound}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     ${personForm.daysMissing}&nbsp;<bean:message key="label.missing.day"/>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="missingfromcitylabel" class="labelclass">
                                         <bean:message key="label.address.missingfrom"/>
@@ -286,7 +298,7 @@
                                     ${personForm.missingFromCity}, ${personForm.missingFromProvince}, ${personForm.missingFromCountry}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="possiblecitylabel" class="labelclass">
                                         <bean:message key="label.address.possiblelocation"/>
@@ -296,7 +308,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="circumstancelabel" class="labelclass">
                                         <bean:message key="label.circumstance"/>
@@ -304,7 +316,7 @@
                                     ${personForm.circumstance}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="rewardlabel" class="labelclass">
                                         <bean:message key="label.reward"/>
@@ -313,10 +325,22 @@
                                 </p>
                             </div>
                         </div>
+                        <c:if test="${(personForm.type == 1) || (personForm.type == 2)}">
+                            <div class="row">
+                                <div class="hiddencell" style="width: 50%;">
+                                    <p class="contentclass">
+                                        <label id="abductorlabel" class="labelclass">
+                                            <bean:message key="label.abductor.name"/>
+                                        </label>
+                                        <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
+                                    </p>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                     <div id="iffound" style="${found}">
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="datefoundlabel" class="labelclass">
                                         <bean:message key="label.date.found"/>
@@ -326,7 +350,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="institutionlabel" class="labelclass">
                                         <bean:message key="label.address.currentlocation"/>
@@ -334,7 +358,7 @@
                                     ${personForm.institution}, ${personForm.institutionStreet}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="institutioncitylabel" class="labelclass">
                                         <bean:message key="label.address.city"/>
@@ -344,7 +368,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="institutionemaillabel" class="labelclass">
                                         <bean:message key="label.email"/>
@@ -352,7 +376,7 @@
                                     ${personForm.institutionEmail}
                                 </p>
                             </div>
-                            <div class="cell" style="width: 50%;">
+                            <div class="hiddencell" style="width: 50%;">
                                 <p class="contentclass">
                                     <label id="institutionnumberlabel" class="labelclass">
                                         <bean:message key="label.number"/>
@@ -362,20 +386,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table">
-                        <div class="row">
-                            <div class="cell" style="width: 50%;">
-                                <p style="text-align: center;">
-                                    <bean:message key="case.print.poster" arg0="${personForm.id}"/>
-                                    <bean:message key="case.sighting" arg0="${personForm.id}"/>
-                                    <c:if test="${currentuser.groupId == 2}">
-                                        <bean:message key="case.progress" arg0="${reportcount}" arg1="${personForm.id}"/>
-                                    </c:if>
-                                </p>
+                    <c:if test="${personForm.status != 1}">
+                        <div class="table">
+                            <div class="row">
+                                <div class="hiddencell" style="width: 50%;">
+                                    <p style="text-align: center;">
+                                        <bean:message key="case.print.poster" arg0="${personForm.id}"/>
+                                        <c:if test="${currentuser.groupId != 2}">
+                                            <bean:message key="case.add.sighting.button" arg0="${personForm.id}"/>
+                                        </c:if>
+                                        <c:if test="${currentuser.groupId == 2}">
+                                            <bean:message key="case.add.progress.button" arg0="${personForm.id}"/>
+                                            <bean:message key="case.print.progress.buttons" arg0="${personForm.id}"/>
+                                        </c:if>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    </c:if>
                 </div>
             </div>
 
