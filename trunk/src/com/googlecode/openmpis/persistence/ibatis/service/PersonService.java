@@ -208,6 +208,15 @@ public interface PersonService {
     public Person getPersonById(Integer id) throws SQLException;
 
     /**
+     * Retrieves an ongoing case given a person's ID.
+     *
+     * @param id            the person ID
+     * @return              the person
+     * @throws java.sql.SQLException
+     */
+    public Person getOngoingCaseById(Integer id) throws SQLException;
+
+    /**
      * Inserts a new person.
      * 
      * @param person        the new person

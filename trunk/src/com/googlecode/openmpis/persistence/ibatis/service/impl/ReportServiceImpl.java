@@ -63,6 +63,18 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
+     * Retrieves all reports for a given person.
+     *
+     * @param id            the ID of the person
+     * @return              the list of reports for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Report> listAllReportsForPerson(Integer id) throws SQLException {
+        return reportDAO.listAllReportsForPerson(id);
+    }
+
+    /**
      * Retrieves all reports written by a given investigator.
      *
      * @param pagination    the pagination context
@@ -71,8 +83,8 @@ public class ReportServiceImpl implements ReportService {
      * @throws java.sql.SQLException
      */
     @Override
-    public List<Report> getAllReportsByInvestigator(Pagination pagination, Integer investigatorId) throws SQLException {
-        return reportDAO.getAllReportsByInvestigator(pagination, investigatorId);
+    public List<Report> getAllReportsByInvestigatorId(Pagination pagination, Integer investigatorId) throws SQLException {
+        return reportDAO.getAllReportsByInvestigatorId(pagination, investigatorId);
     }
 
     /**
@@ -143,7 +155,7 @@ public class ReportServiceImpl implements ReportService {
      * @throws java.sql.SQLException
      */
     @Override
-    public int countAllReportsByInvestigator(Integer investigatorId) throws SQLException {
-        return reportDAO.countAllReportsByInvestigator(investigatorId);
+    public int countAllReportsByInvestigatorId(Integer investigatorId) throws SQLException {
+        return reportDAO.countAllReportsByInvestigatorId(investigatorId);
     }
 }

@@ -44,6 +44,15 @@ public interface ReportService {
     public List<Report> getAllReportsForPerson(Pagination pagination, Integer id) throws SQLException;
 
     /**
+     * Retrieves all reports for a given person.
+     *
+     * @param id            the ID of the person
+     * @return              the list of reports for a given person
+     * @throws java.sql.SQLException
+     */
+    public List<Report> listAllReportsForPerson(Integer id) throws SQLException;
+
+    /**
      * Retrieves all reports written by a given investigator.
      *
      * @param pagination    the pagination context
@@ -51,7 +60,7 @@ public interface ReportService {
      * @return              the list of reports written by a given investigator
      * @throws java.sql.SQLException
      */
-    public List<Report> getAllReportsByInvestigator(Pagination pagination, Integer investigatorId) throws SQLException;
+    public List<Report> getAllReportsByInvestigatorId(Pagination pagination, Integer investigatorId) throws SQLException;
 
     /**
      * Retrieves a report given its ID.
@@ -105,5 +114,5 @@ public interface ReportService {
      * @return              the total number of reports written by a given investigator
      * @throws java.sql.SQLException
      */
-    public int countAllReportsByInvestigator(Integer investigatorId) throws SQLException;
+    public int countAllReportsByInvestigatorId(Integer investigatorId) throws SQLException;
 }

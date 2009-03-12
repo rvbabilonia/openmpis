@@ -63,6 +63,15 @@ public interface MessageService {
     public List<Message> getAllSightingsForPerson(Pagination pagination, Message sighting) throws SQLException;
 
     /**
+     * Retrieves all sightings for a given person.
+     *
+     * @param id            the ID of the person
+     * @return              the list of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    public List<Message> listAllSightingsForPerson(Integer id) throws SQLException;
+
+    /**
      * Retrieves a message given his ID and sets its status to read.
      * 
      * @param id            the message ID

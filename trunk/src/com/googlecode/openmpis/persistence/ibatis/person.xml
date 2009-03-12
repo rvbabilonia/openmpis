@@ -238,11 +238,21 @@
         ]]>
     </select>
 
+    <select id="getOngoingCaseById" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="personColumnsFragment"/>
+        <![CDATA[
+        WHERE ID = #id#
+        AND STATUS = '0'
+        ]]>
+    </select>
+
     <select id="getPersonsByEncoderId" parameterClass="java.lang.Integer" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="personColumnsFragment"/>
         <![CDATA[
         WHERE ENCODERID = #encoderId#
+        AND STATUS = '0'
         ]]>
     </select>
 
@@ -252,6 +262,7 @@
         COUNT(ID)
         FROM PERSON
         WHERE ENCODERID = #encoderId#
+        AND STATUS = '0'
         ]]>
     </select>
 
@@ -260,6 +271,7 @@
         <include refid="personColumnsFragment"/>
         <![CDATA[
         WHERE INVESTIGATORID = #investigatorId#
+        AND STATUS = '0'
         ]]>
     </select>
 
@@ -269,6 +281,7 @@
         COUNT(ID)
         FROM PERSON
         WHERE INVESTIGATORID = #investigatorId#
+        AND STATUS = '0'
         ]]>
     </select>
 

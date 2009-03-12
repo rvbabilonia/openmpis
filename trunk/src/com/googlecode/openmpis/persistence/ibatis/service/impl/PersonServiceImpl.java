@@ -194,6 +194,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Retrieves an ongoing case given a person's ID.
+     *
+     * @param id            the person ID
+     * @return              the person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public Person getOngoingCaseById(Integer id) throws SQLException {
+        return personDAO.getOngoingCaseById(id);
+    }
+
+    /**
      * Retrieves solved cases.
      *
      * @param pagination    the pagination context

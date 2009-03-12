@@ -100,6 +100,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
+     * Retrieves all sightings for a given person.
+     *
+     * @param id            the ID of the person
+     * @return              the list of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> listAllSightingsForPerson(Integer id) throws SQLException {
+        return messageDAO.listAllSightingsForPerson(id);
+    }
+
+    /**
      * Retrieves a message given his ID and sets its status to read.
      * 
      * @param id            the message ID
