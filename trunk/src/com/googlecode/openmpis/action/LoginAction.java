@@ -80,7 +80,7 @@ public class LoginAction extends Action {
         // Check if form is valid
         if (isValidLogin(request, form)) {
             // Retrieve user with the specified j_username
-            User user = (User) userService.getUserByUsername(loginForm.getJ_username());
+            User user = userService.getUserByUsername(loginForm.getJ_username());
             String forward = "";
 
             // Check if j_username exists in the database

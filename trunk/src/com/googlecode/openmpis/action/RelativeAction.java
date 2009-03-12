@@ -112,7 +112,7 @@ public class RelativeAction extends DispatchAction {
 
             if (request.getAttribute("relativeid") != null) {
                 RelativeForm relativeForm = (RelativeForm) form;
-                Relative relative = (Relative) relativeService.getRelativeById((Integer) request.getAttribute("relativeid"));
+                Relative relative = relativeService.getRelativeById((Integer) request.getAttribute("relativeid"));
 
                 // Return relative
                 relativeForm.setId(relative.getId());
@@ -304,16 +304,16 @@ public class RelativeAction extends DispatchAction {
             currentUser = (User) request.getSession().getAttribute("currentuser");
         }
 
-        // Check if current user is an encoder
-        if (currentUser.getGroupId() == 1) {
+        // Check if current user is a authorized
+        if ((currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
             request.setAttribute("action", request.getParameter("action"));
             List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
 
-            int personId = 0;
+            // Retrieve person
             try {
                 if (request.getParameter("personid") != null) {
-                    personId = Integer.parseInt(request.getParameter("personid"));
+                    int personId = Integer.parseInt(request.getParameter("personid"));
                     request.setAttribute("personid", personId);
                     Person person = personService.getPersonById(personId);
                     request.setAttribute("relativeid", person.getRelativeId());
@@ -326,31 +326,28 @@ public class RelativeAction extends DispatchAction {
             }
 
             // Retrieve relative
-            int id = 0;
             try {
-                if (request.getParameter("id") != null) {
-                    id = Integer.parseInt(request.getParameter("id"));
-                } else {
-                    return mapping.findForward(Constants.LIST_PERSON);
-                }
+                int id = Integer.parseInt(request.getParameter("id"));
+                Relative relative = relativeService.getRelativeById(id);
+
+                // Return relative
+                relativeForm.setId(relative.getId());
+                relativeForm.setFirstName(relative.getFirstName());
+                relativeForm.setMiddleName(relative.getMiddleName());
+                relativeForm.setLastName(relative.getLastName());
+                relativeForm.setEmail(relative.getEmail());
+                relativeForm.setNumber(relative.getNumber());
+                relativeForm.setStreet(relative.getStreet());
+                relativeForm.setCity(relative.getCity());
+                relativeForm.setProvince(relative.getProvince());
+                relativeForm.setCountry(relative.getCountry());
+
+                return mapping.findForward(Constants.EDIT_RELATIVE);
             } catch (NumberFormatException nfe) {
                 return mapping.findForward(Constants.LIST_PERSON);
+            } catch (NullPointerException nfe) {
+                return mapping.findForward(Constants.LIST_PERSON);
             }
-            Relative relative = (Relative) relativeService.getRelativeById(id);
-
-            // Return relative
-            relativeForm.setId(relative.getId());
-            relativeForm.setFirstName(relative.getFirstName());
-            relativeForm.setMiddleName(relative.getMiddleName());
-            relativeForm.setLastName(relative.getLastName());
-            relativeForm.setEmail(relative.getEmail());
-            relativeForm.setNumber(relative.getNumber());
-            relativeForm.setStreet(relative.getStreet());
-            relativeForm.setCity(relative.getCity());
-            relativeForm.setProvince(relative.getProvince());
-            relativeForm.setCountry(relative.getCountry());
-
-            return mapping.findForward(Constants.EDIT_RELATIVE);
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
         }
@@ -499,7 +496,7 @@ public class RelativeAction extends DispatchAction {
     if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
     RelativeForm relativeForm = (RelativeForm) form;
     // Retrieve relative
-    Relative relative = (Person) relativeService.getPersonById(new Integer(relativeForm.getId()));
+    Relative relative = relativeService.getPersonById(new Integer(relativeForm.getId()));
 
     relativeForm.setPersonname(relative.getPersonname());
     // Generate 4-digit random code
@@ -544,7 +541,7 @@ public class RelativeAction extends DispatchAction {
     if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
     RelativeForm relativeForm = (RelativeForm) form;
 
-    Relative relative = (Relative) relativeService.getPersonById(new Integer(relativeForm.getId()));
+    Relative relative = relativeService.getPersonById(new Integer(relativeForm.getId()));
 
     // Check if codes match
     if (relativeForm.getCode() == relativeForm.getPersonCode()) {

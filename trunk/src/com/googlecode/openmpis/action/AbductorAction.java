@@ -142,7 +142,7 @@ public class AbductorAction extends DispatchAction {
             }
 
             if (request.getAttribute("abductorid") != null) {
-                Abductor abductor = (Abductor) abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
+                Abductor abductor = abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
                 
                 // Return abductor
                 abductorForm.setId(abductor.getId());
@@ -392,7 +392,7 @@ public class AbductorAction extends DispatchAction {
         } catch (NumberFormatException nfe) {
             //return mapping.findForward(Constants.LIST_ABDUCTOR);
         }
-        Abductor abductor = (Abductor) abductorService.getAbductorById(id);
+        Abductor abductor = abductorService.getAbductorById(id);
 
         // Return abductor
         if (abductor.getPhoto() != null) {
@@ -825,7 +825,7 @@ public class AbductorAction extends DispatchAction {
         } catch (NumberFormatException nfe) {
             //return mapping.findForward(Constants.LIST_ABDUCTOR);
         }
-        Abductor abductor = (Abductor) abductorService.getAbductorById(id);
+        Abductor abductor = abductorService.getAbductorById(id);
 
         // Process the photo
         String tokens[] = abductor.getPhoto().split("\\/");

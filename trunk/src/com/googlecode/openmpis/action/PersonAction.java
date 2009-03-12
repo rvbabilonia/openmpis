@@ -18,14 +18,16 @@
  */
 package com.googlecode.openmpis.action;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -40,15 +42,24 @@ import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Person;
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.PersonForm;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.RelativeDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.ReportDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.UserDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.AbductorService;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
 import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
+import com.googlecode.openmpis.persistence.ibatis.service.RelativeService;
 import com.googlecode.openmpis.persistence.ibatis.service.ReportService;
+import com.googlecode.openmpis.persistence.ibatis.service.UserService;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.AbductorServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.ReportServiceImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.UserServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
 
@@ -61,9 +72,6 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import java.awt.Color;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * The PersonAction class provides the methods to list, add, edit, delete and view
@@ -82,6 +90,18 @@ public class PersonAction extends DispatchAction {
      * The report service
      */
     private ReportService reportService = new ReportServiceImpl(new ReportDAOImpl());
+    /**
+     * The relative service
+     */
+    private RelativeService relativeService = new RelativeServiceImpl(new RelativeDAOImpl());
+    /**
+     * The abductor service
+     */
+    private AbductorService abductorService = new AbductorServiceImpl(new AbductorDAOImpl());
+    /**
+     * The user service
+     */
+    private UserService userService = new UserServiceImpl(new UserDAOImpl());
     /**
      * The log service
      */
@@ -291,11 +311,11 @@ public class PersonAction extends DispatchAction {
                             fos.close();
                             fos.flush();
                             if (agedPhotoFile.getFileName().length() > 0) {
-                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
                                 contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
                                 file = new File(absoluteAgedPhotoFilename);
                                 fos = new FileOutputStream(file);
-                                fos.write(photoFile.getFileData());
+                                fos.write(agedPhotoFile.getFileData());
                                 fos.close();
                                 fos.flush();
                             }
@@ -373,140 +393,137 @@ public class PersonAction extends DispatchAction {
         PersonForm personForm = (PersonForm) form;
 
         // Retrieve person
-        int id = 0;
         try {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id"));
-            } else {
-                return mapping.findForward(Constants.LIST_PERSON);
+            int id = Integer.parseInt(request.getParameter("id"));
+            Person person = (Person) personService.getPersonById(id);
+
+            // Return person
+            if (person.getPhoto() != null) {
+                personForm.setPhoto(person.getPhoto());
             }
-        } catch (NumberFormatException nfe) {
-            return mapping.findForward(Constants.LIST_PERSON);
-        }
-        Person person = (Person) personService.getPersonById(id);
+            if (person.getAgedPhoto() != null) {
+                personForm.setAgedPhoto(person.getAgedPhoto());
+            }
+            personForm.setId(person.getId());
+            personForm.setStatus(person.getStatus());
+            personForm.setType(person.getType());
+            personForm.setFirstName(person.getFirstName());
+            personForm.setNickname(person.getNickname());
+            personForm.setMiddleName(person.getMiddleName());
+            personForm.setLastName(person.getLastName());
+            personForm.setBirthMonth(person.getBirthMonth());
+            personForm.setBirthDay(person.getBirthDay());
+            personForm.setBirthYear(person.getBirthYear());
+            personForm.setAge(getAge(person.getBirthMonth() - 1, person.getBirthDay(), person.getBirthYear()));
+            personForm.setStreet(person.getStreet());
+            personForm.setCity(person.getCity());
+            personForm.setProvince(person.getProvince());
+            personForm.setCountry(person.getCountry());
+            personForm.setSex(person.getSex());
+            personForm.setFeet(person.getFeet());
+            personForm.setInches(person.getInches());
+            personForm.setWeight(person.getWeight());
+            personForm.setReligion(person.getReligion());
+            personForm.setRace(person.getRace());
+            personForm.setEyeColor(person.getEyeColor());
+            personForm.setHairColor(person.getHairColor());
+            personForm.setMedicalCondition(person.getMedicalCondition());
+            personForm.setMarks(person.getMarks());
+            personForm.setPersonalEffects(person.getPersonalEffects());
+            personForm.setRemarks(person.getRemarks());
+            // TODO what if birth date is unknown?
+                personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
+                personForm.setDayMissingOrFound(person.getDayMissingOrFound());
+                personForm.setYearMissingOrFound(person.getYearMissingOrFound());
+                personForm.setDaysMissing(getDaysMissing(person.getMonthMissingOrFound() - 1, person.getDayMissingOrFound(), person.getYearMissingOrFound()));
+            if (person.getMissingFromCity() != null) {
+                personForm.setMissingFromCity(person.getMissingFromCity());
+            }
+            if (person.getMissingFromProvince() != null) {
+                personForm.setMissingFromProvince(person.getMissingFromProvince());
+            }
+            if (person.getMissingFromCountry() != null) {
+                personForm.setMissingFromCountry(person.getMissingFromCountry());
+            }
+            if (person.getPossibleCity() != null) {
+                personForm.setPossibleCity(person.getPossibleCity());
+            }
+            if (person.getPossibleProvince() != null) {
+                personForm.setPossibleProvince(person.getPossibleProvince());
+            }
+            if (person.getPossibleCountry() != null) {
+                personForm.setPossibleCountry(person.getPossibleCountry());
+            }
+            if (person.getCircumstance() != null) {
+                personForm.setCircumstance(person.getCircumstance());
+            }
+            if (person.getReward() != null) {
+                personForm.setReward(person.getReward());
+            }
+            if (person.getInstitution() != null) {
+                personForm.setInstitution(person.getInstitution());
+            }
+            if (person.getInstitutionStreet() != null) {
+                personForm.setInstitutionStreet(person.getInstitutionStreet());
+            }
+            if (person.getInstitutionCity() != null) {
+                personForm.setInstitutionCity(person.getInstitutionCity());
+            }
+            if (person.getInstitutionProvince() != null) {
+                personForm.setInstitutionProvince(person.getInstitutionProvince());
+            }
+            if (person.getInstitutionCountry() != null) {
+                personForm.setInstitutionCountry(person.getInstitutionCountry());
+            }
+            if (person.getInstitutionEmail() != null) {
+                personForm.setInstitutionEmail(person.getInstitutionEmail());
+            }
+            if (person.getInstitutionNumber() != null) {
+                personForm.setInstitutionNumber(person.getInstitutionNumber());
+            }
+            if (person.getCodisId() != null) {
+                personForm.setCodisId(person.getCodisId());
+            }
+            if (person.getAfisId() != null) {
+                personForm.setAfisId(person.getAfisId());
+            }
+            if (person.getDentalId() != null) {
+                personForm.setDentalId(person.getDentalId());
+            }
+            if (person.getRelativeId() != null) {
+                personForm.setRelativeId(person.getRelativeId());
+                personForm.setRelativeFirstName(relativeService.getRelativeById(person.getRelativeId()).getFirstName());
+                personForm.setRelativeLastName(relativeService.getRelativeById(person.getRelativeId()).getLastName());
+            }
+            if (person.getInvestigatorId() != null) {
+                personForm.setInvestigatorId(person.getInvestigatorId());
+                personForm.setInvestigatorUsername(userService.getUserById(person.getInvestigatorId()).getUsername());
+            }
+            if (person.getAbductorId() != null) {
+                personForm.setAbductorId(person.getAbductorId());
+                personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
+                personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
+            }
+            personForm.setProgressReports(countReportsForPerson(person.getId()));
 
-        // Return person
-        if (person.getPhoto() != null) {
-            personForm.setPhoto(person.getPhoto());
-        }
-        if (person.getAgedPhoto() != null) {
-            personForm.setAgedPhoto(person.getAgedPhoto());
-        }
-        personForm.setId(person.getId());
-        personForm.setStatus(person.getStatus());
-        personForm.setType(person.getType());
-        personForm.setFirstName(person.getFirstName());
-        personForm.setNickname(person.getNickname());
-        personForm.setMiddleName(person.getMiddleName());
-        personForm.setLastName(person.getLastName());
-        personForm.setBirthMonth(person.getBirthMonth());
-        personForm.setBirthDay(person.getBirthDay());
-        personForm.setBirthYear(person.getBirthYear());
-        personForm.setAge(getAge(person.getBirthMonth() - 1, person.getBirthDay(), person.getBirthYear()));
-        personForm.setStreet(person.getStreet());
-        personForm.setCity(person.getCity());
-        personForm.setProvince(person.getProvince());
-        personForm.setCountry(person.getCountry());
-        personForm.setSex(person.getSex());
-        personForm.setFeet(person.getFeet());
-        personForm.setInches(person.getInches());
-        personForm.setWeight(person.getWeight());
-        personForm.setReligion(person.getReligion());
-        personForm.setRace(person.getRace());
-        personForm.setEyeColor(person.getEyeColor());
-        personForm.setHairColor(person.getHairColor());
-        personForm.setMedicalCondition(person.getMedicalCondition());
-        personForm.setMarks(person.getMarks());
-        personForm.setPersonalEffects(person.getPersonalEffects());
-        personForm.setRemarks(person.getRemarks());
-        // TODO what if birth date is unknown?
-            personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
-            personForm.setDayMissingOrFound(person.getDayMissingOrFound());
-            personForm.setYearMissingOrFound(person.getYearMissingOrFound());
-            personForm.setDaysMissing(getDaysMissing(person.getMonthMissingOrFound() - 1, person.getDayMissingOrFound(), person.getYearMissingOrFound()));
-        if (person.getMissingFromCity() != null) {
-            personForm.setMissingFromCity(person.getMissingFromCity());
-        }
-        if (person.getMissingFromProvince() != null) {
-            personForm.setMissingFromProvince(person.getMissingFromProvince());
-        }
-        if (person.getMissingFromCountry() != null) {
-            personForm.setMissingFromCountry(person.getMissingFromCountry());
-        }
-        if (person.getPossibleCity() != null) {
-            personForm.setPossibleCity(person.getPossibleCity());
-        }
-        if (person.getPossibleProvince() != null) {
-            personForm.setPossibleProvince(person.getPossibleProvince());
-        }
-        if (person.getPossibleCountry() != null) {
-            personForm.setPossibleCountry(person.getPossibleCountry());
-        }
-        if (person.getCircumstance() != null) {
-            personForm.setCircumstance(person.getCircumstance());
-        }
-        if (person.getReward() != null) {
-            personForm.setReward(person.getReward());
-        }
-        if (person.getInstitution() != null) {
-            personForm.setInstitution(person.getInstitution());
-        }
-        if (person.getInstitutionStreet() != null) {
-            personForm.setInstitutionStreet(person.getInstitutionStreet());
-        }
-        if (person.getInstitutionCity() != null) {
-            personForm.setInstitutionCity(person.getInstitutionCity());
-        }
-        if (person.getInstitutionProvince() != null) {
-            personForm.setInstitutionProvince(person.getInstitutionProvince());
-        }
-        if (person.getInstitutionCountry() != null) {
-            personForm.setInstitutionCountry(person.getInstitutionCountry());
-        }
-        if (person.getInstitutionEmail() != null) {
-            personForm.setInstitutionEmail(person.getInstitutionEmail());
-        }
-        if (person.getInstitutionNumber() != null) {
-            personForm.setInstitutionNumber(person.getInstitutionNumber());
-        }
-        if (person.getCodisId() != null) {
-            personForm.setCodisId(person.getCodisId());
-        }
-        if (person.getAfisId() != null) {
-            personForm.setAfisId(person.getAfisId());
-        }
-        if (person.getDentalId() != null) {
-            personForm.setDentalId(person.getDentalId());
-        }
-        if (person.getRelativeId() != null) {
-            personForm.setRelativeId(person.getRelativeId());
-        }
-        if (person.getAbductorId() != null) {
-            personForm.setAbductorId(person.getAbductorId());
-        }
-        if (person.getInvestigatorId() != null) {
-            personForm.setInvestigatorId(person.getInvestigatorId());
-        }
+            // Check if there exists a session
+            if (request.getSession().getAttribute("currentuser") != null) {
+                currentUser = (User) request.getSession().getAttribute("currentuser");
+                request.setAttribute("action", request.getParameter("action"));
 
-        // Return progress report count
-        request.setAttribute("reportcount", countReportsForPerson(person.getId()));
-
-
-        // Check if there exists a session
-        if (request.getSession().getAttribute("currentuser") != null) {
-            currentUser = (User) request.getSession().getAttribute("currentuser");
-            request.setAttribute("action", request.getParameter("action"));
-
-            // Edit what you created/encoded
-            // Edit your profile
-            // Administrator can edit all except administrators
-            if (currentUser.getId() == person.getEncoderId()) {
-                return mapping.findForward(Constants.EDIT_PERSON);
+                // Edit what you created/encoded
+                // Edit your profile
+                // Administrator can edit all except administrators
+                if (currentUser.getId() == person.getEncoderId()) {
+                    return mapping.findForward(Constants.EDIT_PERSON);
+                } else {
+                    return mapping.findForward(Constants.VIEW_PERSON);
+                }
             } else {
                 return mapping.findForward(Constants.VIEW_PERSON);
             }
-        } else {
-            return mapping.findForward(Constants.VIEW_PERSON);
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
         }
     }
 
@@ -537,6 +554,24 @@ public class PersonAction extends DispatchAction {
             PersonForm personForm = (PersonForm) form;
             ActionMessages errors = new ActionMessages();
             request.setAttribute("action", request.getParameter("action"));
+            
+            // Retrieve person to be updated
+            Person person = personService.getPersonById(personForm.getId());
+            if (person.getRelativeId() != null) {
+                personForm.setRelativeId(person.getRelativeId());
+                personForm.setRelativeFirstName(relativeService.getRelativeById(person.getRelativeId()).getFirstName());
+                personForm.setRelativeLastName(relativeService.getRelativeById(person.getRelativeId()).getLastName());
+            }
+            if (person.getInvestigatorId() != null) {
+                personForm.setInvestigatorId(person.getInvestigatorId());
+                personForm.setInvestigatorUsername(userService.getUserById(person.getInvestigatorId()).getUsername());
+            }
+            if (person.getAbductorId() != null) {
+                personForm.setAbductorId(person.getAbductorId());
+                personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
+                personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
+            }
+            personForm.setProgressReports(countReportsForPerson(person.getId()));
 
             // Check if form is valid
             if (isValidPerson(request, form)) {
@@ -562,9 +597,14 @@ public class PersonAction extends DispatchAction {
                     String contextAgedPhotoFilename = contextUnknownPhotoFilename;
 
                     // Split the filename to get the extension name
-                    if (photoFile.getFileName().length() > 0) {
-                        String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
-                        String extensionName = tokens[1];
+                    if ((photoFile.getFileName().length() > 0) ||
+                            (agedPhotoFile.getFileName().length() > 0)) {
+                        String tokens[];
+                        String extensionName = "";
+                        if (photoFile.getFileName().length() > 0) {
+                            tokens = photoFile.getFileName().toLowerCase().split("\\.");
+                            extensionName = tokens[1];
+                        }
                         if (agedPhotoFile.getFileName().length() > 0) {
                             tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
                             extensionName = tokens[1];
@@ -609,18 +649,18 @@ public class PersonAction extends DispatchAction {
                         fos.close();
                         fos.flush();
                         if (agedPhotoFile.getFileName().length() > 0) {
-                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
                             contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
                             file = new File(absoluteAgedPhotoFilename);
                             fos = new FileOutputStream(file);
-                            fos.write(photoFile.getFileData());
+                            fos.write(agedPhotoFile.getFileData());
                             fos.close();
                             fos.flush();
                         }
                     }
 
                     // Update person
-                    Person person = new Person();
+                    person = new Person();
                     person.setId(personForm.getId());
                     if (photoFile.getFileName().length() > 0) {
                         person.setPhoto(contextDefaultPhotoFilename);
@@ -687,7 +727,7 @@ public class PersonAction extends DispatchAction {
                     }
                     boolean isUpdated = personService.updatePerson(person);
                     
-                    // Retrieve updated person
+                    // Retrieve newly-updated person
                     person = personService.getPersonById(person.getId());
 
                     if (isUpdated) {
@@ -711,6 +751,8 @@ public class PersonAction extends DispatchAction {
                             // Return person ID and investigator ID
                             request.setAttribute("personid", person.getId());
                             request.setAttribute("investigatorid", person.getInvestigatorId());
+                            //personForm.setRelativeId(person.getRelativeId());
+                            //personForm.setInvestigatorId(person.getInvestigatorId());
 
                             return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
@@ -735,11 +777,11 @@ public class PersonAction extends DispatchAction {
 
                     logger.error("Duplicate person.");
 
-                    return mapping.findForward(Constants.ADD_PERSON_REDO);
+                    return mapping.findForward(Constants.EDIT_PERSON_REDO);
                 }
             } else {
                 // Return form validation errors
-                return mapping.findForward(Constants.ADD_PERSON_REDO);
+                return mapping.findForward(Constants.EDIT_PERSON_REDO);
             }
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
@@ -901,117 +943,114 @@ public class PersonAction extends DispatchAction {
         PdfWriter.getInstance(document, baos);
 
         // Retrieve the person
-        int id = 0;
         try {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id"));
-            } else {
-                return mapping.findForward(Constants.LIST_PERSON);
+            int id = Integer.parseInt(request.getParameter("id"));
+            Person person = (Person) personService.getPersonById(id);
+
+            // Process the photo
+            String tokens[] = person.getPhoto().split("\\/");
+            String defaultPhotoBasename = "";
+            for (int i = 0; i < tokens.length - 1; i++) {
+                defaultPhotoBasename += tokens[i] + File.separator;
             }
-        } catch (NumberFormatException nfe) {
-            return mapping.findForward(Constants.LIST_PERSON);
-        }
-        Person person = (Person) personService.getPersonById(id);
+            defaultPhotoBasename += tokens[tokens.length - 1];
+            String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
 
-        // Process the photo
-        String tokens[] = person.getPhoto().split("\\/");
-        String defaultPhotoBasename = "";
-        for (int i = 0; i < tokens.length - 1; i++) {
-            defaultPhotoBasename += tokens[i] + File.separator;
-        }
-        defaultPhotoBasename += tokens[tokens.length - 1];
-        String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+            // Add some meta information to the document
+            document.addTitle("Poster");
+            document.addAuthor("OpenMPIS");
+            document.addSubject("Poster for " + person.getNickname());
+            document.addKeywords("OpenMPIS, missing, found, unidentified");
+            document.addProducer();
+            document.addCreationDate();
+            document.addCreator("OpenMPIS version " + Constants.VERSION);
 
-        // Add some meta information to the document
-        document.addTitle("Poster");
-        document.addAuthor("OpenMPIS");
-        document.addSubject("Poster for " + person.getNickname());
-        document.addKeywords("OpenMPIS, missing, found, unidentified");
-        document.addProducer();
-        document.addCreationDate();
-        document.addCreator("OpenMPIS version " + Constants.VERSION);
-
-        // Open the document for writing
-        document.open();
-        // Add the banner
-        if (person.getType() > 4) {
-            Paragraph foundParagraph = new Paragraph("F O U N D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
-            foundParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(foundParagraph);
-        } else {
-            Paragraph missingParagraph = new Paragraph("M I S S I N G", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
-            missingParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(missingParagraph);
-        }
-        // Add date missing or found
-        Paragraph blackParagraph = new Paragraph(getResources(request).getMessage("month." + person.getMonthMissingOrFound()) + " " + person.getDayMissingOrFound() + ", " + person.getYearMissingOrFound(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add missing from location
-        if (person.getType() < 5) {
-            blackParagraph = new Paragraph(person.getMissingFromCity() + ", " + person.getMissingFromProvince(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
+            // Open the document for writing
+            document.open();
+            // Add the banner
+            if (person.getType() > 4) {
+                Paragraph foundParagraph = new Paragraph("F O U N D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
+                foundParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(foundParagraph);
+            } else {
+                Paragraph missingParagraph = new Paragraph("M I S S I N G", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
+                missingParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(missingParagraph);
+            }
+            // Add date missing or found
+            Paragraph blackParagraph = new Paragraph(getResources(request).getMessage("month." + person.getMonthMissingOrFound()) + " " + person.getDayMissingOrFound() + ", " + person.getYearMissingOrFound(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
             blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(blackParagraph);
-        }
-        // Add name
-        Paragraph redParagraph;
-        if (!person.getNickname().isEmpty()) {
-            redParagraph = new Paragraph(person.getFirstName() + " \"" + person.getNickname() + "\" " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
-        } else {
-            redParagraph = new Paragraph(person.getFirstName() + " " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
-        }
-        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(redParagraph);
-        // Add the photo
-        Image image = Image.getInstance(absoluteDefaultPhotoFilename);
-        image.scaleAbsolute(200, 300);
-        image.setAlignment(Image.ALIGN_CENTER);
-        document.add(image);
-        // Add description
-        redParagraph = new Paragraph("Description", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
-        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(redParagraph);
-        float[] widths = {0.5f, 0.5f};
-        PdfPTable pdfptable = new PdfPTable(widths);
-        pdfptable.setWidthPercentage(100);
-        if (person.getType() < 5) {
-            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.date.birth") + ": " + getResources(request).getMessage("month." + person.getBirthMonth()) + " " + person.getBirthDay() + ", " + person.getBirthYear(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.address.city") + ": " + person.getCity(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        }
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.sex") + ": " + getResources(request).getMessage("sex." + person.getSex()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.hair") + ": " + getResources(request).getMessage("color.hair." + person.getHairColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.height") + ": " + person.getFeet() + "' " + person.getInches() + "\"", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.eye") + ": " + getResources(request).getMessage("color.eye." + person.getEyeColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.weight") + ": " + person.getWeight() + " " + getResources(request).getMessage("label.weight.lbs"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        pdfptable.addCell(new Phrase(getResources(request).getMessage("label.race") + ": " + getResources(request).getMessage("race." + person.getRace()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
-        document.add(pdfptable);
-        // Add circumstance
-        redParagraph = new Paragraph(getResources(request).getMessage("label.circumstance"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
-        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(redParagraph);
-        blackParagraph = new Paragraph(person.getCircumstance(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL));
-        blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
-        document.add(blackParagraph);
-        // Add line
-        blackParagraph = new Paragraph("------------------------------------------------------------------------------");
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add contact
-        blackParagraph = new Paragraph(getResources(request).getMessage("global.contact"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL));
-        blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
-        document.add(blackParagraph);
-        document.close();
+            // Add missing from location
+            if (person.getType() < 5) {
+                blackParagraph = new Paragraph(person.getMissingFromCity() + ", " + person.getMissingFromProvince(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0)));
+                blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(blackParagraph);
+            }
+            // Add name
+            Paragraph redParagraph;
+            if (!person.getNickname().isEmpty()) {
+                redParagraph = new Paragraph(person.getFirstName() + " \"" + person.getNickname() + "\" " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            } else {
+                redParagraph = new Paragraph(person.getFirstName() + " " + person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            }
+            redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(redParagraph);
+            // Add the photo
+            Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+            image.scaleAbsolute(200, 300);
+            image.setAlignment(Image.ALIGN_CENTER);
+            document.add(image);
+            // Add description
+            redParagraph = new Paragraph("Description", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(redParagraph);
+            float[] widths = {0.5f, 0.5f};
+            PdfPTable pdfptable = new PdfPTable(widths);
+            pdfptable.setWidthPercentage(100);
+            if (person.getType() < 5) {
+                pdfptable.addCell(new Phrase(getResources(request).getMessage("label.date.birth") + ": " + getResources(request).getMessage("month." + person.getBirthMonth()) + " " + person.getBirthDay() + ", " + person.getBirthYear(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase(getResources(request).getMessage("label.address.city") + ": " + person.getCity(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            }
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.sex") + ": " + getResources(request).getMessage("sex." + person.getSex()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.hair") + ": " + getResources(request).getMessage("color.hair." + person.getHairColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.height") + ": " + person.getFeet() + "' " + person.getInches() + "\"", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.color.eye") + ": " + getResources(request).getMessage("color.eye." + person.getEyeColor()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.weight") + ": " + person.getWeight() + " " + getResources(request).getMessage("label.weight.lbs"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase(getResources(request).getMessage("label.race") + ": " + getResources(request).getMessage("race." + person.getRace()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            document.add(pdfptable);
+            // Add circumstance
+            redParagraph = new Paragraph(getResources(request).getMessage("label.circumstance"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(redParagraph);
+            blackParagraph = new Paragraph(person.getCircumstance(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL));
+            blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+            document.add(blackParagraph);
+            // Add line
+            blackParagraph = new Paragraph("------------------------------------------------------------------------------");
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add contact
+            blackParagraph = new Paragraph(getResources(request).getMessage("global.contact"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL));
+            blackParagraph.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+            document.add(blackParagraph);
+            document.close();
 
-        // Set the response to return the poster (PDF file)
-        response.setContentType("application/pdf");
-        response.setContentLength(baos.size());
-        response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
+            // Set the response to return the poster (PDF file)
+            response.setContentType("application/pdf");
+            response.setContentLength(baos.size());
+            response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
 
-        // Close the output stream
-        baos.writeTo(response.getOutputStream());
-        response.getOutputStream().flush();
+            // Close the output stream
+            baos.writeTo(response.getOutputStream());
+            response.getOutputStream().flush();
 
-        return null;
+            return null;
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        } catch (NullPointerException npe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        }
     }
 
     /**
@@ -1087,9 +1126,9 @@ public class PersonAction extends DispatchAction {
             }
         }
 
-        if ((agedPhotoFile.getFileName().length() > 1) && ((!agedPhotoFile.getContentType().equals("image/png")) ||
-                (!agedPhotoFile.getContentType().equals("image/jpeg")) ||
-                (!agedPhotoFile.getContentType().equals("image/gif")))) {
+        if ((agedPhotoFile.getFileName().length() > 1) && (!((agedPhotoFile.getContentType().equals("image/png")) ||
+                (agedPhotoFile.getContentType().equals("image/jpeg")) ||
+                (agedPhotoFile.getContentType().equals("image/gif"))))) {
             errors.add("agedphotofile", new ActionMessage("error.photo.invalid"));
         }
 

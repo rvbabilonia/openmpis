@@ -65,7 +65,7 @@ public class SearchAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         SearchForm searchForm = (SearchForm) form;
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {

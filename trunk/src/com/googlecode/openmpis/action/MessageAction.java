@@ -181,7 +181,7 @@ public class MessageAction extends DispatchAction {
 
         // Check if current user is authorized
         if (currentUser.getGroupId() == 0) {
-            String page = (String) request.getParameter("page");
+            String page = request.getParameter("page");
 
             // Set pagination direction
             if (page != null) {
@@ -238,19 +238,22 @@ public class MessageAction extends DispatchAction {
      */
     public ActionForward newSighting(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MessageForm messageForm = (MessageForm) form;
-        if (!request.getParameter("personid").isEmpty()) {
-            Person person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+        try {
+            int personId = Integer.parseInt(request.getParameter("personid"));
+            Person person = (Person) personService.getOngoingCaseById(personId);
 
+            MessageForm sightingForm = (MessageForm) form;
             if (person.getNickname() != null) {
-                messageForm.setSubject("Sighting for " + person.getFirstName() + " " + person.getLastName());
+                sightingForm.setSubject("Sighting for " + person.getFirstName() + " " + person.getLastName());
             } else {
-                messageForm.setSubject("Sighting for " + person.getFirstName() + " \"" + person.getNickname() + "\" "+ person.getLastName());
+                sightingForm.setSubject("Sighting for " + person.getFirstName() + " \"" + person.getNickname() + "\" "+ person.getLastName());
             }
-            request.setAttribute("personid", person.getId());
+            sightingForm.setPersonId(person.getId());
 
             return mapping.findForward(Constants.ADD_SIGHTING);
-        } else {
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        } catch (NullPointerException npe) {
             return mapping.findForward(Constants.LIST_PERSON);
         }
     }
@@ -267,58 +270,59 @@ public class MessageAction extends DispatchAction {
      */
     public ActionForward addSighting(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MessageForm messageForm = (MessageForm) form;
+        MessageForm sightingForm = (MessageForm) form;
 
         // Check if form is valid
         if (isValidMessage(request, form)) {
-            // Retrieve mail properties
-            Configuration config = new Configuration("mail.properties");
-
-            Person person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+            // Retrieve investigator ID
+            Person person = personService.getPersonById(sightingForm.getPersonId());
             User investigator = userService.getUserById(person.getInvestigatorId());
 
             // Create message
-            Message message = new Message();
-            message.setFirstName(messageForm.getFirstName());
-            message.setLastName(messageForm.getLastName());
-            message.setEmail(messageForm.getEmail());
-            message.setSubject(messageForm.getSubject());
-            message.setMessage(messageForm.getMessage());
+            Message sighting = new Message();
+            sighting.setFirstName(sightingForm.getFirstName());
+            sighting.setLastName(sightingForm.getLastName());
+            sighting.setEmail(sightingForm.getEmail());
+            sighting.setSubject(sightingForm.getSubject());
+            sighting.setMessage(sightingForm.getMessage());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date = sdf.format(System.currentTimeMillis());
-            message.setDate(date);
-            message.setPersonId(person.getId());
-            message.setUserId(investigator.getId());
-            message.setIpAddress(request.getRemoteAddr());
+            sighting.setDate(date);
+            sighting.setPersonId(person.getId());
+            sighting.setUserId(investigator.getId());
+            sighting.setIpAddress(request.getRemoteAddr());
 
             // Log message receipt
             Log sightingLog = new Log();
-            sightingLog.setLog("Sighting received from " + messageForm.getEmail() + ".");
+            sightingLog.setLog("Sighting received from " + sightingForm.getEmail() + ".");
             sightingLog.setDate(date);
 
             // Insert feedback and log
-            boolean isInserted = messageService.insertSighting(message);
+            boolean isInserted = messageService.insertSighting(sighting);
             logService.insertLog(sightingLog);
             logger.info(sightingLog.toString());
 
             if (isInserted) {
+                // Retrieve mail properties
+                Configuration config = new Configuration("mail.properties");
+                
                 // Check if email sending is enabled
                 if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
                     Mail mail = new Mail();
 
                     // Send email
-                    mail.send(messageForm.getFirstName(), messageForm.getLastName(), messageForm.getEmail(),
-                            investigator.getEmail(), messageForm.getSubject(), messageForm.getMessage());
+                    mail.send(sightingForm.getFirstName(), sightingForm.getLastName(), sightingForm.getEmail(),
+                            investigator.getEmail(), sightingForm.getSubject(), sightingForm.getMessage());
                 }
 
                 return mapping.findForward(Constants.ADD_SIGHTING_SUCCESS);
             } else {
-                request.setAttribute("personid", request.getParameter("personid"));
+                sightingForm.setPersonId(sightingForm.getPersonId());
                 
                 return mapping.findForward(Constants.ADD_SIGHTING_REDO);
             }
         } else {
-            request.setAttribute("personid", request.getParameter("personid"));
+            sightingForm.setPersonId(sightingForm.getPersonId());
 
             logger.info("Invalid sighting from " + request.getRemoteAddr() + ".");
 
@@ -352,30 +356,86 @@ public class MessageAction extends DispatchAction {
         // Check if current user is authorized
         if (currentUser.getGroupId() == 2) {
             // Retrieve message ID
-            int id = 0;
             try {
-                id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : currentUser.getId();
+                int id = Integer.parseInt(request.getParameter("id"));
+                Message sighting = messageService.getMessageById(id);
+
+                // Return sighting
+                if ((sighting != null) && (sighting.getPersonId() != null)) {
+                    messageForm.setId(sighting.getId());
+                    messageForm.setSubject(sighting.getSubject());
+                    messageForm.setMessage(sighting.getMessage());
+                    messageForm.setFirstName(sighting.getFirstName());
+                    messageForm.setLastName(sighting.getLastName());
+                    messageForm.setEmail(sighting.getEmail());
+                    messageForm.setIpAddress(sighting.getIpAddress());
+                    messageForm.setDate(sighting.getDate());
+                    messageForm.setUserId(sighting.getUserId());
+                    messageForm.setStatus(sighting.getStatus());
+                    messageForm.setPersonId(sighting.getPersonId());
+
+                    return mapping.findForward(Constants.VIEW_MESSAGE);
+                } else {
+                    return mapping.findForward(Constants.LIST_SIGHTING_REDO);
+                }
             } catch (NumberFormatException nfe) {
-                id = currentUser.getId();
+                return mapping.findForward(Constants.LIST_SIGHTING_REDO);
             }
-            Message sighting = (Message) messageService.getMessageById(id);
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
+    }
 
-            // Return message
-            messageForm.setId(sighting.getId());
-            messageForm.setSubject(sighting.getSubject());
-            messageForm.setMessage(sighting.getMessage());
-            messageForm.setFirstName(sighting.getFirstName());
-            messageForm.setLastName(sighting.getLastName());
-            messageForm.setEmail(sighting.getEmail());
-            messageForm.setIpAddress(sighting.getIpAddress());
-            messageForm.setDate(sighting.getDate());
-            messageForm.setUserId(sighting.getUserId());
-            messageForm.setStatus(sighting.getStatus());
-            messageForm.setPersonId(sighting.getPersonId());
+    /**
+     * Views the sighting.
+     * This is the view sighting action called from the Struts framework.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward viewFeedback(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
+        MessageForm messageForm = (MessageForm) form;
 
-            //messageService.
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
 
-            return mapping.findForward(Constants.VIEW_MESSAGE);
+        // Check if current user is an administrator
+        if (currentUser.getGroupId() == 0) {
+            // Retrieve message ID
+            try {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Message feedback = messageService.getMessageById(id);
+
+                // Return feedback
+                if ((feedback != null) && (feedback.getPersonId() == null)) {
+                    messageForm.setId(feedback.getId());
+                    messageForm.setSubject(feedback.getSubject());
+                    messageForm.setMessage(feedback.getMessage());
+                    messageForm.setFirstName(feedback.getFirstName());
+                    messageForm.setLastName(feedback.getLastName());
+                    messageForm.setEmail(feedback.getEmail());
+                    messageForm.setIpAddress(feedback.getIpAddress());
+                    messageForm.setDate(feedback.getDate());
+                    messageForm.setUserId(feedback.getUserId());
+                    messageForm.setStatus(feedback.getStatus());
+
+                    return mapping.findForward(Constants.VIEW_MESSAGE);
+                } else {
+                    return mapping.findForward(Constants.LIST_FEEDBACK_REDO);
+                }
+            } catch (NumberFormatException nfe) {
+                return mapping.findForward(Constants.LIST_FEEDBACK_REDO);
+            }
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
         }
