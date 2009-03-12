@@ -111,6 +111,14 @@ h1 {
     color: #ff0000;
 }
 
+.standalonelabelclass {
+    width: 10em;
+    text-align: left;
+    margin-right: 0.5em;
+    display: block;
+    color: #2a5104;
+}
+
 .labelclass {
     width: 10em;
     float: left;
@@ -131,6 +139,10 @@ h1 {
     border-spacing: 1px;
 }
 
+.hiddentable {
+    display: table;
+}
+
 .row {
     display: table-row;
 }
@@ -142,6 +154,14 @@ h1 {
     text-align: left;
     padding: 2px;
     border: 1px solid #ffffff;
+}
+
+.hiddencell {
+    display: table-cell;
+    font: normal normal normal 9pt sans-serif;
+    color: #111111;
+    text-align: left;
+    padding: 2px;
 }
 
 .columnheader {
