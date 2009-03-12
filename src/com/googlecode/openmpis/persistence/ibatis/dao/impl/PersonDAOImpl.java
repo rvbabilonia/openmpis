@@ -477,8 +477,8 @@ public class PersonDAOImpl implements PersonDAO {
 
         try {
             sqlMap.startTransaction();
-            personList = sqlMap.queryForList("getPersonsByInvestigatorId", abductorId, pagination.getSkipResults(), pagination.getMaxResults());
-            pagination.setTotalResults((Integer) sqlMap.queryForObject("countPersonsByInvestigatorId", abductorId));
+            personList = sqlMap.queryForList("getPersonsByAbductorId", abductorId, pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countPersonsByAbductorId", abductorId));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -529,6 +529,30 @@ public class PersonDAOImpl implements PersonDAO {
         try {
             sqlMap.startTransaction();
             person = (Person) sqlMap.queryForObject("getPersonById", id);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return person;
+    }
+
+    /**
+     * Retrieves an ongoing case given a person's ID.
+     *
+     * @param id            the person ID
+     * @return              the person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public Person getOngoingCaseById(Integer id) throws SQLException {
+        Person person = null;
+
+        try {
+            sqlMap.startTransaction();
+            person = (Person) sqlMap.queryForObject("getOngoingCaseById", id);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();

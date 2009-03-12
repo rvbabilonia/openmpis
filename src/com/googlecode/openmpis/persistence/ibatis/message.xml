@@ -90,6 +90,13 @@
         <include refid="personFragment"/>
     </select>
 
+    <select id="listAllSightingsForPerson" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
+        SELECT
+        <include refid="messageColumnsFragment"/>
+        WHERE PERSONID = #personId#
+        ORDER BY DATE DESC, ID DESC
+    </select>
+
     <select id="countAllNewSightingsForPerson" resultClass="java.lang.Integer" parameterClass="message" cacheModel="messageCache">
         SELECT
         COUNT(ID)

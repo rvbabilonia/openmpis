@@ -148,6 +148,30 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     /**
+     * Retrieves all sightings for a given person.
+     *
+     * @param id            the ID of the person
+     * @return              the list of sightings for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Message> listAllSightingsForPerson(Integer id) throws SQLException {
+        List<Message> messageList = new ArrayList<Message>();
+
+        try {
+            sqlMap.startTransaction();
+            messageList = sqlMap.queryForList("listAllSightingsForPerson", id);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return messageList;
+    }
+
+    /**
      * Retrieves a message given its ID and sets its status to read.
      * 
      * @param id            the message ID

@@ -72,6 +72,32 @@ public class ReportDAOImpl implements ReportDAO {
     }
 
     /**
+     * Retrieves all reports for a given person.
+     *
+     * @param pagination    the pagination context
+     * @param id            the ID of the person
+     * @return              the list of reports for a given person
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Report> listAllReportsForPerson(Integer id) throws SQLException {
+        List<Report> reportList = new ArrayList<Report>();
+
+        try {
+            sqlMap.startTransaction();
+            reportList = sqlMap.queryForList("getAllReportsForPerson", id);
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return reportList;
+    }
+
+    /**
      * Retrieves all reports written by a given investigator.
      *
      * @param pagination    the pagination context
@@ -81,13 +107,13 @@ public class ReportDAOImpl implements ReportDAO {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<Report> getAllReportsByInvestigator(Pagination pagination, Integer id) throws SQLException {
+    public List<Report> getAllReportsByInvestigatorId(Pagination pagination, Integer id) throws SQLException {
         List<Report> reportList = new ArrayList<Report>();
 
         try {
             sqlMap.startTransaction();
-            reportList = sqlMap.queryForList("getAllReportsByInvestigator", id, pagination.getSkipResults(), pagination.getMaxResults());
-            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllReportsByInvestigator", id));
+            reportList = sqlMap.queryForList("getAllReportsByInvestigatorId", id, pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllReportsByInvestigatorId", id));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -226,12 +252,12 @@ public class ReportDAOImpl implements ReportDAO {
      * @throws java.sql.SQLException
      */
     @Override
-    public int countAllReportsByInvestigator(Integer investigatorId) throws SQLException {
+    public int countAllReportsByInvestigatorId(Integer investigatorId) throws SQLException {
         int reportsForPersonCount = 0;
 
         try {
             sqlMap.startTransaction();
-            reportsForPersonCount = (Integer) sqlMap.queryForObject("countAllReportsByInvestigator", investigatorId);
+            reportsForPersonCount = (Integer) sqlMap.queryForObject("countAllReportsByInvestigatorId", investigatorId);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
