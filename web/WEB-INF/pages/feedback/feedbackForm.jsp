@@ -31,55 +31,56 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="feedback.heading"/>
-                    <p>
+                    <p class="contentclass">
                         <label id="addresslabel" class="labelclass">
                             <bean:message key="label.address"/>
                         </label>
                         <bean:message key="feedback.address"/>
                     </p>
-                    <p>
+                    <p class="contentclass">
                         <label id="numberlabel" class="labelclass">
                             <bean:message key="label.number"/>
                         </label>
                         <bean:message key="feedback.number"/>
                     </p>
+
                     <html:form method="post" action="feedback" styleClass="feedbackclass">
-                        <p>
+                        <p class="contentclass">
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield">
                                 <bean:message key="label.firstname"/>
                             </label>
                             <html:text styleId="firstnamefield" styleClass="inputclass" property="firstName" size="66" maxlength="30"/>
                             <html:errors property="firstname"/>
                         </p>
-                        <p>
+                        <p class="contentclass">
                             <label id="lastnamelabel" class="labelclass" for="lastnamefield">
                                 <bean:message key="label.lastname"/>
                             </label>
                             <html:text styleId="lastnamefield" styleClass="inputclass" property="lastName" size="66" maxlength="30"/>
                             <html:errors property="lastname"/>
                         </p>
-                        <p>
+                        <p class="contentclass">
                             <label id="emaillabel" class="labelclass" for="emailfield">
                                 <bean:message key="label.email"/>
                             </label>
                             <html:text styleId="emailfield" styleClass="inputclass" property="email" size="66" maxlength="30"/>
                             <html:errors property="email"/>
                         </p>
-                        <p>
+                        <p class="contentclass">
                             <label id="subjectlabel" class="labelclass" for="subjectfield">
                                 <bean:message key="label.subject"/>
                             </label>
                             <html:text styleId="subjectfield" styleClass="inputclass" property="subject" size="66" maxlength="60"/>
                             <html:errors property="subject"/>
                         </p>
-                        <p>
+                        <p class="contentclass">
                             <label id="messagelabel" class="labelclass" for="messagefield">
                                 <bean:message key="label.message"/>
                             </label>
                             <html:textarea styleId="messagefield" styleClass="textareaclass" property="message" cols="50" rows="10"/>
                             <html:errors property="message"/>
                         </p>
-                        <p>
+                        <p class="contentclass">
                             <bean:message key="feedback.buttons"/>
                         </p>
                     </html:form>
