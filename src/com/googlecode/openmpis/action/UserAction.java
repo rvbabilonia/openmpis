@@ -123,7 +123,7 @@ public class UserAction extends DispatchAction {
 
         // Check if current user is authorized
         if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-            String page = (String) request.getParameter("page");
+            String page = request.getParameter("page");
 
             // Set pagination direction
             if (page != null) {
@@ -345,56 +345,57 @@ public class UserAction extends DispatchAction {
         // Check if current user is authorized
         if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
             // Retrieve user
-            int id = 0;
             try {
-                id = (request.getParameter("id") != null) ? Integer.parseInt(request.getParameter("id")) : currentUser.getId();
+                int id = Integer.parseInt(request.getParameter("id"));
+                User user = userService.getUserById(id);
+
+                // Return user
+                userForm.setId(user.getId());
+                userForm.setGroupId(user.getGroupId());
+                userForm.setUsername(user.getUsername());
+                userForm.setFirstName(user.getFirstName());
+                userForm.setMiddleName(user.getMiddleName());
+                userForm.setLastName(user.getLastName());
+                userForm.setBirthMonth(user.getBirthMonth());
+                userForm.setBirthDay(user.getBirthDay());
+                userForm.setBirthYear(user.getBirthYear());
+                userForm.setDesignation(user.getDesignation());
+                userForm.setAgency(user.getAgency());
+                userForm.setEmail(user.getEmail());
+                userForm.setNumber(user.getNumber());
+                userForm.setIpAddress(user.getIpAddress());
+                userForm.setLastLogin(user.getLastLogin());
+                userForm.setDate(user.getDate());
+                userForm.setCreatorId(user.getCreatorId());
+                userForm.setStatus(user.getStatus());
+                userForm.setQuestion(user.getQuestion());
+                userForm.setAnswer((user.getAnswer() != null) ? user.getAnswer() : "");
+
+                if (user.getGroupId() == 2) {
+                    request.setAttribute("caseshandled", personService.countPersonsByInvestigatorId(user.getId()));
+                }
+                if (user.getGroupId() == 1) {
+                    request.setAttribute("casesencoded", personService.countPersonsByEncoderId(user.getId()));
+                    request.setAttribute("usersencoded", userService.countEncodedUsers(user.getId()));
+                }
+                if (user.getGroupId() == 0) {
+                    request.setAttribute("usersencoded", userService.countEncodedUsers(user.getId()));
+                }
+
+                // Edit what you created/encoded
+                // Edit your profile
+                // Administrator can edit all except administrators
+                if ((currentUser.getId() == user.getCreatorId()) ||
+                        (currentUser.getId() == user.getId()) ||
+                        ((currentUser.getGroupId() == 0) && (user.getGroupId() > 0))) {
+                    return mapping.findForward(Constants.EDIT_USER);
+                } else {
+                    return mapping.findForward(Constants.UNAUTHORIZED);
+                }
             } catch (NumberFormatException nfe) {
-                id = currentUser.getId();
-            }
-            User user = (User) userService.getUserById(id);
-
-            // Return user
-            userForm.setId(user.getId());
-            userForm.setGroupId(user.getGroupId());
-            userForm.setUsername(user.getUsername());
-            userForm.setFirstName(user.getFirstName());
-            userForm.setMiddleName(user.getMiddleName());
-            userForm.setLastName(user.getLastName());
-            userForm.setBirthMonth(user.getBirthMonth());
-            userForm.setBirthDay(user.getBirthDay());
-            userForm.setBirthYear(user.getBirthYear());
-            userForm.setDesignation(user.getDesignation());
-            userForm.setAgency(user.getAgency());
-            userForm.setEmail(user.getEmail());
-            userForm.setNumber(user.getNumber());
-            userForm.setIpAddress(user.getIpAddress());
-            userForm.setLastLogin(user.getLastLogin());
-            userForm.setDate(user.getDate());
-            userForm.setCreatorId(user.getCreatorId());
-            userForm.setStatus(user.getStatus());
-            userForm.setQuestion(user.getQuestion());
-            userForm.setAnswer((user.getAnswer() != null) ? user.getAnswer() : "");
-
-            if (user.getGroupId() == 2) {
-                request.setAttribute("caseshandled", personService.countPersonsByInvestigatorId(user.getId()));
-            }
-            if (user.getGroupId() == 1) {
-                request.setAttribute("casesencoded", personService.countPersonsByEncoderId(user.getId()));
-                request.setAttribute("usersencoded", userService.countEncodedUsers(user.getId()));
-            }
-            if (user.getGroupId() == 0) {
-                request.setAttribute("usersencoded", userService.countEncodedUsers(user.getId()));
-            }
-
-            // Edit what you created/encoded
-            // Edit your profile
-            // Administrator can edit all except administrators
-            if ((currentUser.getId() == user.getCreatorId()) ||
-                    (currentUser.getId() == user.getId()) ||
-                    ((currentUser.getGroupId() == 0) && (user.getGroupId() > 0))) {
-                return mapping.findForward(Constants.EDIT_USER);
-            } else {
-                return mapping.findForward(Constants.UNAUTHORIZED);
+                return mapping.findForward(Constants.LIST_USER);
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_USER);
             }
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
@@ -542,7 +543,7 @@ public class UserAction extends DispatchAction {
         if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
             UserForm userForm = (UserForm) form;
             // Retrieve user
-            User user = (User) userService.getUserById(userForm.getId());
+            User user = userService.getUserById(userForm.getId());
 
             userForm.setUsername(user.getUsername());
             // Generate 4-digit random code
@@ -587,7 +588,7 @@ public class UserAction extends DispatchAction {
         if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
             UserForm userForm = (UserForm) form;
 
-            User user = (User) userService.getUserById(userForm.getId());
+            User user = userService.getUserById(userForm.getId());
 
             // Check if codes match
             if (userForm.getCode() == userForm.getUserCode()) {
@@ -1017,98 +1018,100 @@ public class UserAction extends DispatchAction {
         table.addCell("\t\t\t\t\tTotal Suspended Users");
         table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + userService.countSuspendedUsers());
         document.add(table);
-        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-            document.setHeader(new HeaderFooter(new Phrase("List of administrators as of " + date), false));
-            document.newPage();
-            float[] widths = {0.03f, 0.07f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
-            PdfPTable pdfptable = new PdfPTable(widths);
-            pdfptable.setWidthPercentage(100);
-            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            List<User> administratorList = userService.listAdministrators();
-            for (User administrator : administratorList) {
-                pdfptable.addCell(new Phrase("" + administrator.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + administrator.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(administrator.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(administrator.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(administrator.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(administrator.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(administrator.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + administrator.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-            }
-            document.add(pdfptable);
+        if (currentUser != null) {
+            if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+                document.setHeader(new HeaderFooter(new Phrase("List of administrators as of " + date), false));
+                document.newPage();
+                float[] widths = {0.03f, 0.07f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
+                PdfPTable pdfptable = new PdfPTable(widths);
+                pdfptable.setWidthPercentage(100);
+                pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                List<User> administratorList = userService.listAdministrators();
+                for (User administrator : administratorList) {
+                    pdfptable.addCell(new Phrase("" + administrator.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + administrator.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(administrator.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(administrator.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(administrator.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(administrator.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(administrator.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + administrator.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                }
+                document.add(pdfptable);
 
-            document.setHeader(new HeaderFooter(new Phrase("List of encoders as of " + date), false));
-            document.newPage();
-            widths[0] = 0.03f;
-            widths[1] = 0.07f;
-            widths[2] = 0.1f;
-            widths[3] = 0.1f;
-            widths[4] = 0.1f;
-            widths[5] = 0.1f;
-            widths[6] = 0.2f;
-            widths[7] = 0.05f;
-            pdfptable = new PdfPTable(widths);
-            pdfptable.setWidthPercentage(100);
-            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            List<User> encoderList = userService.listEncoders();
-            for (User encoder : encoderList) {
-                pdfptable.addCell(new Phrase("" + encoder.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + encoder.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(encoder.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(encoder.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(encoder.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(encoder.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(encoder.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + encoder.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-            }
-            document.add(pdfptable);
+                document.setHeader(new HeaderFooter(new Phrase("List of encoders as of " + date), false));
+                document.newPage();
+                widths[0] = 0.03f;
+                widths[1] = 0.07f;
+                widths[2] = 0.1f;
+                widths[3] = 0.1f;
+                widths[4] = 0.1f;
+                widths[5] = 0.1f;
+                widths[6] = 0.2f;
+                widths[7] = 0.05f;
+                pdfptable = new PdfPTable(widths);
+                pdfptable.setWidthPercentage(100);
+                pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                List<User> encoderList = userService.listEncoders();
+                for (User encoder : encoderList) {
+                    pdfptable.addCell(new Phrase("" + encoder.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + encoder.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(encoder.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(encoder.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(encoder.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(encoder.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(encoder.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + encoder.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                }
+                document.add(pdfptable);
 
-            document.setHeader(new HeaderFooter(new Phrase("List of investigators as of " + date), false));
-            document.newPage();
-            widths[0] = 0.03f;
-            widths[1] = 0.07f;
-            widths[2] = 0.1f;
-            widths[3] = 0.1f;
-            widths[4] = 0.1f;
-            widths[5] = 0.1f;
-            widths[6] = 0.2f;
-            widths[7] = 0.05f;
-			pdfptable = new PdfPTable(widths);
-            pdfptable.setWidthPercentage(100);
-            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            List<User> investigatorList = userService.listInvestigators();
-            for (User investigator : investigatorList) {
-                pdfptable.addCell(new Phrase("" + investigator.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + investigator.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(investigator.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(investigator.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(investigator.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(investigator.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(investigator.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + investigator.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                document.setHeader(new HeaderFooter(new Phrase("List of investigators as of " + date), false));
+                document.newPage();
+                widths[0] = 0.03f;
+                widths[1] = 0.07f;
+                widths[2] = 0.1f;
+                widths[3] = 0.1f;
+                widths[4] = 0.1f;
+                widths[5] = 0.1f;
+                widths[6] = 0.2f;
+                widths[7] = 0.05f;
+                pdfptable = new PdfPTable(widths);
+                pdfptable.setWidthPercentage(100);
+                pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Group", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Agency", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Designation", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("E-mail Address", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                List<User> investigatorList = userService.listInvestigators();
+                for (User investigator : investigatorList) {
+                    pdfptable.addCell(new Phrase("" + investigator.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("group." + investigator.getGroupId()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(investigator.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(investigator.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(investigator.getAgency(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(investigator.getDesignation(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(investigator.getEmail(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.user." + investigator.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                }
+                document.add(pdfptable);
             }
-            document.add(pdfptable);
         }
         document.close();
 

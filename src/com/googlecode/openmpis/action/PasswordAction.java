@@ -77,7 +77,7 @@ public class PasswordAction extends Action {
         // Check if form is valid
         if (isValidAccount(request, form)) {
             // Retrieve user
-            User user = (User) userService.getUserByUsername(passwordForm.getUsername());
+            User user = userService.getUserByUsername(passwordForm.getUsername());
             String forward = "";
 
             // Check if user exists

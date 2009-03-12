@@ -953,6 +953,13 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward printCases(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
+
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") != null) {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
         // Set the paper size and margins
         Document document = new Document(PageSize.LETTER.rotate(), 50, 50, 50, 50);
 
@@ -1059,8 +1066,8 @@ public class CaseAction extends DispatchAction {
         table.addCell("Total Abductors");
         table.addCell("" + abductorService.countAllAbductors());
         document.add(table);
-
-            document.setHeader(new HeaderFooter(new Phrase("List of administrators as of " + date), false));
+        if (currentUser != null) {
+            document.setHeader(new HeaderFooter(new Phrase("List of missing persons as of " + date), false));
             document.newPage();
             float[] widths = {0.03f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
             PdfPTable pdfptable = new PdfPTable(widths);
@@ -1076,31 +1083,33 @@ public class CaseAction extends DispatchAction {
             pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            List<Person> personList = null;//personService.listMissing();
-            for (Person person : personList) {
-                // Process the photo
-                String tokens[] = person.getPhoto().split("\\/");
-                String defaultPhotoBasename = "";
-                for (int i = 0; i < tokens.length - 1; i++) {
-                    defaultPhotoBasename += tokens[i] + File.separator;
-                }
-                defaultPhotoBasename += tokens[tokens.length - 1];
-                String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
-                Image image = Image.getInstance(absoluteDefaultPhotoFilename);
-                image.scaleAbsolute(200, 300);
-                image.setAlignment(Image.ALIGN_CENTER);
+            List<Person> personList = null;
+            if (personList != null) {
+                for (Person person : personList) {
+                    // Process the photo
+                    String tokens[] = person.getPhoto().split("\\/");
+                    String defaultPhotoBasename = "";
+                    for (int i = 0; i < tokens.length - 1; i++) {
+                        defaultPhotoBasename += tokens[i] + File.separator;
+                    }
+                    defaultPhotoBasename += tokens[tokens.length - 1];
+                    String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+                    Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+                    image.scaleAbsolute(200, 300);
+                    image.setAlignment(Image.ALIGN_CENTER);
 
-                pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(person.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(person.getNickname(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(person.getMiddleName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-                pdfptable.addCell(image);
+                    pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getNickname(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getMiddleName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(image);
+                }
             }
             document.add(pdfptable);
-
+        }
         document.close();
 
         // Set the response to return the poster (PDF file)
