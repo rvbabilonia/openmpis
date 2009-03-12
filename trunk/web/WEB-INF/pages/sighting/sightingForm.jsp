@@ -35,7 +35,7 @@
                     <html:form method="post" action="viewMessage" styleClass="sightingclass">
                         <p class="contentclass">
                             <html:hidden property="action" value="addSighting"/>
-                            <html:hidden property="personid" value="${personid}"/>
+                            <html:hidden property="personId"/>
                         </p>
                         <p class="contentclass">
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield">
