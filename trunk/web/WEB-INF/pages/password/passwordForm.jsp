@@ -32,6 +32,7 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="password.heading"/>
+                    
                     <html:form method="post" action="resetPassword" styleClass="login">
                         <html:errors property="question"/>
                         <html:errors property="user"/>
