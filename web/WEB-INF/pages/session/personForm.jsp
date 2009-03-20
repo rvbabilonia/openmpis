@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
-        <bean:message key="case.title"/>
+        <title><bean:message key="case.title"/></title>
     </head>
     <body onload="javascript: setCities('${personForm.country}', '${personForm.province}', '${personForm.city}');
         setMissingFromCities('${personForm.missingFromCountry}', '${personForm.missingFromProvince}', '${personForm.missingFromCity}');
@@ -72,13 +72,9 @@
                             <c:choose>
                                 <c:when test="${(action == 'newPerson') || (action == 'addPerson')}">
                                     <html:hidden property="action" value="addPerson"/>
-                                    <html:hidden property="personid" value="${personid}"/>
-                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
                                 </c:when>
                                 <c:when test="${(action == 'viewPerson') || (action == 'editPerson')}">
                                     <html:hidden property="action" value="editPerson"/>
-                                    <html:hidden property="personid" value="${personid}"/>
-                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
                                 </c:when>
                             </c:choose>
                         </p>
@@ -127,7 +123,7 @@
                             <html:select styleId="typefield" styleClass="selectclass" property="type"
                                 onchange="javascript: toggleMissingOrFound(typefield.value);"
                                 onkeyup="javascript: toggleMissingOrFound(typefield.value);">
-                                <c:forEach begin="0" end="7" step="1" var="i">
+                                <c:forEach begin="0" end="8" step="1" var="i">
                                     <html:option value="${i}" styleId="typefield${i}" styleClass="optionclass"><bean:message key="type.${i}"/></html:option>
                                 </c:forEach>
                             </html:select>
@@ -164,14 +160,24 @@
                             <label id="birthdatelabel" class="labelclass" for="monthfield">
                                 <bean:message key="label.date.birth"/>
                             </label>
-                                <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth"
+                            <c:choose>
+                                <c:when test="${personForm.knownBirthDate == 'true'}">
+                                    <c:set var="isDisabled" value="false"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="isDisabled" value="true"/>
+                                </c:otherwise>
+                            </c:choose>
+                            <html:radio property="knownBirthDate" value="false" onchange="javascript: monthfield.disabled = true; dayfield.disabled = true; yearfield.disabled = true;">Unknown</html:radio>
+                            <html:radio property="knownBirthDate" value="true" onchange="javascript: monthfield.disabled = false; dayfield.disabled = false; yearfield.disabled = false;">
+                                <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="1" end="12" step="1" var="i">
                                         <html:option value="${i}" styleId="monthfield${i}" styleClass="monthoptionclass"><bean:message key="month.${i}"/></html:option>
                                     </c:forEach>
                                 </html:select>
-                                <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay"
+                                <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="1" end="31" step="1" var="i">
@@ -180,7 +186,7 @@
                                 </html:select>
                                 <jsp:useBean id="currentDate" class="java.util.Date"/>
                                 <fmt:formatDate var="currentYear" value="${currentDate}" pattern="yyyy"/>
-                                <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear"
+                                <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="${currentYear - 80}" end="${currentYear}" step="1" var="i">
@@ -190,7 +196,7 @@
                                 <bean:message key="label.age"/>
                                 <html:text styleId="agefield" styleClass="ageinputclass" property="age" disabled="true"/>
                                 <html:errors property="birthdate"/>
-                                [birth date is uknown]
+                            </html:radio>
                         </p>
                         <p class="contentclass">
                             <label id="streetlabel" class="labelclass" for="streetfield">
@@ -555,24 +561,24 @@
                         </p>
                         <c:if test="${personForm.relativeId > 0}">
                             <p class="contentclass">
-                                <label id="relativeidlabel" class="labelclass">
-                                    <bean:message key="label.relative.id"/>
+                                <label id="relativelabel" class="labelclass">
+                                    <bean:message key="label.relative.name"/>
                                 </label>
                                 <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeFirstName} ${personForm.relativeLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.abductorId > 0}">
                             <p class="contentclass">
-                                <label id="abductoridlabel" class="labelclass">
-                                    <bean:message key="label.abductor.id"/>
+                                <label id="abductorlabel" class="labelclass">
+                                    <bean:message key="label.abductor.name"/>
                                 </label>
-                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
+                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorId} ${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.investigatorId > 0}">
                             <p class="contentclass">
-                                <label id="investigatoridlabel" class="labelclass">
-                                    <bean:message key="label.investigator.id"/>
+                                <label id="investigatorlabel" class="labelclass">
+                                    <bean:message key="label.investigator.username"/>
                                 </label>
                                 <html:link action="viewUser.do?action=viewUser" paramName="personForm" paramId="id" paramProperty="investigatorId">${personForm.investigatorUsername}</html:link>
                             </p>
@@ -595,7 +601,9 @@
                                         <bean:message key="case.delete.buttons"/>
                                     </c:when>
                                 </c:choose>
-                                <bean:message key="case.print.progress.buttons" arg0="${personForm.id}"/>
+                                <c:if test="${(action == 'editPerson') || (action == 'viewPerson')}">
+                                    <bean:message key="case.print.progress.buttons" arg0="${personForm.id}"/>
+                                </c:if>
                             </p>
                         </c:if>
                     </html:form>
