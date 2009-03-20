@@ -6,6 +6,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -564,7 +565,12 @@
                                 <label id="relativelabel" class="labelclass">
                                     <bean:message key="label.relative.name"/>
                                 </label>
-                                <html:link action="viewRelative.do?action=viewRelative" paramName="personForm" paramId="id" paramProperty="relativeId">${personForm.relativeFirstName} ${personForm.relativeLastName}</html:link>
+                                <c:url var="url" scope="page" value="/viewRelative.do">
+                                    <c:param name="action" value="viewRelative"/>
+                                    <c:param name="id" value="${personForm.relativeId}"/>
+                                    <c:param name="personid" value="${personForm.id}"/>
+                                </c:url>
+                                <html:link href="${fn:escapeXml(url)}">${personForm.relativeFirstName} ${personForm.relativeLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.abductorId > 0}">
@@ -572,7 +578,12 @@
                                 <label id="abductorlabel" class="labelclass">
                                     <bean:message key="label.abductor.name"/>
                                 </label>
-                                <html:link action="viewAbductor.do?action=viewAbductor" paramName="personForm" paramId="id" paramProperty="abductorId">${personForm.abductorId} ${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
+                                <c:url var="url" scope="page" value="/viewAbductor.do">
+                                    <c:param name="action" value="viewAbductor"/>
+                                    <c:param name="id" value="${personForm.abductorId}"/>
+                                    <c:param name="personid" value="${personForm.id}"/>
+                                </c:url>
+                                <html:link href="${fn:escapeXml(url)}">${personForm.abductorId} - ${personForm.abductorFirstName} ${personForm.abductorLastName}</html:link>
                             </p>
                         </c:if>
                         <c:if test="${personForm.investigatorId > 0}">
