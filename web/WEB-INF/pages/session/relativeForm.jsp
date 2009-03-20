@@ -45,10 +45,10 @@
                     <c:choose>
                         <c:when test="${currentuser.groupId == 1}">
                             <c:choose>
-                                <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
+                                <c:when test="${((action == 'newRelative') && (relativeForm.id == 0)) || (action == 'addRelative')}">
                                     <bean:message key="relative.add"/>
                                 </c:when>
-                                <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
+                                <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || ((action == 'newRelative') && (relativeForm.id != 0))}">
                                     <bean:message key="relative.edit"/>
                                 </c:when>
                                 <c:when test="${(action == 'viewRelative') && (relativeForm.personId == null)}">
@@ -71,13 +71,13 @@
                                     <html:hidden property="action" value="addRelative"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
-                                <c:when test="${(action == 'viewRelative') || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
+                                <c:when test="${(action == 'viewRelative') || (action == 'editRelative')}">
                                     <html:hidden property="action" value="editRelative"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
                             </c:choose>
                         </p>
-                        <c:if test="${relativeForm.personId != null}">
+                        <c:if test="${currentuser.groupId == 1}">
                             <p class="contentclass">
                                 <label id="relativelistlabel" class="labelclass" for="relativelistfield">
                                     <bean:message key="label.relative.existing"/>
@@ -171,17 +171,17 @@
                             <html:text styleId="numberfield" styleClass="inputclass" property="number" maxlength="30"/>
                             <html:errors property="number"/>
                         </p>
-                        <c:if test="${relativeForm.personId != null}">
-                            <p class="contentclass">
-                                <label id="relationlabel" class="labelclass" for="relationfield">
-                                    * <bean:message key="label.relation"/>
-                                </label>
-                                <html:select styleId="relationfield" styleClass="selectclass" property="relationToRelative">
-                                    <c:forEach begin="0" end="30" step="1" var="i">
-                                        <html:option value="${i}" styleId="relationfield${i}" styleClass="optionclass"><bean:message key="relation.${i}"/></html:option>
-                                    </c:forEach>
-                                </html:select>
-                            </p>
+                        <p class="contentclass">
+                            <label id="relationlabel" class="labelclass" for="relationfield">
+                                * <bean:message key="label.relation"/>
+                            </label>
+                            <html:select styleId="relationfield" styleClass="selectclass" property="relationToRelative">
+                                <c:forEach begin="0" end="30" step="1" var="i">
+                                    <html:option value="${i}" styleId="relationfield${i}" styleClass="optionclass"><bean:message key="relation.${i}"/></html:option>
+                                </c:forEach>
+                            </html:select>
+                        </p>
+                        <c:if test="${relativeForm.personId != 0}">
                             <p class="contentclass">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
