@@ -55,8 +55,10 @@
     <action-mappings>
         <action
                 path="/viewHome"
-                type="org.apache.struts.actions.ForwardAction"
-                parameter="/WEB-INF/pages/home.jsp"/>
+                type="com.googlecode.openmpis.action.HomeAction"
+                scope="request">
+            <forward name="home" path="/WEB-INF/pages/home.jsp"/>
+        </action>
         <action
                 path="/viewAbout"
                 type="org.apache.struts.actions.ForwardAction"
@@ -138,7 +140,7 @@
             <forward name="delete-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
             <forward name="user-statistics" path="/WEB-INF/pages/statistics/userStatistics.jsp"/>
         </action>
-        <!-- List and count persons, relatives and abductors -->
+        <!-- List and count persons, relatives and abductors and assign investigator -->
         <action
                 path="/viewCase"
                 type="com.googlecode.openmpis.action.CaseAction"
@@ -161,7 +163,6 @@
             <forward name="list-abductor" path="/WEB-INF/pages/person/listPersons.jsp"/>
             <forward name="case-statistics" path="/WEB-INF/pages/statistics/caseStatistics.jsp"/>
             <forward name="assign-investigator" path="/WEB-INF/pages/session/investigatorForm.jsp"/>
-            <forward name="add-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
             <forward name="edit-person-success" path="/WEB-INF/pages/session/personSuccess.jsp"/>
         </action>
         <!-- Add, view, edit and delete persons -->
@@ -194,7 +195,7 @@
                 input="/WEB-INF/pages/session/relativeForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="list-person" redirect="true" path="/viewCase.do?action=listAllMissing"/>
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="view-relative" path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
             <forward name="add-relative-redo"  path="/WEB-INF/pages/session/relativeForm.jsp"/>
@@ -217,7 +218,7 @@
                 input="/WEB-INF/pages/session/abductorForm.jsp"
                 validate="false"
                 parameter="action">
-            <forward name="view-abductor" path="/WEB-INF/pages/person/personForm.jsp"/>
+            <forward name="view-abductor" path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor-redo"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor-success" path="/WEB-INF/pages/session/abductorSuccess.jsp"/>
@@ -269,18 +270,6 @@
             <forward name="add-sighting-redo" path="/WEB-INF/pages/sighting/sightingForm.jsp"/>
             <forward name="add-sighting-success" path="/WEB-INF/pages/sighting/sightingSuccess.jsp"/>
             <forward name="list-person" redirect="true" path="/viewCase.do?action=listAllMissing"/>
-        </action>
-        <!-- Selects and assigns investigator -->
-        <action
-                path="/viewInvestigator"
-                type="com.googlecode.openmpis.action.InvestigatorAction"
-                scope="request"
-                name="investigatorForm"
-                input="/WEB-INF/pages/session/investigatorForm.jsp"
-                validate="false"
-                parameter="action">
-            <forward name="assign-investigator"  path="/WEB-INF/pages/session/investigatorForm.jsp"/>
-            <forward name="assign-investigator-success" path="/WEB-INF/pages/session/investigatorSuccess.jsp"/>
         </action>
         <!-- User home page -->
         <action
