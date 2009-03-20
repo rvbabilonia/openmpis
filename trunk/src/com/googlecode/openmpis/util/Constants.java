@@ -342,4 +342,8 @@ public abstract class Constants {
      * The logical name of the forwarding instance for successful searching
      */
     public static final String SEARCH_SUCCESS = "search-success";
+    /**
+     * The logical name of the forwarding instance for the home page
+     */
+    public static final String HOME = "home";
 }
