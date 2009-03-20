@@ -18,7 +18,9 @@
  */
 package com.googlecode.openmpis.action;
 
-import com.googlecode.openmpis.dto.Abductor;
+import java.awt.Color;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +30,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 
+import com.googlecode.openmpis.dto.Abductor;
 import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Message;
 import com.googlecode.openmpis.dto.Report;
@@ -57,6 +62,7 @@ import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl
 import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Pagination;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -68,11 +74,6 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 /**
  * The ReportAction class provides the method to list, add, edit, view and delete
@@ -636,29 +637,26 @@ public class ReportAction extends DispatchAction {
                 Relative relative = relativeService.getRelativeById(person.getRelativeId());
 
                 document.newPage();
-                document.add(new Phrase(getResources(request).getMessage("label.relative.name") + ": " + relative.getFirstName() + " " + relative.getLastName()));
+                document.add(new Paragraph(getResources(request).getMessage("label.relative.name") + ": " + relative.getFirstName() + " " + relative.getLastName()));
+                document.add(new Paragraph(getResources(request).getMessage("label.relation") + ": " + getResources(request).getMessage("relation." + person.getRelationToRelative())));
+                document.add(new Paragraph(getResources(request).getMessage("label.address") + ": " + relative.getStreet() + ", " + relative.getCity() + ", " + relative.getProvince()));
+                document.add(new Paragraph(getResources(request).getMessage("label.number") + ": " + relative.getNumber()));
+                document.add(new Paragraph(getResources(request).getMessage("label.email") + ": " + relative.getEmail()));
 
                 // Print information on abductor
                 if (person.getAbductorId() != null) {
                     Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
 
                     document.newPage();
-                    document.add(new Phrase(getResources(request).getMessage("label.abductor.name") + ": " + abductor.getFirstName() + " " + abductor.getLastName()));
+                    document.add(new Paragraph(getResources(request).getMessage("label.abductor.name") + ": " + abductor.getFirstName() + " " + abductor.getLastName()));
                 }
 
                 // Print sightings
                 if ((currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
                     document.setHeader(new HeaderFooter(new Phrase("List of sightings as of " + date), false));
                     document.newPage();
-                    widths[0] = 0.1f;
-                    widths[1] = 0.1f;
-                    widths[2] = 0.1f;
-                    widths[3] = 0.3f;
-                    widths[4] = 0.1f;
-                    widths[5] = 0.1f;
-                    widths[6] = 0.1f;
-                    widths[7] = 0.1f;
-                    pdfptable = new PdfPTable(widths);
+                    float sightingsWidths[] = {0.1f, 0.1f, 0.1f, 0.3f, 0.1f, 0.1f, 0.1f, 0.1f};
+                    pdfptable = new PdfPTable(sightingsWidths);
                     pdfptable.setWidthPercentage(100);
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("label.id"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("label.date.sent"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
@@ -686,10 +684,8 @@ public class ReportAction extends DispatchAction {
                 if ((currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
                     document.setHeader(new HeaderFooter(new Phrase("List of progress reports as of " + date), false));
                     document.newPage();
-                    widths[0] = 0.1f;
-                    widths[1] = 0.1f;
-                    widths[2] = 0.3f;
-                    pdfptable = new PdfPTable(widths);
+                    float reportsWidths[] = {0.1f, 0.1f, 0.3f};
+                    pdfptable = new PdfPTable(reportsWidths);
                     pdfptable.setWidthPercentage(100);
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("label.id"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("label.date.reported"), FontFactory.getFont(FontFactory.HELVETICA, 12)));
