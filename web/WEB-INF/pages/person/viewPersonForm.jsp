@@ -18,7 +18,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="case.title"/>
+        <title><bean:message key="case.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -37,7 +37,7 @@
                         <bean:message key="investigator.case.menu" arg0="${currentuser.id}"/>
                     </c:when>
                     <c:otherwise>
-                        <bean:message key="global.menu"/>
+                        <bean:message key="home.menu"/>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -50,14 +50,20 @@
                     </div>
                     <bean:message key="case.view"/>
 
-                    <h2 style="text-align: center;">
-                        ${personForm.firstName}
-                        <c:if test="${personForm.nickname ne ''}">
-                            "${personForm.nickname}"
-                        </c:if>
-                        ${personForm.middleName}
-                        ${personForm.lastName}
-                    </h2>
+                    <div class="table">
+                        <div class="row">
+                            <div class="hiddencell">
+                                <h2 style="text-align: center;">
+                                    ${personForm.firstName}
+                                    <c:if test="${personForm.nickname != ''}">
+                                        "${personForm.nickname}"
+                                    </c:if>
+                                    ${personForm.middleName}
+                                    ${personForm.lastName}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table">
                         <div class="row">
                             <div class="hiddencell" style="width: 50%;">
@@ -95,8 +101,14 @@
                                     <label id="birthdatelabel" class="labelclass">
                                         <bean:message key="label.date.birth"/>
                                     </label>
-                                    <bean:message key="month.${personForm.birthMonth}"/>&nbsp;${personForm.birthDay},&nbsp;${personForm.birthYear}
-                                    
+                                    <c:choose>
+                                        <c:when test="${personForm.knownBirthDate == 'true'}">
+                                            <bean:message key="month.${personForm.birthMonth}"/>&nbsp;${personForm.birthDay},&nbsp;${personForm.birthYear}
+                                        </c:when>
+                                        <c:otherwise>
+                                            <bean:message key="label.unknown"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
                             </div>
                             <div class="hiddencell" style="width: 50%;">
@@ -266,10 +278,10 @@
                     <c:choose>
                         <c:when test="${personForm.type > 4}">
                             <c:set var="missing" value="display: none;"/>
-                            <c:set var="found" value="display: table; width: 100%; border-spacing: 1px;"/>
+                            <c:set var="found" value="display: table; width: 80%; border-spacing: 1px;"/>
                         </c:when>
                         <c:otherwise>
-                            <c:set var="missing" value="display: table; width: 100%; border-spacing: 1px;"/>
+                            <c:set var="missing" value="display: table; width: 80%; border-spacing: 1px;"/>
                             <c:set var="found" value="display: none;"/>
                         </c:otherwise>
                     </c:choose>
