@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
-        <bean:message key="relative.title"/>
+        <title><bean:message key="relative.title"/></title>
     </head>
     <body onload="javascript: setCities('${relativeForm.country}', '${relativeForm.province}', '${relativeForm.city}');
         setProvinces('${relativeForm.country}', '${relativeForm.province}');
@@ -48,10 +48,10 @@
                                 <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
                                     <bean:message key="relative.add"/>
                                 </c:when>
-                                <c:when test="${((action == 'viewRelative') && (personid != null)) || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
+                                <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
                                     <bean:message key="relative.edit"/>
                                 </c:when>
-                                <c:when test="${(action == 'viewRelative') && (personid == null)}">
+                                <c:when test="${(action == 'viewRelative') && (relativeForm.personId == null)}">
                                     <bean:message key="relative.view"/>
                                 </c:when>
                             </c:choose>
@@ -69,24 +69,22 @@
                             <c:choose>
                                 <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
                                     <html:hidden property="action" value="addRelative"/>
-                                    <html:hidden property="personid" value="${personid}"/>
-                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
+                                    <html:hidden property="personId"/>
                                 </c:when>
                                 <c:when test="${(action == 'viewRelative') || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
                                     <html:hidden property="action" value="editRelative"/>
-                                    <html:hidden property="personid" value="${personid}"/>
-                                    <html:hidden property="investigatorid" value="${investigatorid}"/>
+                                    <html:hidden property="personId"/>
                                 </c:when>
                             </c:choose>
                         </p>
-                        <c:if test="${personid != null}">
+                        <c:if test="${relativeForm.personId != null}">
                             <p class="contentclass">
                                 <label id="relativelistlabel" class="labelclass" for="relativelistfield">
                                     <bean:message key="label.relative.existing"/>
                                 </label>
                                 <html:select styleId="relativelistfield" styleClass="selectclass" property="id"
-                                    onchange="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${personid};}"
-                                    onkeyup="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${personid};}">
+                                    onchange="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${relativeForm.personId};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${relativeForm.personId};}"
+                                    onkeyup="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${relativeForm.personId};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${relativeForm.personId};}">
                                     <html:option value="0" styleId="relativefield0" styleClass="optionclass">----------</html:option>
                                     <c:forEach items="${relativelist}" var="relative">
                                         <html:option value="${relative.id}" styleId="relativefield${i}" styleClass="optionclass">${relative.lastName}, ${relative.firstName}</html:option>
@@ -94,12 +92,14 @@
                                 </html:select>
                             </p>
                         </c:if>
-                        <p class="contentclass">
-                            <label id="idlabel" class="labelclass" for="idfield">
-                                <bean:message key="label.id"/>
-                            </label>
-                            <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
-                        </p>
+                        <c:if test="${relativeForm.id != 0}">
+                            <p class="contentclass">
+                                <label id="idlabel" class="labelclass" for="idfield">
+                                    <bean:message key="label.id"/>
+                                </label>
+                                <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
+                            </p>
+                        </c:if>
                         <p class="contentclass">
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield">
                                 * <bean:message key="label.firstname"/>
@@ -171,7 +171,7 @@
                             <html:text styleId="numberfield" styleClass="inputclass" property="number" maxlength="30"/>
                             <html:errors property="number"/>
                         </p>
-                        <c:if test="${personid != null}">
+                        <c:if test="${relativeForm.personId != null}">
                             <p class="contentclass">
                                 <label id="relationlabel" class="labelclass" for="relationfield">
                                     * <bean:message key="label.relation"/>
