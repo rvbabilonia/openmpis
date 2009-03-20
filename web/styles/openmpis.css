@@ -306,11 +306,13 @@ div#link li:first-child {
 div#copyright {
     float: left;
     padding-left: 10px;
+    width: 20%;
 }
 
 div#link {
     float: right;
     padding-right: 10px;
+    width: 49%;
 }
 
 div#pagination {
