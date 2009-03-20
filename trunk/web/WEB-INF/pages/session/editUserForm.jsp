@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/md5.js"></script>
-        <bean:message key="user.title"/>
+        <title><bean:message key="user.title"/></title>
     </head>
     <body>
         <div id="container">

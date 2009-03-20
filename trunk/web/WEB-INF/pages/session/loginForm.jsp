@@ -19,7 +19,7 @@
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/md5.js"></script>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
-        <bean:message key="login.title"/>
+        <title><bean:message key="login.title"/></title>
     </head>
     <body>
         <div id="container">
