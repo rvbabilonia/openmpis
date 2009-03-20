@@ -32,6 +32,10 @@ public class InvestigatorForm extends ActionForm {
      * The investigator ID
      */
     private int id;
+    /**
+     * The person to whom this investigator is attributed
+     */
+    private int personId;
 
     /**
      * Gets the ID of the investigator.
@@ -49,6 +53,24 @@ public class InvestigatorForm extends ActionForm {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * Gets the ID of the person.
+     *
+     * @return              the ID of the person
+     */
+    public int getPersonId() {
+        return personId;
+    }
+
+    /**
+     * Sets the ID of the person.
+     *
+     * @param personId      the ID of the person
+     */
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     /**
