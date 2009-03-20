@@ -18,18 +18,24 @@
  */
 package com.googlecode.openmpis.action;
 
-import com.googlecode.openmpis.dto.Log;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
+import com.googlecode.openmpis.dto.Abductor;
+import com.googlecode.openmpis.dto.Log;
 import com.googlecode.openmpis.dto.Person;
+import com.googlecode.openmpis.dto.Relative;
 import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.InvestigatorForm;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
@@ -63,10 +69,6 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import java.awt.Color;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import org.apache.log4j.Logger;
 
 /**
  * The CaseAction class provides the methods to list persons.
@@ -123,7 +125,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward list(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -190,7 +192,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listAllMissing(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -244,7 +246,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listMissing(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -298,7 +300,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listFamilyAbduction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -352,7 +354,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listNonFamilyAbduction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -406,7 +408,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listRunaway(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -460,7 +462,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listUnknown(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -514,7 +516,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listAllFound(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -557,6 +559,60 @@ public class CaseAction extends DispatchAction {
     }
 
     /**
+     * Lists found persons.
+     *
+     * @param mapping       the ActionMapping used to select this instance
+     * @param form          the optional ActionForm bean for this request
+     * @param request       the HTTP Request we are processing
+     * @param response      the HTTP Response we are processing
+     * @return              the forwarding instance
+     * @throws java.lang.Exception
+     */
+    public ActionForward listFound(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String page = request.getParameter("page");
+
+        // Set pagination direction
+        if (page != null) {
+            if (page.equals("next")) {
+                pagination.nextPage();
+            } else if (page.equals("previous")) {
+                pagination.previousPage();
+            } else if (page.equals("start")) {
+                pagination.firstPage();
+            } else if (page.equals("end")) {
+                pagination.lastPage();
+            }
+        }
+
+        // Retrieve list of persons
+        List<Person> personList = personService.getFound(pagination);
+
+        // Return number of persons
+        request.setAttribute("personcount", personList.size());
+
+        // Return list of persons
+        request.setAttribute("personlist", personList);
+
+        // Return current page
+        request.setAttribute("currentpage", pagination.getCurrentPage());
+
+        // Return total number of pages
+        request.setAttribute("totalpages", pagination.getTotalPages());
+
+        // Return total results
+        request.setAttribute("totalresults", pagination.getTotalResults());
+
+        // Return max results
+        request.setAttribute("maxresults", pagination.getMaxResults());
+
+        // Return condition if there are more pages
+        request.setAttribute("morepages", pagination.hasMorePages());
+
+        return mapping.findForward(Constants.LIST_PERSON_ALL_FOUND);
+    }
+
+    /**
      * Lists abandoned persons.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -568,7 +624,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listAbandoned(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -622,7 +678,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listThrowaway(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -676,7 +732,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listUnidentified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -730,7 +786,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listSolved(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -784,7 +840,7 @@ public class CaseAction extends DispatchAction {
      */
     public ActionForward listUnsolved(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String page = (String) request.getParameter("page");
+        String page = request.getParameter("page");
 
         // Set pagination direction
         if (page != null) {
@@ -847,6 +903,7 @@ public class CaseAction extends DispatchAction {
         request.setAttribute("nonfamilyabductioncount", personService.countNonFamilyAbduction());
         request.setAttribute("runawaycount", personService.countRunaway());
         request.setAttribute("unknowncount", personService.countUnknown());
+        request.setAttribute("foundcount", personService.countFound());
         request.setAttribute("abandonedcount", personService.countAbandoned());
         request.setAttribute("throwawaycount", personService.countThrowaway());
         request.setAttribute("unidentifiedcount", personService.countUnidentified());
@@ -882,11 +939,12 @@ public class CaseAction extends DispatchAction {
             List<User> investigatorList = userService.listActiveInvestigators();
             request.setAttribute("investigatorlist", investigatorList);
 
-            InvestigatorForm investigatorForm = (InvestigatorForm) form;
-            Person person = personService.getPersonById(Integer.parseInt(request.getAttribute("personid").toString()));
+            Person person = personService.getPersonById((Integer) request.getAttribute("personid"));
 
             if (person.getInvestigatorId() != null) {
+                InvestigatorForm investigatorForm = (InvestigatorForm) form;
                 investigatorForm.setId(person.getInvestigatorId());
+                investigatorForm.setPersonId(person.getId());
             }
 
             return mapping.findForward(Constants.ASSIGN_INVESTIGATOR);
@@ -919,7 +977,7 @@ public class CaseAction extends DispatchAction {
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
             InvestigatorForm investigatorForm = (InvestigatorForm) form;
-            Person person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+            Person person = personService.getPersonById(investigatorForm.getPersonId());
             User investigator = userService.getUserById(investigatorForm.getId());
             person.setInvestigatorId(investigator.getId());
             personService.updatePersonInvestigator(person);
@@ -1002,74 +1060,81 @@ public class CaseAction extends DispatchAction {
         table.addCell("Total On-going Cases");
         table.addCell("" + personService.countOngoing());
         table.addCell("\t\t\t\t\tMissing Persons");
-        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countMissing());
         table.addCell("\t\t\t\t\tFamily Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countFamilyAbduction());
         table.addCell("\t\t\t\t\tNon-Family Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countNonFamilyAbduction());
         table.addCell("\t\t\t\t\tRunaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countRunaway());
         table.addCell("\t\t\t\t\tUnknown");
-        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\tFound Persons");
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countFound());
         table.addCell("\t\t\t\t\tAbandoned Persons");
-        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countAbandoned());
         table.addCell("\t\t\t\t\tThrowaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countThrowaway());
         table.addCell("\t\t\t\t\tUnidentified");
-        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnidentified());
         table.addCell("Total Solved Cases");
         table.addCell("" + personService.countSolved());
         table.addCell("\t\t\t\t\tMissing Persons");
-        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedMissing());
         table.addCell("\t\t\t\t\tFamily Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedFamilyAbduction());
         table.addCell("\t\t\t\t\tNon-Family Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedNonFamilyAbduction());
         table.addCell("\t\t\t\t\tRunaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedRunaway());
         table.addCell("\t\t\t\t\tUnknown");
-        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedUnknown());
+        table.addCell("\t\t\t\t\tFound Persons");
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedFound());
         table.addCell("\t\t\t\t\tAbandoned Persons");
-        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedAbandoned());
         table.addCell("\t\t\t\t\tThrowaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedThrowaway());
         table.addCell("\t\t\t\t\tUnidentified");
-        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countSolvedUnidentified());
         table.addCell("Total Unsolved Cases");
         table.addCell("" + personService.countUnsolved());
         table.addCell("\t\t\t\t\tMissing Persons");
-        table.addCell("\t\t\t\t\t" + personService.countMissing());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedMissing());
         table.addCell("\t\t\t\t\tFamily Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedFamilyAbduction());
         table.addCell("\t\t\t\t\tNon-Family Abductions");
-        table.addCell("\t\t\t\t\t" + personService.countNonFamilyAbduction());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedNonFamilyAbduction());
         table.addCell("\t\t\t\t\tRunaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countRunaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedRunaway());
         table.addCell("\t\t\t\t\tUnknown");
-        table.addCell("\t\t\t\t\t" + personService.countUnknown());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedUnknown());
+        table.addCell("\t\t\t\t\tFound Persons");
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedFound());
         table.addCell("\t\t\t\t\tAbandoned Persons");
-        table.addCell("\t\t\t\t\t" + personService.countAbandoned());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedAbandoned());
         table.addCell("\t\t\t\t\tThrowaway Persons");
-        table.addCell("\t\t\t\t\t" + personService.countThrowaway());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedThrowaway());
         table.addCell("\t\t\t\t\tUnidentified");
-        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnsolvedUnidentified());
         table.addCell("Total Cases");
         table.addCell("" + personService.countAllPersons());
         table.addCell("\t\t\t\t\tTotal Missing Persons");
-        table.addCell("\t\t\t\t\t" + personService.countAllMissing());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t" + personService.countAllMissing());
         table.addCell("\t\t\t\t\tTotal Found Persons");
-        table.addCell("\t\t\t\t\t" + personService.countAllFound());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countAllFound());
         table.addCell("\t\t\t\t\tTotal Unidentified Persons");
-        table.addCell("\t\t\t\t\t" + personService.countUnidentified());
+        table.addCell("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + personService.countUnidentified());
         table.addCell("Total Relatives");
         table.addCell("" + relativeService.countAllRelatives());
         table.addCell("Total Abductors");
         table.addCell("" + abductorService.countAllAbductors());
         document.add(table);
         if (currentUser != null) {
-            document.setHeader(new HeaderFooter(new Phrase("List of missing persons as of " + date), false));
+            // List ongoing cases
+            document.setHeader(new HeaderFooter(new Phrase("List of ongoing cases as of " + date), false));
             document.newPage();
-            float[] widths = {0.03f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
+            float[] widths = {0.05f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.15f, 0.1f, 0.1f};
             PdfPTable pdfptable = new PdfPTable(widths);
             pdfptable.setWidthPercentage(100);
             pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
@@ -1082,8 +1147,7 @@ public class CaseAction extends DispatchAction {
             pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
-            List<Person> personList = null;
+            List<Person> personList = personService.listOngoing();
             if (personList != null) {
                 for (Person person : personList) {
                     // Process the photo
@@ -1095,7 +1159,7 @@ public class CaseAction extends DispatchAction {
                     defaultPhotoBasename += tokens[tokens.length - 1];
                     String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
                     Image image = Image.getInstance(absoluteDefaultPhotoFilename);
-                    image.scaleAbsolute(200, 300);
+                    image.scaleAbsolute(50, 75);
                     image.setAlignment(Image.ALIGN_CENTER);
 
                     pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
@@ -1106,6 +1170,114 @@ public class CaseAction extends DispatchAction {
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(image);
+                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String abductorName = "";
+                    if (person.getAbductorId() != null) {
+                        Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
+                        abductorName = abductor.getFirstName() + " " + abductor.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                }
+            }
+            document.add(pdfptable);
+
+            // List solved cases
+            document.setHeader(new HeaderFooter(new Phrase("List of solved cases as of " + date), false));
+            document.newPage();
+            pdfptable = new PdfPTable(widths);
+            pdfptable.setWidthPercentage(100);
+            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Nickname", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Middle Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Case Type", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            personList = personService.listSolved();
+            if (personList != null) {
+                for (Person person : personList) {
+                    // Process the photo
+                    String tokens[] = person.getPhoto().split("\\/");
+                    String defaultPhotoBasename = "";
+                    for (int i = 0; i < tokens.length - 1; i++) {
+                        defaultPhotoBasename += tokens[i] + File.separator;
+                    }
+                    defaultPhotoBasename += tokens[tokens.length - 1];
+                    String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+                    Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+                    image.scaleAbsolute(50, 75);
+                    image.setAlignment(Image.ALIGN_CENTER);
+
+                    pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getNickname(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getMiddleName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(image);
+                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String abductorName = "";
+                    if (person.getAbductorId() != null) {
+                        Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
+                        abductorName = abductor.getFirstName() + " " + abductor.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                }
+            }
+            document.add(pdfptable);
+
+            // List unsolved cases
+            document.setHeader(new HeaderFooter(new Phrase("List of unsolved cases as of " + date), false));
+            document.newPage();
+            pdfptable = new PdfPTable(widths);
+            pdfptable.setWidthPercentage(100);
+            pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Last Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("First Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Nickname", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Middle Name", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Case Type", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Status", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            personList = personService.listUnsolved();
+            if (personList != null) {
+                for (Person person : personList) {
+                    // Process the photo
+                    String tokens[] = person.getPhoto().split("\\/");
+                    String defaultPhotoBasename = "";
+                    for (int i = 0; i < tokens.length - 1; i++) {
+                        defaultPhotoBasename += tokens[i] + File.separator;
+                    }
+                    defaultPhotoBasename += tokens[tokens.length - 1];
+                    String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
+                    Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+                    image.scaleAbsolute(50, 75);
+                    image.setAlignment(Image.ALIGN_CENTER);
+
+                    pdfptable.addCell(new Phrase("" + person.getId(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getFirstName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getNickname(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(person.getMiddleName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    pdfptable.addCell(image);
+                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String abductorName = "";
+                    if (person.getAbductorId() != null) {
+                        Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
+                        abductorName = abductor.getFirstName() + " " + abductor.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                 }
             }
             document.add(pdfptable);
