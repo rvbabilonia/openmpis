@@ -180,9 +180,12 @@ public class PersonAction extends DispatchAction {
                 // and if the rest of the form is valid
                 Person checker = new Person();
                 String firstName = personForm.getFirstName();
+                String nickname = personForm.getNickname();
+                String middleName = personForm.getMiddleName();
                 String lastName = personForm.getLastName();
-                checker.setId(personForm.getId());
                 checker.setFirstName(firstName);
+                checker.setNickname(nickname);
+                checker.setMiddleName(middleName);
                 checker.setLastName(lastName);
 
                 // Check if person is unique
@@ -193,12 +196,14 @@ public class PersonAction extends DispatchAction {
                     person.setStatus(personForm.getStatus());
                     person.setType(personForm.getType());
                     person.setFirstName(firstName);
-                    person.setNickname(personForm.getNickname());
-                    person.setMiddleName(personForm.getMiddleName());
+                    person.setNickname(nickname);
+                    person.setMiddleName(middleName);
                     person.setLastName(lastName);
-                    person.setBirthMonth(personForm.getBirthMonth());
-                    person.setBirthDay(personForm.getBirthDay());
-                    person.setBirthYear(personForm.getBirthYear());
+                    if (personForm.isKnownBirthDate()) {
+                        person.setBirthMonth(personForm.getBirthMonth());
+                        person.setBirthDay(personForm.getBirthDay());
+                        person.setBirthYear(personForm.getBirthYear());
+                    }
                     person.setStreet(personForm.getStreet());
                     person.setCity(personForm.getCity());
                     person.setProvince(personForm.getProvince());
@@ -276,7 +281,6 @@ public class PersonAction extends DispatchAction {
                             String directoryName = createDirectoryName(generatedId);
 
                             // Calculate age
-                            // TODO what if birth date is unknown?
                             int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
 
                             // Create context-relative directories
@@ -414,6 +418,9 @@ public class PersonAction extends DispatchAction {
             personForm.setBirthMonth(person.getBirthMonth());
             personForm.setBirthDay(person.getBirthDay());
             personForm.setBirthYear(person.getBirthYear());
+            if (person.getBirthMonth() != 0) {
+                personForm.setKnownBirthDate(true);
+            }
             personForm.setAge(getAge(person.getBirthMonth() - 1, person.getBirthDay(), person.getBirthYear()));
             personForm.setStreet(person.getStreet());
             personForm.setCity(person.getCity());
@@ -431,11 +438,10 @@ public class PersonAction extends DispatchAction {
             personForm.setMarks(person.getMarks());
             personForm.setPersonalEffects(person.getPersonalEffects());
             personForm.setRemarks(person.getRemarks());
-            // TODO what if birth date is unknown?
-                personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
-                personForm.setDayMissingOrFound(person.getDayMissingOrFound());
-                personForm.setYearMissingOrFound(person.getYearMissingOrFound());
-                personForm.setDaysMissing(getDaysMissing(person.getMonthMissingOrFound() - 1, person.getDayMissingOrFound(), person.getYearMissingOrFound()));
+            personForm.setMonthMissingOrFound(person.getMonthMissingOrFound());
+            personForm.setDayMissingOrFound(person.getDayMissingOrFound());
+            personForm.setYearMissingOrFound(person.getYearMissingOrFound());
+            personForm.setDaysMissing(getDaysMissing(person.getMonthMissingOrFound() - 1, person.getDayMissingOrFound(), person.getYearMissingOrFound()));
             if (person.getMissingFromCity() != null) {
                 personForm.setMissingFromCity(person.getMissingFromCity());
             }
@@ -511,10 +517,7 @@ public class PersonAction extends DispatchAction {
                 currentUser = (User) request.getSession().getAttribute("currentuser");
                 request.setAttribute("action", request.getParameter("action"));
 
-                // Edit what you created/encoded
-                // Edit your profile
-                // Administrator can edit all except administrators
-                if (currentUser.getId() == person.getEncoderId()) {
+                if (currentUser.getGroupId() == 1) {
                     return mapping.findForward(Constants.EDIT_PERSON);
                 } else {
                     return mapping.findForward(Constants.VIEW_PERSON);
@@ -554,7 +557,7 @@ public class PersonAction extends DispatchAction {
             PersonForm personForm = (PersonForm) form;
             ActionMessages errors = new ActionMessages();
             request.setAttribute("action", request.getParameter("action"));
-            
+
             // Retrieve person to be updated
             Person person = personService.getPersonById(personForm.getId());
             if (person.getRelativeId() != null) {
@@ -614,7 +617,6 @@ public class PersonAction extends DispatchAction {
                         String directoryName = createDirectoryName(personForm.getId());
 
                         // Calculate age
-                        // TODO what if birth date is unknown?
                         int age = getAge(personForm.getBirthMonth() - 1, personForm.getBirthDay(), personForm.getBirthYear());
 
                         // Create context-relative directories
@@ -641,18 +643,20 @@ public class PersonAction extends DispatchAction {
                         }
 
                         // Prepare filenames and upload photo
-                        String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
-                        contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
-                        File file = new File(absoluteDefaultPhotoFilename);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(photoFile.getFileData());
-                        fos.close();
-                        fos.flush();
+                        if (photoFile.getFileName().length() > 0) {
+                            String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                            contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                            File file = new File(absoluteDefaultPhotoFilename);
+                            FileOutputStream fos = new FileOutputStream(file);
+                            fos.write(photoFile.getFileData());
+                            fos.close();
+                            fos.flush();
+                        }
                         if (agedPhotoFile.getFileName().length() > 0) {
                             String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
                             contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
-                            file = new File(absoluteAgedPhotoFilename);
-                            fos = new FileOutputStream(file);
+                            File file = new File(absoluteAgedPhotoFilename);
+                            FileOutputStream fos = new FileOutputStream(file);
                             fos.write(agedPhotoFile.getFileData());
                             fos.close();
                             fos.flush();
@@ -676,9 +680,11 @@ public class PersonAction extends DispatchAction {
                     person.setNickname(personForm.getNickname());
                     person.setMiddleName(personForm.getMiddleName());
                     person.setLastName(lastName);
-                    person.setBirthMonth(personForm.getBirthMonth());
-                    person.setBirthDay(personForm.getBirthDay());
-                    person.setBirthYear(personForm.getBirthYear());
+                    if (personForm.isKnownBirthDate()) {
+                        person.setBirthMonth(personForm.getBirthMonth());
+                        person.setBirthDay(personForm.getBirthDay());
+                        person.setBirthYear(personForm.getBirthYear());
+                    }
                     person.setStreet(personForm.getStreet());
                     person.setCity(personForm.getCity());
                     person.setProvince(personForm.getProvince());
@@ -725,8 +731,11 @@ public class PersonAction extends DispatchAction {
                     if (!personForm.getDentalId().isEmpty()) {
                         person.setDentalId(personForm.getDentalId());
                     }
+                    if (!((personForm.getType() == 1) || (personForm.getType() == 2))) {
+                        person.setAbductorId(null);
+                    }
                     boolean isUpdated = personService.updatePerson(person);
-                    
+
                     // Retrieve newly-updated person
                     person = personService.getPersonById(person.getId());
 
@@ -747,23 +756,15 @@ public class PersonAction extends DispatchAction {
                         logger.info(editLog.toString());
 
                         if (person.getType() > 4) {
-                            // Check if person is abandoned, throwaway or unidentified
-                            // Return person ID and investigator ID
+                            // Check if person is found, abandoned, throwaway or unidentified
+                            // Return person ID
                             request.setAttribute("personid", person.getId());
-                            request.setAttribute("investigatorid", person.getInvestigatorId());
-                            //personForm.setRelativeId(person.getRelativeId());
-                            //personForm.setInvestigatorId(person.getInvestigatorId());
 
                             return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             // Check if missing
-                            // Return person ID, relative ID and relation to relative
+                            // Return person ID
                             request.setAttribute("personid", person.getId());
-                            request.setAttribute("relativeid", person.getRelativeId());
-                            request.setAttribute("relationtorelative", person.getRelationToRelative());
-                            request.setAttribute("abductorid", person.getAbductorId());
-                            request.setAttribute("relationtoabductor", person.getRelationToAbductor());
-                            request.setAttribute("investigatorid", person.getInvestigatorId());
 
                             return mapping.findForward(Constants.ADD_RELATIVE);
                         }
@@ -922,7 +923,6 @@ public class PersonAction extends DispatchAction {
     }
     }
      */
-
     /**
      * Prints the person's poster in PDF file.
      *
@@ -1284,8 +1284,7 @@ public class PersonAction extends DispatchAction {
 
         if (!errors.isEmpty()) {
             saveErrors(request, errors);
-            isValid =
-                    false;
+            isValid = false;
         }
 
         return isValid;
