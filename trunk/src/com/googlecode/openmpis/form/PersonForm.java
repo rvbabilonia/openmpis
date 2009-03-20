@@ -1573,10 +1573,20 @@ public class PersonForm extends ActionForm {
         this.relationToAbductor = relationToAbductor;
     }
 
+    /**
+     * Checks if birth date is known.
+     *
+     * @return              <code>true</code> if birth date is known; <code>false</code> otherwise
+     */
     public boolean isKnownBirthDate() {
         return knownBirthDate;
     }
 
+    /**
+     * Sets birth date as known or not.
+     *
+     * @param knownBirthDate <code>true</code> if birth date is known; <code>false</code> otherwise
+     */
     public void setKnownBirthDate(boolean knownBirthDate) {
         this.knownBirthDate = knownBirthDate;
     }
