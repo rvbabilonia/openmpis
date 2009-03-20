@@ -104,28 +104,41 @@ public class RelativeAction extends DispatchAction {
             List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
             request.setAttribute("action", request.getParameter("action"));
+
+            RelativeForm relativeForm = (RelativeForm) form;
+
             if (request.getAttribute("personid") != null) {
-                request.setAttribute("personid", request.getAttribute("personid"));
+                // Retrieve person
+                Person person = personService.getPersonById((Integer) request.getAttribute("personid"));
+                relativeForm.setPersonId(person.getId());
+
+                if (person != null) {
+                    if (person.getRelativeId() != null) {
+                        // Retrieve relative
+                        Relative relative = relativeService.getRelativeById(person.getRelativeId());
+
+                        // Return relative
+                        relativeForm.setId(relative.getId());
+                        relativeForm.setFirstName(relative.getFirstName());
+                        relativeForm.setMiddleName(relative.getMiddleName());
+                        relativeForm.setLastName(relative.getLastName());
+                        relativeForm.setEmail(relative.getEmail());
+                        relativeForm.setNumber(relative.getNumber());
+                        relativeForm.setStreet(relative.getStreet());
+                        relativeForm.setCity(relative.getCity());
+                        relativeForm.setProvince(relative.getProvince());
+                        relativeForm.setCountry(relative.getCountry());
+                        relativeForm.setRelationToRelative(person.getRelationToRelative());
+                    }
+                }
             } else {
-                request.setAttribute("personid", request.getParameter("personid"));
-            }
-
-            if (request.getAttribute("relativeid") != null) {
-                RelativeForm relativeForm = (RelativeForm) form;
-                Relative relative = relativeService.getRelativeById((Integer) request.getAttribute("relativeid"));
-
-                // Return relative
-                relativeForm.setId(relative.getId());
-                relativeForm.setFirstName(relative.getFirstName());
-                relativeForm.setMiddleName(relative.getMiddleName());
-                relativeForm.setLastName(relative.getLastName());
-                relativeForm.setEmail(relative.getEmail());
-                relativeForm.setNumber(relative.getNumber());
-                relativeForm.setStreet(relative.getStreet());
-                relativeForm.setCity(relative.getCity());
-                relativeForm.setProvince(relative.getProvince());
-                relativeForm.setCountry(relative.getCountry());
-                relativeForm.setRelationToRelative((Integer) request.getAttribute("relationtorelative"));
+                try {
+                    relativeForm.setPersonId(Integer.parseInt(request.getParameter("personid")));
+                } catch (NumberFormatException nfe) {
+                    return mapping.findForward(Constants.LIST_PERSON);
+                } catch (NullPointerException npe) {
+                    return mapping.findForward(Constants.LIST_PERSON);
+                }
             }
 
             return mapping.findForward(Constants.ADD_RELATIVE);
@@ -167,7 +180,7 @@ public class RelativeAction extends DispatchAction {
             if (relativeForm.getId() > 0) {
                 // Update relative ID in person
                 Person person = new Person();
-                person.setId(Integer.parseInt(request.getParameter("personid")));
+                person.setId(relativeForm.getPersonId());
                 person.setRelativeId(relativeForm.getId());
                 person.setRelationToRelative(relativeForm.getRelationToRelative());
                 personService.updatePersonRelative(person);
@@ -179,19 +192,17 @@ public class RelativeAction extends DispatchAction {
                 logService.insertLog(addLog);
                 logger.info(addLog.toString());
 
-                person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
-                //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
+                person = personService.getPersonById(relativeForm.getPersonId());
                 if ((person.getType() == 1) || (person.getType() == 2)) {
                     // Check if abducted by a family member or kidnappers
                     // Return person ID
                     request.setAttribute("personid", person.getId());
-                    request.setAttribute("abductorid", person.getAbductorId());
+                    request.setAttribute("action", request.getParameter("action"));
 
                     return mapping.findForward(Constants.ADD_ABDUCTOR);
                 } else {
                     request.setAttribute("personid", person.getId());
 
-                    //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
                     return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                 }
             } else {
@@ -202,7 +213,8 @@ public class RelativeAction extends DispatchAction {
                     String firstName = relativeForm.getFirstName();
                     String middleName = relativeForm.getMiddleName();
                     String lastName = relativeForm.getLastName();
-                    checker.setId(relativeForm.getId());
+                    String number = relativeForm.getNumber();
+                    String email = relativeForm.getEmail();
                     checker.setFirstName(firstName);
                     checker.setMiddleName(middleName);
                     checker.setLastName(lastName);
@@ -218,14 +230,14 @@ public class RelativeAction extends DispatchAction {
                         relative.setCity(relativeForm.getCity());
                         relative.setProvince(relativeForm.getProvince());
                         relative.setCountry(relativeForm.getCountry());
-                        relative.setEmail(relativeForm.getEmail());
-                        relative.setNumber(relativeForm.getNumber());
+                        relative.setEmail(email);
+                        relative.setNumber(number);
                         int generatedId = relativeService.insertRelative(relative);
 
                         if (generatedId > 0) {
                             // Update relative ID in person
                             Person person = new Person();
-                            person.setId(Integer.parseInt((String) request.getParameter("personid")));
+                            person.setId(relativeForm.getPersonId());
                             person.setRelativeId(generatedId);
                             person.setRelationToRelative(relativeForm.getRelationToRelative());
                             personService.updatePersonRelative(person);
@@ -238,17 +250,12 @@ public class RelativeAction extends DispatchAction {
                             logService.insertLog(addLog);
                             logger.info(addLog.toString());
 
-                            // Return relative and operation type
-                            //relative.setId(generatedId);
-                            //request.setAttribute("relative", relative);
-                            //request.setAttribute("operation", "add");
+                            // Retrieve person
                             person = personService.getPersonById(generatedId);
-                            //return mapping.findForward(Constants.ADD_RELATIVE_SUCCESS);
                             if ((person.getType() == 1) || (person.getType() == 2)) {
                                 // Check if abducted by a family member or kidnappers
                                 // Return person ID
                                 request.setAttribute("personid", person.getId());
-                                request.setAttribute("abductorid", person.getAbductorId());
 
                                 return mapping.findForward(Constants.ADD_ABDUCTOR);
                             } else {
@@ -260,8 +267,6 @@ public class RelativeAction extends DispatchAction {
                             return mapping.findForward(Constants.FAILURE);
                         }
                     } else {
-                        request.setAttribute("personid", request.getParameter("personid"));
-
                         // Return duplicate relative error
                         errors.add("firstname", new ActionMessage("error.relative.duplicate", firstName + " " + middleName + " " + lastName));
                         saveErrors(request, errors);
@@ -271,8 +276,6 @@ public class RelativeAction extends DispatchAction {
                         return mapping.findForward(Constants.ADD_RELATIVE_REDO);
                     }
                 } else {
-                    request.setAttribute("personid", request.getParameter("personid"));
-
                     // Return form validation errors
                     return mapping.findForward(Constants.ADD_RELATIVE_REDO);
                 }
@@ -306,22 +309,20 @@ public class RelativeAction extends DispatchAction {
 
         // Check if current user is a authorized
         if ((currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
-            request.setAttribute("action", request.getParameter("action"));
             List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
+            request.setAttribute("action", request.getParameter("action"));
 
             // Retrieve person
+            int personId = 0;
             try {
-                if (request.getParameter("personid") != null) {
-                    int personId = Integer.parseInt(request.getParameter("personid"));
-                    request.setAttribute("personid", personId);
-                    Person person = personService.getPersonById(personId);
-                    request.setAttribute("relativeid", person.getRelativeId());
-                    request.setAttribute("relationtorelative", person.getRelationToRelative());
-                } else {
-                    //return mapping.findForward(Constants.LIST_PERSON);
-                }
+                personId = Integer.parseInt(request.getParameter("personid"));
+                Person person = personService.getPersonById(personId);
+                relativeForm.setRelationToRelative(person.getRelationToRelative());
+                relativeForm.setId(person.getRelativeId());
             } catch (NumberFormatException nfe) {
+                //return mapping.findForward(Constants.LIST_PERSON);
+            } catch (NullPointerException npe) {
                 //return mapping.findForward(Constants.LIST_PERSON);
             }
 
@@ -332,6 +333,7 @@ public class RelativeAction extends DispatchAction {
 
                 // Return relative
                 relativeForm.setId(relative.getId());
+                relativeForm.setPersonId(personId);
                 relativeForm.setFirstName(relative.getFirstName());
                 relativeForm.setMiddleName(relative.getMiddleName());
                 relativeForm.setLastName(relative.getLastName());
@@ -381,7 +383,6 @@ public class RelativeAction extends DispatchAction {
             request.setAttribute("action", request.getParameter("action"));
             List<Relative> relativeList = relativeService.listAllRelatives();
             request.setAttribute("relativelist", relativeList);
-            request.setAttribute("personid", request.getParameter("personid"));
 
             // Check if form is valid
             if (isValidRelative(request, form)) {
@@ -389,11 +390,12 @@ public class RelativeAction extends DispatchAction {
                     String firstName = relativeForm.getFirstName();
                     String middleName = relativeForm.getMiddleName();
                     String lastName = relativeForm.getLastName();
+                    String email = relativeForm.getEmail();
+                    String number = relativeForm.getNumber();
                     checker.setId(relativeForm.getId());
                     checker.setFirstName(firstName);
                     checker.setMiddleName(middleName);
                     checker.setLastName(lastName);
-                    checker.setEmail(relativeForm.getEmail());
 
                 // Check if relative is unique
                 if (relativeService.isUniqueRelative(checker)) {
@@ -407,14 +409,14 @@ public class RelativeAction extends DispatchAction {
                         relative.setCity(relativeForm.getCity());
                         relative.setProvince(relativeForm.getProvince());
                         relative.setCountry(relativeForm.getCountry());
-                        relative.setEmail(relativeForm.getEmail());
-                        relative.setNumber(relativeForm.getNumber());
+                        relative.setEmail(email);
+                        relative.setNumber(number);
                         boolean isUpdated = relativeService.updateRelative(relative);
 
                         if (isUpdated) {
                             // Update relative ID in person
                             Person person = new Person();
-                            person.setId(Integer.parseInt(request.getParameter("personid")));
+                            person.setId(relativeForm.getPersonId());
                             person.setRelativeId(relativeForm.getId());
                             person.setRelationToRelative(relativeForm.getRelationToRelative());
                             personService.updatePersonRelative(person);
@@ -427,28 +429,19 @@ public class RelativeAction extends DispatchAction {
                             logService.insertLog(editLog);
                             logger.info(editLog.toString());
 
-                            person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+                            person = personService.getPersonById(relativeForm.getPersonId());
                             // Return relative and operation type
                             if ((person.getType() == 1) || (person.getType() == 2)) {
                                 // Check if abducted by a family member or kidnappers
                                 // Return person ID
                                 request.setAttribute("personid", person.getId());
-                                request.setAttribute("abductorid", person.getAbductorId());
 
                                 return mapping.findForward(Constants.ADD_ABDUCTOR);
                             } else {
                                 request.setAttribute("personid", person.getId());
-                                request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
 
                                 return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                             }
-                            //request.setAttribute("relative", relative);
-                            //request.setAttribute("operation", "edit");
-                            //request.setAttribute("investigatorid", request.getAttribute("investigatorid"));
-                            //System.out.println("editrelative investigator id attribute: " + request.getAttribute("investigatorid"));
-                            //System.out.println("editrelative investigator id parameter: " + request.getParameter("investigatorid"));
-
-                            //return mapping.findForward(Constants.EDIT_RELATIVE_SUCCESS);
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
@@ -623,6 +616,15 @@ public class RelativeAction extends DispatchAction {
         String province = relativeForm.getProvince();
         String email = relativeForm.getEmail();
         String number = relativeForm.getNumber();
+        int id = relativeForm.getId();
+        Relative checker = new Relative();
+        checker.setId(id);
+        checker.setEmail(email);
+        checker.setNumber(number);
+
+        if (!relativeService.isUniqueRelativeNumber(checker)) {
+            errors.add("number", new ActionMessage("error.number.duplicate"));
+        }
 
         if (firstName.length() < 1) {
             errors.add("firstname", new ActionMessage("error.firstname.required"));
@@ -650,6 +652,10 @@ public class RelativeAction extends DispatchAction {
 
         if ((email.length() > 0) && (!validator.isValidEmailAddress(email))) {
             errors.add("email", new ActionMessage("error.email.invalid"));
+        }
+
+        if ((email.length() > 0) && (!relativeService.isUniqueRelativeEmail(checker))) {
+            errors.add("email", new ActionMessage("error.email.duplicate"));
         }
 
         if (number.length() < 1) {
