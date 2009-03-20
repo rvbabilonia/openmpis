@@ -309,6 +309,10 @@ public class PersonForm extends ActionForm {
      * The relationship of the abductor to the person
      */
     private Integer relationToAbductor;
+    /**
+     * Status if birth date is known
+     */
+    private boolean knownBirthDate;
 
     /**
      * Gets the ID of the person.
@@ -1173,7 +1177,6 @@ public class PersonForm extends ActionForm {
         this.institutionNumber = institutionNumber.trim();
     }
 
-
     /**
      * Gets the photo of the person.
      *
@@ -1297,7 +1300,7 @@ public class PersonForm extends ActionForm {
      * @param relativeFirstName the first name of the relative
      */
     public void setRelativeFirstName(String relativeFirstName) {
-        this.relativeFirstName = relativeFirstName;
+        this.relativeFirstName = relativeFirstName.trim();
     }
 
     /**
@@ -1315,7 +1318,7 @@ public class PersonForm extends ActionForm {
      * @param relativeLastName the last name of the relative
      */
     public void setRelativeLastName(String relativeLastName) {
-        this.relativeLastName = relativeLastName;
+        this.relativeLastName = relativeLastName.trim();
     }
 
     /**
@@ -1351,7 +1354,7 @@ public class PersonForm extends ActionForm {
      * @param investigatorUsername the username of the investigator
      */
     public void setInvestigatorUsername(String investigatorUsername) {
-        this.investigatorUsername = investigatorUsername;
+        this.investigatorUsername = investigatorUsername.trim();
     }
 
     /**
@@ -1387,7 +1390,7 @@ public class PersonForm extends ActionForm {
      * @param abductorFirstName the first name of the abductor
      */
     public void setAbductorFirstName(String abductorFirstName) {
-        this.abductorFirstName = abductorFirstName;
+        this.abductorFirstName = abductorFirstName.trim();
     }
 
     /**
@@ -1405,7 +1408,7 @@ public class PersonForm extends ActionForm {
      * @param abductorLastName the last name of the abductor
      */
     public void setAbductorLastName(String abductorLastName) {
-        this.abductorLastName = abductorLastName;
+        this.abductorLastName = abductorLastName.trim();
     }
 
     /**
@@ -1568,6 +1571,14 @@ public class PersonForm extends ActionForm {
      */
     public void setRelationToAbductor(Integer relationToAbductor) {
         this.relationToAbductor = relationToAbductor;
+    }
+
+    public boolean isKnownBirthDate() {
+        return knownBirthDate;
+    }
+
+    public void setKnownBirthDate(boolean knownBirthDate) {
+        this.knownBirthDate = knownBirthDate;
     }
 
     /**
