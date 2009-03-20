@@ -125,37 +125,61 @@ public class AbductorAction extends DispatchAction {
 
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
-            AbductorForm abductorForm = (AbductorForm) form;
             List<Abductor> abductorList = abductorService.listAllAbductors();
             request.setAttribute("abductorlist", abductorList);
-            
+            request.setAttribute("action", request.getParameter("action"));
+            System.out.println("action: " + request.getParameter("action"));
+
+            AbductorForm abductorForm = (AbductorForm) form;
+
             if (request.getAttribute("personid") != null) {
-                request.setAttribute("personid", request.getAttribute("personid"));
-            } else {
-                request.setAttribute("personid", request.getParameter("personid"));
-            }
+                // Retrieve person
+                Person person = personService.getPersonById((Integer) request.getAttribute("personid"));
+                abductorForm.setPersonId(person.getId());
+
+                if (person != null) {
+                    if (person.getAbductorId() != null) {
+                        // Retrieve abductor
+            
+//            if (request.getAttribute("personid") != null) {
+//                request.setAttribute("personid", request.getAttribute("personid"));
+//            } else {
+//                request.setAttribute("personid", request.getParameter("personid"));
+//            }
 
             //if (abductorList.size() == 0) {
-                request.setAttribute("action", request.getParameter("action"));
-                abductorForm.reset(mapping, request);
+//                abductorForm.reset(mapping, request);
             //}
 
-            if (request.getAttribute("abductorid") != null) {
-                Abductor abductor = abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
-                
-                // Return abductor
-                abductorForm.setId(abductor.getId());
-                abductorForm.setFirstName(abductor.getFirstName());
-                abductorForm.setMiddleName(abductor.getMiddleName());
-                abductorForm.setLastName(abductor.getLastName());
-                abductorForm.setStreet(abductor.getStreet());
-                abductorForm.setCity(abductor.getCity());
-                abductorForm.setProvince(abductor.getProvince());
-                abductorForm.setCountry(abductor.getCountry());
-                abductorForm.setRemarks(abductor.getRemarks());
-                abductorForm.setRelationToAbductor((Integer) request.getAttribute("relationtoabductor"));
+//            if (request.getAttribute("abductorid") != null) {
+//                        Abductor abductor = abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
+                        Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
 
-                request.setAttribute("action", "editAbductor");
+                        // Return abductor
+                        abductorForm.setId(abductor.getId());
+                        abductorForm.setFirstName(abductor.getFirstName());
+                        abductorForm.setMiddleName(abductor.getMiddleName());
+                        abductorForm.setLastName(abductor.getLastName());
+                        abductorForm.setStreet(abductor.getStreet());
+                        abductorForm.setCity(abductor.getCity());
+                        abductorForm.setProvince(abductor.getProvince());
+                        abductorForm.setCountry(abductor.getCountry());
+                        abductorForm.setRemarks(abductor.getRemarks());
+                        abductorForm.setRelationToAbductor(person.getRelationToAbductor());
+//                        abductorForm.setRelationToAbductor((Integer) request.getAttribute("relationtoabductor"));
+
+//                request.setAttribute("action", "editAbductor");
+//            }
+                    }
+                }
+            } else {
+                try {
+                    abductorForm.setPersonId(Integer.parseInt(request.getParameter("personid")));
+                } catch (NumberFormatException nfe) {
+                    return mapping.findForward(Constants.LIST_PERSON);
+                } catch (NullPointerException npe) {
+                    return mapping.findForward(Constants.LIST_PERSON);
+                }
             }
 
             return mapping.findForward(Constants.ADD_ABDUCTOR);
@@ -190,181 +214,207 @@ public class AbductorAction extends DispatchAction {
         if (currentUser.getGroupId() == 1) {
             AbductorForm abductorForm = (AbductorForm) form;
             ActionMessages errors = new ActionMessages();
-            request.setAttribute("action", request.getParameter("action"));
+            List<Abductor> abductorList = abductorService.listAllAbductors();
+            request.setAttribute("abductorlist", abductorList);
+//            request.setAttribute("action", request.getParameter("action"));
 
-            // Check if form is valid
-            if (isValidAbductor(request, form)) {
-                // Check if updated abductor is unique
-                // and if the rest of the form is valid
-                Abductor checker = new Abductor();
-                String firstName = abductorForm.getFirstName();
-                String lastName = abductorForm.getLastName();
-                checker.setId(abductorForm.getId());
-                checker.setFirstName(firstName);
-                checker.setLastName(lastName);
+            // Check if abductor is selected from list
+            if (abductorForm.getId() > 0) {
+                // Update abductor ID in person
+                Person person = new Person();
+                person.setId(abductorForm.getPersonId());
+                person.setAbductorId(abductorForm.getId());
+                person.setRelationToAbductor(abductorForm.getRelationToAbductor());
+                personService.updatePersonAbductor(person);
 
-                // Check if abductor is unique
-                if (abductorService.isUniqueAbductor(checker)) {
+                // Log abductor assignment event
+                Log addLog = new Log();
+                addLog.setLog("Abductor " + abductorForm.getId() + " was attributed to person " + person.getId() + ".");
+                addLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                logService.insertLog(addLog);
+                logger.info(addLog.toString());
 
-                    // Insert abductor
-                    Abductor abductor = new Abductor();
-                    abductor.setFirstName(firstName);
-                    abductor.setNickname(abductorForm.getNickname());
-                    abductor.setMiddleName(abductorForm.getMiddleName());
-                    abductor.setLastName(lastName);
-                    // TODO what if birth date is unknown?
-                        abductor.setBirthMonth(abductorForm.getBirthMonth());
-                        abductor.setBirthDay(abductorForm.getBirthDay());
-                        abductor.setBirthYear(abductorForm.getBirthYear());
-                    abductor.setStreet(abductorForm.getStreet());
-                    abductor.setCity(abductorForm.getCity());
-                    abductor.setProvince(abductorForm.getProvince());
-                    abductor.setCountry(abductorForm.getCountry());
-                    abductor.setSex(abductorForm.getSex());
-                    abductor.setFeet(abductorForm.getFeet());
-                    abductor.setInches(abductorForm.getInches());
-                    abductor.setWeight(abductorForm.getWeight());
-                    abductor.setReligion(abductorForm.getReligion());
-                    abductor.setRace(abductorForm.getRace());
-                    abductor.setEyeColor(abductorForm.getEyeColor());
-                    abductor.setHairColor(abductorForm.getHairColor());
-                    abductor.setMarks(abductorForm.getMarks());
-                    abductor.setPersonalEffects(abductorForm.getPersonalEffects());
-                    abductor.setRemarks(abductorForm.getRemarks());
-                    if (!abductorForm.getCodisId().isEmpty()) {
-                        abductor.setCodisId(abductorForm.getCodisId());
-                    }
-                    if (!abductorForm.getAfisId().isEmpty()) {
-                        abductor.setAfisId(abductorForm.getAfisId());
-                    }
-                    if (!abductorForm.getDentalId().isEmpty()) {
-                        abductor.setDentalId(abductorForm.getDentalId());
-                    }
-                    int generatedId = abductorService.insertAbductor(abductor);
+                person = personService.getPersonById(abductorForm.getPersonId());
+                request.setAttribute("personid", person.getId());
 
-                    if (generatedId > 0) {
+                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
+            } else {
+                request.setAttribute("action", request.getParameter("action"));
+                // Check if form is valid
+                if (isValidAbductor(request, form)) {
+                    // Check if updated abductor is unique
+                    // and if the rest of the form is valid
+                    Abductor checker = new Abductor();
+                    String firstName = abductorForm.getFirstName();
+                    String lastName = abductorForm.getLastName();
+                    checker.setId(abductorForm.getId());
+                    checker.setFirstName(firstName);
+                    checker.setLastName(lastName);
 
-                        // Process uploaded photos
-                        FormFile photoFile = abductorForm.getPhotoFile();
-                        FormFile agedPhotoFile = abductorForm.getAgedPhotoFile();
+                    // Check if abductor is unique
+                    if (abductorService.isUniqueAbductor(checker)) {
+                        // Insert abductor
+                        Abductor abductor = new Abductor();
+                        abductor.setFirstName(firstName);
+                        abductor.setNickname(abductorForm.getNickname());
+                        abductor.setMiddleName(abductorForm.getMiddleName());
+                        abductor.setLastName(lastName);
+                        if (abductorForm.isKnownBirthDate()) {
+                            abductor.setBirthMonth(abductorForm.getBirthMonth());
+                            abductor.setBirthDay(abductorForm.getBirthDay());
+                            abductor.setBirthYear(abductorForm.getBirthYear());
+                        }
+                        abductor.setStreet(abductorForm.getStreet());
+                        abductor.setCity(abductorForm.getCity());
+                        abductor.setProvince(abductorForm.getProvince());
+                        abductor.setCountry(abductorForm.getCountry());
+                        abductor.setSex(abductorForm.getSex());
+                        abductor.setFeet(abductorForm.getFeet());
+                        abductor.setInches(abductorForm.getInches());
+                        abductor.setWeight(abductorForm.getWeight());
+                        abductor.setReligion(abductorForm.getReligion());
+                        abductor.setRace(abductorForm.getRace());
+                        abductor.setEyeColor(abductorForm.getEyeColor());
+                        abductor.setHairColor(abductorForm.getHairColor());
+                        abductor.setMarks(abductorForm.getMarks());
+                        abductor.setPersonalEffects(abductorForm.getPersonalEffects());
+                        abductor.setRemarks(abductorForm.getRemarks());
+                        if (!abductorForm.getCodisId().isEmpty()) {
+                            abductor.setCodisId(abductorForm.getCodisId());
+                        }
+                        if (!abductorForm.getAfisId().isEmpty()) {
+                            abductor.setAfisId(abductorForm.getAfisId());
+                        }
+                        if (!abductorForm.getDentalId().isEmpty()) {
+                            abductor.setDentalId(abductorForm.getDentalId());
+                        }
+                        int generatedId = abductorService.insertAbductor(abductor);
 
-                        // Set default context-relative photo filename
-                        String contextUnknownPhotoFilename = "photo/unknown.png";
-                        String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
-                        String contextAgedPhotoFilename = contextUnknownPhotoFilename;
+                        if (generatedId > 0) {
+                            // Process uploaded photos
+                            FormFile photoFile = abductorForm.getPhotoFile();
+                            FormFile agedPhotoFile = abductorForm.getAgedPhotoFile();
 
-                        // Split the filename to get the extension name
-                        if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
-                            String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
-                            String extensionName = tokens[1];
-                            if (agedPhotoFile.getFileName().length() > 0) {
-                                tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
-                                extensionName = tokens[1];
-                            }
+                            // Set default context-relative photo filename
+                            String contextUnknownPhotoFilename = "photo/unknown.png";
+                            String contextDefaultPhotoFilename = contextUnknownPhotoFilename;
+                            String contextAgedPhotoFilename = contextUnknownPhotoFilename;
 
-                            // Create directories for abductor
-                            String directoryName = "abductor-" + createDirectoryName(generatedId);
+                            // Split the filename to get the extension name
+                            if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
+                                String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
+                                String extensionName = tokens[1];
+                                if (agedPhotoFile.getFileName().length() > 0) {
+                                    tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                                    extensionName = tokens[1];
+                                }
 
-                            // Calculate age
-                            // TODO what if birth date is unknown?
-                            int age = getAge(abductorForm.getBirthMonth() - 1, abductorForm.getBirthDay(), abductorForm.getBirthYear());
+                                // Create directories for abductor
+                                String directoryName = "abductor-" + createDirectoryName(generatedId);
 
-                            // Create context-relative directories
-                            String contextPhotoDirectory = "photo/" + directoryName;
-                            String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
-                            String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
+                                // Calculate age
+                                int age = getAge(abductorForm.getBirthMonth() - 1, abductorForm.getBirthDay(), abductorForm.getBirthYear());
 
-                            // Create absolute directories
-                            String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
-                            String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
-                            String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
-                            File photoDirectory = new File(absolutePhotoDirectory);
-                            File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
-                            File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
-                            if (!photoDirectory.exists()) {
-                                photoDirectory.mkdir();
-                                defaultPhotoDirectory.mkdir();
-                                agedPhotoDirectory.mkdir();
-                            } else {
-                                if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
+                                // Create context-relative directories
+                                String contextPhotoDirectory = "photo/" + directoryName;
+                                String contextDefaultPhotoDirectory = contextPhotoDirectory + "/default";
+                                String contextAgedPhotoDirectory = contextPhotoDirectory + "/aged";
+
+                                // Create absolute directories
+                                String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + directoryName;
+                                String absoluteDefaultPhotoDirectory = absolutePhotoDirectory + File.separator + "default";
+                                String absoluteAgedPhotoDirectory = absolutePhotoDirectory + File.separator + "aged";
+                                File photoDirectory = new File(absolutePhotoDirectory);
+                                File defaultPhotoDirectory = new File(absoluteDefaultPhotoDirectory);
+                                File agedPhotoDirectory = new File(absoluteAgedPhotoDirectory);
+                                if (!photoDirectory.exists()) {
+                                    photoDirectory.mkdir();
                                     defaultPhotoDirectory.mkdir();
                                     agedPhotoDirectory.mkdir();
+                                } else {
+                                    if ((!defaultPhotoDirectory.exists()) || (!agedPhotoDirectory.exists())) {
+                                        defaultPhotoDirectory.mkdir();
+                                        agedPhotoDirectory.mkdir();
+                                    }
                                 }
+
+                                // Prepare filenames and upload photo
+                                if (photoFile.getFileName().length() > 0) {
+                                    String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                                    contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                                    File file = new File(absoluteDefaultPhotoFilename);
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    fos.write(photoFile.getFileData());
+                                    fos.close();
+                                    fos.flush();
+                                }
+                                if (agedPhotoFile.getFileName().length() > 0) {
+                                    String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
+                                    contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
+                                    File file = new File(absoluteAgedPhotoFilename);
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    fos.write(agedPhotoFile.getFileData());
+                                    fos.close();
+                                    fos.flush();
+                                }
+
+                                abductor.setId(generatedId);
+                                abductor.setPhoto(contextDefaultPhotoFilename);
+                                if (agedPhotoFile.getFileName().length() > 0) {
+                                    abductor.setAgedPhoto(contextAgedPhotoFilename);
+                                } else {
+                                    abductor.setAgedPhoto(contextUnknownPhotoFilename);
+                                }
+
+                                abductorService.updateAbductor(abductor);
                             }
 
-                            // Prepare filenames and upload photo
-                            if (photoFile.getFileName().length() > 0) {
-                                String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
-                                contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
-                                File file = new File(absoluteDefaultPhotoFilename);
-                                FileOutputStream fos = new FileOutputStream(file);
-                                fos.write(photoFile.getFileData());
-                                fos.close();
-                                fos.flush();
-                            }
-                            if (agedPhotoFile.getFileName().length() > 0) {
-                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
-                                contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
-                                File file = new File(absoluteAgedPhotoFilename);
-                                FileOutputStream fos = new FileOutputStream(file);
-                                fos.write(agedPhotoFile.getFileData());
-                                fos.close();
-                                fos.flush();
-                            }
+                            // Update abductor ID in person
+                            Person person = new Person();
+                            person.setId(abductorForm.getPersonId());
+                            person.setAbductorId(generatedId);
+                            person.setRelationToAbductor(abductorForm.getRelationToAbductor());
+                            personService.updatePersonAbductor(person);
 
-                            abductor.setId(generatedId);
-                            abductor.setPhoto(contextDefaultPhotoFilename);
-                            if (agedPhotoFile.getFileName().length() > 0) {
-                                abductor.setAgedPhoto(contextAgedPhotoFilename);
+                            // Log abductor creation event
+                            Log addLog = new Log();
+                            if ((!firstName.isEmpty()) && (!lastName.isEmpty())) {
+                                addLog.setLog(firstName + " '" + abductorForm.getNickname() + "' " + lastName + " was encoded by " + currentUser.getUsername() + ".");
                             } else {
-                                abductor.setAgedPhoto(contextUnknownPhotoFilename);
+                                addLog.setLog("' " + abductorForm.getNickname() + " '" + " was encoded by " + currentUser.getUsername() + ".");
                             }
-                            
-                            abductorService.updateAbductor(abductor);
-                        }
+                            addLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                            logService.insertLog(addLog);
+                            logger.info(addLog.toString());
 
-                        // Update abductor ID in person
-                        Person person = new Person();
-                        person.setId(Integer.parseInt((String) request.getParameter("personid")));
-                        person.setAbductorId(generatedId);
-                        person.setRelationToAbductor(abductorForm.getRelationToAbductor());
-                        personService.updatePersonAbductor(person);
+                            // Return person ID
+                            request.setAttribute("personid", abductorForm.getPersonId());
 
-                        // Log abductor creation event
-                        Log addLog = new Log();
-                        if ((!firstName.isEmpty()) && (!lastName.isEmpty())) {
-                            addLog.setLog(firstName + " '" + abductorForm.getNickname() + "' " + lastName + " was encoded by " + currentUser.getUsername() + ".");
+//                            // Return abductor ID
+//                            request.setAttribute("personid", Integer.parseInt((String) request.getParameter("personid")));
+//                            request.setAttribute("investigatorid", generatedId);
+
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
-                            addLog.setLog("' " + abductorForm.getNickname() + " '" + " was encoded by " + currentUser.getUsername() + ".");
+                            return mapping.findForward(Constants.FAILURE);
                         }
-                        addLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-                        logService.insertLog(addLog);
-                        logger.info(addLog.toString());
-
-                        // Return abductor ID
-                        request.setAttribute("personid", Integer.parseInt((String) request.getParameter("personid")));
-                        request.setAttribute("investigatorid", generatedId);
-
-                        return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                     } else {
-                        return mapping.findForward(Constants.FAILURE);
+//                        request.setAttribute("personid", request.getParameter("personid"));
+
+                        // Return duplicate abductor error
+                        errors.add("firstname", new ActionMessage("error.abductor.duplicate"));
+                        saveErrors(request, errors);
+
+                        logger.error("Duplicate abductor.");
+
+                        return mapping.findForward(Constants.ADD_ABDUCTOR_REDO);
                     }
                 } else {
-                    request.setAttribute("personid", request.getParameter("personid"));
+//                    request.setAttribute("personid", request.getParameter("personid"));
 
-                    // Return duplicate abductor error
-                    errors.add("abductor", new ActionMessage("error.abductor.duplicate"));
-                    saveErrors(request, errors);
-
-                    logger.error("Duplicate abductor.");
-
+                    // Return form validation errors
                     return mapping.findForward(Constants.ADD_ABDUCTOR_REDO);
                 }
-            } else {
-                request.setAttribute("personid", request.getParameter("personid"));
-                    
-                // Return form validation errors
-                return mapping.findForward(Constants.ADD_ABDUCTOR_REDO);
             }
         } else {
             return mapping.findForward(Constants.UNAUTHORIZED);
@@ -387,77 +437,88 @@ public class AbductorAction extends DispatchAction {
         User currentUser = null;
         AbductorForm abductorForm = (AbductorForm) form;
 
-        // Retrieve abductor
-        int id = 0;
+        // Retrieve person
+        int personId = 0;
         try {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id"));
-            } else {
-                //return mapping.findForward(Constants.LIST_ABDUCTOR);
-            }
+            personId = Integer.parseInt(request.getParameter("personid"));
+            Person person = personService.getPersonById(personId);
+            abductorForm.setRelationToAbductor(person.getRelationToAbductor());
+            abductorForm.setId(person.getAbductorId());
         } catch (NumberFormatException nfe) {
-            //return mapping.findForward(Constants.LIST_ABDUCTOR);
+        } catch (NullPointerException npe) {
         }
-        Abductor abductor = abductorService.getAbductorById(id);
 
-        // Return abductor
-        if (abductor.getPhoto() != null) {
-            abductorForm.setPhoto(abductor.getPhoto());
-        }
-        if (abductor.getAgedPhoto() != null) {
-            abductorForm.setAgedPhoto(abductor.getAgedPhoto());
-        }
-        abductorForm.setId(abductor.getId());
-        abductorForm.setFirstName(abductor.getFirstName());
-        abductorForm.setNickname(abductor.getNickname());
-        abductorForm.setMiddleName(abductor.getMiddleName());
-        abductorForm.setLastName(abductor.getLastName());
-        // TODO what if birth date is unknown?
+        // Retrieve abductor
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Abductor abductor = abductorService.getAbductorById(id);
+
+            // Return abductor
+            if (abductor.getPhoto() != null) {
+                abductorForm.setPhoto(abductor.getPhoto());
+            }
+            if (abductor.getAgedPhoto() != null) {
+                abductorForm.setAgedPhoto(abductor.getAgedPhoto());
+            }
+            abductorForm.setId(abductor.getId());
+            abductorForm.setPersonId(personId);
+            abductorForm.setFirstName(abductor.getFirstName());
+            abductorForm.setNickname(abductor.getNickname());
+            abductorForm.setMiddleName(abductor.getMiddleName());
+            abductorForm.setLastName(abductor.getLastName());
             abductorForm.setBirthMonth(abductor.getBirthMonth());
             abductorForm.setBirthDay(abductor.getBirthDay());
             abductorForm.setBirthYear(abductor.getBirthYear());
+            if (abductor.getBirthMonth() != 0) {
+                abductorForm.setKnownBirthDate(true);
+            }
             abductorForm.setAge(getAge(abductor.getBirthMonth() - 1, abductor.getBirthDay(), abductor.getBirthYear()));
-        abductorForm.setStreet(abductor.getStreet());
-        abductorForm.setCity(abductor.getCity());
-        abductorForm.setProvince(abductor.getProvince());
-        abductorForm.setCountry(abductor.getCountry());
-        abductorForm.setSex(abductor.getSex());
-        abductorForm.setFeet(abductor.getFeet());
-        abductorForm.setInches(abductor.getInches());
-        abductorForm.setWeight(abductor.getWeight());
-        abductorForm.setReligion(abductor.getReligion());
-        abductorForm.setRace(abductor.getRace());
-        abductorForm.setEyeColor(abductor.getEyeColor());
-        abductorForm.setHairColor(abductor.getHairColor());
-        abductorForm.setMarks(abductor.getMarks());
-        abductorForm.setPersonalEffects(abductor.getPersonalEffects());
-        abductorForm.setRemarks(abductor.getRemarks());
-        if (abductor.getCodisId() != null) {
-            abductorForm.setCodisId(abductor.getCodisId());
-        }
-        if (abductor.getAfisId() != null) {
-            abductorForm.setAfisId(abductor.getAfisId());
-        }
-        if (abductor.getDentalId() != null) {
-            abductorForm.setDentalId(abductor.getDentalId());
-        }
+            abductorForm.setStreet(abductor.getStreet());
+            abductorForm.setCity(abductor.getCity());
+            abductorForm.setProvince(abductor.getProvince());
+            abductorForm.setCountry(abductor.getCountry());
+            abductorForm.setSex(abductor.getSex());
+            abductorForm.setFeet(abductor.getFeet());
+            abductorForm.setInches(abductor.getInches());
+            abductorForm.setWeight(abductor.getWeight());
+            abductorForm.setReligion(abductor.getReligion());
+            abductorForm.setRace(abductor.getRace());
+            abductorForm.setEyeColor(abductor.getEyeColor());
+            abductorForm.setHairColor(abductor.getHairColor());
+            abductorForm.setMarks(abductor.getMarks());
+            abductorForm.setPersonalEffects(abductor.getPersonalEffects());
+            abductorForm.setRemarks(abductor.getRemarks());
+            if (abductor.getCodisId() != null) {
+                abductorForm.setCodisId(abductor.getCodisId());
+            }
+            if (abductor.getAfisId() != null) {
+                abductorForm.setAfisId(abductor.getAfisId());
+            }
+            if (abductor.getDentalId() != null) {
+                abductorForm.setDentalId(abductor.getDentalId());
+            }
 
-        // Check if there exists a session
-        if (request.getSession().getAttribute("currentuser") != null) {
-            currentUser = (User) request.getSession().getAttribute("currentuser");
-            request.setAttribute("action", request.getParameter("action"));
+            // Check if there exists a session
+            if (request.getSession().getAttribute("currentuser") != null) {
+                currentUser = (User) request.getSession().getAttribute("currentuser");
+                request.setAttribute("action", request.getParameter("action"));
 
-            // Edit what you created/encoded
-            // Edit your profile
-            // Administrator can edit all except administrators
-            if (currentUser.getGroupId() <= 2) {
-            //if (currentUser.getId() == abductor.getEncoderId()) {
-                return mapping.findForward(Constants.EDIT_ABDUCTOR);
+                // Check if current user is an encoder
+                if (currentUser.getGroupId() == 1) {
+                    List<Abductor> abductorList = abductorService.listAllAbductors();
+                    request.setAttribute("abductorlist", abductorList);
+
+                    return mapping.findForward(Constants.EDIT_ABDUCTOR);
+                } else {
+                    return mapping.findForward(Constants.VIEW_ABDUCTOR);
+                }
             } else {
                 return mapping.findForward(Constants.VIEW_ABDUCTOR);
             }
-        } else {
-            return mapping.findForward(Constants.VIEW_ABDUCTOR);
+        } catch (NumberFormatException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
+        } catch (NullPointerException nfe) {
+            return mapping.findForward(Constants.LIST_PERSON);
         }
     }
 
@@ -488,6 +549,8 @@ public class AbductorAction extends DispatchAction {
             AbductorForm abductorForm = (AbductorForm) form;
             ActionMessages errors = new ActionMessages();
             request.setAttribute("action", request.getParameter("action"));
+            List<Abductor> abductorList = abductorService.listAllAbductors();
+            request.setAttribute("abductorlist", abductorList);
 
             // Check if form is valid
             if (isValidAbductor(request, form)) {
@@ -502,7 +565,6 @@ public class AbductorAction extends DispatchAction {
 
                 // Check if abductor is unique
                 if (abductorService.isUniqueAbductor(checker)) {
-
                     // Process uploaded photos
                     FormFile photoFile = abductorForm.getPhotoFile();
                     FormFile agedPhotoFile = abductorForm.getAgedPhotoFile();
@@ -530,7 +592,6 @@ public class AbductorAction extends DispatchAction {
                         String directoryName = "abductor-" + createDirectoryName(abductorForm.getId());
 
                         // Calculate age
-                        // TODO what if birth date is unknown?
                         int age = getAge(abductorForm.getBirthMonth() - 1, abductorForm.getBirthDay(), abductorForm.getBirthYear());
 
                         // Create context-relative directories
@@ -590,9 +651,11 @@ public class AbductorAction extends DispatchAction {
                     abductor.setNickname(abductorForm.getNickname());
                     abductor.setMiddleName(abductorForm.getMiddleName());
                     abductor.setLastName(lastName);
-                    abductor.setBirthMonth(abductorForm.getBirthMonth());
-                    abductor.setBirthDay(abductorForm.getBirthDay());
-                    abductor.setBirthYear(abductorForm.getBirthYear());
+                    if (abductorForm.isKnownBirthDate()) {
+                        abductor.setBirthMonth(abductorForm.getBirthMonth());
+                        abductor.setBirthDay(abductorForm.getBirthDay());
+                        abductor.setBirthYear(abductorForm.getBirthYear());
+                    }
                     abductor.setStreet(abductorForm.getStreet());
                     abductor.setCity(abductorForm.getCity());
                     abductor.setProvince(abductorForm.getProvince());
@@ -625,7 +688,7 @@ public class AbductorAction extends DispatchAction {
                     if (isUpdated) {
                         // Update abductor ID in person
                         Person person = new Person();
-                        person.setId(Integer.parseInt(request.getParameter("personid")));
+                        person.setId(abductorForm.getPersonId());
                         person.setAbductorId(abductorForm.getId());
                         person.setRelationToAbductor(abductorForm.getRelationToAbductor());
                         personService.updatePersonAbductor(person);
@@ -645,12 +708,15 @@ public class AbductorAction extends DispatchAction {
                         logService.insertLog(editLog);
                         logger.info(editLog.toString());
 
-                        person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+//                        person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
+//
+//                        // Check if abductor is abandoned, throwaway or unidentified
+//                        // Return abductor ID and investigator ID
+//                        request.setAttribute("personid", Integer.parseInt(request.getParameter("personid")));
+//                        request.setAttribute("investigatorid", person.getInvestigatorId());
 
-                        // Check if abductor is abandoned, throwaway or unidentified
-                        // Return abductor ID and investigator ID
-                        request.setAttribute("personid", Integer.parseInt(request.getParameter("personid")));
-                        request.setAttribute("investigatorid", person.getInvestigatorId());
+                        // Return person ID
+                        request.setAttribute("personid", abductorForm.getPersonId());
 
                         return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                     } else {
