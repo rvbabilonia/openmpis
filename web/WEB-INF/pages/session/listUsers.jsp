@@ -18,7 +18,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="user.title"/>
+        <title><bean:message key="user.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -57,12 +57,9 @@
                                     <div class="columnheader"><bean:message key="label.count"/></div>
                                     <div class="columnheader"><bean:message key="label.username"/></div>
                                     <div class="columnheader"><bean:message key="label.group"/></div>
-                                    <div class="columnheader"><bean:message key="label.firstname"/></div>
-                                    <div class="columnheader"><bean:message key="label.lastname"/></div>
+                                    <div class="columnheader"><bean:message key="label.name"/></div>
                                     <div class="columnheader"><bean:message key="label.agency"/></div>
-                                    <div class="columnheader"><bean:message key="label.designation"/></div>
                                     <div class="columnheader"><bean:message key="label.date.lastlogin"/></div>
-                                    <div class="columnheader"><bean:message key="label.email"/></div>
                                     <div class="columnheader"><bean:message key="label.status"/></div>
                                 </div>
                                 <c:forEach items="${userlist}" var="user" varStatus="userCount">
@@ -81,12 +78,9 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <div class="cell"><bean:message key="group.${user.groupId}"/></div>
-                                        <div class="cell">${user.firstName}</div>
-                                        <div class="cell">${user.lastName}</div>
+                                        <div class="cell"><html:link href="mailto:${user.email}">${user.lastName}, ${user.firstName}</html:link></div>
                                         <div class="cell">${user.agency}</div>
-                                        <div class="cell">${user.designation}</div>
                                         <div class="cell">${user.lastLogin}</div>
-                                        <div class="cell"><html:link href="mailto:${user.email}">${user.email}</html:link></div>
                                         <div class="cell"><bean:message key="status.user.${user.status}"/></div>
                                     </div>
                                 </c:forEach>

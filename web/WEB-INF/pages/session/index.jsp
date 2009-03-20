@@ -19,13 +19,13 @@
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <c:choose>
             <c:when test="${currentuser.groupId == 0}">
-                <bean:message key="admin.home.title"/>
+                <title><bean:message key="admin.home.title"/></title>
             </c:when>
             <c:when test="${currentuser.groupId == 1}">
-                <bean:message key="encoder.home.title"/>
+                <title><bean:message key="encoder.home.title"/></title>
             </c:when>
             <c:when test="${currentuser.groupId == 2}">
-                <bean:message key="investigator.home.title"/>
+                <title><bean:message key="investigator.home.title"/></title>
             </c:when>
         </c:choose>
     </head>
