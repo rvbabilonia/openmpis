@@ -16,7 +16,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="search.title"/>
+        <title><bean:message key="search.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -31,6 +31,7 @@
             <div id="content">
                 <div id="contentitem">
                     <bean:message key="search.heading"/>
+
                     <html:form method="get" action="search" styleClass="search">
                         <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
                         <bean:message key="search.searchbutton"/>
