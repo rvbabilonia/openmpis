@@ -45,17 +45,23 @@
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
-                    [${action}]
                     <c:choose>
-                        <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
-                            <bean:message key="abductor.add"/>
+                        <c:when test="${currentuser.groupId == 1}">
+                            <c:choose>
+                                <c:when test="${((action == 'newAbductor') && (abductorForm.id == 0)) || (action == 'addAbductor')}">
+                                    <bean:message key="abductor.add"/>
+                                </c:when>
+                                <c:when test="${((action == 'viewAbductor') && (abductorForm.personId != null)) || (action == 'editAbductor') || ((action == 'newAbductor') && (abductorForm.id != 0))}">
+                                    <bean:message key="abductor.edit"/>
+                                </c:when>
+                                <c:when test="${(action == 'viewAbductor') && (abductorForm.personId == null)}">
+                                    <bean:message key="abductor.view"/>
+                                </c:when>
+                            </c:choose>
                         </c:when>
-                        <c:when test="${action == 'editAbductor'}">
-                            <bean:message key="abductor.edit"/>
-                        </c:when>
-                        <c:when test="${action == 'viewAbductor'}">
+                        <c:otherwise>
                             <bean:message key="abductor.view"/>
-                        </c:when>
+                        </c:otherwise>
                     </c:choose>
                     <noscript>
                         <bean:message key="error.javascript.disabled"/>
@@ -64,24 +70,24 @@
                     <html:form method="post" action="viewAbductor" styleClass="adduserclass" enctype="multipart/form-data">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == '') || (action == null)}">
+                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor')}">
                                     <html:hidden property="action" value="addAbductor"/>
-                                    <html:hidden property="personid" value="${personid}"/>
+                                    <html:hidden property="personId"/>
                                 </c:when>
                                 <c:when test="${(action == 'viewAbductor') || (action == 'editAbductor')}">
                                     <html:hidden property="action" value="editAbductor"/>
-                                    <html:hidden property="personid" value="${personid}"/>
+                                    <html:hidden property="personId"/>
                                 </c:when>
                             </c:choose>
                         </p>
-                        <c:if test="${personid != null}">
+                        <c:if test="${currentuser.groupId == 1}">
                             <p class="contentclass">
                                 <label id="abductorlistlabel" class="labelclass" for="abductorlistfield">
                                     <bean:message key="label.abductor.existing"/>
                                 </label>
                                 <html:select styleId="abductorlistfield" styleClass="selectclass" property="id"
-                                    onchange="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${personid};}"
-                                    onkeyup="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${personid};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${personid};}">
+                                    onchange="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${abductorForm.personId};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${abductorForm.personId};}"
+                                    onkeyup="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${abductorForm.personId};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${abductorForm.personId};}">
                                     <html:option value="0" styleId="abductorfield0" styleClass="optionclass">----------</html:option>
                                     <c:forEach items="${abductorlist}" var="abductor">
                                         <html:option value="${abductor.id}" styleId="abductorfield${i}" styleClass="optionclass">${abductor.id} - ${abductor.lastName}, ${abductor.firstName}</html:option>
@@ -95,26 +101,28 @@
                             </label>
                             <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
                         </p>
-                        <c:if test="${(action == 'editAbductor') || (action == 'viewAbductor')}">
+                        <c:if test="${(action == 'editAbductor') || (action == 'viewAbductor') || (action == null)}">
                             <p class="contentclass">
-                                <html:img styleClass="photoclass" src="${abductorForm.photo == '' ? 'photo/unknown.png' : abductorForm.photo}" alt="The person's photo" title="Photo"/>
-                                <html:img styleClass="photoclass" src="${abductorForm.agedPhoto == '' ? 'photo/unknown.png' : abductorForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
+                                <html:img styleClass="photoclass" src="${abductorForm.photo == null ? 'photo/unknown.png' : abductorForm.photo}" alt="The person's photo" title="Photo"/>
+                                <html:img styleClass="photoclass" src="${abductorForm.agedPhoto == null ? 'photo/unknown.png' : abductorForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
                             </p>
                         </c:if>
-                        <p class="contentclass">
-                            <label id="photolabel" class="labelclass" for="photofile">
-                                <bean:message key="label.photo"/>
-                            </label>
-                            <html:file styleId="photofile" property="photoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
-                            <html:errors property="photofile"/>
-                        </p>
-                        <p class="contentclass">
-                            <label id="agedphotolabel" class="labelclass" for="agedphotofile">
-                                <bean:message key="label.agedphoto"/>
-                            </label>
-                            <html:file styleId="agedphotofile" property="agedPhotoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
-                            <html:errors property="agedphotofile"/>
-                        </p>
+                        <c:if test="${currentuser.groupId == 1}">
+                            <p class="contentclass">
+                                <label id="photolabel" class="labelclass" for="photofile">
+                                    <bean:message key="label.photo"/>
+                                </label>
+                                <html:file styleId="photofile" property="photoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
+                                <html:errors property="photofile"/>
+                            </p>
+                            <p class="contentclass">
+                                <label id="agedphotolabel" class="labelclass" for="agedphotofile">
+                                    <bean:message key="label.agedphoto"/>
+                                </label>
+                                <html:file styleId="agedphotofile" property="agedPhotoFile" accept="image/png,image/jpg,image/gif" styleClass="fileclass" size="33"/>
+                                <html:errors property="agedphotofile"/>
+                            </p>
+                        </c:if>
                         <p class="contentclass">
                             <label id="firstnamelabel" class="labelclass" for="firstnamefield">
                                 <bean:message key="label.firstname"/>
@@ -147,14 +155,24 @@
                             <label id="birthdatelabel" class="labelclass" for="monthfield">
                                 <bean:message key="label.date.birth"/>
                             </label>
-                                <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth"
+                            <c:choose>
+                                <c:when test="${abductorForm.knownBirthDate == 'true'}">
+                                    <c:set var="isDisabled" value="false"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="isDisabled" value="true"/>
+                                </c:otherwise>
+                            </c:choose>
+                            <html:radio property="knownBirthDate" value="false" onchange="javascript: monthfield.disabled = true; dayfield.disabled = true; yearfield.disabled = true;">Unknown</html:radio>
+                            <html:radio property="knownBirthDate" value="true" onchange="javascript: monthfield.disabled = false; dayfield.disabled = false; yearfield.disabled = false;">
+                                <html:select styleId="monthfield" styleClass="monthselectclass" property="birthMonth" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="1" end="12" step="1" var="i">
                                         <html:option value="${i}" styleId="monthfield${i}" styleClass="monthoptionclass"><bean:message key="month.${i}"/></html:option>
                                     </c:forEach>
                                 </html:select>
-                                <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay"
+                                <html:select styleId="dayfield" styleClass="dayselectclass" property="birthDay" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="1" end="31" step="1" var="i">
@@ -163,7 +181,7 @@
                                 </html:select>
                                 <jsp:useBean id="currentDate" class="java.util.Date"/>
                                 <fmt:formatDate var="currentYear" value="${currentDate}" pattern="yyyy"/>
-                                <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear"
+                                <html:select styleId="yearfield" styleClass="yearselectclass" property="birthYear" disabled="${isDisabled}"
                                     onchange="javascript: setAge();"
                                     onkeyup="javascript: setAge();">
                                     <c:forEach begin="${currentYear - 80}" end="${currentYear}" step="1" var="i">
@@ -173,7 +191,7 @@
                                 <bean:message key="label.age"/>
                                 <html:text styleId="agefield" styleClass="ageinputclass" property="age" disabled="true"/>
                                 <html:errors property="birthdate"/>
-                                [birth date is uknown]
+                            </html:radio>
                         </p>
                         <p class="contentclass">
                             <label id="streetlabel" class="labelclass" for="streetfield">
@@ -328,17 +346,17 @@
                             <html:text styleId="dentalidfield" styleClass="inputclass" property="dentalId" maxlength="30"/>
                             <html:errors property="dentalid"/>
                         </p>
-                        <c:if test="${personid != null}">
-                            <p class="contentclass">
-                                <label id="relationlabel" class="labelclass" for="relationfield">
-                                    * <bean:message key="label.relation"/>
-                                </label>
-                                <html:select styleId="relationfield" styleClass="selectclass" property="relationToAbductor">
-                                    <c:forEach begin="0" end="30" step="1" var="i">
-                                        <html:option value="${i}" styleId="relationfield${i}" styleClass="optionclass"><bean:message key="relation.${i}"/></html:option>
-                                    </c:forEach>
-                                </html:select>
-                            </p>
+                        <p class="contentclass">
+                            <label id="relationlabel" class="labelclass" for="relationfield">
+                                * <bean:message key="label.relation"/>
+                            </label>
+                            <html:select styleId="relationfield" styleClass="selectclass" property="relationToAbductor">
+                                <c:forEach begin="0" end="30" step="1" var="i">
+                                    <html:option value="${i}" styleId="relationfield${i}" styleClass="optionclass"><bean:message key="relation.${i}"/></html:option>
+                                </c:forEach>
+                            </html:select>
+                        </p>
+                        <c:if test="${abductorForm.personId != 0}">
                             <p class="contentclass">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
