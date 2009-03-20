@@ -96,6 +96,24 @@ public interface RelativeService {
     public boolean isUniqueRelative(Relative relative) throws SQLException;
 
     /**
+     * Checks if the relative's email address is unique.
+     *
+     * @param relative      the existing relative
+     * @return              <code>true</code> if the relative's email address is unique; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    public boolean isUniqueRelativeEmail(Relative relative) throws SQLException;
+
+    /**
+     * Checks if the relative's contact number is unique.
+     *
+     * @param relative      the existing relative
+     * @return              <code>true</code> if the relative's contact number is unique; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    public boolean isUniqueRelativeNumber(Relative relative) throws SQLException;
+
+    /**
      * Returns the total number of relatives.
      *
      * @return              the total number of relatives

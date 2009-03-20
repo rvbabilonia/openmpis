@@ -217,6 +217,58 @@ public class RelativeDAOImpl implements RelativeDAO {
     }
 
     /**
+     * Checks if the relative's email address is unique.
+     *
+     * @param relative      the existing relative
+     * @return              <code>true</code> if the relative's email address is unique; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean isUniqueRelativeEmail(Relative relative) throws SQLException {
+        try {
+            sqlMap.startTransaction();
+            Relative r = (Relative) sqlMap.queryForObject("checkRelativeEmail", relative);
+            sqlMap.commitTransaction();
+
+            if (r == null) {
+                return true;
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the relative's contact number is unique.
+     *
+     * @param relative      the existing relative
+     * @return              <code>true</code> if the relative's contact number is unique; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean isUniqueRelativeNumber(Relative relative) throws SQLException {
+        try {
+            sqlMap.startTransaction();
+            Relative r = (Relative) sqlMap.queryForObject("checkRelativeNumber", relative);
+            sqlMap.commitTransaction();
+
+            if (r == null) {
+                return true;
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the total number of relatives.
      *
      * @return              the total number of relatives

@@ -74,6 +74,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Retrieves the 4 newly-added missing persons.
+     *
+     * @return              the list of all missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Person> listNewMissing() throws SQLException {
+        return personDAO.listNewMissing();
+    }
+
+    /**
      * Retrieves endangered missing persons.
      *
      * @param pagination    the pagination context
@@ -146,6 +157,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Retrieves found persons.
+     *
+     * @param pagination    the pagination context
+     * @return              the list of found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Person> getFound(Pagination pagination) throws SQLException {
+        return personDAO.getFound(pagination);
+    }
+
+    /**
      * Retrieves abandoned persons.
      *
      * @param pagination    the pagination context
@@ -194,6 +217,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Retrieves ongoing cases.
+     *
+     * @return              the list of ongoing cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Person> listOngoing() throws SQLException {
+        return personDAO.listOngoing();
+    }
+
+    /**
      * Retrieves an ongoing case given a person's ID.
      *
      * @param id            the person ID
@@ -218,6 +252,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Retrieves solved cases.
+     *
+     * @return              the list of solved cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Person> listSolved() throws SQLException {
+        return personDAO.listSolved();
+    }
+
+    /**
      * Retrieves unsolved cases.
      *
      * @param pagination    the pagination context
@@ -227,6 +272,17 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> getUnsolved(Pagination pagination) throws SQLException {
         return personDAO.getUnsolved(pagination);
+    }
+
+    /**
+     * Retrieves unsolved cases.
+     *
+     * @return              the list of unsolved cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public List<Person> listUnsolved() throws SQLException {
+        return personDAO.listUnsolved();
     }
 
     /**
@@ -421,14 +477,36 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
-     * Returns the total number of all missing persons.
+     * Returns the total number of all ongoing and missing persons.
      *
-     * @return              the total number of missing persons
+     * @return              the total number of all ongoing and missing persons
      * @throws java.sql.SQLException
      */
     @Override
     public int countAllMissing() throws SQLException {
         return personDAO.countAllMissing();
+    }
+
+    /**
+     * Returns the total number of all solved and missing persons.
+     *
+     * @return              the total number of all solved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSolvedMissing() throws SQLException {
+        return personDAO.countAllSolvedMissing();
+    }
+
+    /**
+     * Returns the total number of all unsolved and missing persons.
+     *
+     * @return              the total number of all unsolved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllUnsolvedMissing() throws SQLException {
+        return personDAO.countAllSolvedMissing();
     }
 
     /**
@@ -443,6 +521,28 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Returns the total number of solved and missing persons.
+     *
+     * @return              the total number of solved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedMissing() throws SQLException {
+        return personDAO.countSolvedMissing();
+    }
+
+    /**
+     * Returns the total number of unsolved and missing persons.
+     *
+     * @return              the total number of unsolved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedMissing() throws SQLException {
+        return personDAO.countUnsolvedMissing();
+    }
+
+    /**
      * Returns the total number of family abductions.
      *
      * @return              the total number of family abductions
@@ -451,6 +551,28 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public int countFamilyAbduction() throws SQLException {
         return personDAO.countFamilyAbduction();
+    }
+
+    /**
+     * Returns the total number of solved family abductions.
+     *
+     * @return              the total number of solved family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedFamilyAbduction() throws SQLException {
+        return personDAO.countSolvedFamilyAbduction();
+    }
+
+    /**
+     * Returns the total number of unsolved family abductions.
+     *
+     * @return              the total number of unsolved family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedFamilyAbduction() throws SQLException {
+        return personDAO.countUnsolvedFamilyAbduction();
     }
 
     /**
@@ -465,6 +587,28 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Returns the total number of solved non-family abductions.
+     *
+     * @return              the total number of solved non-family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedNonFamilyAbduction() throws SQLException {
+        return personDAO.countSolvedNonFamilyAbduction();
+    }
+
+    /**
+     * Returns the total number of unsolved non-family abductions.
+     *
+     * @return              the total number of unsolved non-family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedNonFamilyAbduction() throws SQLException {
+        return personDAO.countUnsolvedNonFamilyAbduction();
+    }
+
+    /**
      * Returns the total number of runaway persons.
      *
      * @return              the total number of runaway persons
@@ -473,6 +617,28 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public int countRunaway() throws SQLException {
         return personDAO.countRunaway();
+    }
+
+    /**
+     * Returns the total number of solved and runaway persons.
+     *
+     * @return              the total number of solved and runaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedRunaway() throws SQLException {
+        return personDAO.countSolvedRunaway();
+    }
+
+    /**
+     * Returns the total number of unsolved and runaway persons.
+     *
+     * @return              the total number of unsolved and runaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedRunaway() throws SQLException {
+        return personDAO.countUnsolvedRunaway();
     }
 
     /**
@@ -487,14 +653,91 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
-     * Returns the total number of all found persons.
+     * Returns the total number of solved and unknown cases.
      *
-     * @return              the total number of all found persons
+     * @return              the total number of solved and unknown cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedUnknown() throws SQLException {
+        return personDAO.countSolvedUnknown();
+    }
+
+    /**
+     * Returns the total number of unsolved and unknown cases.
+     *
+     * @return              the total number of unsolved and unknown cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedUnknown() throws SQLException {
+        return personDAO.countUnsolvedUnknown();
+    }
+
+    /**
+     * Returns the total number of all ongoing and found persons.
+     *
+     * @return              the total number of all ongoing and found persons
      * @throws java.sql.SQLException
      */
     @Override
     public int countAllFound() throws SQLException {
         return personDAO.countAllFound();
+    }
+
+    /**
+     * Returns the total number of all solved and found persons.
+     *
+     * @return              the total number of all solved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSolvedFound() throws SQLException {
+        return personDAO.countAllSolvedFound();
+    }
+
+    /**
+     * Returns the total number of all unsolved and found persons.
+     *
+     * @return              the total number of all unsolved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllUnsolvedFound() throws SQLException {
+        return personDAO.countAllUnsolvedFound();
+    }
+
+    /**
+     * Returns the total number of found persons.
+     *
+     * @return              the total number of found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countFound() throws SQLException {
+        return personDAO.countFound();
+    }
+
+    /**
+     * Returns the total number of solved and found persons.
+     *
+     * @return              the total number of solved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedFound() throws SQLException {
+        return personDAO.countSolvedFound();
+    }
+
+    /**
+     * Returns the total number of unsolved and found persons.
+     *
+     * @return              the total number of unsolved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedFound() throws SQLException {
+        return personDAO.countUnsolvedFound();
     }
 
     /**
@@ -509,6 +752,28 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Returns the total number of solved and abandoned persons.
+     *
+     * @return              the total number of solved and abandoned persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedAbandoned() throws SQLException {
+        return personDAO.countSolvedAbandoned();
+    }
+
+    /**
+     * Returns the total number of unsolved and abandoned persons.
+     *
+     * @return              the total number of unsolved and abandoned persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedAbandoned() throws SQLException {
+        return personDAO.countUnsolvedAbandoned();
+    }
+
+    /**
      * Returns the total number of throwaway persons.
      *
      * @return              the total number of throwaway persons
@@ -520,6 +785,28 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Returns the total number of solved and throwaway persons.
+     *
+     * @return              the total number of solved and throwaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedThrowaway() throws SQLException {
+        return personDAO.countSolvedThrowaway();
+    }
+
+    /**
+     * Returns the total number of unsolved and throwaway persons.
+     *
+     * @return              the total number of unsolved and throwaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedThrowaway() throws SQLException {
+        return personDAO.countUnsolvedThrowaway();
+    }
+
+    /**
      * Returns the total number of unidentified persons.
      *
      * @return              the total number of unidentified persons
@@ -528,6 +815,28 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public int countUnidentified() throws SQLException {
         return personDAO.countUnidentified();
+    }
+
+    /**
+     * Returns the total number of solved and unidentified persons.
+     *
+     * @return              the total number of solved and unidentified persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedUnidentified() throws SQLException {
+        return personDAO.countSolvedUnidentified();
+    }
+
+    /**
+     * Returns the total number of unsolved and unidentified persons.
+     *
+     * @return              the total number of unsolved and unidentified persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedUnidentified() throws SQLException {
+        return personDAO.countUnsolvedUnidentified();
     }
 
     /**

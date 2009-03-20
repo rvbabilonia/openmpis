@@ -71,10 +71,10 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     /**
-     * Retrieves all missing persons.
+     * Retrieves all ongoing and missing persons.
      *
      * @param pagination    the pagination context
-     * @return              the list of all missing persons
+     * @return              the list of all ongoing and missing persons
      * @throws java.sql.SQLException
      */
     @Override
@@ -112,6 +112,30 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.startTransaction();
             personList = sqlMap.queryForList("getMissing", pagination.getSkipResults(), pagination.getMaxResults());
             pagination.setTotalResults((Integer) sqlMap.queryForObject("countMissing"));
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return personList;
+    }
+
+    /**
+     * Retrieves the 4 newly-added missing persons.
+     *
+     * @return              the list of all missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Person> listNewMissing() throws SQLException {
+        List<Person> personList = new ArrayList<Person>();
+
+        try {
+            sqlMap.startTransaction();
+            personList = sqlMap.queryForList("listNewMissing");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -227,10 +251,10 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     /**
-     * Retrieves all found persons.
+     * Retrieves all ongoing and found persons.
      *
      * @param pagination    the pagination context
-     * @return              the list of all found persons
+     * @return              the list of all ongoing and found persons
      * @throws java.sql.SQLException
      */
     @Override
@@ -242,6 +266,32 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.startTransaction();
             personList = sqlMap.queryForList("getAllFound", pagination.getSkipResults(), pagination.getMaxResults());
             pagination.setTotalResults((Integer) sqlMap.queryForObject("countAllFound"));
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return personList;
+    }
+
+    /**
+     * Retrieves ongoing and found persons.
+     *
+     * @param pagination    the pagination context
+     * @return              the list of ongoing and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Person> getFound(Pagination pagination) throws SQLException {
+        List<Person> personList = new ArrayList<Person>();
+
+        try {
+            sqlMap.startTransaction();
+            personList = sqlMap.queryForList("getFound", pagination.getSkipResults(), pagination.getMaxResults());
+            pagination.setTotalResults((Integer) sqlMap.queryForObject("countFound"));
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -357,6 +407,30 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     /**
+     * Retrieves ongoing cases.
+     *
+     * @return              the list of ongoing cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Person> listOngoing() throws SQLException {
+        List<Person> personList = new ArrayList<Person>();
+
+        try {
+            sqlMap.startTransaction();
+            personList = sqlMap.queryForList("getOngoing");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return personList;
+    }
+
+    /**
      * Retrieves solved cases.
      *
      * @param pagination    the pagination context
@@ -383,6 +457,30 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     /**
+     * Retrieves solved cases.
+     *
+     * @return              the list of solved cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Person> listSolved() throws SQLException {
+        List<Person> personList = new ArrayList<Person>();
+
+        try {
+            sqlMap.startTransaction();
+            personList = sqlMap.queryForList("getSolved");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return personList;
+    }
+
+    /**
      * Retrieves unsolved cases.
      *
      * @param pagination    the pagination context
@@ -398,6 +496,30 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.startTransaction();
             personList = sqlMap.queryForList("getUnsolved", pagination.getSkipResults(), pagination.getMaxResults());
             pagination.setTotalResults((Integer) sqlMap.queryForObject("countUnsolved"));
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return personList;
+    }
+
+    /**
+     * Retrieves unsolved cases.
+     *
+     * @return              the list of unsolved cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Person> listUnsolved() throws SQLException {
+        List<Person> personList = new ArrayList<Person>();
+
+        try {
+            sqlMap.startTransaction();
+            personList = sqlMap.queryForList("getUnsolved");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -741,11 +863,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countAllPersons() throws SQLException {
-        int personCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            personCount = (Integer) sqlMap.queryForObject("countAllPersons");
+            count = (Integer) sqlMap.queryForObject("countAllPersons");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -753,7 +875,7 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return personCount;
+        return count;
     }
 
     /**
@@ -764,11 +886,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countOngoing() throws SQLException {
-        int ongoingCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            ongoingCount = (Integer) sqlMap.queryForObject("countOngoing");
+            count = (Integer) sqlMap.queryForObject("countOngoing");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -776,7 +898,7 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return ongoingCount;
+        return count;
     }
 
     /**
@@ -787,11 +909,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countSolved() throws SQLException {
-        int solvedCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            solvedCount = (Integer) sqlMap.queryForObject("countSolved");
+            count = (Integer) sqlMap.queryForObject("countSolved");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -799,7 +921,7 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return solvedCount;
+        return count;
     }
 
     /**
@@ -810,11 +932,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countUnsolved() throws SQLException {
-        int unsolvedCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            unsolvedCount = (Integer) sqlMap.queryForObject("countUnsolved");
+            count = (Integer) sqlMap.queryForObject("countUnsolved");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -822,22 +944,22 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return unsolvedCount;
+        return count;
     }
 
     /**
-     * Returns the total number of all missing persons.
+     * Returns the total number of all ongoing and missing persons.
      *
-     * @return              the total number of missing persons
+     * @return              the total number of all ongoing and missing persons
      * @throws java.sql.SQLException
      */
     @Override
     public int countAllMissing() throws SQLException {
-        int allMissingCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            allMissingCount = (Integer) sqlMap.queryForObject("countAllMissing");
+            count = (Integer) sqlMap.queryForObject("countAllMissing");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -845,7 +967,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return allMissingCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of all solved and missing persons.
+     *
+     * @return              the total number of all solved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSolvedMissing() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countAllSolvedMissing");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of all unsolved and missing persons.
+     *
+     * @return              the total number of all unsolved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllUnsolvedMissing() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countAllUnsolvedMissing");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -856,11 +1024,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countMissing() throws SQLException {
-        int missingCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            missingCount = (Integer) sqlMap.queryForObject("countMissing");
+            count = (Integer) sqlMap.queryForObject("countMissing");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -868,7 +1036,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return missingCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and missing persons.
+     *
+     * @return              the total number of solved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedMissing() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedMissing");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and missing persons.
+     *
+     * @return              the total number of unsolved and missing persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedMissing() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedMissing");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -879,11 +1093,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countFamilyAbduction() throws SQLException {
-        int familyAbductionCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            familyAbductionCount = (Integer) sqlMap.queryForObject("countFamilyAbduction");
+            count = (Integer) sqlMap.queryForObject("countFamilyAbduction");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -891,7 +1105,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return familyAbductionCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved family abductions.
+     *
+     * @return              the total number of solved family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedFamilyAbduction() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedFamilyAbduction");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved family abductions.
+     *
+     * @return              the total number of unsolved family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedFamilyAbduction() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedFamilyAbduction");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -902,11 +1162,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countNonFamilyAbduction() throws SQLException {
-        int nonFamilyAbductionCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            nonFamilyAbductionCount = (Integer) sqlMap.queryForObject("countNonFamilyAbduction");
+            count = (Integer) sqlMap.queryForObject("countNonFamilyAbduction");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -914,7 +1174,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return nonFamilyAbductionCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved non-family abductions.
+     *
+     * @return              the total number of solved non-family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedNonFamilyAbduction() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedNonFamilyAbduction");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved non-family abductions.
+     *
+     * @return              the total number of unsolved non-family abductions
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedNonFamilyAbduction() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedNonFamilyAbduction");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -925,11 +1231,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countRunaway() throws SQLException {
-        int runawayCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            runawayCount = (Integer) sqlMap.queryForObject("countRunaway");
+            count = (Integer) sqlMap.queryForObject("countRunaway");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -937,7 +1243,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return runawayCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and runaway persons.
+     *
+     * @return              the total number of solved and runaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedRunaway() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedRunaway");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and runaway persons.
+     *
+     * @return              the total number of unsolved and runaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedRunaway() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedRunaway");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -948,11 +1300,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countUnknown() throws SQLException {
-        int unknownCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            unknownCount = (Integer) sqlMap.queryForObject("countUnknown");
+            count = (Integer) sqlMap.queryForObject("countUnknown");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -960,22 +1312,68 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return unknownCount;
+        return count;
     }
 
     /**
-     * Returns the total number of all found persons.
+     * Returns the total number of solved and unknown cases.
      *
-     * @return              the total number of all found persons
+     * @return              the total number of solved and unknown cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedUnknown() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedUnknown");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and unknown cases.
+     *
+     * @return              the total number of unsolved and unknown cases
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedUnknown() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedUnknown");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of all ongoing and found persons.
+     *
+     * @return              the total number of all ongoing and found persons
      * @throws java.sql.SQLException
      */
     @Override
     public int countAllFound() throws SQLException {
-        int allFoundCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            allFoundCount = (Integer) sqlMap.queryForObject("countAllFound");
+            count = (Integer) sqlMap.queryForObject("countAllFound");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -983,7 +1381,122 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return allFoundCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of all solved and found persons.
+     *
+     * @return              the total number of all solved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllSolvedFound() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countAllSolvedFound");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of all unsolved and found persons.
+     *
+     * @return              the total number of all unsolved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countAllUnsolvedFound() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countAllUnsolvedFound");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of ongoing and found persons.
+     *
+     * @return              the total number of ongoing and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countFound() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countFound");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and found persons.
+     *
+     * @return              the total number of solved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedFound() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedFound");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and found persons.
+     *
+     * @return              the total number of unsolved and found persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedFound() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedFound");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -994,11 +1507,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countAbandoned() throws SQLException {
-        int abandonedCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            abandonedCount = (Integer) sqlMap.queryForObject("countAbandoned");
+            count = (Integer) sqlMap.queryForObject("countAbandoned");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1006,7 +1519,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return abandonedCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and abandoned persons.
+     *
+     * @return              the total number of solved and abandoned persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedAbandoned() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedAbandoned");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and abandoned persons.
+     *
+     * @return              the total number of unsolved and abandoned persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedAbandoned() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedAbandoned");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -1017,11 +1576,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countThrowaway() throws SQLException {
-        int throwawayCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            throwawayCount = (Integer) sqlMap.queryForObject("countThrowaway");
+            count = (Integer) sqlMap.queryForObject("countThrowaway");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1029,7 +1588,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return throwawayCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and throwaway persons.
+     *
+     * @return              the total number of solved and throwaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedThrowaway() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedThrowaway");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and throwaway persons.
+     *
+     * @return              the total number of unsolved and throwaway persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedThrowaway() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedThrowaway");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -1040,11 +1645,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countUnidentified() throws SQLException {
-        int unidentifiedCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            unidentifiedCount = (Integer) sqlMap.queryForObject("countUnidentified");
+            count = (Integer) sqlMap.queryForObject("countUnidentified");
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1052,7 +1657,53 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return unidentifiedCount;
+        return count;
+    }
+
+    /**
+     * Returns the total number of solved and unidentified persons.
+     *
+     * @return              the total number of solved and unidentified persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countSolvedUnidentified() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countSolvedUnidentified");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns the total number of unsolved and unidentified persons.
+     *
+     * @return              the total number of unsolved and unidentified persons
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countUnsolvedUnidentified() throws SQLException {
+        int count = 0;
+
+        try {
+            sqlMap.startTransaction();
+            count = (Integer) sqlMap.queryForObject("countUnsolvedUnidentified");
+            sqlMap.commitTransaction();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            sqlMap.endTransaction();
+        }
+
+        return count;
     }
 
     /**
@@ -1064,11 +1715,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countPersonsByEncoderId(Integer encoderId) throws SQLException {
-        int personCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            personCount = (Integer) sqlMap.queryForObject("countPersonsByEncoderId", encoderId);
+            count = (Integer) sqlMap.queryForObject("countPersonsByEncoderId", encoderId);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1076,7 +1727,7 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return personCount;
+        return count;
     }
 
     /**
@@ -1088,11 +1739,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countPersonsByInvestigatorId(Integer investigatorId) throws SQLException {
-        int personCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            personCount = (Integer) sqlMap.queryForObject("countPersonsByInvestigatorId", investigatorId);
+            count = (Integer) sqlMap.queryForObject("countPersonsByInvestigatorId", investigatorId);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1100,7 +1751,7 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return personCount;
+        return count;
     }
 
     /**
@@ -1112,11 +1763,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public int countPersonsByAbductorId(Integer abductorId) throws SQLException {
-        int personCount = 0;
+        int count = 0;
 
         try {
             sqlMap.startTransaction();
-            personCount = (Integer) sqlMap.queryForObject("countPersonsByEncoderId", abductorId);
+            count = (Integer) sqlMap.queryForObject("countPersonsByEncoderId", abductorId);
             sqlMap.commitTransaction();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -1124,6 +1775,6 @@ public class PersonDAOImpl implements PersonDAO {
             sqlMap.endTransaction();
         }
 
-        return personCount;
+        return count;
     }
 }
