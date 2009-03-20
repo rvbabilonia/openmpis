@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
-        <bean:message key="investigator.title"/>
+        <title><bean:message key="investigator.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -45,7 +45,7 @@
                     <html:form method="post" action="viewCase" styleClass="adduserclass">
                         <p class="contentclass">
                             <html:hidden property="action" value="assignInvestigator"/>
-                            <html:hidden property="personid" value="${personid}"/>
+                            <html:hidden property="personId"/>
                         </p>
                         <p class="contentclass">
                             <label id="investigatorlistlabel" class="labelclass" for="investigatorlistfield">
