@@ -13,6 +13,7 @@
     </cacheModel>
 
     <sql id="abductorColumnsFragment">
+        ID as id,
         FIRSTNAME as firstName,
         NICKNAME as nickname,
         MIDDLENAME as middleName,
@@ -76,8 +77,13 @@
         SELECT
         FIRSTNAME as firstName
         FROM ABDUCTOR
-        WHERE ID != #id# AND FIRSTNAME = #firstName# AND LASTNAME = #lastName#
+        WHERE (FIRSTNAME = #firstName# AND LASTNAME = #lastName#)
         ]]>
+        <isGreaterThan prepend="AND" property="id" compareValue="0">
+            <![CDATA[
+            ID != #id#
+            ]]>
+        </isGreaterThan>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
@@ -131,7 +137,7 @@
         AGEDPHOTO = #agedPhoto#,
         CODISID = #codisId#,
         AFISID = #afisId#,
-        DENTALID = #dentalId#,
+        DENTALID = #dentalId#
         WHERE ID = #id#
         ]]>
     </update>

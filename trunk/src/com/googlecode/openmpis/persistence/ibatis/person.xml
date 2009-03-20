@@ -192,40 +192,132 @@
         WHERE (TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4') AND STATUS = '0'
     </sql>
 
+    <sql id="allSolvedMissingFragment">
+        WHERE (TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4') AND STATUS = '1'
+    </sql>
+
+    <sql id="allUnsolvedMissingFragment">
+        WHERE (TYPE = '0' OR TYPE = '1' OR TYPE = '2' OR TYPE = '3' OR TYPE = '4') AND STATUS = '2'
+    </sql>
+
     <sql id="missingFragment">
         WHERE TYPE = '0' AND STATUS = '0'
+    </sql>
+
+    <sql id="solvedMissingFragment">
+        WHERE TYPE = '0' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedMissingFragment">
+        WHERE TYPE = '0' AND STATUS = '2'
     </sql>
 
     <sql id="familyAbductionFragment">
         WHERE TYPE = '1' AND STATUS = '0'
     </sql>
 
+    <sql id="solvedFamilyAbductionFragment">
+        WHERE TYPE = '1' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedFamilyAbductionFragment">
+        WHERE TYPE = '1' AND STATUS = '2'
+    </sql>
+
     <sql id="nonFamilyAbductionFragment">
         WHERE TYPE = '2' AND STATUS = '0'
+    </sql>
+
+    <sql id="solvedNonFamilyAbductionFragment">
+        WHERE TYPE = '2' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedNonFamilyAbductionFragment">
+        WHERE TYPE = '2' AND STATUS = '2'
     </sql>
 
     <sql id="runawayFragment">
         WHERE TYPE = '3' AND STATUS = '0'
     </sql>
 
+    <sql id="solvedRunawayFragment">
+        WHERE TYPE = '3' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedRunawayFragment">
+        WHERE TYPE = '3' AND STATUS = '2'
+    </sql>
+
     <sql id="unknownFragment">
         WHERE TYPE = '4' AND STATUS = '0'
     </sql>
 
-    <sql id="allFoundFragment">
-        WHERE (TYPE = '5' OR TYPE = '6') AND STATUS = '0'
+    <sql id="solvedUnknownFragment">
+        WHERE TYPE = '4' AND STATUS = '1'
     </sql>
 
-    <sql id="abandonedFragment">
+    <sql id="unsolvedUnknownFragment">
+        WHERE TYPE = '4' AND STATUS = '2'
+    </sql>
+
+    <sql id="allFoundFragment">
+        WHERE (TYPE = '5' OR TYPE = '6' OR TYPE = '7') AND STATUS = '0'
+    </sql>
+
+    <sql id="allSolvedFoundFragment">
+        WHERE (TYPE = '5' OR TYPE = '6' OR TYPE = '7') AND STATUS = '1'
+    </sql>
+
+    <sql id="allUnsolvedFoundFragment">
+        WHERE (TYPE = '5' OR TYPE = '6' OR TYPE = '7') AND STATUS = '2'
+    </sql>
+
+    <sql id="foundFragment">
         WHERE TYPE = '5' AND STATUS = '0'
     </sql>
 
-    <sql id="throwawayFragment">
+    <sql id="solvedFoundFragment">
+        WHERE TYPE = '5' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedFoundFragment">
+        WHERE TYPE = '5' AND STATUS = '2'
+    </sql>
+
+    <sql id="abandonedFragment">
         WHERE TYPE = '6' AND STATUS = '0'
     </sql>
 
-    <sql id="unidentifiedFragment">
+    <sql id="solvedAbandonedFragment">
+        WHERE TYPE = '6' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedAbandonedFragment">
+        WHERE TYPE = '6' AND STATUS = '2'
+    </sql>
+
+    <sql id="throwawayFragment">
         WHERE TYPE = '7' AND STATUS = '0'
+    </sql>
+
+    <sql id="solvedThrowawayFragment">
+        WHERE TYPE = '7' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedThrowawayFragment">
+        WHERE TYPE = '7' AND STATUS = '2'
+    </sql>
+
+    <sql id="unidentifiedFragment">
+        WHERE TYPE = '8' AND STATUS = '0'
+    </sql>
+
+    <sql id="solvedUnidentifiedFragment">
+        WHERE TYPE = '8' AND STATUS = '1'
+    </sql>
+
+    <sql id="unsolvedUnidentifiedFragment">
+        WHERE TYPE = '8' AND STATUS = '2'
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -302,7 +394,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="ongoingFragment"/>
-        ORDER BY ID
+        ORDER BY TYPE, ID
     </select>
 
     <select id="countOngoing" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -316,7 +408,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="solvedFragment"/>
-        ORDER BY ID
+        ORDER BY TYPE, ID
     </select>
 
     <select id="countSolved" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -330,7 +422,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="unsolvedFragment"/>
-        ORDER BY ID
+        ORDER BY TYPE, ID
     </select>
 
     <select id="countUnsolved" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -354,6 +446,20 @@
         <include refid="allMissingFragment"/>
     </select>
 
+    <select id="countAllSolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="allSolvedMissingFragment"/>
+    </select>
+
+    <select id="countAllUnsolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="allUnsolvedMissingFragment"/>
+    </select>
+
     <select id="getMissing" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="missingColumnsFragment"/>
@@ -366,6 +472,28 @@
         COUNT(ID)
         FROM PERSON
         <include refid="missingFragment"/>
+    </select>
+
+    <select id="countSolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedMissingFragment"/>
+    </select>
+
+    <select id="countUnsolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedMissingFragment"/>
+    </select>
+
+    <select id="listNewMissing" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="missingColumnsFragment"/>
+        <include refid="allMissingFragment"/>
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
+        LIMIT 4
     </select>
 
     <select id="getFamilyAbduction" resultClass="person" cacheModel="personCache">
@@ -382,6 +510,20 @@
         <include refid="familyAbductionFragment"/>
     </select>
 
+    <select id="countSolvedFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedFamilyAbductionFragment"/>
+    </select>
+
+    <select id="countUnsolvedFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedFamilyAbductionFragment"/>
+    </select>
+
     <select id="getNonFamilyAbduction" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="missingColumnsFragment"/>
@@ -394,6 +536,20 @@
         COUNT(ID)
         FROM PERSON
         <include refid="nonFamilyAbductionFragment"/>
+    </select>
+
+    <select id="countSolvedNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedNonFamilyAbductionFragment"/>
+    </select>
+
+    <select id="countUnsolvedNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedNonFamilyAbductionFragment"/>
     </select>
 
     <select id="getRunaway" resultClass="person" cacheModel="personCache">
@@ -410,6 +566,20 @@
         <include refid="runawayFragment"/>
     </select>
 
+    <select id="countSolvedRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedRunawayFragment"/>
+    </select>
+
+    <select id="countUnsolvedRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedRunawayFragment"/>
+    </select>
+
     <select id="getUnknown" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="missingColumnsFragment"/>
@@ -422,6 +592,20 @@
         COUNT(ID)
         FROM PERSON
         <include refid="unknownFragment"/>
+    </select>
+
+    <select id="countSolvedUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedUnknownFragment"/>
+    </select>
+
+    <select id="countUnsolvedUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedUnknownFragment"/>
     </select>
 
     <select id="getAllFound" resultClass="person" cacheModel="personCache">
@@ -438,6 +622,48 @@
         <include refid="allFoundFragment"/>
     </select>
 
+    <select id="countAllSolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="allSolvedFoundFragment"/>
+    </select>
+
+    <select id="countAllUnsolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="allUnsolvedFoundFragment"/>
+    </select>
+
+    <select id="getFound" resultClass="person" cacheModel="personCache">
+        SELECT
+        <include refid="foundColumnsFragment"/>
+        <include refid="foundFragment"/>
+        ORDER BY ID
+    </select>
+
+    <select id="countFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="foundFragment"/>
+    </select>
+
+    <select id="countSolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedFoundFragment"/>
+    </select>
+
+    <select id="countUnsolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedFoundFragment"/>
+    </select>
+
     <select id="getAbandoned" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="foundColumnsFragment"/>
@@ -450,6 +676,20 @@
         COUNT(ID)
         FROM PERSON
         <include refid="abandonedFragment"/>
+    </select>
+
+    <select id="countSolvedAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedAbandonedFragment"/>
+    </select>
+
+    <select id="countUnsolvedAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedAbandonedFragment"/>
     </select>
 
     <select id="getThrowaway" resultClass="person" cacheModel="personCache">
@@ -466,6 +706,20 @@
         <include refid="throwawayFragment"/>
     </select>
 
+    <select id="countSolvedThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedThrowawayFragment"/>
+    </select>
+
+    <select id="countUnsolvedThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedThrowawayFragment"/>
+    </select>
+
     <select id="getUnidentified" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="foundColumnsFragment"/>
@@ -480,14 +734,32 @@
         <include refid="unidentifiedFragment"/>
     </select>
 
+    <select id="countSolvedUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="solvedUnidentifiedFragment"/>
+    </select>
+
+    <select id="countUnsolvedUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        <include refid="unsolvedUnidentifiedFragment"/>
+    </select>
+
     <select id="checkPerson" parameterClass="person" resultClass="person" cacheModel="personCache">
         <![CDATA[
         SELECT
-        FIRSTNAME as firstName,
-        LASTNAME as lastName
+        FIRSTNAME as firstName
         FROM PERSON
-        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND LASTNAME = #lastName#)
+        WHERE (FIRSTNAME = #firstName# AND NICKNAME = #nickname# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
         ]]>
+        <isGreaterThan prepend="AND" property="id" compareValue="0">
+            <![CDATA[
+            ID != #id#
+            ]]>
+        </isGreaterThan>
     </select>
 
     <select id="simpleSearchPerson" parameterClass="java.lang.String" resultClass="person" cacheModel="personCache">
@@ -499,7 +771,22 @@
         OR MIDDLENAME LIKE "%$keyword$%"
         OR LASTNAME LIKE "%$keyword$%"
         OR CIRCUMSTANCE LIKE "%$keyword$%"
+        OR PERSONALEFFECTS LIKE "%$keyword$%"
         OR REMARKS LIKE "%$keyword$%"
+        OR MARKS LIKE "%$keyword$%"
+        OR MEDICALCONDITION LIKE "%$keyword$%"
+        OR CITY LIKE "%$keyword$%"
+        OR PROVINCE LIKE "%$keyword$%"
+        OR COUNTRY LIKE "%$keyword$%"
+        OR MISSINGFROMCITY LIKE "%$keyword$%"
+        OR MISSINGFROMPROVINCE LIKE "%$keyword$%"
+        OR MISSINGFROMCOUNTRY LIKE "%$keyword$%"
+        OR POSSIBLECITY LIKE "%$keyword$%"
+        OR POSSIBLEPROVINCE LIKE "%$keyword$%"
+        OR POSSIBLECOUNTRY LIKE "%$keyword$%"
+        OR INSTITUTIONCITY LIKE "%$keyword$%"
+        OR INSTITUTIONPROVINCE LIKE "%$keyword$%"
+        OR INSTITUTIONCOUNTRY LIKE "%$keyword$%"
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
