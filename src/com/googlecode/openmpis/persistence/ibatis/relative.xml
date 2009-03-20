@@ -59,8 +59,42 @@
         SELECT
         FIRSTNAME as firstName
         FROM RELATIVE
-        WHERE ID != #id# AND (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
+        WHERE
+        (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
         ]]>
+        <isGreaterThan prepend="AND" property="id" compareValue="0">
+            <![CDATA[
+            ID != #id#
+            ]]>
+        </isGreaterThan>
+    </select>
+
+    <select id="checkRelativeEmail" parameterClass="relative" resultClass="relative" cacheModel="relativeCache">
+        <![CDATA[
+        SELECT
+        FIRSTNAME as firstName
+        FROM RELATIVE
+        WHERE EMAIL = #email#
+        ]]>
+        <isGreaterThan prepend="AND" property="id" compareValue="0">
+            <![CDATA[
+            ID != #id#
+            ]]>
+        </isGreaterThan>
+    </select>
+
+    <select id="checkRelativeNumber" parameterClass="relative" resultClass="relative" cacheModel="relativeCache">
+        <![CDATA[
+        SELECT
+        FIRSTNAME as firstName
+        FROM RELATIVE
+        WHERE NUMBER = #number#
+        ]]>
+        <isGreaterThan prepend="AND" property="id" compareValue="0">
+            <![CDATA[
+            ID != #id#
+            ]]>
+        </isGreaterThan>
     </select>
 
     <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
