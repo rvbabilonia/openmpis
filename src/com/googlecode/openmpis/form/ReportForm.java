@@ -120,7 +120,7 @@ public class ReportForm extends ActionForm {
      * @param firstName     the person's first name
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     /**
@@ -138,7 +138,7 @@ public class ReportForm extends ActionForm {
      * @param lastName     the person's last name
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     /**
@@ -156,7 +156,7 @@ public class ReportForm extends ActionForm {
      * @param nickname     the person's nickname
      */
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname.trim();
     }
 
     /**
