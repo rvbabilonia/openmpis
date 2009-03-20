@@ -209,6 +209,8 @@ public class RelativeAction extends DispatchAction {
                 request.setAttribute("action", request.getParameter("action"));
                 // Check if form is valid
                 if (isValidRelative(request, form)) {
+                    // Check if updated relative is unique
+                    // and if the rest of the form is valid
                     Relative checker = new Relative();
                     String firstName = relativeForm.getFirstName();
                     String middleName = relativeForm.getMiddleName();
@@ -251,7 +253,7 @@ public class RelativeAction extends DispatchAction {
                             logger.info(addLog.toString());
 
                             // Retrieve person
-                            person = personService.getPersonById(generatedId);
+                            person = personService.getPersonById(relativeForm.getPersonId());
                             if ((person.getType() == 1) || (person.getType() == 2)) {
                                 // Check if abducted by a family member or kidnappers
                                 // Return person ID
@@ -321,9 +323,7 @@ public class RelativeAction extends DispatchAction {
                 relativeForm.setRelationToRelative(person.getRelationToRelative());
                 relativeForm.setId(person.getRelativeId());
             } catch (NumberFormatException nfe) {
-                //return mapping.findForward(Constants.LIST_PERSON);
             } catch (NullPointerException npe) {
-                //return mapping.findForward(Constants.LIST_PERSON);
             }
 
             // Retrieve relative
@@ -386,65 +386,67 @@ public class RelativeAction extends DispatchAction {
 
             // Check if form is valid
             if (isValidRelative(request, form)) {
-                    Relative checker = new Relative();
-                    String firstName = relativeForm.getFirstName();
-                    String middleName = relativeForm.getMiddleName();
-                    String lastName = relativeForm.getLastName();
-                    String email = relativeForm.getEmail();
-                    String number = relativeForm.getNumber();
-                    checker.setId(relativeForm.getId());
-                    checker.setFirstName(firstName);
-                    checker.setMiddleName(middleName);
-                    checker.setLastName(lastName);
+                // Check if updated relative is unique
+                // and if the rest of the form is valid
+                Relative checker = new Relative();
+                String firstName = relativeForm.getFirstName();
+                String middleName = relativeForm.getMiddleName();
+                String lastName = relativeForm.getLastName();
+                String email = relativeForm.getEmail();
+                String number = relativeForm.getNumber();
+                checker.setId(relativeForm.getId());
+                checker.setFirstName(firstName);
+                checker.setMiddleName(middleName);
+                checker.setLastName(lastName);
 
                 // Check if relative is unique
                 if (relativeService.isUniqueRelative(checker)) {
-                        // Update relative
-                        Relative relative = new Relative();
-                        relative.setId(relativeForm.getId());
-                        relative.setFirstName(firstName);
-                        relative.setMiddleName(relativeForm.getMiddleName());
-                        relative.setLastName(lastName);
-                        relative.setStreet(relativeForm.getStreet());
-                        relative.setCity(relativeForm.getCity());
-                        relative.setProvince(relativeForm.getProvince());
-                        relative.setCountry(relativeForm.getCountry());
-                        relative.setEmail(email);
-                        relative.setNumber(number);
-                        boolean isUpdated = relativeService.updateRelative(relative);
+                    // Update relative
+                    Relative relative = new Relative();
+                    relative.setId(relativeForm.getId());
+                    relative.setFirstName(firstName);
+                    relative.setMiddleName(relativeForm.getMiddleName());
+                    relative.setLastName(lastName);
+                    relative.setStreet(relativeForm.getStreet());
+                    relative.setCity(relativeForm.getCity());
+                    relative.setProvince(relativeForm.getProvince());
+                    relative.setCountry(relativeForm.getCountry());
+                    relative.setEmail(email);
+                    relative.setNumber(number);
+                    boolean isUpdated = relativeService.updateRelative(relative);
 
-                        if (isUpdated) {
-                            // Update relative ID in person
-                            Person person = new Person();
-                            person.setId(relativeForm.getPersonId());
-                            person.setRelativeId(relativeForm.getId());
-                            person.setRelationToRelative(relativeForm.getRelationToRelative());
-                            personService.updatePersonRelative(person);
+                    if (isUpdated) {
+                        // Update relative ID in person
+                        Person person = new Person();
+                        person.setId(relativeForm.getPersonId());
+                        person.setRelativeId(relativeForm.getId());
+                        person.setRelationToRelative(relativeForm.getRelationToRelative());
+                        personService.updatePersonRelative(person);
 
-                            // Log relative modification event
-                            Log editLog = new Log();
-                            editLog.setLog(firstName + " " + lastName + " with ID " + relativeForm.getId() + " was updated by " + currentUser.getUsername() + ".");
-                            editLog.setLog("Relative " + relativeForm.getId() + " was attributed to person " + person.getId() + ".");
-                            editLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-                            logService.insertLog(editLog);
-                            logger.info(editLog.toString());
+                        // Log relative modification event
+                        Log editLog = new Log();
+                        editLog.setLog(firstName + " " + lastName + " with ID " + relativeForm.getId() + " was updated by " + currentUser.getUsername() + ".");
+                        editLog.setLog("Relative " + relativeForm.getId() + " was attributed to person " + person.getId() + ".");
+                        editLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                        logService.insertLog(editLog);
+                        logger.info(editLog.toString());
 
-                            person = personService.getPersonById(relativeForm.getPersonId());
-                            // Return relative and operation type
-                            if ((person.getType() == 1) || (person.getType() == 2)) {
-                                // Check if abducted by a family member or kidnappers
-                                // Return person ID
-                                request.setAttribute("personid", person.getId());
+                        person = personService.getPersonById(relativeForm.getPersonId());
+                        // Return relative and operation type
+                        if ((person.getType() == 1) || (person.getType() == 2)) {
+                            // Check if abducted by a family member or kidnappers
+                            // Return person ID
+                            request.setAttribute("personid", person.getId());
 
-                                return mapping.findForward(Constants.ADD_ABDUCTOR);
-                            } else {
-                                request.setAttribute("personid", person.getId());
-
-                                return mapping.findForward(Constants.SELECT_INVESTIGATOR);
-                            }
+                            return mapping.findForward(Constants.ADD_ABDUCTOR);
                         } else {
-                            return mapping.findForward(Constants.FAILURE);
+                            request.setAttribute("personid", person.getId());
+
+                            return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         }
+                    } else {
+                        return mapping.findForward(Constants.FAILURE);
+                    }
                 } else {
                     // Return duplicate relative error
                     errors.add("firstname", new ActionMessage("error.relative.duplicate"));
