@@ -1,26 +1,22 @@
 validation
-    xhtml
+    xhtml (buttons/links/jsp/application resources)
+    css
 
-security audit
-    firewall
-    injection
-    cross-site scripting
-
-test cases
+test cases (selenium)
 
 documentation
     user manual
     developer manual
     system administrator manual
+    comments
+    imports
+
+change in case type (person)
+    removal of abductor
 
 public
     case
         /viewCase.do?action=viewAbductor&id=
-
-administrator
-    reports using itext
-        list of feedbacks
-        list of logs
 
 encoder
     case
@@ -39,32 +35,20 @@ encoder
         abductor
             /viewAbductor.do?action=newAbductor
             /viewAbductor.do?action=addAbductor (form action)
-                upload photo
                 assign to person
             /viewAbductor.do?action=viewAbductor&id=
             /viewAbductor.do?action=editAbductor (form action)
-                upload photo
                 assign to person
             /viewAbductor.do?action=eraseAdbuctor&id=
             /viewAbductor.do?action=deleteAbductor (form action)
                 remove from person
                 remove from database
                 delete photos
-    reports using itext
-        list of cases
 
 investigator
     case
-        /viewCase.do?action=list*
-            layout
-        /viewCase.do?action=viewRelative&id=
-        /viewCase.do?action=viewAbductor&id=
-        /viewProgress.do?action=downloadReport&id=
         /viewProgress.do?action=eraseReport&id=
         /viewProgress.do?action=deleteReport
-    reports using itext
-        list of progress reports
-        list of sightings from the public
 
 administrator
     (currentuser.groupId == 0)
@@ -83,6 +67,20 @@ your creator/encoder
 
 you are the creator/encoder
     (currentuser.id == editUserForm.creatorId)
+
+
+        <!-- Selects and assigns investigator -->
+        <action
+                path="/viewInvestigator"
+                type="com.googlecode.openmpis.action.InvestigatorAction"
+                scope="request"
+                name="investigatorForm"
+                input="/WEB-INF/pages/session/investigatorForm.jsp"
+                validate="false"
+                parameter="action">
+            <forward name="assign-investigator"  path="/WEB-INF/pages/session/investigatorForm.jsp"/>
+            <forward name="assign-investigator-success" path="/WEB-INF/pages/session/investigatorSuccess.jsp"/>
+        </action>
 
 INSERT INTO `user` (`id`,`groupID`,`username`,`password`,`firstName`,`middleName`,`lastName`,`birthMonth`,`birthDay`,`birthYear`,`email`,`designation`,`agency`,`number`,`ipAddress`,`lastLogin`,`date`,`creatorID`,`status`,`question`,`answer`) VALUES
  (2,1,'MO0916','148332b694fc60c7dac7ef37f3d2b34d','Marvic','Brizuela','Orejo',9,16,1981,'marvic.orejo@thomsonreuters.com','QC Lead','Thomson Reuters','+639175584603','127.0.0.1','2009-02-16','2009-02-16',1,0,0,'blue'),

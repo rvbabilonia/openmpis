@@ -18,14 +18,18 @@
  */
 package com.googlecode.openmpis.action;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -63,12 +67,6 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-
-import java.awt.Color;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * The AbductorAction class provides the methods to list, add, edit, delete and view
@@ -130,16 +128,17 @@ public class AbductorAction extends DispatchAction {
             AbductorForm abductorForm = (AbductorForm) form;
             List<Abductor> abductorList = abductorService.listAllAbductors();
             request.setAttribute("abductorlist", abductorList);
-            request.setAttribute("action", request.getParameter("action"));
+            
             if (request.getAttribute("personid") != null) {
                 request.setAttribute("personid", request.getAttribute("personid"));
             } else {
                 request.setAttribute("personid", request.getParameter("personid"));
             }
 
-            if (abductorList.size() == 0) {
+            //if (abductorList.size() == 0) {
+                request.setAttribute("action", request.getParameter("action"));
                 abductorForm.reset(mapping, request);
-            }
+            //}
 
             if (request.getAttribute("abductorid") != null) {
                 Abductor abductor = abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
@@ -153,7 +152,10 @@ public class AbductorAction extends DispatchAction {
                 abductorForm.setCity(abductor.getCity());
                 abductorForm.setProvince(abductor.getProvince());
                 abductorForm.setCountry(abductor.getCountry());
+                abductorForm.setRemarks(abductor.getRemarks());
                 abductorForm.setRelationToAbductor((Integer) request.getAttribute("relationtoabductor"));
+
+                request.setAttribute("action", "editAbductor");
             }
 
             return mapping.findForward(Constants.ADD_ABDUCTOR);
@@ -210,6 +212,7 @@ public class AbductorAction extends DispatchAction {
                     abductor.setNickname(abductorForm.getNickname());
                     abductor.setMiddleName(abductorForm.getMiddleName());
                     abductor.setLastName(lastName);
+                    // TODO what if birth date is unknown?
                         abductor.setBirthMonth(abductorForm.getBirthMonth());
                         abductor.setBirthDay(abductorForm.getBirthDay());
                         abductor.setBirthYear(abductorForm.getBirthYear());
@@ -260,7 +263,7 @@ public class AbductorAction extends DispatchAction {
                             }
 
                             // Create directories for abductor
-                            String directoryName = createDirectoryName(generatedId);
+                            String directoryName = "abductor-" + createDirectoryName(generatedId);
 
                             // Calculate age
                             // TODO what if birth date is unknown?
@@ -290,23 +293,26 @@ public class AbductorAction extends DispatchAction {
                             }
 
                             // Prepare filenames and upload photo
-                            String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
-                            contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
-                            File file = new File(absoluteDefaultPhotoFilename);
-                            FileOutputStream fos = new FileOutputStream(file);
-                            fos.write(photoFile.getFileData());
-                            fos.close();
-                            fos.flush();
-                            if (agedPhotoFile.getFileName().length() > 0) {
-                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
-                                contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
-                                file = new File(absoluteAgedPhotoFilename);
-                                fos = new FileOutputStream(file);
+                            if (photoFile.getFileName().length() > 0) {
+                                String absoluteDefaultPhotoFilename = absoluteDefaultPhotoDirectory + File.separator + directoryName + "-age-" + age + "." + extensionName;
+                                contextDefaultPhotoFilename = contextDefaultPhotoDirectory + "/" + directoryName + "-age-" + age + "." + extensionName;
+                                File file = new File(absoluteDefaultPhotoFilename);
+                                FileOutputStream fos = new FileOutputStream(file);
                                 fos.write(photoFile.getFileData());
                                 fos.close();
                                 fos.flush();
                             }
+                            if (agedPhotoFile.getFileName().length() > 0) {
+                                String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
+                                contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
+                                File file = new File(absoluteAgedPhotoFilename);
+                                FileOutputStream fos = new FileOutputStream(file);
+                                fos.write(agedPhotoFile.getFileData());
+                                fos.close();
+                                fos.flush();
+                            }
 
+                            abductor.setId(generatedId);
                             abductor.setPhoto(contextDefaultPhotoFilename);
                             if (agedPhotoFile.getFileName().length() > 0) {
                                 abductor.setAgedPhoto(contextAgedPhotoFilename);
@@ -444,11 +450,12 @@ public class AbductorAction extends DispatchAction {
             // Edit what you created/encoded
             // Edit your profile
             // Administrator can edit all except administrators
+            if (currentUser.getGroupId() <= 2) {
             //if (currentUser.getId() == abductor.getEncoderId()) {
                 return mapping.findForward(Constants.EDIT_ABDUCTOR);
-            //} else {
-            //    return mapping.findForward(Constants.VIEW_ABDUCTOR);
-            //}
+            } else {
+                return mapping.findForward(Constants.VIEW_ABDUCTOR);
+            }
         } else {
             return mapping.findForward(Constants.VIEW_ABDUCTOR);
         }
@@ -506,14 +513,21 @@ public class AbductorAction extends DispatchAction {
                     String contextAgedPhotoFilename = contextUnknownPhotoFilename;
 
                     // Split the filename to get the extension name
-                    if ((photoFile.getFileName().length() > 0) || (agedPhotoFile.getFileName().length() > 0)) {
-                        String tokens[] = photoFile.getFileName().toLowerCase().split("\\.");
-                        String extensionName = tokens[1];
-                        tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
-                        extensionName = tokens[1];
+                    if ((photoFile.getFileName().length() > 0) ||
+                            (agedPhotoFile.getFileName().length() > 0)) {
+                        String tokens[];
+                        String extensionName = "";
+                        if (photoFile.getFileName().length() > 0) {
+                            tokens = photoFile.getFileName().toLowerCase().split("\\.");
+                            extensionName = tokens[1];
+                        }
+                        if (agedPhotoFile.getFileName().length() > 0) {
+                            tokens = agedPhotoFile.getFileName().toLowerCase().split("\\.");
+                            extensionName = tokens[1];
+                        }
 
                         // Create directories for abductor
-                        String directoryName = createDirectoryName(abductorForm.getId());
+                        String directoryName = "abductor-" + createDirectoryName(abductorForm.getId());
 
                         // Calculate age
                         // TODO what if birth date is unknown?
@@ -551,7 +565,7 @@ public class AbductorAction extends DispatchAction {
                         fos.close();
                         fos.flush();
                         if (agedPhotoFile.getFileName().length() > 0) {
-                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + agedPhotoFile.getFileName().toLowerCase();
+                            String absoluteAgedPhotoFilename = absoluteAgedPhotoDirectory + File.separator + directoryName + "." + extensionName;
                             contextAgedPhotoFilename = contextAgedPhotoDirectory + "/" + directoryName + "." + extensionName;
                             file = new File(absoluteAgedPhotoFilename);
                             fos = new FileOutputStream(file);
@@ -561,7 +575,7 @@ public class AbductorAction extends DispatchAction {
                         }
                     }
 
-                    // Insert abductor
+                    // Update abductor
                     Abductor abductor = new Abductor();
                     abductor.setId(abductorForm.getId());
                     if (agedPhotoFile.getFileName().length() > 0) {
@@ -967,9 +981,9 @@ public class AbductorAction extends DispatchAction {
             errors.add("photofile", new ActionMessage("error.photo.invalid"));
         }
 
-        if ((agedPhotoFile.getFileName().length() > 1) && ((!agedPhotoFile.getContentType().equals("image/png")) ||
-                (!agedPhotoFile.getContentType().equals("image/jpeg")) ||
-                (!agedPhotoFile.getContentType().equals("image/gif")))) {
+        if ((agedPhotoFile.getFileName().length() > 1) && (!((agedPhotoFile.getContentType().equals("image/png")) ||
+                (agedPhotoFile.getContentType().equals("image/jpeg")) ||
+                (agedPhotoFile.getContentType().equals("image/gif"))))) {
             errors.add("agedphotofile", new ActionMessage("error.photo.invalid"));
         }
 

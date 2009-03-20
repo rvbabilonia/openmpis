@@ -1,5 +1,5 @@
 /*
- * This file is part of OpenMPIS, the Open Source Missing Persons Information System.
+ * This file is part of OpenMPIS, the Open Source Missing abductors Information System.
  * Copyright (C) 2008  Rey Vincent Babilonia <rvbabilonia@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package com.googlecode.openmpis.form;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
@@ -33,7 +34,7 @@ import org.apache.struts.upload.FormFile;
 public class AbductorForm extends ActionForm {
 
     /**
-     * The person ID
+     * The abductor ID
      */
     private int id;
     /**
@@ -45,19 +46,19 @@ public class AbductorForm extends ActionForm {
      */
     private int type;
     /**
-     * The first name of the person
+     * The first name of the abductor
      */
     private String firstName;
     /**
-     * The nickname of the person
+     * The nickname of the abductor
      */
     private String nickname;
     /**
-     * The middle name of the person
+     * The middle name of the abductor
      */
     private String middleName;
     /**
-     * The last name of the person
+     * The last name of the abductor
      */
     private String lastName;
     /**
@@ -73,103 +74,103 @@ public class AbductorForm extends ActionForm {
      */
     private int birthYear;
     /**
-     * The street address of the person
+     * The street address of the abductor
      */
     private String street;
     /**
-     * The home city of the person
+     * The home city of the abductor
      */
     private String city;
     /**
-     * The home province of the person
+     * The home province of the abductor
      */
     private String province;
     /**
-     * The home country of the person
+     * The home country of the abductor
      */
     private String country;
     /**
-     * The sex of the person
+     * The sex of the abductor
      */
     private int sex;
     /**
-     * The height of the person in feet
+     * The height of the abductor in feet
      */
     private int feet;
     /**
-     * The additional inches to the person's height
+     * The additional inches to the abductor's height
      */
     private int inches;
     /**
-     * The height of the person in centimeters
+     * The height of the abductor in centimeters
      */
     private double cm;
     /**
-     * The weight of the person in pounds
+     * The weight of the abductor in pounds
      */
     private double weight;
     /**
-     * The mass of the person in kilograms
+     * The mass of the abductor in kilograms
      */
     private double mass;
     /**
-     * The religion of the person
+     * The religion of the abductor
      */
     private int religion;
     /**
-     * The race of the person
+     * The race of the abductor
      */
     private int race;
     /**
-     * The eye color of the person
+     * The eye color of the abductor
      */
     private int eyeColor;
     /**
-     * The hair color of the person
+     * The hair color of the abductor
      */
     private int hairColor;
     /**
-     * The relationship of the abductor to the person
+     * The relationship of the abductor to the abductor
      */
     private int relationToAbductor;
     /**
-     * The distinguishing marks of the person
+     * The distinguishing marks of the abductor
      */
     private String marks;
     /**
-     * The personal effects worn by the person
+     * The abductoral effects worn by the abductor
      */
     private String personalEffects;
     /**
-     * The remarks to the person
+     * The remarks to the abductor
      */
     private String remarks;
     /**
-     * The filename of the photo of the person
+     * The filename of the photo of the abductor
      */
     private String photo;
     /**
-     * The photo of the person
+     * The photo of the abductor
      */
     private FormFile photoFile;
     /**
-     * The filename of the optional age-progressed photo of the person
+     * The filename of the optional age-progressed photo of the abductor
      */
     private String agedPhoto;
     /**
-     * The optional age-progressed photo of the person
+     * The optional age-progressed photo of the abductor
      */
     private FormFile agedPhotoFile;
     /**
-     * The optional DNA ID of the person
+     * The optional DNA ID of the abductor
      */
     private String codisId;
     /**
-     * The optional fingerprint ID of the person
+     * The optional fingerprint ID of the abductor
      */
     private String afisId;
     /**
-     * The optional dental ID of the person
+     * The optional dental ID of the abductor
      */
     private String dentalId;
     /**
@@ -184,20 +185,24 @@ public class AbductorForm extends ActionForm {
      * The current age
      */
     private int age;
+    /**
+     * The ID of the person to whom this abductor is attributed
+     */
+    private int personId;
 
     /**
-     * Gets the ID of the person.
+     * Gets the ID of the abductor.
      *
-     * @return               the ID of the person
+     * @return               the ID of the abductor
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Sets the ID of the person.
+     * Sets the ID of the abductor.
      *
-     * @param id            the ID of the person
+     * @param id            the ID of the abductor
      */
     public void setId(int id) {
         this.id = id;
@@ -240,72 +245,72 @@ public class AbductorForm extends ActionForm {
     }
 
     /**
-     * Gets the first name of the person.
+     * Gets the first name of the abductor.
      *
-     * @return               the first name of the person
+     * @return               the first name of the abductor
      */
     public String getFirstName() {
         return firstName;
     }
 
     /**
-     * Sets the first name of the person.
+     * Sets the first name of the abductor.
      *
-     * @param firstName     the first name of the person
+     * @param firstName     the first name of the abductor
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName.trim();
     }
 
     /**
-     * Gets the nickname of the person.
+     * Gets the nickname of the abductor.
      *
-     * @return              the nickname of the person
+     * @return              the nickname of the abductor
      */
     public String getNickname() {
         return nickname;
     }
 
     /**
-     * Sets the nickname of the person.
+     * Sets the nickname of the abductor.
      *
-     * @param nickname      the nickname of the person
+     * @param nickname      the nickname of the abductor
      */
     public void setNickname(String nickname) {
         this.nickname = nickname.trim();
     }
 
     /**
-     * Gets the middle name of the person.
+     * Gets the middle name of the abductor.
      *
-     * @return               the middle name of the person
+     * @return               the middle name of the abductor
      */
     public String getMiddleName() {
         return middleName;
     }
 
     /**
-     * Sets the middle name of the person.
+     * Sets the middle name of the abductor.
      *
-     * @param middleName    the middle name of the person
+     * @param middleName    the middle name of the abductor
      */
     public void setMiddleName(String middleName) {
         this.middleName = middleName.trim();
     }
 
     /**
-     * Gets the last name of the person.
+     * Gets the last name of the abductor.
      *
-     * @return               the last name of the person
+     * @return               the last name of the abductor
      */
     public String getLastName() {
         return lastName;
     }
 
     /**
-     * Sets the last name of the person.
+     * Sets the last name of the abductor.
      *
-     * @param lastName      the last name of the person
+     * @param lastName      the last name of the abductor
      */
     public void setLastName(String lastName) {
         this.lastName = lastName.trim();
@@ -366,414 +371,414 @@ public class AbductorForm extends ActionForm {
     }
 
     /**
-     * Gets the street address of the person.
+     * Gets the street address of the abductor.
      *
-     * @return              the street address of the person
+     * @return              the street address of the abductor
      */
     public String getStreet() {
         return street;
     }
 
     /**
-     * Sets the street address of the person.
+     * Sets the street address of the abductor.
      *
-     * @param street        the street address of the person
+     * @param street        the street address of the abductor
      */
     public void setStreet(String street) {
         this.street = street.trim();
     }
 
     /**
-     * Sets the home city of the person.
+     * Sets the home city of the abductor.
      *
-     * @return              the home city of the person
+     * @return              the home city of the abductor
      */
     public String getCity() {
         return city;
     }
 
     /**
-     * Sets the home city of the person.
+     * Sets the home city of the abductor.
      *
-     * @param city          the home city of the person
+     * @param city          the home city of the abductor
      */
     public void setCity(String city) {
         this.city = city.trim();
     }
 
     /**
-     * Gets the home province of the person.
+     * Gets the home province of the abductor.
      *
-     * @return              the home province of the person
+     * @return              the home province of the abductor
      */
     public String getProvince() {
         return province;
     }
 
     /**
-     * Sets the home province of the person.
+     * Sets the home province of the abductor.
      *
-     * @param province      the home province of the person
+     * @param province      the home province of the abductor
      */
     public void setProvince(String province) {
         this.province = province.trim();
     }
 
     /**
-     * Gets the home country of the person.
+     * Gets the home country of the abductor.
      *
-     * @return              the home country of the person
+     * @return              the home country of the abductor
      */
     public String getCountry() {
         return country;
     }
 
     /**
-     * Sets the home country of the person.
+     * Sets the home country of the abductor.
      *
-     * @param country       the home country of the person
+     * @param country       the home country of the abductor
      */
     public void setCountry(String country) {
         this.country = country.trim();
     }
 
     /**
-     * Gets the sex of the person.
+     * Gets the sex of the abductor.
      *
-     * @return              the sex of the person
+     * @return              the sex of the abductor
      */
     public int getSex() {
         return sex;
     }
 
     /**
-     * Sets the sex of the person.
+     * Sets the sex of the abductor.
      *
-     * @param sex           the sex of the person
+     * @param sex           the sex of the abductor
      */
     public void setSex(int sex) {
         this.sex = sex;
     }
 
     /**
-     * Gets the height of the person in feet.
+     * Gets the height of the abductor in feet.
      *
-     * @return              the height of the person in feet
+     * @return              the height of the abductor in feet
      */
     public int getFeet() {
         return feet;
     }
 
     /**
-     * Sets the height of the person in feet.
+     * Sets the height of the abductor in feet.
      *
-     * @param feet          he height of the person in feet
+     * @param feet          he height of the abductor in feet
      */
     public void setFeet(int feet) {
         this.feet = feet;
     }
 
     /**
-     * Gets the additional inches to the person's height.
+     * Gets the additional inches to the abductor's height.
      *
-     * @return              the additional inches to the person's height
+     * @return              the additional inches to the abductor's height
      */
     public int getInches() {
         return inches;
     }
 
     /**
-     * Sets the additional inches to the person's height.
+     * Sets the additional inches to the abductor's height.
      *
-     * @param inches        the additional inches to the person's height
+     * @param inches        the additional inches to the abductor's height
      */
     public void setInches(int inches) {
         this.inches = inches;
     }
 
     /**
-     * Gets the height of the person in centimeters.
+     * Gets the height of the abductor in centimeters.
      *
-     * @return              the height of the person in centimeters
+     * @return              the height of the abductor in centimeters
      */
     public double getCm() {
         return cm;
     }
 
     /**
-     * Sets the height of the person in centimeters.
+     * Sets the height of the abductor in centimeters.
      *
-     * @param cm            the height of the person in centimeters
+     * @param cm            the height of the abductor in centimeters
      */
     public void setCm(double cm) {
         this.cm = cm;
     }
 
     /**
-     * Gets the weight of the person.
+     * Gets the weight of the abductor.
      *
-     * @return              the weight of the person
+     * @return              the weight of the abductor
      */
     public double getWeight() {
         return weight;
     }
 
     /**
-     * Sets the weight of the person.
+     * Sets the weight of the abductor.
      *
-     * @param weight        the weight of the person
+     * @param weight        the weight of the abductor
      */
     public void setWeight(double weight) {
         this.weight = weight;
     }
 
     /**
-     * Gets the mass of the person in kilograms
+     * Gets the mass of the abductor in kilograms
      *
-     * @return              the mass of the person in kilograms
+     * @return              the mass of the abductor in kilograms
      */
     public double getMass() {
         return mass;
     }
 
     /**
-     * Sets the mass of the person in kilograms
+     * Sets the mass of the abductor in kilograms
      *
-     * @param mass          the mass of the person in kilograms
+     * @param mass          the mass of the abductor in kilograms
      */
     public void setMass(double mass) {
         this.mass = mass;
     }
 
     /**
-     * Gets the religion of the person.
+     * Gets the religion of the abductor.
      *
-     * @return              the religion of the person
+     * @return              the religion of the abductor
      */
     public int getReligion() {
         return religion;
     }
 
     /**
-     * Sets the religion of the person.
+     * Sets the religion of the abductor.
      *
-     * @param religion      the religion of the person
+     * @param religion      the religion of the abductor
      */
     public void setReligion(int religion) {
         this.religion = religion;
     }
 
     /**
-     * Gets the race of the person.
+     * Gets the race of the abductor.
      *
-     * @return              the race of the person
+     * @return              the race of the abductor
      */
     public int getRace() {
         return race;
     }
 
     /**
-     * Sets the race of the person.
+     * Sets the race of the abductor.
      *
-     * @param race          the race of the person
+     * @param race          the race of the abductor
      */
     public void setRace(int race) {
         this.race = race;
     }
 
     /**
-     * Gets the eye color of the person.
+     * Gets the eye color of the abductor.
      *
-     * @return              the eye color of the person
+     * @return              the eye color of the abductor
      */
     public int getEyeColor() {
         return eyeColor;
     }
 
     /**
-     * Sets the eye color of the person.
+     * Sets the eye color of the abductor.
      *
-     * @param eyeColor      the eye color of the person
+     * @param eyeColor      the eye color of the abductor
      */
     public void setEyeColor(int eyeColor) {
         this.eyeColor = eyeColor;
     }
 
     /**
-     * Gets the hair color of the person.
+     * Gets the hair color of the abductor.
      *
-     * @return              the hair color of the person
+     * @return              the hair color of the abductor
      */
     public int getHairColor() {
         return hairColor;
     }
 
     /**
-     * Sets the hair color of the person.
+     * Sets the hair color of the abductor.
      *
-     * @param hairColor     the hair color of the person
+     * @param hairColor     the hair color of the abductor
      */
     public void setHairColor(int hairColor) {
         this.hairColor = hairColor;
     }
 
     /**
-     * Gets the distinguishing marks of the person.
+     * Gets the distinguishing marks of the abductor.
      *
-     * @return              the distinguishing marks of the person
+     * @return              the distinguishing marks of the abductor
      */
     public String getMarks() {
         return marks;
     }
 
     /**
-     * Sets the distinguishing marks of the person.
+     * Sets the distinguishing marks of the abductor.
      *
-     * @param marks         the distinguishing marks of the person
+     * @param marks         the distinguishing marks of the abductor
      */
     public void setMarks(String marks) {
         this.marks = marks.trim();
     }
 
     /**
-     * Gets the relationship of the abductor to the person.
+     * Gets the relationship of the abductor to the abductor.
      *
-     * @return              the relationship of the abductor to the person
+     * @return              the relationship of the abductor to the abductor
      */
     public int getRelationToAbductor() {
         return relationToAbductor;
     }
 
     /**
-     * Sets the relationship of the abductor to the person.
+     * Sets the relationship of the abductor to the abductor.
      *
-     * @param relationToAbductor the relationship of the abductor to the person
+     * @param relationToAbductor the relationship of the abductor to the abductor
      */
     public void setRelationToAbductor(int relationToAbductor) {
         this.relationToAbductor = relationToAbductor;
     }
 
     /**
-     * Gets the personal effects worn by the person.
+     * Gets the abductoral effects worn by the abductor.
      *
-     * @return              the personal effects worn by the person
+     * @return              the abductoral effects worn by the abductor
      */
     public String getPersonalEffects() {
         return personalEffects;
     }
 
     /**
-     * Sets the personal effects worn by the person.
+     * Sets the abductoral effects worn by the abductor.
      *
-     * @param personalEffects the personal effects worn by the person
+     * @param personalEffects the abductoral effects worn by the abductor
      */
     public void setPersonalEffects(String personalEffects) {
         this.personalEffects = personalEffects.trim();
     }
 
     /**
-     * Gets the remarks to the person.
+     * Gets the remarks to the abductor.
      *
-     * @return              the remarks to the person
+     * @return              the remarks to the abductor
      */
     public String getRemarks() {
         return remarks;
     }
 
     /**
-     * Sets the remarks to the person.
+     * Sets the remarks to the abductor.
      *
-     * @param remarks       the remarks to the person
+     * @param remarks       the remarks to the abductor
      */
     public void setRemarks(String remarks) {
         this.remarks = remarks.trim();
     }
 
     /**
-     * Gets the photo of the person.
+     * Gets the photo of the abductor.
      *
-     * @return              the photo of the person
+     * @return              the photo of the abductor
      */
     public String getPhoto() {
         return photo;
     }
 
     /**
-     * Sets the photo of the person.
+     * Sets the photo of the abductor.
      *
-     * @param photo         the photo of the person
+     * @param photo         the photo of the abductor
      */
     public void setPhoto(String photo) {
         this.photo = photo.trim();
     }
 
     /**
-     * Gets the optional age-progressed photo of the person.
+     * Gets the optional age-progressed photo of the abductor.
      *
-     * @return              the optional age-progressed photo of the person
+     * @return              the optional age-progressed photo of the abductor
      */
     public String getAgedPhoto() {
         return agedPhoto;
     }
 
     /**
-     * Sets the optional age-progressed photo of the person.
+     * Sets the optional age-progressed photo of the abductor.
      *
-     * @param agedPhoto     the optional age-progressed photo of the person
+     * @param agedPhoto     the optional age-progressed photo of the abductor
      */
     public void setAgedPhoto(String agedPhoto) {
         this.agedPhoto = agedPhoto.trim();
     }
 
     /**
-     * Gets the optional DNA ID of the person.
+     * Gets the optional DNA ID of the abductor.
      *
-     * @return              the optional DNA ID of the person
+     * @return              the optional DNA ID of the abductor
      */
     public String getCodisId() {
         return codisId;
     }
 
     /**
-     * Sets the optional DNA ID of the person.
+     * Sets the optional DNA ID of the abductor.
      *
-     * @param codisId       the optional DNA ID of the person
+     * @param codisId       the optional DNA ID of the abductor
      */
     public void setCodisId(String codisId) {
         this.codisId = codisId.trim();
     }
 
     /**
-     * Gets the optional fingerprint ID of the person.
+     * Gets the optional fingerprint ID of the abductor.
      *
-     * @return              the optional fingerprint ID of the person
+     * @return              the optional fingerprint ID of the abductor
      */
     public String getAfisId() {
         return afisId;
     }
 
     /**
-     * Sets the optional fingerprint ID of the person.
+     * Sets the optional fingerprint ID of the abductor.
      *
-     * @param afisId        the optional fingerprint ID of the person
+     * @param afisId        the optional fingerprint ID of the abductor
      */
     public void setAfisId(String afisId) {
         this.afisId = afisId.trim();
     }
 
     /**
-     * Gets the optional dental ID of the person.
+     * Gets the optional dental ID of the abductor.
      *
-     * @return              the optional dental ID of the person
+     * @return              the optional dental ID of the abductor
      */
     public String getDentalId() {
         return dentalId;
     }
 
     /**
-     * Sets the optional dental ID of the person.
+     * Sets the optional dental ID of the abductor.
      *
-     * @param dentalId      the optional dental ID of the person
+     * @param dentalId      the optional dental ID of the abductor
      */
     public void setDentalId(String dentalId) {
         this.dentalId = dentalId.trim();
@@ -834,18 +839,18 @@ public class AbductorForm extends ActionForm {
     }
 
     /**
-     * Gets the uploaded photo of the person.
+     * Gets the uploaded photo of the abductor.
      *
-     * @return              the uploaded photo of the person
+     * @return              the uploaded photo of the abductor
      */
     public FormFile getPhotoFile() {
         return photoFile;
     }
 
     /**
-     * Sets the uploaded photo of the person.
+     * Sets the uploaded photo of the abductor.
      *
-     * @param photoFile     the uploaded photo of the person
+     * @param photoFile     the uploaded photo of the abductor
      */
     public void setPhotoFile(FormFile photoFile) {
         this.photoFile = photoFile;
@@ -869,89 +874,107 @@ public class AbductorForm extends ActionForm {
         this.age = age;
     }
 
-    @Override
-    public void reset(ActionMapping mapping, ServletRequest request) {
-        super.reset(mapping, request);
-
-        this.id = 0;
-        this.status = 0;
-        this.type = 0;
-        this.firstName = "";
-        this.nickname = "";
-        this.middleName = "";
-        this.lastName = "";
-        this.birthMonth = 1;
-        this.birthDay = 1;
-        this.birthYear = 1929;
-        this.street = "";
-        this.city = "";
-        this.province = "";
-        this.country = "";
-        this.sex = 0;
-        this.feet = 1;
-        this.inches = 0;
-        this.cm = 0;
-        this.weight = 0;
-        this.mass = 0;
-        this.religion = 0;
-        this.race = 0;
-        this.eyeColor = 0;
-        this.hairColor = 0;
-        this.relationToAbductor = 0;
-        this.marks = "";
-        this.personalEffects = "";
-        this.remarks = "";
-        this.photo = "";
-        this.photoFile = null;
-        this.agedPhoto = "";
-        this.agedPhotoFile = null;
-        this.codisId = "";
-        this.afisId = "";
-        this.dentalId = "";
-        this.age = 0;
+    /**
+     * Gets the ID of the person.
+     *
+     * @return              the ID of the person
+     */
+    public int getPersonId() {
+        return personId;
     }
 
-    @Override
-    public void reset(ActionMapping mapping, HttpServletRequest request) {
-        super.reset(mapping, request);
-
-        this.id = 0;
-        this.status = 0;
-        this.type = 0;
-        this.firstName = "";
-        this.nickname = "";
-        this.middleName = "";
-        this.lastName = "";
-        this.birthMonth = 1;
-        this.birthDay = 1;
-        this.birthYear = 1929;
-        this.street = "";
-        this.city = "";
-        this.province = "";
-        this.country = "";
-        this.sex = 0;
-        this.feet = 1;
-        this.inches = 0;
-        this.cm = 0;
-        this.weight = 0;
-        this.mass = 0;
-        this.religion = 0;
-        this.race = 0;
-        this.eyeColor = 0;
-        this.hairColor = 0;
-        this.relationToAbductor = 0;
-        this.marks = "";
-        this.personalEffects = "";
-        this.remarks = "";
-        this.photo = "";
-        this.photoFile = null;
-        this.agedPhoto = "";
-        this.agedPhotoFile = null;
-        this.codisId = "";
-        this.afisId = "";
-        this.dentalId = "";
-        this.age = 0;
+    /**
+     * Sets the ID of the person.
+     *
+     * @param personId      the ID of the person
+     */
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
+
+//    @Override
+//    public void reset(ActionMapping mapping, ServletRequest request) {
+//        super.reset(mapping, request);
+//
+//        this.id = 0;
+//        this.status = 0;
+//        this.type = 0;
+//        this.firstName = "";
+//        this.nickname = "";
+//        this.middleName = "";
+//        this.lastName = "";
+//        this.birthMonth = 1;
+//        this.birthDay = 1;
+//        this.birthYear = 1929;
+//        this.street = "";
+//        this.city = "";
+//        this.province = "";
+//        this.country = "";
+//        this.sex = 0;
+//        this.feet = 1;
+//        this.inches = 0;
+//        this.cm = 0;
+//        this.weight = 0;
+//        this.mass = 0;
+//        this.religion = 0;
+//        this.race = 0;
+//        this.eyeColor = 0;
+//        this.hairColor = 0;
+//        this.relationToAbductor = 0;
+//        this.marks = "";
+//        this.personalEffects = "";
+//        this.remarks = "";
+//        this.photo = "";
+//        this.photoFile = null;
+//        this.agedPhoto = "";
+//        this.agedPhotoFile = null;
+//        this.codisId = "";
+//        this.afisId = "";
+//        this.dentalId = "";
+//        this.age = 0;
+//    }
+//
+//    @Override
+//    public void reset(ActionMapping mapping, HttpServletRequest request) {
+//        super.reset(mapping, request);
+//
+//        this.id = 0;
+//        this.status = 0;
+//        this.type = 0;
+//        this.firstName = "";
+//        this.nickname = "";
+//        this.middleName = "";
+//        this.lastName = "";
+//        this.birthMonth = 1;
+//        this.birthDay = 1;
+//        this.birthYear = 1929;
+//        this.street = "";
+//        this.city = "";
+//        this.province = "";
+//        this.country = "";
+//        this.sex = 0;
+//        this.feet = 1;
+//        this.inches = 0;
+//        this.cm = 0;
+//        this.weight = 0;
+//        this.mass = 0;
+//        this.religion = 0;
+//        this.race = 0;
+//        this.eyeColor = 0;
+//        this.hairColor = 0;
+//        this.relationToAbductor = 0;
+//        this.marks = "";
+//        this.personalEffects = "";
+//        this.remarks = "";
+//        this.photo = "";
+//        this.photoFile = null;
+//        this.agedPhoto = "";
+//        this.agedPhotoFile = null;
+//        this.codisId = "";
+//        this.afisId = "";
+//        this.dentalId = "";
+//        this.age = 0;
+//    }
 
     /**
      * Returns a String representation of this data transfer object.
@@ -982,7 +1005,7 @@ public class AbductorForm extends ActionForm {
         content += "\nEye Color: " + eyeColor;
         content += "\nHair Color: " + hairColor;
         content += "\nDistinguishing Marks: " + marks;
-        content += "\nPersonal Effects: " + personalEffects;
+        content += "\nabductoral Effects: " + personalEffects;
         content += "\nRelation: " + relationToAbductor;
         content += "\nRemarks: " + remarks;
         content += "\nPhoto Filename: " + photo;

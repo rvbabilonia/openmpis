@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
         <script type="text/javascript" src="scripts/openmpis.js"></script>
-        <bean:message key="case.title"/>
+        <title><bean:message key="abductor.title"/></title>
     </head>
     <body onload="javascript: setCities('${abductorForm.country}', '${abductorForm.province}', '${abductorForm.city}');
         setProvinces('${abductorForm.country}', '${abductorForm.province}');
@@ -33,29 +33,29 @@
                     <c:when test="${currentuser.groupId == 1}">
                         <bean:message key="encoder.case.menu"/>
                     </c:when>
+                    <c:when test="${currentuser.groupId == 2}">
+                        <bean:message key="investigator.case.menu"/>
+                    </c:when>
+                    <c:otherwise>
+                        <bean:message key="home.menu"/>
+                    </c:otherwise>
                 </c:choose>
             </div>
 
             <!-- Content -->
             <div id="content">
                 <div id="contentitem">
+                    [${action}]
                     <c:choose>
-                        <c:when test="${currentuser.groupId == 1}">
-                            <c:choose>
-                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
-                                    <bean:message key="abductor.add"/>
-                                </c:when>
-                                <c:when test="${action == 'editAbductor'}">
-                                    <bean:message key="abductor.edit"/>
-                                </c:when>
-                                <c:when test="${action == 'viewAbductor'}">
-                                    <bean:message key="abductor.view"/>
-                                </c:when>
-                            </c:choose>
+                        <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
+                            <bean:message key="abductor.add"/>
                         </c:when>
-                        <c:otherwise>
-                            <bean:message key="case.view"/>
-                        </c:otherwise>
+                        <c:when test="${action == 'editAbductor'}">
+                            <bean:message key="abductor.edit"/>
+                        </c:when>
+                        <c:when test="${action == 'viewAbductor'}">
+                            <bean:message key="abductor.view"/>
+                        </c:when>
                     </c:choose>
                     <noscript>
                         <bean:message key="error.javascript.disabled"/>
