@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="report.title"/>
+        <title><bean:message key="report.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -77,8 +77,8 @@
                                 </div>
                                 <div class="hiddencell">
                                     <bean:write name="reportForm" property="firstName"/>
-                                    <c:if test="${reportForm.nickname != null}">
-                                        "<bean:write name="reportForm" property="firstName"/>"
+                                    <c:if test="${!((reportForm.nickname == '') || (reportForm.nickname == null))}">
+                                        "<bean:write name="reportForm" property="nickname"/>"
                                     </c:if>
                                     <bean:write name="reportForm" property="lastName"/>
                                 </div>
