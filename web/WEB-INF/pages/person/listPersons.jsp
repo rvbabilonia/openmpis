@@ -18,7 +18,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="case.title"/>
+        <title><bean:message key="case.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -37,7 +37,7 @@
                         <bean:message key="investigator.case.menu"/>
                     </c:when>
                     <c:otherwise>
-                        <bean:message key="global.menu"/>
+                        <bean:message key="home.menu"/>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -49,32 +49,41 @@
                         <bean:message key="case.menu"/>
                     </div>
                     <c:choose>
-                        <c:when test="${type == 'allmissing'}">
+                        <c:when test="${param.action == 'listAllMissing'}">
                             <bean:message key="case.list.allmissing" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'missing'}">
+                        <c:when test="${param.action == 'listMissing'}">
                             <bean:message key="case.list.missing" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'familyabduction'}">
+                        <c:when test="${param.action == 'listFamilyAbduction'}">
                             <bean:message key="case.list.familyabduction" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'nonfamilyabduction'}">
-                            <bean:message key="case.list.nonfamily" arg0="${currentpage}" arg1="${totalpages}"/>
+                        <c:when test="${param.action == 'listNonFamilyAbduction'}">
+                            <bean:message key="case.list.nonfamilyabduction" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'runaway'}">
+                        <c:when test="${param.action == 'listRunaway'}">
                             <bean:message key="case.list.runaway" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'unknown'}">
+                        <c:when test="${param.action == 'listUnknown'}">
                             <bean:message key="case.list.unknown" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'abandoned'}">
+                        <c:when test="${param.action == 'listFound'}">
+                            <bean:message key="case.list.found" arg0="${currentpage}" arg1="${totalpages}"/>
+                        </c:when>
+                        <c:when test="${param.action == 'listAbandoned'}">
                             <bean:message key="case.list.abandoned" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'throwaway'}">
+                        <c:when test="${param.action == 'listThrowaway'}">
                             <bean:message key="case.list.throwaway" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
-                        <c:when test="${type == 'unidentified'}">
+                        <c:when test="${param.action == 'listUnidentified'}">
                             <bean:message key="case.list.unidentified" arg0="${currentpage}" arg1="${totalpages}"/>
+                        </c:when>
+                        <c:when test="${param.action == 'listSolved'}">
+                            <bean:message key="case.list.solved" arg0="${currentpage}" arg1="${totalpages}"/>
+                        </c:when>
+                        <c:when test="${param.action == 'listUnsolved'}">
+                            <bean:message key="case.list.unsolved" arg0="${currentpage}" arg1="${totalpages}"/>
                         </c:when>
                         <c:when test="${currentuser.groupId == 1}">
                             <bean:message key="encoder.case.list" arg0="${currentpage}" arg1="${totalpages}"/>
@@ -135,7 +144,14 @@
                                                             </c:choose>
                                                         </p>
                                                         <p style="text-align: center;">
-                                                            ${personlist[(4 * i) + j].missingFromCity}, ${personlist[(4 * i) + j].missingFromProvince}
+                                                            <c:choose>
+                                                                <c:when test="${personlist[(4 * i) + j].type < 5}">
+                                                                    ${personlist[(4 * i) + j].missingFromCity}, ${personlist[(4 * i) + j].missingFromProvince}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${personlist[(4 * i) + j].institutionCity}, ${personlist[(4 * i) + j].institutionProvince}
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </p>
                                                         <p style="text-align: center;">
                                                             <bean:message key="type.${personlist[(4 * i) + j].type}"/>
