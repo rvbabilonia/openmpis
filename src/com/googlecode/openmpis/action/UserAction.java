@@ -346,7 +346,12 @@ public class UserAction extends DispatchAction {
         if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1) || (currentUser.getGroupId() == 2)) {
             // Retrieve user
             try {
-                int id = Integer.parseInt(request.getParameter("id"));
+                int id = 0;
+                if (request.getParameter("id") != null) {
+                    id = Integer.parseInt(request.getParameter("id"));
+                } else if (request.getParameter("id") == null) {
+                    id = currentUser.getId();
+                }
                 User user = userService.getUserById(id);
 
                 // Return user
@@ -1020,6 +1025,7 @@ public class UserAction extends DispatchAction {
         document.add(table);
         if (currentUser != null) {
             if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+                // List administrators
                 document.setHeader(new HeaderFooter(new Phrase("List of administrators as of " + date), false));
                 document.newPage();
                 float[] widths = {0.03f, 0.07f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.05f};
@@ -1046,16 +1052,9 @@ public class UserAction extends DispatchAction {
                 }
                 document.add(pdfptable);
 
+                // List encoders
                 document.setHeader(new HeaderFooter(new Phrase("List of encoders as of " + date), false));
                 document.newPage();
-                widths[0] = 0.03f;
-                widths[1] = 0.07f;
-                widths[2] = 0.1f;
-                widths[3] = 0.1f;
-                widths[4] = 0.1f;
-                widths[5] = 0.1f;
-                widths[6] = 0.2f;
-                widths[7] = 0.05f;
                 pdfptable = new PdfPTable(widths);
                 pdfptable.setWidthPercentage(100);
                 pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
@@ -1079,16 +1078,9 @@ public class UserAction extends DispatchAction {
                 }
                 document.add(pdfptable);
 
+                // List investigators
                 document.setHeader(new HeaderFooter(new Phrase("List of investigators as of " + date), false));
                 document.newPage();
-                widths[0] = 0.03f;
-                widths[1] = 0.07f;
-                widths[2] = 0.1f;
-                widths[3] = 0.1f;
-                widths[4] = 0.1f;
-                widths[5] = 0.1f;
-                widths[6] = 0.2f;
-                widths[7] = 0.05f;
                 pdfptable = new PdfPTable(widths);
                 pdfptable.setWidthPercentage(100);
                 pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
