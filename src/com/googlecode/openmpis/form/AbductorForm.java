@@ -18,11 +18,7 @@
  */
 package com.googlecode.openmpis.form;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 
 /**
@@ -189,6 +185,10 @@ public class AbductorForm extends ActionForm {
      * The ID of the person to whom this abductor is attributed
      */
     private int personId;
+    /**
+     * Status if birth date is known
+     */
+    private boolean knownBirthDate;
 
     /**
      * Gets the ID of the abductor.
@@ -892,89 +892,23 @@ public class AbductorForm extends ActionForm {
         this.personId = personId;
     }
 
-//    @Override
-//    public void reset(ActionMapping mapping, ServletRequest request) {
-//        super.reset(mapping, request);
-//
-//        this.id = 0;
-//        this.status = 0;
-//        this.type = 0;
-//        this.firstName = "";
-//        this.nickname = "";
-//        this.middleName = "";
-//        this.lastName = "";
-//        this.birthMonth = 1;
-//        this.birthDay = 1;
-//        this.birthYear = 1929;
-//        this.street = "";
-//        this.city = "";
-//        this.province = "";
-//        this.country = "";
-//        this.sex = 0;
-//        this.feet = 1;
-//        this.inches = 0;
-//        this.cm = 0;
-//        this.weight = 0;
-//        this.mass = 0;
-//        this.religion = 0;
-//        this.race = 0;
-//        this.eyeColor = 0;
-//        this.hairColor = 0;
-//        this.relationToAbductor = 0;
-//        this.marks = "";
-//        this.personalEffects = "";
-//        this.remarks = "";
-//        this.photo = "";
-//        this.photoFile = null;
-//        this.agedPhoto = "";
-//        this.agedPhotoFile = null;
-//        this.codisId = "";
-//        this.afisId = "";
-//        this.dentalId = "";
-//        this.age = 0;
-//    }
-//
-//    @Override
-//    public void reset(ActionMapping mapping, HttpServletRequest request) {
-//        super.reset(mapping, request);
-//
-//        this.id = 0;
-//        this.status = 0;
-//        this.type = 0;
-//        this.firstName = "";
-//        this.nickname = "";
-//        this.middleName = "";
-//        this.lastName = "";
-//        this.birthMonth = 1;
-//        this.birthDay = 1;
-//        this.birthYear = 1929;
-//        this.street = "";
-//        this.city = "";
-//        this.province = "";
-//        this.country = "";
-//        this.sex = 0;
-//        this.feet = 1;
-//        this.inches = 0;
-//        this.cm = 0;
-//        this.weight = 0;
-//        this.mass = 0;
-//        this.religion = 0;
-//        this.race = 0;
-//        this.eyeColor = 0;
-//        this.hairColor = 0;
-//        this.relationToAbductor = 0;
-//        this.marks = "";
-//        this.personalEffects = "";
-//        this.remarks = "";
-//        this.photo = "";
-//        this.photoFile = null;
-//        this.agedPhoto = "";
-//        this.agedPhotoFile = null;
-//        this.codisId = "";
-//        this.afisId = "";
-//        this.dentalId = "";
-//        this.age = 0;
-//    }
+    /**
+     * Checks if birth date is known.
+     *
+     * @return              <code>true</code> if birth date is known; <code>false</code> otherwise
+     */
+    public boolean isKnownBirthDate() {
+        return knownBirthDate;
+    }
+
+    /**
+     * Sets birth date as known or not.
+     *
+     * @param knownBirthDate <code>true</code> if birth date is known; <code>false</code> otherwise
+     */
+    public void setKnownBirthDate(boolean knownBirthDate) {
+        this.knownBirthDate = knownBirthDate;
+    }
 
     /**
      * Returns a String representation of this data transfer object.
