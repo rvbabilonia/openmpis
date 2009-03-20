@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="statistics.title"/>
+        <title><bean:message key="statistics.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -52,7 +52,7 @@
                         <bean:message key="statistics.content.missing" arg0="${missingcount}" arg1="${familyabductioncount}" arg2="${nonfamilyabductioncount}" arg3="${runawaycount}" arg4="${unknowncount}"/>
                     </p>
                     <p class="contentclass">
-                        <bean:message key="statistics.content.found" arg0="${abandonedcount}" arg1="${throwawaycount}" arg2="${unidentifiedcount}"/>
+                        <bean:message key="statistics.content.found" arg0="${foundcount}" arg1="${abandonedcount}" arg2="${throwawaycount}" arg3="${unidentifiedcount}"/>
                     </p>
                     <p class="contentclass">
                         <bean:message key="statistics.content.relatives" arg0="${relativecount}"/>
