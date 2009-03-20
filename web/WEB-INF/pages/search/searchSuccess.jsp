@@ -18,7 +18,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="case.title"/>
+        <title><bean:message key="case.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -135,7 +135,7 @@
                                                     </div>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <div class="cell" style="width: 25%;"></div>
+                                                    <div class="hiddencell" style="width: 25%;"></div>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>

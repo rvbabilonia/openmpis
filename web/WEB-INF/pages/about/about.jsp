@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <bean:message key="about.title"/>
+        <title><bean:message key="about.title"/></title>
     </head>
     <body>
         <div id="container">
