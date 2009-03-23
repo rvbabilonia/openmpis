@@ -177,7 +177,7 @@
             <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="view-person" path="/WEB-INF/pages/person/viewPersonForm.jsp"/>
             <forward name="add-person"  path="/WEB-INF/pages/session/personForm.jsp"/>
-            <forward name="add-person-redo"  path="/WEB-INF/pages/session/personForm.jsp"/>
+            <forward name="add-person-redo" path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="edit-person" path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="edit-person-redo" path="/WEB-INF/pages/session/personForm.jsp"/>
             <forward name="delete-person" path="/WEB-INF/pages/session/deletePersonForm.jsp"/>
@@ -218,6 +218,7 @@
                 input="/WEB-INF/pages/session/abductorForm.jsp"
                 validate="false"
                 parameter="action">
+            <forward name="list-person" redirect="true" path="/viewCase.do?action=list"/>
             <forward name="view-abductor" path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
             <forward name="add-abductor-redo"  path="/WEB-INF/pages/session/abductorForm.jsp"/>
