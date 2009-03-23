@@ -95,7 +95,7 @@ h3 {
     background-color: #cccccc;
 }
 
-.feedbackbuttonclass, .loginbuttonclass, .userbuttonclass, .casebuttonclass {
+.feedbackbuttonclass, .loginbuttonclass, .userbuttonclass, .casebuttonclass, .relativebuttonclass, .abductorbuttonclass, .reportbuttonclass {
     border: 1px solid #6c6c6c;
     background-color: #cccccc;
     margin-left: 9.4em;
