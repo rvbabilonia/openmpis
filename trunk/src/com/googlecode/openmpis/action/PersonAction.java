@@ -510,7 +510,7 @@ public class PersonAction extends DispatchAction {
                 personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
                 personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
             }
-            personForm.setProgressReports(countReportsForPerson(person.getId()));
+            personForm.setProgressReports(reportService.countAllReportsForPerson(person.getId()));
 
             // Check if there exists a session
             if (request.getSession().getAttribute("currentuser") != null) {
@@ -574,7 +574,7 @@ public class PersonAction extends DispatchAction {
                 personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
                 personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
             }
-            personForm.setProgressReports(countReportsForPerson(person.getId()));
+            personForm.setProgressReports(reportService.countAllReportsForPerson(person.getId()));
 
             // Check if form is valid
             if (isValidPerson(request, form)) {
@@ -733,6 +733,8 @@ public class PersonAction extends DispatchAction {
                     }
                     if (!((personForm.getType() == 1) || (personForm.getType() == 2))) {
                         person.setAbductorId(null);
+                        person.setRelationToAbductor(null);
+                        personService.updatePersonAbductor(person);
                     }
                     boolean isUpdated = personService.updatePerson(person);
 
@@ -791,7 +793,7 @@ public class PersonAction extends DispatchAction {
 
     /**
      * Prepares the form for deleting a person.
-     * This is the erase person action called from the Struts framework.
+     * This is the erase abductor action called from the Struts framework.
      *
      * @param mapping       the ActionMapping used to select this instance
      * @param form          the optional ActionForm bean for this request
@@ -800,41 +802,59 @@ public class PersonAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward erasePerson(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            PersonForm personForm = (PersonForm) form;
+            // Retrieve person
+            try {
+                Person person = personService.getPersonById(personForm.getId());
+                personForm.setFirstName(person.getFirstName());
+                personForm.setNickname(person.getNickname());
+                personForm.setLastName(person.getLastName());
+                if (person.getAbductorId() != null) {
+                    if (personService.countPersonsByAbductorId(person.getAbductorId()) == 1) {
+                        personForm.setAbductorId(person.getAbductorId());
+                        personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
+                        personForm.setAbductorNickname(abductorService.getAbductorById(person.getAbductorId()).getNickname());
+                        personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
+                    }
+                }
+                if (person.getRelativeId() != null) {
+                    if (personService.countPersonsByRelativeId(person.getRelativeId()) == 1) {
+                        personForm.setRelativeId(person.getRelativeId());
+                        personForm.setRelativeFirstName(relativeService.getRelativeById(person.getRelativeId()).getFirstName());
+                        personForm.setRelativeLastName(relativeService.getRelativeById(person.getRelativeId()).getLastName());
+                    }
+                }
+                // Generate 4-digit random code
+                personForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                if (currentUser.getGroupId() == 1) {
+                    return mapping.findForward(Constants.DELETE_PERSON);
+                } else {
+                    return mapping.findForward(Constants.UNAUTHORIZED);
+                }
+            } catch (NumberFormatException nfe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current person is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    PersonForm personForm = (PersonForm) form;
-    // Retrieve person
-    Person person = (Person) personService.getPersonById(new Integer(personForm.getId()));
-
-    personForm.setPersonname(person.getPersonname());
-    // Generate 4-digit random code
-    personForm.setCode((int) (Math.random() * 9999) + 1000);
-
-    // Delete what you created/encoded
-    // Administrator can delete all except administrators
-    if ((currentUser.getId() == person.getCreatorId()) ||
-    ((currentUser.getGroupId() == 0) && (person.getGroupId() > 0))) {
-    return mapping.findForward(Constants.DELETE_USER);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
      * Deletes a person from the database.
      * This is the delete person action called from the HTML form.
@@ -846,83 +866,127 @@ public class PersonAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward deletePerson(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            PersonForm personForm = (PersonForm) form;
+
+            try {
+                Person person = personService.getPersonById(personForm.getId());
+
+                // Check if codes match
+                if (personForm.getCode() == personForm.getUserCode()) {
+                    // Encoder can delete a person
+                    if (currentUser.getGroupId() == 1) {
+                        // Delete person
+                        personService.deletePerson(person.getId());
+
+                        // Delete person photos
+                        String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + createDirectoryName(person.getId());
+                        File photoDirectory = new File(absolutePhotoDirectory);
+                        if (photoDirectory.exists()) {
+                            for (File primaryFile : photoDirectory.listFiles()) {
+                                if (primaryFile.isDirectory()) {
+                                    for (File secondaryFile : primaryFile.listFiles()) {
+                                        secondaryFile.delete();
+                                    }
+                                }
+                                primaryFile.delete();
+                            }
+                            photoDirectory.delete();
+                        }
+
+                        // Delete relative
+                        if (person.getRelativeId() != null) {
+                            if (personService.countPersonsByRelativeId(person.getRelativeId()) == 1) {
+                                relativeService.deleteRelative(person.getRelativeId());
+                            }
+                        }
+
+                        // Delete abductor
+                        if (person.getAbductorId() != null) {
+                            if (personService.countPersonsByAbductorId(person.getAbductorId()) == 1) {
+                                abductorService.deleteAbductor(person.getAbductorId());
+
+                                // Delete abductor photos
+                                absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + "abductor-" + createDirectoryName(person.getAbductorId());
+                                photoDirectory = new File(absolutePhotoDirectory);
+                                if (photoDirectory.exists()) {
+                                    for (File primaryFile : photoDirectory.listFiles()) {
+                                        if (primaryFile.isDirectory()) {
+                                            for (File secondaryFile : primaryFile.listFiles()) {
+                                                secondaryFile.delete();
+                                            }
+                                        }
+                                        primaryFile.delete();
+                                    }
+                                    photoDirectory.delete();
+                                }
+                            }
+                        }
+
+                        // Log person deletion event
+                        Log deleteLog = new Log();
+                        deleteLog.setLog("Person " + person.getFirstName() + " \"" + person.getNickname() + "\" " + person.getLastName() + " was deleted by " + currentUser.getUsername() + ".");
+                        deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                        logService.insertLog(deleteLog);
+                        logger.info(deleteLog.toString());
+
+                        // Return person and operation type
+                        request.setAttribute("person", person);
+                        request.setAttribute("operation", "delete");
+
+                        return mapping.findForward(Constants.DELETE_PERSON_SUCCESS);
+                    } else {
+                        return mapping.findForward(Constants.UNAUTHORIZED);
+                    }
+                } else {
+                    personForm.setFirstName(person.getFirstName());
+                    personForm.setNickname(person.getNickname());
+                    personForm.setLastName(person.getLastName());
+                    if (person.getAbductorId() != null) {
+                        if (personService.countPersonsByAbductorId(person.getAbductorId()) == 1) {
+                            personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
+                            personForm.setAbductorNickname(abductorService.getAbductorById(person.getAbductorId()).getNickname());
+                            personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
+                        }
+                    }
+                    if (person.getRelativeId() != null) {
+                        if (personService.countPersonsByRelativeId(person.getRelativeId()) == 1) {
+                            personForm.setRelativeFirstName(relativeService.getRelativeById(person.getRelativeId()).getFirstName());
+                            personForm.setRelativeLastName(relativeService.getRelativeById(person.getRelativeId()).getLastName());
+                        }
+                    }
+                    // Generate 4-digit random code
+                    personForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                    // Return duplicate personname error
+                    ActionMessages errors = new ActionMessages();
+                    errors.add("usercode", new ActionMessage("error.code.mismatch"));
+                    saveErrors(request, errors);
+
+                    logger.error("Codes did not match.");
+
+                    return mapping.findForward(Constants.DELETE_PERSON_REDO);
+                }
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current person is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    PersonForm personForm = (PersonForm) form;
-
-    Person person = (User) personService.getPersonById(new Integer(personForm.getId()));
-
-    // Check if codes match
-    if (personForm.getCode() == personForm.getPersonCode()) {
-    // Administrator can delete a person except his creator/encoder
-    // Person can delete a person that he encoded
-    if (((currentUser.getGroupId() == 0) && (currentUser.getCreatorId() != person.getId())) ||
-    ((currentUser.getGroupId() == 1) && (currentUser.getId() == person.getCreatorId()))) {
-    // Delete person
-    personService.deletePerson(new Integer(person.getId()));
-
-    // Log person deletion event
-    Log deleteLog = new Log();
-    deleteLog.setLog("Person " + person.getPersonname() + " was deleted by " + currentUser.getPersonname() + ".");
-    deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-    logService.insertLog(deleteLog);
-    logger.info(deleteLog.toString());
-
-    // Retrieve mail properties
-    Configuration config = new Configuration("mail.properties");
-    // Check if nickname sending is enabled
-    if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
-    Mail mail = new Mail();
-
-    // Send nickname
-    mail.send(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), "nickname",
-    "Account Deletion",
-    "Dear " + "firstname" + "," +
-    "\n\nThis is to inform you that after a long deliberation, your account has to be deleted." +
-    "\n\nIf you have any questions, please feel free to nickname me." +
-    "\n\nYours truly," +
-    "\n" + currentUser.getFirstName());
-    }
-
-    // Return personname and operation type
-    request.setAttribute("personname", person.getPersonname());
-    request.setAttribute("operation", "delete");
-
-    return mapping.findForward(Constants.DELETE_SUCCESS);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    // Generate 4-digit random code
-    personForm.setCode((int) (Math.random() * 9999) + 1000);
-    personForm.setPersonname(person.getPersonname());
-
-    // Return duplicate personname error
-    ActionMessages errors = new ActionMessages();
-    errors.add("personcode", new ActionMessage("error.code.mismatch"));
-    saveErrors(request, errors);
-
-    logger.error("Codes did not match.");
-
-    return mapping.findForward(Constants.DELETE_REDO);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
      * Prints the person's poster in PDF file.
      *
@@ -1288,16 +1352,6 @@ public class PersonAction extends DispatchAction {
         }
 
         return isValid;
-    }
-
-    /**
-     * Counts the province of reports for a given person.
-     *
-     * @return              the province of reports associated with a given person
-     * @throws java.lang.Exception
-     */
-    private int countReportsForPerson(Integer personId) throws Exception {
-        return reportService.countAllReportsForPerson(personId);
     }
 
     /**
