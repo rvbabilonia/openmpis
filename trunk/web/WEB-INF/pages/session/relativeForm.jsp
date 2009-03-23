@@ -67,11 +67,11 @@
                     <html:form method="post" action="viewRelative" styleClass="adduserclass">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
+                                <c:when test="${((action == 'newRelative') && (relativeForm.id == 0)) || (action == 'addRelative')}">
                                     <html:hidden property="action" value="addRelative"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
-                                <c:when test="${(action == 'viewRelative') || (action == 'editRelative')}">
+                                <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || ((action == 'newRelative') && (relativeForm.id != 0))}">
                                     <html:hidden property="action" value="editRelative"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
@@ -185,11 +185,11 @@
                             <p class="contentclass">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
-                                        <c:when test="${(action == 'newRelative') || (action == 'addRelative')}">
+                                        <c:when test="${((action == 'newRelative') && (relativeForm.id == 0)) || (action == 'addRelative')}">
                                             <bean:message key="relative.add.buttons"/>
                                         </c:when>
-                                        <c:when test="${(action == 'viewRelative') || (action == 'editRelative') || (action == 'editPerson') || (action == 'addPerson')}">
-                                            <bean:message key="relative.delete.buttons"/>
+                                        <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || ((action == 'newRelative') && (relativeForm.id != 0))}">
+                                            <bean:message key="relative.delete.buttons" arg0="${relativeForm.id}"/>
                                         </c:when>
                                     </c:choose>
                                 </c:if>
