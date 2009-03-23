@@ -9,6 +9,7 @@
         <flushOnExecute statement="insertSighting"/>
         <flushOnExecute statement="insertFeedback"/>
         <flushOnExecute statement="deleteMessage"/>
+        <flushOnExecute statement="updateMessage"/>
         <flushInterval hours="24"/>
     </cacheModel>
 
