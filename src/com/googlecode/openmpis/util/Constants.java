@@ -51,6 +51,10 @@ public abstract class Constants {
      */
     public static final String LIST_USER = "list-user";
     /**
+     * The logical name of the forwarding instance for unsuccessful user viewing
+     */
+    public static final String LIST_USER_REDO = "list-user-redo";
+    /**
      * The logical name of the forwarding instance for adding new user
      */
     public static final String ADD_USER = "add-user";
