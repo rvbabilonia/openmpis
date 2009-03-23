@@ -320,8 +320,10 @@ public class RelativeAction extends DispatchAction {
             try {
                 personId = Integer.parseInt(request.getParameter("personid"));
                 Person person = personService.getPersonById(personId);
-                relativeForm.setRelationToRelative(person.getRelationToRelative());
                 relativeForm.setId(person.getRelativeId());
+                if (person.getRelativeId() == Integer.parseInt(request.getParameter("id"))) {
+                    relativeForm.setRelationToRelative(person.getRelationToRelative());
+                }
             } catch (NumberFormatException nfe) {
             } catch (NullPointerException npe) {
             }
@@ -466,6 +468,7 @@ public class RelativeAction extends DispatchAction {
     }
 
     /**
+     * Prepares the form for deleting an relative.
      * This is the erase relative action called from the Struts framework.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -475,42 +478,48 @@ public class RelativeAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward eraseRelative(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            RelativeForm relativeForm = (RelativeForm) form;
+            // Retrieve relative
+            try {
+                Relative relative = relativeService.getRelativeById(relativeForm.getId());
+                relativeForm.setFirstName(relative.getFirstName());
+                relativeForm.setLastName(relative.getLastName());
+                // Generate 4-digit random code
+                relativeForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                // Delete what you created/encoded
+                // Administrator can delete all except administrators
+                if (currentUser.getGroupId() == 1) {
+                    request.setAttribute("personcount", personService.countPersonsByRelativeId(relative.getId()));
+                    return mapping.findForward(Constants.DELETE_RELATIVE);
+                } else {
+                    return mapping.findForward(Constants.UNAUTHORIZED);
+                }
+            } catch (NumberFormatException nfe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current relative is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    RelativeForm relativeForm = (RelativeForm) form;
-    // Retrieve relative
-    Relative relative = relativeService.getPersonById(new Integer(relativeForm.getId()));
-
-    relativeForm.setPersonname(relative.getPersonname());
-    // Generate 4-digit random code
-    relativeForm.setCode((int) (Math.random() * 9999) + 1000);
-
-    // Delete what you created/encoded
-    // Administrator can delete all except administrators
-    if ((currentUser.getId() == relative.getCreatorId()) ||
-    ((currentUser.getGroupId() == 0) && (relative.getGroupId() > 0))) {
-    return mapping.findForward(Constants.DELETE_USER);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
+     * Deletes an relative from the database.
      * This is the delete relative action called from the HTML form.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -520,83 +529,69 @@ public class RelativeAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward deleteRelative(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            RelativeForm relativeForm = (RelativeForm) form;
+
+            try {
+                Relative relative = relativeService.getRelativeById(relativeForm.getId());
+
+                // Check if codes match
+                if (relativeForm.getCode() == relativeForm.getUserCode()) {
+                    // Encoder can delete an relative
+                    if (currentUser.getGroupId() == 1) {
+                        // Delete relative
+                        relativeService.deleteRelative(relative.getId());
+
+                        // Log relative deletion event
+                        Log deleteLog = new Log();
+                        deleteLog.setLog("Relative " + relative.getFirstName() + " " + relative.getLastName() + " was deleted by " + currentUser.getUsername() + ".");
+                        deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                        logService.insertLog(deleteLog);
+                        logger.info(deleteLog.toString());
+
+                        // Return relative and operation type
+                        request.setAttribute("relative", relative);
+                        request.setAttribute("operation", "delete");
+
+                        return mapping.findForward(Constants.DELETE_RELATIVE_SUCCESS);
+                    } else {
+                        return mapping.findForward(Constants.UNAUTHORIZED);
+                    }
+                } else {
+                    relativeForm.setFirstName(relative.getFirstName());
+                    relativeForm.setLastName(relative.getLastName());
+                    // Generate 4-digit random code
+                    relativeForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                    // Return duplicate personname error
+                    ActionMessages errors = new ActionMessages();
+                    errors.add("usercode", new ActionMessage("error.code.mismatch"));
+                    saveErrors(request, errors);
+
+                    logger.error("Codes did not match.");
+
+                    return mapping.findForward(Constants.DELETE_RELATIVE_REDO);
+                }
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current relative is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    RelativeForm relativeForm = (RelativeForm) form;
-
-    Relative relative = relativeService.getPersonById(new Integer(relativeForm.getId()));
-
-    // Check if codes match
-    if (relativeForm.getCode() == relativeForm.getPersonCode()) {
-    // Administrator can delete a relative except his creator/encoder
-    // Person can delete a relative that he encoded
-    if (((currentUser.getGroupId() == 0) && (currentUser.getCreatorId() != relative.getId())) ||
-    ((currentUser.getGroupId() == 1) && (currentUser.getId() == relative.getCreatorId()))) {
-    // Delete relative
-    relativeService.deleteRelative(new Integer(relative.getId()));
-
-    // Log relative deletion event
-    Log deleteLog = new Log();
-    deleteLog.setLog("Person " + relative.getPersonname() + " was deleted by " + currentUser.getPersonname() + ".");
-    deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-    logService.insertLog(deleteLog);
-    logger.info(deleteLog.toString());
-
-    // Retrieve mail properties
-    Configuration config = new Configuration("mail.properties");
-    // Check if email sending is enabled
-    if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
-    Mail mail = new Mail();
-
-    // Send email
-    mail.send(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), "email",
-    "Account Deletion",
-    "Dear " + "firstname" + "," +
-    "\n\nThis is to inform you that after a long deliberation, your account has to be deleted." +
-    "\n\nIf you have any questions, please feel free to email me." +
-    "\n\nYours truly," +
-    "\n" + currentUser.getFirstName());
-    }
-
-    // Return relativename and operation type
-    request.setAttribute("relativename", relative.getPersonname());
-    request.setAttribute("operation", "delete");
-
-    return mapping.findForward(Constants.DELETE_SUCCESS);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    // Generate 4-digit random code
-    relativeForm.setCode((int) (Math.random() * 9999) + 1000);
-    relativeForm.setPersonname(relative.getPersonname());
-
-    // Return duplicate relativename error
-    ActionMessages errors = new ActionMessages();
-    errors.add("relativecode", new ActionMessage("error.code.mismatch"));
-    saveErrors(request, errors);
-
-    logger.error("Codes did not match.");
-
-    return mapping.findForward(Constants.DELETE_REDO);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
      * Validates the inputs from the relative form.
      *
