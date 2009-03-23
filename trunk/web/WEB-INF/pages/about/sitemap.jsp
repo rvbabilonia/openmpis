@@ -48,6 +48,7 @@
                     <h2>Home Page</h2>
                     <ul>
                         <li>Home</li>
+                        <li>Cases</li>
                         <li>About</li>
                         <li>Search</li>
                         <li>Feedback</li>
@@ -67,6 +68,7 @@
                     <h2>Log In Page</h2>
                     <ul>
                         <li>Home</li>
+                        <li>Cases</li>
                         <li>About</li>
                         <li>Search</li>
                         <li>Feedback</li>
