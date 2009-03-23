@@ -264,17 +264,7 @@
                             </p>
                         </c:if>
                         <p class="contentclass">
-                            <c:choose>
-                                <c:when test="${(currentuser.id == userForm.creatorId)}">
-                                    <bean:message key="user.delete.buttons" arg0="${userForm.id}"/>
-                                </c:when>
-                                <c:when test="${(currentuser.groupId == 0) && (currentuser.creatorId != userForm.id) && (currentuser.id != userForm.id)}">
-                                    <bean:message key="user.delete.buttons" arg0="${userForm.id}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <bean:message key="user.edit.buttons"/>
-                                </c:otherwise>
-                            </c:choose>
+                            <bean:message key="user.edit.buttons"/>
                         </p>
                     </html:form>
                     
