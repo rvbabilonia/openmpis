@@ -129,6 +129,7 @@
                 validate="false"
                 parameter="action">
             <forward name="list-user" path="/WEB-INF/pages/session/listUsers.jsp"/>
+            <forward name="list-user-redo" redirect="true" path="/viewUser.do?action=list"/>
             <forward name="add-user"  path="/WEB-INF/pages/session/addUserForm.jsp"/>
             <forward name="add-user-redo"  path="/WEB-INF/pages/session/addUserForm.jsp"/>
             <forward name="add-user-success" path="/WEB-INF/pages/session/userSuccess.jsp"/>
