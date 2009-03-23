@@ -26,7 +26,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,15 +47,12 @@ import com.googlecode.openmpis.form.AbductorForm;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
-import com.googlecode.openmpis.persistence.ibatis.dao.impl.ReportDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.AbductorService;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
 import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
-import com.googlecode.openmpis.persistence.ibatis.service.ReportService;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.AbductorServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
-import com.googlecode.openmpis.persistence.ibatis.service.impl.ReportServiceImpl;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Validator;
 
@@ -81,10 +77,6 @@ public class AbductorAction extends DispatchAction {
      * The abductor service
      */
     private PersonService personService = new PersonServiceImpl(new PersonDAOImpl());
-    /**
-     * The report service
-     */
-    private ReportService reportService = new ReportServiceImpl(new ReportDAOImpl());
     /**
      * The abductor service
      */
@@ -128,48 +120,91 @@ public class AbductorAction extends DispatchAction {
             List<Abductor> abductorList = abductorService.listAllAbductors();
             request.setAttribute("abductorlist", abductorList);
             request.setAttribute("action", request.getParameter("action"));
-            System.out.println("action: " + request.getParameter("action"));
 
             AbductorForm abductorForm = (AbductorForm) form;
 
             if (request.getAttribute("personid") != null) {
                 // Retrieve person
                 Person person = personService.getPersonById((Integer) request.getAttribute("personid"));
-                abductorForm.setPersonId(person.getId());
 
                 if (person != null) {
                     if (person.getAbductorId() != null) {
                         // Retrieve abductor
-            
-//            if (request.getAttribute("personid") != null) {
-//                request.setAttribute("personid", request.getAttribute("personid"));
-//            } else {
-//                request.setAttribute("personid", request.getParameter("personid"));
-//            }
-
-            //if (abductorList.size() == 0) {
-//                abductorForm.reset(mapping, request);
-            //}
-
-//            if (request.getAttribute("abductorid") != null) {
-//                        Abductor abductor = abductorService.getAbductorById((Integer) request.getAttribute("abductorid"));
                         Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
 
                         // Return abductor
+                        if (abductor.getPhoto() != null) {
+                            abductorForm.setPhoto(abductor.getPhoto());
+                        }
+                        if (abductor.getAgedPhoto() != null) {
+                            abductorForm.setAgedPhoto(abductor.getAgedPhoto());
+                        }
                         abductorForm.setId(abductor.getId());
+                        abductorForm.setPersonId(person.getId());
                         abductorForm.setFirstName(abductor.getFirstName());
+                        abductorForm.setNickname(abductor.getNickname());
                         abductorForm.setMiddleName(abductor.getMiddleName());
                         abductorForm.setLastName(abductor.getLastName());
+                        abductorForm.setBirthMonth(abductor.getBirthMonth());
+                        abductorForm.setBirthDay(abductor.getBirthDay());
+                        abductorForm.setBirthYear(abductor.getBirthYear());
+                        if (abductor.getBirthMonth() != 0) {
+                            abductorForm.setKnownBirthDate(true);
+                        }
+                        abductorForm.setAge(getAge(abductor.getBirthMonth() - 1, abductor.getBirthDay(), abductor.getBirthYear()));
                         abductorForm.setStreet(abductor.getStreet());
                         abductorForm.setCity(abductor.getCity());
                         abductorForm.setProvince(abductor.getProvince());
                         abductorForm.setCountry(abductor.getCountry());
+                        abductorForm.setSex(abductor.getSex());
+                        abductorForm.setFeet(abductor.getFeet());
+                        abductorForm.setInches(abductor.getInches());
+                        abductorForm.setWeight(abductor.getWeight());
+                        abductorForm.setReligion(abductor.getReligion());
+                        abductorForm.setRace(abductor.getRace());
+                        abductorForm.setEyeColor(abductor.getEyeColor());
+                        abductorForm.setHairColor(abductor.getHairColor());
+                        abductorForm.setMarks(abductor.getMarks());
+                        abductorForm.setPersonalEffects(abductor.getPersonalEffects());
                         abductorForm.setRemarks(abductor.getRemarks());
+                        if (abductor.getCodisId() != null) {
+                            abductorForm.setCodisId(abductor.getCodisId());
+                        }
+                        if (abductor.getAfisId() != null) {
+                            abductorForm.setAfisId(abductor.getAfisId());
+                        }
+                        if (abductor.getDentalId() != null) {
+                            abductorForm.setDentalId(abductor.getDentalId());
+                        }
                         abductorForm.setRelationToAbductor(person.getRelationToAbductor());
-//                        abductorForm.setRelationToAbductor((Integer) request.getAttribute("relationtoabductor"));
-
-//                request.setAttribute("action", "editAbductor");
-//            }
+                    } else {
+                        // Return empty abductor
+                        abductorForm.setId(0);
+                        abductorForm.setPhoto("");
+                        abductorForm.setAgedPhoto("");
+                        abductorForm.setFirstName("");
+                        abductorForm.setNickname("");
+                        abductorForm.setMiddleName("");
+                        abductorForm.setLastName("");
+                        abductorForm.setKnownBirthDate(false);
+                        abductorForm.setStreet("");
+                        abductorForm.setCity("All");
+                        abductorForm.setProvince("All");
+                        abductorForm.setCountry("Philippines");
+                        abductorForm.setSex(0);
+                        abductorForm.setFeet(0);
+                        abductorForm.setInches(0);
+                        abductorForm.setWeight(0);
+                        abductorForm.setReligion(0);
+                        abductorForm.setRace(0);
+                        abductorForm.setEyeColor(0);
+                        abductorForm.setHairColor(0);
+                        abductorForm.setMarks("");
+                        abductorForm.setPersonalEffects("");
+                        abductorForm.setRemarks("");
+                        abductorForm.setCodisId("");
+                        abductorForm.setAfisId("");
+                        abductorForm.setDentalId("");
                     }
                 }
             } else {
@@ -216,7 +251,6 @@ public class AbductorAction extends DispatchAction {
             ActionMessages errors = new ActionMessages();
             List<Abductor> abductorList = abductorService.listAllAbductors();
             request.setAttribute("abductorlist", abductorList);
-//            request.setAttribute("action", request.getParameter("action"));
 
             // Check if abductor is selected from list
             if (abductorForm.getId() > 0) {
@@ -390,17 +424,11 @@ public class AbductorAction extends DispatchAction {
                             // Return person ID
                             request.setAttribute("personid", abductorForm.getPersonId());
 
-//                            // Return abductor ID
-//                            request.setAttribute("personid", Integer.parseInt((String) request.getParameter("personid")));
-//                            request.setAttribute("investigatorid", generatedId);
-
                             return mapping.findForward(Constants.SELECT_INVESTIGATOR);
                         } else {
                             return mapping.findForward(Constants.FAILURE);
                         }
                     } else {
-//                        request.setAttribute("personid", request.getParameter("personid"));
-
                         // Return duplicate abductor error
                         errors.add("firstname", new ActionMessage("error.abductor.duplicate"));
                         saveErrors(request, errors);
@@ -410,8 +438,6 @@ public class AbductorAction extends DispatchAction {
                         return mapping.findForward(Constants.ADD_ABDUCTOR_REDO);
                     }
                 } else {
-//                    request.setAttribute("personid", request.getParameter("personid"));
-
                     // Return form validation errors
                     return mapping.findForward(Constants.ADD_ABDUCTOR_REDO);
                 }
@@ -442,8 +468,10 @@ public class AbductorAction extends DispatchAction {
         try {
             personId = Integer.parseInt(request.getParameter("personid"));
             Person person = personService.getPersonById(personId);
-            abductorForm.setRelationToAbductor(person.getRelationToAbductor());
             abductorForm.setId(person.getAbductorId());
+            if (person.getAbductorId() == Integer.parseInt(request.getParameter("id"))) {
+                abductorForm.setRelationToAbductor(person.getRelationToAbductor());
+            }
         } catch (NumberFormatException nfe) {
         } catch (NullPointerException npe) {
         }
@@ -708,13 +736,6 @@ public class AbductorAction extends DispatchAction {
                         logService.insertLog(editLog);
                         logger.info(editLog.toString());
 
-//                        person = personService.getPersonById(Integer.parseInt(request.getParameter("personid")));
-//
-//                        // Check if abductor is abandoned, throwaway or unidentified
-//                        // Return abductor ID and investigator ID
-//                        request.setAttribute("personid", Integer.parseInt(request.getParameter("personid")));
-//                        request.setAttribute("investigatorid", person.getInvestigatorId());
-
                         // Return person ID
                         request.setAttribute("personid", abductorForm.getPersonId());
 
@@ -724,7 +745,7 @@ public class AbductorAction extends DispatchAction {
                     }
                 } else {
                     // Return duplicate abductor error
-                    errors.add("nickname", new ActionMessage("error.abductor.duplicate"));
+                    errors.add("firstname", new ActionMessage("error.abductor.duplicate"));
                     saveErrors(request, errors);
 
                     logger.error("Duplicate abductor.");
@@ -741,7 +762,7 @@ public class AbductorAction extends DispatchAction {
     }
 
     /**
-     * Prepares the form for deleting a abductor.
+     * Prepares the form for deleting an abductor.
      * This is the erase abductor action called from the Struts framework.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -751,43 +772,49 @@ public class AbductorAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward eraseAbductor(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            AbductorForm abductorForm = (AbductorForm) form;
+            // Retrieve abductor
+            try {
+                Abductor abductor = abductorService.getAbductorById(abductorForm.getId());
+                abductorForm.setFirstName(abductor.getFirstName());
+                abductorForm.setNickname(abductor.getNickname());
+                abductorForm.setLastName(abductor.getLastName());
+                // Generate 4-digit random code
+                abductorForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                // Delete what you created/encoded
+                // Administrator can delete all except administrators
+                if (currentUser.getGroupId() == 1) {
+                    request.setAttribute("personcount", personService.countPersonsByAbductorId(abductor.getId()));
+                    return mapping.findForward(Constants.DELETE_ABDUCTOR);
+                } else {
+                    return mapping.findForward(Constants.UNAUTHORIZED);
+                }
+            } catch (NumberFormatException nfe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
 
-    // Check if current abductor is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    AbductorForm abductorForm = (AbductorForm) form;
-    // Retrieve abductor
-    Abductor abductor = (Abductor) personService.getPersonById(new Integer(abductorForm.getId()));
-
-    abductorForm.setPersonname(abductor.getPersonname());
-    // Generate 4-digit random code
-    abductorForm.setCode((int) (Math.random() * 9999) + 1000);
-
-    // Delete what you created/encoded
-    // Administrator can delete all except administrators
-    if ((currentUser.getId() == abductor.getCreatorId()) ||
-    ((currentUser.getGroupId() == 0) && (abductor.getGroupId() > 0))) {
-    return mapping.findForward(Constants.DELETE_USER);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
     /**
-     * Deletes a abductor from the database.
+     * Deletes an abductor from the database.
      * This is the delete abductor action called from the HTML form.
      *
      * @param mapping       the ActionMapping used to select this instance
@@ -797,83 +824,84 @@ public class AbductorAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
-    /*
     public ActionForward deleteAbductor(ActionMapping mapping, ActionForm form,
-    HttpServletRequest request, HttpServletResponse response) throws Exception {
-    User currentUser = null;
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User currentUser = null;
 
-    // Check if there exists a session
-    if (request.getSession().getAttribute("currentuser") == null) {
-    return mapping.findForward(Constants.EXPIRED);
-    } else {
-    currentUser = (User) request.getSession().getAttribute("currentuser");
+        // Check if there exists a session
+        if (request.getSession().getAttribute("currentuser") == null) {
+            return mapping.findForward(Constants.EXPIRED);
+        } else {
+            currentUser = (User) request.getSession().getAttribute("currentuser");
+        }
+
+        // Check if current user is authorized
+        if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
+            AbductorForm abductorForm = (AbductorForm) form;
+
+            try {
+                Abductor abductor = abductorService.getAbductorById(abductorForm.getId());
+
+                // Check if codes match
+                if (abductorForm.getCode() == abductorForm.getUserCode()) {
+                    // Encoder can delete an abductor
+                    if (currentUser.getGroupId() == 1) {
+                        // Delete abductor
+                        abductorService.deleteAbductor(abductor.getId());
+
+                        // Delete abductor photos
+                        String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + "abductor-" + createDirectoryName(abductor.getId());
+                        File photoDirectory = new File(absolutePhotoDirectory);
+                        if (photoDirectory.exists()) {
+                            for (File primaryFile : photoDirectory.listFiles()) {
+                                if (primaryFile.isDirectory()) {
+                                    for (File secondaryFile : primaryFile.listFiles()) {
+                                        secondaryFile.delete();
+                                    }
+                                }
+                                primaryFile.delete();
+                            }
+                            photoDirectory.delete();
+                        }
+
+                        // Log abductor deletion event
+                        Log deleteLog = new Log();
+                        deleteLog.setLog("Abductor " + abductor.getFirstName() + " \"" + abductor.getNickname() + "\" " + abductor.getLastName() + " was deleted by " + currentUser.getUsername() + ".");
+                        deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
+                        logService.insertLog(deleteLog);
+                        logger.info(deleteLog.toString());
+
+                        // Return abductor and operation type
+                        request.setAttribute("abductor", abductor);
+                        request.setAttribute("operation", "delete");
+
+                        return mapping.findForward(Constants.DELETE_ABDUCTOR_SUCCESS);
+                    } else {
+                        return mapping.findForward(Constants.UNAUTHORIZED);
+                    }
+                } else {
+                    abductorForm.setFirstName(abductor.getFirstName());
+                    abductorForm.setNickname(abductor.getNickname());
+                    abductorForm.setLastName(abductor.getLastName());
+                    // Generate 4-digit random code
+                    abductorForm.setCode((int) (Math.random() * 7777) + 1000);
+
+                    // Return duplicate personname error
+                    ActionMessages errors = new ActionMessages();
+                    errors.add("usercode", new ActionMessage("error.code.mismatch"));
+                    saveErrors(request, errors);
+
+                    logger.error("Codes did not match.");
+
+                    return mapping.findForward(Constants.DELETE_ABDUCTOR_REDO);
+                }
+            } catch (NullPointerException npe) {
+                return mapping.findForward(Constants.LIST_PERSON);
+            }
+        } else {
+            return mapping.findForward(Constants.UNAUTHORIZED);
+        }
     }
-
-    // Check if current abductor is authorized
-    if ((currentUser.getGroupId() == 0) || (currentUser.getGroupId() == 1)) {
-    AbductorForm abductorForm = (AbductorForm) form;
-
-    Abductor abductor = (User) personService.getPersonById(new Integer(abductorForm.getId()));
-
-    // Check if codes match
-    if (abductorForm.getCode() == abductorForm.getPersonCode()) {
-    // Administrator can delete a abductor except his creator/encoder
-    // Abductor can delete a abductor that he encoded
-    if (((currentUser.getGroupId() == 0) && (currentUser.getCreatorId() != abductor.getId())) ||
-    ((currentUser.getGroupId() == 1) && (currentUser.getId() == abductor.getCreatorId()))) {
-    // Delete abductor
-    personService.deletePerson(new Integer(abductor.getId()));
-
-    // Log abductor deletion event
-    Log deleteLog = new Log();
-    deleteLog.setLog("Abductor " + abductor.getPersonname() + " was deleted by " + currentUser.getPersonname() + ".");
-    deleteLog.setDate(simpleDateFormat.format(System.currentTimeMillis()));
-    logService.insertLog(deleteLog);
-    logger.info(deleteLog.toString());
-
-    // Retrieve mail properties
-    Configuration config = new Configuration("mail.properties");
-    // Check if nickname sending is enabled
-    if (Boolean.parseBoolean(config.getProperty("mail.enable"))) {
-    Mail mail = new Mail();
-
-    // Send nickname
-    mail.send(currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), "nickname",
-    "Account Deletion",
-    "Dear " + "firstname" + "," +
-    "\n\nThis is to inform you that after a long deliberation, your account has to be deleted." +
-    "\n\nIf you have any questions, please feel free to nickname me." +
-    "\n\nYours truly," +
-    "\n" + currentUser.getFirstName());
-    }
-
-    // Return personname and operation type
-    request.setAttribute("personname", abductor.getPersonname());
-    request.setAttribute("operation", "delete");
-
-    return mapping.findForward(Constants.DELETE_SUCCESS);
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    } else {
-    // Generate 4-digit random code
-    abductorForm.setCode((int) (Math.random() * 9999) + 1000);
-    abductorForm.setPersonname(abductor.getPersonname());
-
-    // Return duplicate personname error
-    ActionMessages errors = new ActionMessages();
-    errors.add("personcode", new ActionMessage("error.code.mismatch"));
-    saveErrors(request, errors);
-
-    logger.error("Codes did not match.");
-
-    return mapping.findForward(Constants.DELETE_REDO);
-    }
-    } else {
-    return mapping.findForward(Constants.UNAUTHORIZED);
-    }
-    }
-     */
 
     /**
      * Prints the abductor's poster in PDF file.
@@ -895,107 +923,116 @@ public class AbductorAction extends DispatchAction {
         PdfWriter.getInstance(document, baos);
 
         // Retrieve the abductor
-        int id = 0;
         try {
-            if (request.getParameter("id") != null) {
-                id = Integer.parseInt(request.getParameter("id"));
-            } else {
-                //return mapping.findForward(Constants.LIST_ABDUCTOR);
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            Abductor abductor = abductorService.getAbductorById(id);
+
+            // Process the photo
+            String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + "unknown.png";
+            if (abductor.getPhoto() != null) {
+                String tokens[] = abductor.getPhoto().split("\\/");
+                String defaultPhotoBasename = "";
+                for (int i = 0; i < tokens.length - 1; i++) {
+                    defaultPhotoBasename += tokens[i] + File.separator;
+                }
+                defaultPhotoBasename += tokens[tokens.length - 1];
+                absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
             }
+
+            // Add some meta information to the document
+            document.addTitle("Poster");
+            document.addAuthor("OpenMPIS");
+            document.addSubject("Poster for " + abductor.getNickname());
+            document.addKeywords("OpenMPIS, missing, found, unidentified");
+            document.addProducer();
+            document.addCreationDate();
+            document.addCreator("OpenMPIS version " + Constants.VERSION);
+
+            // Open the document for writing
+            document.open();
+            // Add the banner
+            Paragraph wantedParagraph = new Paragraph("W A N T E D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
+            wantedParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(wantedParagraph);
+            // Add name
+            Paragraph redParagraph;
+            if (!abductor.getNickname().isEmpty()) {
+                redParagraph = new Paragraph(abductor.getFirstName() + " \"" + abductor.getNickname() + "\" " + abductor.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            } else {
+                redParagraph = new Paragraph(abductor.getFirstName() + " " + abductor.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(255, 0, 0)));
+            }
+            redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(redParagraph);
+            // Add the photo
+            Image image = Image.getInstance(absoluteDefaultPhotoFilename);
+            image.scaleAbsolute(200, 300);
+            image.setAlignment(Image.ALIGN_CENTER);
+            document.add(image);
+            // Add birth date
+            Paragraph blackParagraph;
+            if (abductor.getBirthMonth() > 0) {
+                blackParagraph = new Paragraph(getResources(request).getMessage("label.date.birth") + ": " + getResources(request).getMessage("month." + abductor.getBirthMonth()) + " " + abductor.getBirthDay() + ", " + abductor.getBirthYear(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+                blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(blackParagraph);
+            }
+            // Add birth place
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.address.city") + ": " + abductor.getCity(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add sex
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.sex") + ": " + getResources(request).getMessage("sex." + abductor.getSex()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add height
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.height") + ": " + abductor.getFeet() + "' " + abductor.getInches() + "\"", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add weight
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.weight") + ": " + abductor.getWeight() + " " + getResources(request).getMessage("label.weight.lbs"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add hair color
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.color.hair") + ": " + getResources(request).getMessage("color.hair." + abductor.getHairColor()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add eye color
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.color.eye") + ": " + getResources(request).getMessage("color.eye." + abductor.getEyeColor()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add race
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.race") + ": " + getResources(request).getMessage("race." + abductor.getRace()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add circumstance
+            blackParagraph = new Paragraph(getResources(request).getMessage("label.remarks") + ": " + abductor.getRemarks(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add line
+            blackParagraph = new Paragraph("---------------------------------------");
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            // Add contact
+            blackParagraph = new Paragraph(getResources(request).getMessage("global.contact"), FontFactory.getFont(FontFactory.HELVETICA, 14, Font.NORMAL, new Color(0, 0, 0)));
+            blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(blackParagraph);
+            document.close();
+
+            // Set the response to return the poster (PDF file)
+            response.setContentType("application/pdf");
+            response.setContentLength(baos.size());
+            response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
+
+            // Close the output stream
+            baos.writeTo(response.getOutputStream());
+            response.getOutputStream().flush();
+
+            return null;
         } catch (NumberFormatException nfe) {
-            //return mapping.findForward(Constants.LIST_ABDUCTOR);
+            return mapping.findForward(Constants.LIST_PERSON);
+        } catch (NullPointerException npe) {
+            return mapping.findForward(Constants.LIST_PERSON);
         }
-        Abductor abductor = abductorService.getAbductorById(id);
-
-        // Process the photo
-        String tokens[] = abductor.getPhoto().split("\\/");
-        String defaultPhotoBasename = "";
-        for (int i = 0; i < tokens.length - 1; i++) {
-            defaultPhotoBasename += tokens[i] + File.separator;
-        }
-        defaultPhotoBasename += tokens[tokens.length - 1];
-        String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
-
-        // Add some meta information to the document
-        document.addTitle("Poster");
-        document.addAuthor("OpenMPIS");
-        document.addSubject("Poster for " + abductor.getNickname());
-        document.addKeywords("OpenMPIS, missing, found, unidentified");
-        document.addProducer();
-        document.addCreationDate();
-        document.addCreator("OpenMPIS version " + Constants.VERSION);
-
-        // Open the document for writing
-        document.open();
-        // Add the banner
-        Paragraph wantedParagraph = new Paragraph("W A N T E D", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 36, Font.BOLD, new Color(255, 0, 0)));
-        wantedParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(wantedParagraph);
-        // Add name
-        Paragraph redParagraph = new Paragraph(abductor.getFirstName() + " '" + abductor.getNickname() + "' " + abductor.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLD, new Color(255, 0, 0)));
-        redParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(redParagraph);
-        // Add the photo
-        Image image = Image.getInstance(absoluteDefaultPhotoFilename);
-        image.scaleAbsolute(200, 300);
-        image.setAlignment(Image.ALIGN_CENTER);
-        document.add(image);
-        // Add birth date
-        Paragraph blackParagraph = new Paragraph(getResources(request).getMessage("label.date.birth") + ": " + getResources(request).getMessage("month." + abductor.getBirthMonth()) + " " + abductor.getBirthDay() + ", " + abductor.getBirthYear(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add birth place
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.address.city") + ": " + abductor.getCity(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add sex
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.sex") + ": " + getResources(request).getMessage("sex." + abductor.getSex()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add height
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.height") + ": " + abductor.getFeet() + "' " + abductor.getInches() + "\"", FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add weight
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.weight") + ": " + abductor.getWeight() + " " + getResources(request).getMessage("label.weight.lbs"), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add hair color
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.color.hair") + ": " + getResources(request).getMessage("color.hair." + abductor.getHairColor()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add eye color
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.color.eye") + ": " + getResources(request).getMessage("color.eye." + abductor.getEyeColor()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add race
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.race") + ": " + getResources(request).getMessage("race." + abductor.getRace()), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add circumstance
-        blackParagraph = new Paragraph(getResources(request).getMessage("label.remarks") + ": " + abductor.getRemarks(), FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add line
-        blackParagraph = new Paragraph("---------------------------------------");
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        // Add contact
-        blackParagraph = new Paragraph(getResources(request).getMessage("global.contact"), FontFactory.getFont(FontFactory.HELVETICA, 14, Font.NORMAL, new Color(0, 0, 0)));
-        blackParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(blackParagraph);
-        document.close();
-
-        // Set the response to return the poster (PDF file)
-        response.setContentType("application/pdf");
-        response.setContentLength(baos.size());
-        response.setHeader("Content-disposition", "attachment; filename=Poster.pdf");
-
-        // Close the output stream
-        baos.writeTo(response.getOutputStream());
-        response.getOutputStream().flush();
-
-        return null;
     }
 
     /**
@@ -1115,22 +1152,7 @@ public class AbductorAction extends DispatchAction {
                     false;
         }
 
-        Iterator i = errors.get();
-        while (i.hasNext()) {
-            System.out.println("errors: " + i.next());
-        }
-
         return isValid;
-    }
-
-    /**
-     * Counts the province of reports for a given abductor.
-     *
-     * @return              the province of reports associated with a given abductor
-     * @throws java.lang.Exception
-     */
-    private int countReportsForPerson(Integer personId) throws Exception {
-        return reportService.countAllReportsForPerson(personId);
     }
 
     /**
