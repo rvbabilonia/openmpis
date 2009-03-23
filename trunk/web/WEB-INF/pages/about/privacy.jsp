@@ -119,6 +119,7 @@
                         with this Privacy Policy. Please feel free to direct any questions or concerns
                         regarding this Privacy Policy or the Open Source Missing Persons Information System
                         treatment of personal information by contacting us through this Web site.
+                    </p>
                     <h1>Changes to Privacy Policy</h1>
                     <p class="contentclass">
                         Please note that this Privacy Policy may change from time to time. We will not
