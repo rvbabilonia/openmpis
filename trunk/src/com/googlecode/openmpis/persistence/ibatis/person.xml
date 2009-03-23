@@ -381,7 +381,7 @@
     <select id="getAllPersons" resultClass="person" cacheModel="personCache">
         SELECT
         <include refid="personColumnsFragment"/>
-        ORDER BY ID
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countAllPersons" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -394,7 +394,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="ongoingFragment"/>
-        ORDER BY TYPE, ID
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countOngoing" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -408,7 +408,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="solvedFragment"/>
-        ORDER BY TYPE, ID
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countSolved" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -422,7 +422,7 @@
         SELECT
         <include refid="personColumnsFragment"/>
         <include refid="unsolvedFragment"/>
-        ORDER BY TYPE, ID
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countUnsolved" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -436,7 +436,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="allMissingFragment"/>
-        ORDER BY TYPE
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countAllMissing" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -464,7 +464,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="missingFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countMissing" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -500,7 +500,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="familyAbductionFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -528,7 +528,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="nonFamilyAbductionFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -556,7 +556,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="runawayFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -584,7 +584,7 @@
         SELECT
         <include refid="missingColumnsFragment"/>
         <include refid="unknownFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -612,7 +612,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="allFoundFragment"/>
-        ORDER BY TYPE
+        ORDER BY TYPE, YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countAllFound" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -640,7 +640,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="foundFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countFound" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -668,7 +668,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="abandonedFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -696,7 +696,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="throwawayFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -724,7 +724,7 @@
         SELECT
         <include refid="foundColumnsFragment"/>
         <include refid="unidentifiedFragment"/>
-        ORDER BY ID
+        ORDER BY YEARMISSINGORFOUND DESC, MONTHMISSINGORFOUND DESC, DAYMISSINGORFOUND DESC, DATE DESC, ID DESC
     </select>
 
     <select id="countUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
@@ -746,6 +746,20 @@
         COUNT(ID)
         FROM PERSON
         <include refid="unsolvedUnidentifiedFragment"/>
+    </select>
+
+    <select id="countPersonsByRelativeId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        WHERE RELATIVEID = #relativeId#
+    </select>
+
+    <select id="countPersonsByAbductorId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
+        SELECT
+        COUNT(ID)
+        FROM PERSON
+        WHERE ABDUCTORID = #abductorId#
     </select>
 
     <select id="checkPerson" parameterClass="person" resultClass="person" cacheModel="personCache">
@@ -889,6 +903,14 @@
         ]]>
     </update>
 
+    <update id="updatePersonEncoder" parameterClass="person">
+        <![CDATA[
+        UPDATE PERSON SET
+        ENCODERID = #encoderId#
+        WHERE ID = #id#
+        ]]>
+    </update>
+
     <update id="updatePersonAbductor" parameterClass="person">
         <![CDATA[
         UPDATE PERSON SET
@@ -902,7 +924,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deletePerson" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE PERSON
+        DELETE FROM PERSON
         WHERE ID = #id#
         ]]>
     </delete>
