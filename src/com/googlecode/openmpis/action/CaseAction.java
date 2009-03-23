@@ -977,9 +977,10 @@ public class CaseAction extends DispatchAction {
         // Check if current user is an encoder
         if (currentUser.getGroupId() == 1) {
             InvestigatorForm investigatorForm = (InvestigatorForm) form;
-            Person person = personService.getPersonById(investigatorForm.getPersonId());
             User investigator = userService.getUserById(investigatorForm.getId());
-            person.setInvestigatorId(investigator.getId());
+            Person person = personService.getPersonById(investigatorForm.getPersonId());
+            person.setId(investigatorForm.getPersonId());
+            person.setInvestigatorId(investigatorForm.getId());
             personService.updatePersonInvestigator(person);
 
             // Log person modification event
@@ -990,6 +991,8 @@ public class CaseAction extends DispatchAction {
             logService.insertLog(assignLog);
             logger.info(assignLog.toString());
 
+            // Return person, investigator and operation type
+            request.setAttribute("operation", "add");
             request.setAttribute("person", person);
             request.setAttribute("investigator", investigator);
 
@@ -1134,7 +1137,7 @@ public class CaseAction extends DispatchAction {
             // List ongoing cases
             document.setHeader(new HeaderFooter(new Phrase("List of ongoing cases as of " + date), false));
             document.newPage();
-            float[] widths = {0.05f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.15f, 0.1f, 0.1f};
+            float[] widths = {0.05f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.05f, 0.15f, 0.1f, 0.1f, 0.05f};
             PdfPTable pdfptable = new PdfPTable(widths);
             pdfptable.setWidthPercentage(100);
             pdfptable.addCell(new Phrase("ID", FontFactory.getFont(FontFactory.HELVETICA, 12)));
@@ -1147,6 +1150,7 @@ public class CaseAction extends DispatchAction {
             pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Investigator", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             List<Person> personList = personService.listOngoing();
             if (personList != null) {
                 for (Person person : personList) {
@@ -1170,14 +1174,24 @@ public class CaseAction extends DispatchAction {
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(image);
-                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
-                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String relativeName = "";
+                    if (person.getRelativeId() != null) {
+                        Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                        relativeName = relative.getFirstName() + " " + relative.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(relativeName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     String abductorName = "";
                     if (person.getAbductorId() != null) {
                         Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
                         abductorName = abductor.getFirstName() + " " + abductor.getLastName();
                     }
                     pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String investigatorUsername = "";
+                    if (person.getInvestigatorId() != null) {
+                        User investigator = userService.getUserById(person.getInvestigatorId());
+                        investigatorUsername = investigator.getUsername();
+                    }
+                    pdfptable.addCell(new Phrase(investigatorUsername, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                 }
             }
             document.add(pdfptable);
@@ -1197,6 +1211,7 @@ public class CaseAction extends DispatchAction {
             pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Investigator", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             personList = personService.listSolved();
             if (personList != null) {
                 for (Person person : personList) {
@@ -1220,14 +1235,24 @@ public class CaseAction extends DispatchAction {
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(image);
-                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
-                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String relativeName = "";
+                    if (person.getRelativeId() != null) {
+                        Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                        relativeName = relative.getFirstName() + " " + relative.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(relativeName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     String abductorName = "";
                     if (person.getAbductorId() != null) {
                         Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
                         abductorName = abductor.getFirstName() + " " + abductor.getLastName();
                     }
                     pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String investigatorUsername = "";
+                    if (person.getInvestigatorId() != null) {
+                        User investigator = userService.getUserById(person.getInvestigatorId());
+                        investigatorUsername = investigator.getUsername();
+                    }
+                    pdfptable.addCell(new Phrase(investigatorUsername, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                 }
             }
             document.add(pdfptable);
@@ -1247,6 +1272,7 @@ public class CaseAction extends DispatchAction {
             pdfptable.addCell(new Phrase("Photo", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Relative", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             pdfptable.addCell(new Phrase("Abductor", FontFactory.getFont(FontFactory.HELVETICA, 12)));
+            pdfptable.addCell(new Phrase("Investigator", FontFactory.getFont(FontFactory.HELVETICA, 12)));
             personList = personService.listUnsolved();
             if (personList != null) {
                 for (Person person : personList) {
@@ -1270,14 +1296,24 @@ public class CaseAction extends DispatchAction {
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("type." + person.getType()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(new Phrase(getResources(request).getMessage("status.case." + person.getStatus()), FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     pdfptable.addCell(image);
-                    Relative relative = relativeService.getRelativeById(person.getRelativeId());
-                    pdfptable.addCell(new Phrase(relative.getFirstName() + " " + relative.getLastName(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String relativeName = "";
+                    if (person.getRelativeId() != null) {
+                        Relative relative = relativeService.getRelativeById(person.getRelativeId());
+                        relativeName = relative.getFirstName() + " " + relative.getLastName();
+                    }
+                    pdfptable.addCell(new Phrase(relativeName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                     String abductorName = "";
                     if (person.getAbductorId() != null) {
                         Abductor abductor = abductorService.getAbductorById(person.getAbductorId());
                         abductorName = abductor.getFirstName() + " " + abductor.getLastName();
                     }
                     pdfptable.addCell(new Phrase(abductorName, FontFactory.getFont(FontFactory.HELVETICA, 8)));
+                    String investigatorUsername = "";
+                    if (person.getInvestigatorId() != null) {
+                        User investigator = userService.getUserById(person.getInvestigatorId());
+                        investigatorUsername = investigator.getUsername();
+                    }
+                    pdfptable.addCell(new Phrase(investigatorUsername, FontFactory.getFont(FontFactory.HELVETICA, 8)));
                 }
             }
             document.add(pdfptable);
