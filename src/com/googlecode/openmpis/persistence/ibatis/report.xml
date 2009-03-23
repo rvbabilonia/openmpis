@@ -109,7 +109,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteReport" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE REPORT
+        DELETE FROM REPORT
         WHERE ID = #id#
         ]]>
     </delete>

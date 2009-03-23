@@ -166,7 +166,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteMessage" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE MESSAGE
+        DELETE FROM MESSAGE
         WHERE ID = #id#
         ]]>
     </delete>
