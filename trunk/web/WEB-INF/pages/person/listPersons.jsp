@@ -37,7 +37,7 @@
                         <bean:message key="investigator.case.menu"/>
                     </c:when>
                     <c:otherwise>
-                        <bean:message key="home.menu"/>
+                        <bean:message key="case.menu"/>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -46,7 +46,7 @@
             <div id="content">
                 <div id="contentitem">
                     <div id="casemenu">
-                        <bean:message key="case.menu"/>
+                        <bean:message key="case.submenu"/>
                     </div>
                     <c:choose>
                         <c:when test="${param.action == 'listAllMissing'}">
