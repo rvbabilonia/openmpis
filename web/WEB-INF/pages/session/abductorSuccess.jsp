@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <title><bean:message key="user.title"/></title>
+        <title><bean:message key="abductor.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -26,14 +26,8 @@
             <!-- Menu -->
             <div id="menu">
                 <c:choose>
-                    <c:when test="${currentuser.groupId == 0}">
-                        <bean:message key="admin.user.menu"/>
-                    </c:when>
                     <c:when test="${currentuser.groupId == 1}">
-                        <bean:message key="encoder.user.menu"/>
-                    </c:when>
-                    <c:when test="${currentuser.groupId == 2}">
-                        <bean:message key="investigator.user.menu"/>
+                        <bean:message key="encoder.case.menu"/>
                     </c:when>
                 </c:choose>
             </div>
@@ -43,14 +37,8 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${operation == 'add'}">
-                                <bean:message key="user.content.created" arg0="${user.username}" arg1="${user.id}" arg2="${user.date}"/>
-                            </c:when>
-                            <c:when test="${operation == 'edit'}">
-                                <bean:message key="user.content.updated" arg0="${username}"/>
-                            </c:when>
                             <c:when test="${operation == 'delete'}">
-                                <bean:message key="user.content.deleted" arg0="${username}"/>
+                                <bean:message key="abductor.content.deleted" arg0="${abductor.firstName}" arg1="${abductor.nickname}" arg2="${abductor.lastName}" arg3="${abductor.id}"/>
                             </c:when>
                         </c:choose>
                     </p>

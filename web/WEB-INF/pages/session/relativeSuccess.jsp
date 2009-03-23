@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <title><bean:message key="user.title"/></title>
+        <title><bean:message key="relative.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -37,12 +37,6 @@
                 <div id="contentitem">
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${operation == 'add'}">
-                                <bean:message key="relative.content.created" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
-                            </c:when>
-                            <c:when test="${operation == 'edit'}">
-                                <bean:message key="relative.content.updated" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
-                            </c:when>
                             <c:when test="${operation == 'delete'}">
                                 <bean:message key="relative.content.deleted" arg0="${relative.firstName}" arg1="${relative.lastName}" arg2="${relative.id}"/>
                             </c:when>
