@@ -294,6 +294,15 @@ public interface PersonService {
     public boolean updatePersonInvestigator(Person person) throws SQLException;
 
     /**
+     * Updates a person's encoder ID.
+     *
+     * @param person        the existing person
+     * @return              <code>true</code> if the person's encoder ID was successfully updated; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    public boolean updatePersonEncoder(Person person) throws SQLException;
+
+    /**
      * Updates a person's relative ID.
      *
      * @param person        the existing person
@@ -642,4 +651,13 @@ public interface PersonService {
      * @throws java.sql.SQLException
      */
     public int countPersonsByAbductorId(Integer abductorId) throws SQLException;
+
+    /**
+     * Returns the total number of persons related to a given relative.
+     *
+     * @param relativeId    the abductor ID
+     * @return              the total number of persons related to a given relative
+     * @throws java.sql.SQLException
+     */
+    public int countPersonsByRelativeId(Integer relativeId) throws SQLException;
 }
