@@ -414,13 +414,33 @@
                             <div class="row">
                                 <div class="hiddencell" style="width: 50%;">
                                     <p style="text-align: center;">
-                                        <bean:message key="case.print.poster" arg0="${personForm.id}"/>
+                                        <c:url var="url" scope="page" value="/viewPerson.do">
+                                            <c:param name="action" value="printPoster"/>
+                                            <c:param name="id" value="${personForm.id}"/>
+                                        </c:url>
+                                        <bean:message key="case.print.poster" arg0="${fn:escapeXml(url)}"/>
                                         <c:if test="${currentuser.groupId != 2}">
-                                            <bean:message key="case.add.sighting.button" arg0="${personForm.id}"/>
+                                            <c:url var="url" scope="page" value="/viewMessage.do">
+                                                <c:param name="action" value="newSighting"/>
+                                                <c:param name="personid" value="${personForm.id}"/>
+                                            </c:url>
+                                            <bean:message key="case.add.sighting.button" arg0="${fn:escapeXml(url)}"/>
                                         </c:if>
                                         <c:if test="${currentuser.groupId == 2}">
-                                            <bean:message key="case.add.progress.button" arg0="${personForm.id}"/>
-                                            <bean:message key="case.print.progress.buttons" arg0="${personForm.id}"/>
+                                            <c:url var="url" scope="page" value="/viewReport.do">
+                                                <c:param name="action" value="newReport"/>
+                                                <c:param name="personid" value="${personForm.id}"/>
+                                            </c:url>
+                                            <bean:message key="case.add.progress.button" arg0="${fn:escapeXml(url)}"/>
+                                            <c:url var="url" scope="page" value="/viewReport.do">
+                                                <c:param name="action" value="listReport"/>
+                                                <c:param name="personid" value="${personForm.id}"/>
+                                            </c:url>
+                                            <c:url var="url2" scope="page" value="/viewReport.do">
+                                                <c:param name="action" value="printReport"/>
+                                                <c:param name="personid" value="${personForm.id}"/>
+                                            </c:url>
+                                            <bean:message key="case.print.progress.buttons" arg0="${fn:escapeXml(url)}" arg1="${fn:escapeXml(url2)}"/>
                                         </c:if>
                                     </p>
                                 </div>

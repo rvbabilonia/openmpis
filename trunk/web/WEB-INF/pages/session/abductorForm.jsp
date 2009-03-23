@@ -6,6 +6,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -203,6 +204,7 @@
                                 <bean:message key="label.address.city"/>
                             </label>
                             <html:select styleId="cityfield" styleClass="selectclass" property="city">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="citytextfield" styleClass="hiddeninputclass" property="city" maxlength="30" disabled="true"/>
                         </p>
@@ -213,6 +215,7 @@
                             <html:select styleId="provincefield" styleClass="selectclass" property="province"
                                 onchange="javascript: setCitiesOnProvinceChange(this, cityfield);"
                                 onkeyup="javascript: setCitiesOnProvinceChange(this, cityfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="provincetextfield" styleClass="hiddeninputclass" property="province" maxlength="30" disabled="true"/>
                         </p>
@@ -223,6 +226,7 @@
                             <html:select styleId="countryfield" styleClass="selectclass" property="country"
                                 onchange="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);"
                                 onkeyup="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -307,21 +311,21 @@
                             <label id="markslabel" class="labelclass" for="marksfield">
                                 <bean:message key="label.marks"/>
                             </label>
-                            <html:textarea styleId="marksfield" styleClass="textareaclass" property="marks"/>
+                            <html:textarea styleId="marksfield" styleClass="textareaclass" property="marks" cols="" rows=""/>
                             <html:errors property="marks"/>
                         </p>
                         <p class="contentclass">
                             <label id="personaleffectslabel" class="labelclass" for="personaleffectsfield">
                                 <bean:message key="label.personaleffects"/>
                             </label>
-                            <html:textarea styleId="personaleffectsfield" styleClass="textareaclass" property="personalEffects"/>
+                            <html:textarea styleId="personaleffectsfield" styleClass="textareaclass" property="personalEffects" cols="" rows=""/>
                             <html:errors property="personaleffects"/>
                         </p>
                         <p class="contentclass">
                             <label id="remarkslabel" class="labelclass" for="remarksfield">
                                 * <bean:message key="label.remarks"/>
                             </label>
-                            <html:textarea styleId="remarksfield" styleClass="textareaclass" property="remarks"/>
+                            <html:textarea styleId="remarksfield" styleClass="textareaclass" property="remarks" cols="" rows=""/>
                             <html:errors property="remarks"/>
                         </p>
                         <p class="contentclass">
@@ -363,12 +367,20 @@
                                             <bean:message key="abductor.add.buttons"/>
                                         </c:when>
                                         <c:when test="${((action == 'viewAbductor') && (abductorForm.personId != null)) || (action == 'editAbductor') || ((action == 'newAbductor') && (abductorForm.id != 0))}">
-                                            <bean:message key="abductor.delete.buttons" arg0="${abductorForm.id}"/>
+                                            <c:url var="url" scope="page" value="/viewAbductor.do">
+                                                <c:param name="action" value="eraseAbductor"/>
+                                                <c:param name="id" value="${abductorForm.id}"/>
+                                            </c:url>
+                                            <bean:message key="abductor.delete.buttons" arg0="${fn:escapeXml(url)}"/>
                                         </c:when>
                                     </c:choose>
                                 </c:if>
                             </c:if>
-                            <bean:message key="abductor.print.poster" arg0="${abductorForm.id}"/>
+                            <c:url var="url" scope="page" value="/viewAbductor.do">
+                                <c:param name="action" value="printPoster"/>
+                                <c:param name="id" value="${abductorForm.id}"/>
+                            </c:url>
+                            <bean:message key="abductor.print.poster" arg0="${fn:escapeXml(url)}"/>
                         </p>
                     </html:form>
 
