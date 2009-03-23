@@ -70,11 +70,11 @@
                     <html:form method="post" action="viewAbductor" styleClass="adduserclass" enctype="multipart/form-data">
                         <p class="contentclass">
                             <c:choose>
-                                <c:when test="${(action == 'newAbductor') || (action == 'addAbductor')}">
+                                <c:when test="${((action == 'newAbductor') && (abductorForm.id == 0)) || (action == 'addAbductor')}">
                                     <html:hidden property="action" value="addAbductor"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
-                                <c:when test="${(action == 'viewAbductor') || (action == 'editAbductor')}">
+                                <c:when test="${((action == 'viewAbductor') && (abductorForm.personId != null)) || (action == 'editAbductor') || ((action == 'newAbductor') && (abductorForm.id != 0))}">
                                     <html:hidden property="action" value="editAbductor"/>
                                     <html:hidden property="personId"/>
                                 </c:when>
@@ -101,12 +101,10 @@
                             </label>
                             <html:text styleId="idfield" styleClass="inputclass" property="id" readonly="true"/>
                         </p>
-                        <c:if test="${(action == 'editAbductor') || (action == 'viewAbductor') || (action == null)}">
-                            <p class="contentclass">
-                                <html:img styleClass="photoclass" src="${abductorForm.photo == null ? 'photo/unknown.png' : abductorForm.photo}" alt="The person's photo" title="Photo"/>
-                                <html:img styleClass="photoclass" src="${abductorForm.agedPhoto == null ? 'photo/unknown.png' : abductorForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
-                            </p>
-                        </c:if>
+                        <p class="contentclass">
+                            <html:img styleClass="photoclass" src="${((abductorForm.photo == null) || (abductorForm.photo == '')) ? 'photo/unknown.png' : abductorForm.photo}" alt="The person's photo" title="Photo"/>
+                            <html:img styleClass="photoclass" src="${((abductorForm.agedPhoto == null) || (abductorForm.agedPhoto == '')) ? 'photo/unknown.png' : abductorForm.agedPhoto}" alt="The person's aged-progressed photo" title="Age-progressed photo"/>
+                        </p>
                         <c:if test="${currentuser.groupId == 1}">
                             <p class="contentclass">
                                 <label id="photolabel" class="labelclass" for="photofile">
@@ -232,6 +230,7 @@
                                 <bean:message key="label.sex"/>
                             </label>
                             <html:select styleId="sexfield" styleClass="selectclass" property="sex">
+                                <html:option value="0" styleId="sexfield0" styleClass="optionclass"><bean:message key="sex.0"/></html:option>
                                 <html:option value="1" styleId="sexfield1" styleClass="optionclass"><bean:message key="sex.1"/></html:option>
                                 <html:option value="2" styleId="sexfield2" styleClass="optionclass"><bean:message key="sex.2"/></html:option>
                             </html:select>
@@ -356,20 +355,21 @@
                                 </c:forEach>
                             </html:select>
                         </p>
-                        <c:if test="${abductorForm.personId != 0}">
-                            <p class="contentclass">
+                        <p class="contentclass">
+                            <c:if test="${abductorForm.personId != 0}">
                                 <c:if test="${currentuser.groupId == 1}">
                                     <c:choose>
-                                        <c:when test="${(action == 'newAbductor') || (action == 'addAbductor') || (action == 'addRelative') || (action == null)}">
-                                            <bean:message key="case.add.buttons"/>
+                                        <c:when test="${((action == 'newAbductor') && (abductorForm.id == 0)) || (action == 'addAbductor')}">
+                                            <bean:message key="abductor.add.buttons"/>
                                         </c:when>
-                                        <c:when test="${(action == 'editAbductor') || (action == 'viewAbductor')}">
-                                            <bean:message key="case.delete.buttons"/>
+                                        <c:when test="${((action == 'viewAbductor') && (abductorForm.personId != null)) || (action == 'editAbductor') || ((action == 'newAbductor') && (abductorForm.id != 0))}">
+                                            <bean:message key="abductor.delete.buttons" arg0="${abductorForm.id}"/>
                                         </c:when>
                                     </c:choose>
                                 </c:if>
-                            </p>
-                        </c:if>
+                            </c:if>
+                            <bean:message key="abductor.print.poster" arg0="${abductorForm.id}"/>
+                        </p>
                     </html:form>
 
                 </div>

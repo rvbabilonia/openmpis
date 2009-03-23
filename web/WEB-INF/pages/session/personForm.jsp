@@ -609,7 +609,7 @@
                                         <bean:message key="case.add.buttons"/>
                                     </c:when>
                                     <c:when test="${(action == 'editPerson') || (action == 'viewPerson')}">
-                                        <bean:message key="case.delete.buttons"/>
+                                        <bean:message key="case.delete.buttons" arg0="${personForm.id}"/>
                                     </c:when>
                                 </c:choose>
                                 <c:if test="${(action == 'editPerson') || (action == 'viewPerson')}">
