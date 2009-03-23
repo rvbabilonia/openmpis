@@ -278,6 +278,10 @@ public class PersonForm extends ActionForm {
      */
     private String abductorFirstName;
     /**
+     * The nickname of the abductor
+     */
+    private String abductorNickname;
+    /**
      * The last name of the abductor
      */
     private String abductorLastName;
@@ -1391,6 +1395,24 @@ public class PersonForm extends ActionForm {
      */
     public void setAbductorFirstName(String abductorFirstName) {
         this.abductorFirstName = abductorFirstName.trim();
+    }
+
+    /**
+     * Gets the nickname of the abductor.
+     *
+     * @return              the nickname of the abductor
+     */
+    public String getAbductorNickname() {
+        return abductorNickname;
+    }
+
+    /**
+     * Sets the nickname of the abductor.
+     *
+     * @param abductorNickname the nickname of the abductor
+     */
+    public void setAbductorNickname(String abductorNickname) {
+        this.abductorNickname = abductorNickname.trim();
     }
 
     /**
