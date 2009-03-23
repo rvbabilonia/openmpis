@@ -18,6 +18,8 @@
  */
 package com.googlecode.openmpis.action;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -95,7 +97,7 @@ public class PasswordAction extends Action {
 
                     // Reset password
                     String password = "op3nmp!s";
-                    user.setPassword(password);
+                    user.setPassword(encryptPassword(password));
 
                     // Set password modification event
                     Log resetLog = new Log();
@@ -183,5 +185,30 @@ public class PasswordAction extends Action {
         }
 
         return isValid;
+    }
+
+    /**
+     * Creates an MD5-encrypted password.
+     * Adapted from http://snipplr.com/view/4321/generate-md5-hash-from-string/.
+     *
+     * @param password      the password
+     * @return              the 32 alphanumeric-equivalent of the password
+     * @throws java.security.NoSuchAlgorithmException
+     */
+    private String encryptPassword(String password) throws NoSuchAlgorithmException {
+        StringBuffer encryptedPassword = new StringBuffer();
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.reset();
+        md5.update(password.getBytes());
+        byte digest[] = md5.digest();
+        for (int i = 0; i < digest.length; i++) {
+            String hex = Integer.toHexString(0xFF & digest[i]);
+            if(hex.length()==1) {
+                encryptedPassword.append('0');
+            }
+            encryptedPassword.append(hex);
+        }
+
+        return encryptedPassword.toString();
     }
 }
