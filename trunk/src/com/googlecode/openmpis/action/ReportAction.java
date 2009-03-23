@@ -421,9 +421,13 @@ public class ReportAction extends DispatchAction {
                 reportForm.setPersonId(report.getPersonId());
                 reportForm.setReport(report.getReport());
                 reportForm.setDate(report.getDate());
-                reportForm.setFirstName(report.getFirstName());
-                reportForm.setNickname(report.getNickname());
-                reportForm.setLastName(report.getLastName());
+
+                // Return person
+                Person person = personService.getPersonById(report.getPersonId());
+                reportForm.setFirstName(person.getFirstName());
+                reportForm.setNickname(person.getNickname());
+                reportForm.setLastName(person.getLastName());
+
                 request.setAttribute("action", request.getParameter("action"));
 
                 return mapping.findForward(Constants.EDIT_REPORT);
