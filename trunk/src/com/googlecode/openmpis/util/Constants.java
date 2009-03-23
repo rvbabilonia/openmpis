@@ -155,6 +155,18 @@ public abstract class Constants {
      */
     public static final String EDIT_PERSON_SUCCESS = "edit-person-success";
     /**
+     * The logical name of the forwarding instance for deleting a person
+     */
+    public static final String DELETE_PERSON = "delete-person";
+    /**
+     * The logical name of the forwarding instance for unsuccessful deleting of a person
+     */
+    public static final String DELETE_PERSON_REDO = "delete-person-redo";
+    /**
+     * The logical name of the forwarding instance for successful deleting of a person
+     */
+    public static final String DELETE_PERSON_SUCCESS = "delete-person-success";
+    /**
      * The logical name of the forwarding instance for viewing a person's poster
      */
     public static final String VIEW_PERSON_POSTER = "view-person-poster";
