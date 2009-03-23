@@ -135,7 +135,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteRelative" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE RELATIVE
+        DELETE FROM RELATIVE
         WHERE ID = #id#
         ]]>
     </delete>
