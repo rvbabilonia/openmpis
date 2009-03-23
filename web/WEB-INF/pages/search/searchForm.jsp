@@ -33,8 +33,10 @@
                     <bean:message key="search.heading"/>
 
                     <html:form method="get" action="search" styleClass="search">
-                        <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
-                        <bean:message key="search.searchbutton"/>
+                        <p class="contentclass">
+                            <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
+                            <bean:message key="search.searchbutton"/>
+                        </p>
                     </html:form>
                     <html:errors/>
                 </div>

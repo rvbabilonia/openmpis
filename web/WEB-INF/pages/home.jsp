@@ -32,9 +32,8 @@
             <!-- Content -->
             <div id="content">
                 <div id="contenthome">
-                    <p class="contentclass">
-                        <bean:message key="home.alert"/>
-                    </p>
+                    <bean:message key="home.alert"/>
+
                     <div class="table">
                         <div class="row">
                             <c:forEach begin="0" end="3" step="1" var="j">
@@ -96,8 +95,10 @@
                     <bean:message key="search.heading"/>
                     
                     <html:form method="get" action="search" styleClass="search">
-                        <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
-                        <bean:message key="search.searchbutton"/>
+                        <p class="contentclass">
+                            <html:text styleId="searchfield" styleClass="inputclass" property="keyword" size="40" maxlength="2000" value="${keyword}"/>
+                            <bean:message key="search.searchbutton"/>
+                        </p>
                     </html:form>
                     <html:errors/>
                 </div>
