@@ -45,7 +45,7 @@
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
-    be auto-mapped results to Person object (JavaBean) properties -->
+    be auto-mapped results to Abductor object (JavaBean) properties -->
     <select id="getAbductorById" parameterClass="java.lang.Integer" resultClass="abductor" cacheModel="abductorCache">
         SELECT
         <include refid="abductorColumnsFragment"/>
@@ -86,7 +86,7 @@
         </isGreaterThan>
     </select>
 
-    <!-- Use Person object (JavaBean) properties as parameters for insert. Each of the
+    <!-- Use Abductor object (JavaBean) properties as parameters for insert. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertAbductor" parameterClass="abductor">
         <selectKey type="post" resultClass="int">
@@ -106,7 +106,7 @@
         ]]>
     </insert>
 
-    <!-- Use Person object (JavaBean) properties as parameters for update. Each of the
+    <!-- Use Abductor object (JavaBean) properties as parameters for update. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateAbductor" parameterClass="abductor">
         <![CDATA[
@@ -142,11 +142,11 @@
         ]]>
     </update>
 
-    <!-- Use Person object (JavaBean) “id” properties as parameters for delete. Each of the
+    <!-- Use Abductor object (JavaBean) “id” properties as parameters for delete. Each of the
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteAbductor" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE ABDUCTOR
+        DELETE FROM ABDUCTOR
         WHERE ID = #id#
         ]]>
     </delete>
