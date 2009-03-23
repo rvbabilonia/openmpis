@@ -397,6 +397,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * Updates a person's encoder ID.
+     *
+     * @param person        the existing person
+     * @return              <code>true</code> if the person's encoder ID was successfully updated; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean updatePersonEncoder(Person person) throws SQLException {
+        return personDAO.updatePersonEncoder(person);
+    }
+
+    /**
      * Updates a person's relative ID.
      *
      * @param person        the existing person
@@ -873,5 +885,17 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public int countPersonsByAbductorId(Integer abductorId) throws SQLException {
         return personDAO.countPersonsByAbductorId(abductorId);
+    }
+
+    /**
+     * Returns the total number of persons related to a given relative.
+     *
+     * @param relativeId    the abductor ID
+     * @return              the total number of persons related to a given relative
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public int countPersonsByRelativeId(Integer relativeId) throws SQLException {
+        return personDAO.countPersonsByRelativeId(relativeId);
     }
 }
