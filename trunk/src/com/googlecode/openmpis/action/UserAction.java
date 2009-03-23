@@ -533,6 +533,7 @@ public class UserAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
+    /*
     public ActionForward eraseUser(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         User currentUser = null;
@@ -552,7 +553,7 @@ public class UserAction extends DispatchAction {
 
             userForm.setUsername(user.getUsername());
             // Generate 4-digit random code
-            userForm.setCode((int) (Math.random() * 9999) + 1000);
+            userForm.setCode((int) (Math.random() * 7777) + 1000);
 
             // Delete what you created/encoded
             // Administrator can delete all except administrators
@@ -566,6 +567,7 @@ public class UserAction extends DispatchAction {
             return mapping.findForward(Constants.UNAUTHORIZED);
         }
     }
+     */
 
     /**
      * Deletes the user from the database.
@@ -578,6 +580,7 @@ public class UserAction extends DispatchAction {
      * @return              the forwarding instance
      * @throws java.lang.Exception
      */
+    /*
     public ActionForward deleteUser(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         User currentUser = null;
@@ -637,7 +640,7 @@ public class UserAction extends DispatchAction {
                 }
             } else {
                 // Generate 4-digit random code
-                userForm.setCode((int) (Math.random() * 9999) + 1000);
+                userForm.setCode((int) (Math.random() * 7777) + 1000);
                 userForm.setUsername(user.getUsername());
 
                 // Return duplicate username error
@@ -653,6 +656,7 @@ public class UserAction extends DispatchAction {
             return mapping.findForward(Constants.UNAUTHORIZED);
         }
     }
+     */
 
     /**
      * Validates the inputs from the user form.
