@@ -17,7 +17,14 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <title><bean:message key="sighting.title"/></title>
+        <c:choose>
+            <c:when test="${currentuser.groupId == 0}">
+                <title><bean:message key="feedback.title"/></title>
+            </c:when>
+            <c:when test="${currentuser.groupId == 2}">
+                <title><bean:message key="sighting.title"/></title>
+            </c:when>
+        </c:choose>
     </head>
     <body>
         <div id="container">
