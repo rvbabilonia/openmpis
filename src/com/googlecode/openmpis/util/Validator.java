@@ -149,6 +149,6 @@ public class Validator {
      * @return              <code>true</code> if the institution is valid; <code>false</code> otherwise
      */
     public boolean isValidInstitution(String institution) {
-        return institution.matches("[A-Z][a-z0-9\\.]+([\\s'-][a-zA-Z0-9]+)*");
+        return institution.matches("[A-Z][a-z0-9\\.]+([\\s'-\\.][a-zA-Z0-9]+)*");
     }
 }
