@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <title><bean:message key="user.title"/></title>
+        <title><bean:message key="case.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -41,21 +41,28 @@
                     <bean:message key="case.heading"/>
                     <p class="contentclass">
                         <c:choose>
-                            <c:when test="${(person.type == 1) || (person.type == 2)}">
-                                <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
-                                <bean:message key="case.content.relative" arg0="${person.relativeId}"/>
-                                <bean:message key="case.content.abductor" arg0="${person.abductorId}"/>
-                                <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                            <c:when test="${operation == 'add'}">
+                                <c:choose>
+                                    <c:when test="${(person.type == 1) || (person.type == 2)}">
+                                        <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
+                                        <bean:message key="case.content.relative" arg0="${person.relativeId}"/>
+                                        <bean:message key="case.content.abductor" arg0="${person.abductorId}"/>
+                                        <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                                    </c:when>
+                                    <c:when test="${person.type > 4}">
+                                        <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
+                                        <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
+                                        <bean:message key="case.content.relative" arg0="${person.relativeId}"/>
+                                        <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
-                            <c:when test="${person.type > 4}">
-                                <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
-                                <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
+                            <c:when test="${operation == 'delete'}">
+                                <bean:message key="case.content.deleted" arg0="${person.firstName}" arg1="${person.nickname}" arg2="${person.lastName}" arg3="${person.id}"/>
                             </c:when>
-                            <c:otherwise>
-                                <bean:message key="case.content.person" arg0="${person.id}" arg1="${person.date}"/>
-                                <bean:message key="case.content.relative" arg0="${person.relativeId}"/>
-                                <bean:message key="case.content.investigator" arg0="${investigator.id}" arg1="${investigator.username}"/>
-                            </c:otherwise>
                         </c:choose>
                     </p>
                 </div>
