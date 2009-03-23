@@ -81,8 +81,7 @@ public class LoginAction extends Action {
         if (isValidLogin(request, form)) {
             // Retrieve user with the specified j_username
             User user = userService.getUserByUsername(loginForm.getJ_username());
-            String forward = "";
-
+            
             // Check if j_username exists in the database
             if ((user != null) && (user.getPassword().equals(loginForm.getJ_password()))) {
                 // Store the user on the session
@@ -105,7 +104,7 @@ public class LoginAction extends Action {
                 logService.insertLog(loginLog);
                 logger.info(loginLog.toString());
 
-                forward = Constants.LOGIN_SUCCESS;
+                return mapping.findForward(Constants.LOGIN_SUCCESS);
             } else {
                 ActionMessages errors = new ActionMessages();
                 errors.add("login", new ActionMessage("error.login.invalid"));
@@ -114,10 +113,8 @@ public class LoginAction extends Action {
                 logger.info("Invalid password for user " + loginForm.getJ_username() +
                         " from " + request.getRemoteAddr() + ".");
 
-                forward = Constants.LOGIN_REDO;
+                return mapping.findForward(Constants.LOGIN_REDO);
             }
-
-            return mapping.findForward(forward);
         } else {
             logger.info("Invalid login credentials from " + request.getRemoteAddr() + ".");
 
@@ -141,13 +138,15 @@ public class LoginAction extends Action {
         String j_username = loginForm.getJ_username();
         String j_password = loginForm.getJ_password();
 
-        // Check if j_username is empty
-        if (j_username.length() < 1) {
-            errors.add("j_username", new ActionMessage("error.username.required"));
-        } else {
-            // Check if j_username consists of 5 or 6 alphanumeric characters
-            if ((!validator.isValidUsername(j_username))) {
-                errors.add("j_username", new ActionMessage("error.username.invalid"));
+        if (j_username != null) {
+            // Check if j_username is empty
+            if (j_username.length() < 1) {
+                errors.add("j_username", new ActionMessage("error.username.required"));
+            } else {
+                // Check if j_username consists of 5 or 6 alphanumeric characters
+                if ((!validator.isValidUsername(j_username))) {
+                    errors.add("j_username", new ActionMessage("error.username.invalid"));
+                }
             }
         }
 
