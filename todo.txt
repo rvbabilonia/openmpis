@@ -1,6 +1,5 @@
 validation
     xhtml (buttons/links/jsp/application resources)
-    css
 
 test cases (selenium)
 
@@ -11,89 +10,70 @@ documentation
     comments
     imports
 
-change in case type (person)
-    removal of abductor
-
-public
-    case
-        /viewCase.do?action=viewAbductor&id=
+methods
+    actionforward (action.*)
+    action (struts-config)
 
 encoder
     case
         person
-            /viewPerson.do?action=erasePerson&id=
             /viewPerson.do?action=deletePerson (form action)
-                remove relative
-                remove abductor
-                remove from database
-                delete photos
-        relative
-            /viewRelative.do?action=eraseRelative&id=
-            /viewRelative.do?action=deleteRelative (form action)
-                remove from person
-                remove from database
+                remove relative if no other person is related to said relative
+                remove abductor if no other person has been abducted by said abductor
+                    delete photos
         abductor
-            /viewAbductor.do?action=newAbductor
-            /viewAbductor.do?action=addAbductor (form action)
-                assign to person
-            /viewAbductor.do?action=viewAbductor&id=
-            /viewAbductor.do?action=editAbductor (form action)
-                assign to person
-            /viewAbductor.do?action=eraseAdbuctor&id=
             /viewAbductor.do?action=deleteAbductor (form action)
-                remove from person
-                remove from database
                 delete photos
 
-investigator
-    case
-        /viewProgress.do?action=eraseReport&id=
-        /viewProgress.do?action=deleteReport
+package
+    svn export https://openmpis.googlecode.com/svn/trunk/ openmpis --username rvbabilonia --password
 
-administrator
-    (currentuser.groupId == 0)
+match found to missing
+    word stemming
+    adjacent locations
 
-not your creator
-    (currentuser.creatorId != editUserForm.id)
+cellphone to mpis
 
-not your personal account
-    (currentuser.id != editUserForm.id)
+contact
+    gma
+        jessica soho
+    dilg
+        barangay halls
+        dilgmail@dilg.gov.ph
+    dswd
+        http://www.dswd.gov.ph/inquiry.php
+        wcbelizar@dswd.gov.ph
+    pnp
+        feedback@pnp.gov.ph
+        helpdesk@pnp.gov.ph
+    nbi
+        director@nbi.gov.ph
+        oddsis@nbi.gov.ph
+    senate
+        sb429: senjinggoyestrada@senate.gov.ph
+        sb1709: mb_villar@yahoo.com
+        sb1385: loren_b_legarda@yahoo.com
+        welfare: pia@senatorpiacayetano.com
+        mass media: alancayetano@yahoo.com
+        human rights: sen.escudero@gmail.com, reachus@chizescudero.com, mediagroup@chizescudero.com
+    congress
+        http://www.congress.gov.ph/contact/popform.php?re=sendemail&to=committee&id=0528
+        http://www.congress.gov.ph/contact/popform.php?re=sendemail&to=committee&id=E507
+    comelec
+    nso
+    telebisyon.net
+        http://telebisyon.net/Reunions/series/comments/18/
+    frjes
+        http://frjes.wordpress.com/
+    phr
+        http://www.philippinehumanrights.org/contact-us.html
+    human rights
+        http://www.humanrights.gov.ph/index.php?categoryid=37
+    chr
+        Hon. Leila M. De Lima atty_delima@yahoo.com.ph
 
-personal account
-    (currentuser.id == editUserForm.id)
+success stories
 
-your creator/encoder
-    (currentuser.creatorId == editUserForm.id)
+merit/demerit system
 
-you are the creator/encoder
-    (currentuser.id == editUserForm.creatorId)
-
-
-        <!-- Selects and assigns investigator -->
-        <action
-                path="/viewInvestigator"
-                type="com.googlecode.openmpis.action.InvestigatorAction"
-                scope="request"
-                name="investigatorForm"
-                input="/WEB-INF/pages/session/investigatorForm.jsp"
-                validate="false"
-                parameter="action">
-            <forward name="assign-investigator"  path="/WEB-INF/pages/session/investigatorForm.jsp"/>
-            <forward name="assign-investigator-success" path="/WEB-INF/pages/session/investigatorSuccess.jsp"/>
-        </action>
-
-INSERT INTO `user` (`id`,`groupID`,`username`,`password`,`firstName`,`middleName`,`lastName`,`birthMonth`,`birthDay`,`birthYear`,`email`,`designation`,`agency`,`number`,`ipAddress`,`lastLogin`,`date`,`creatorID`,`status`,`question`,`answer`) VALUES
- (2,1,'MO0916','148332b694fc60c7dac7ef37f3d2b34d','Marvic','Brizuela','Orejo',9,16,1981,'marvic.orejo@thomsonreuters.com','QC Lead','Thomson Reuters','+639175584603','127.0.0.1','2009-02-16','2009-02-16',1,0,0,'blue'),
- (3,2,'GB1116','b7463760284fd06773ac2a48e29b0acf','Giovanni','Potencio','Babilonia',11,16,1982,'babski@yahoo.com','CSR','Sitel','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (4,2,'HB1214','b7463760284fd06773ac2a48e29b0acf','Hadji','Potencio','Babilonia',12,14,1986,'boboy@yahoo.com','RN','Home','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (5,2,'DU0101','b7463760284fd06773ac2a48e29b0acf','Diana Marie','Marie','Miano-Uy',1,1,1949,'dmiano@yahoo.com','Lawyer','Bunag-Uy','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (6,2,'EC0202','b7463760284fd06773ac2a48e29b0acf','Elyzabeth','Policarpio','Cureg',2,2,1950,'ely_cureg@yahoo.com','Political Analyst','NCPAG','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (7,2,'GF0303','b7463760284fd06773ac2a48e29b0acf','Glaiza','Flores','Fabayos',3,3,1951,'glaiza.fabayos@thomsonreuters.com','Research  Analyst','Thomson Reuters','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (8,2,'HM0404','b7463760284fd06773ac2a48e29b0acf','Hanzel','Leveriza','Monforte',4,4,1952,'don_hamon40@yahoo.com','Tutor','iTouch','+63 2 426 9760',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (9,2,'BB0106','b7463760284fd06773ac2a48e29b0acf','Bemboy','Potencio','Babilonia',1,6,1982,'rvincent@asti.dost.gov.ph','SRSI','ASTI','+63 2 426 9760 ext. 1302',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (10,2,'MB0916','b7463760284fd06773ac2a48e29b0acf','Marcella Victoria','Brizuela','Babilonia',9,16,1981,'t_d916@yahoo.com','QC Team Leader','Thomson Reuters','+63 2 426 9760','127.0.0.1','2009-02-16','2009-02-16',2,0,0,NULL),
- (11,2,'LP0808','b7463760284fd06773ac2a48e29b0acf','Lynne','Clemeno','Potencio',8,8,1956,'lynne@yahoo.com','Teacher','RNTVS','1234567',NULL,NULL,'2009-02-16',2,0,0,NULL),
- (12,2,'JC0114','b7463760284fd06773ac2a48e29b0acf','Juan','Santos','de la Cruz',1,14,1960,'jdc@gmail.com','Streetkid','MMDA','028886666',NULL,NULL,'2009-02-16',2,0,0,NULL);
-
-
-
+logo of case handler
