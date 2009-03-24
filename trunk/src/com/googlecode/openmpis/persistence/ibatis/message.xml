@@ -171,4 +171,11 @@
         WHERE ID = #id#
         ]]>
     </delete>
+
+    <delete id="deleteMessagesForPerson" parameterClass="java.lang.Integer">
+        <![CDATA[
+        DELETE FROM MESSAGE
+        WHERE PERSONID = #personId#
+        ]]>
+    </delete>
 </sqlMap>
