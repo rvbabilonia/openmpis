@@ -1,38 +1,27 @@
-validation
-    xhtml (buttons/links/jsp/application resources)
-
-test cases (selenium)
-
 documentation
     user manual
     developer manual
     system administrator manual
-    comments
-    imports
-
-methods
-    actionforward (action.*)
-    action (struts-config)
-
-encoder
-    case
-        person
-            /viewPerson.do?action=deletePerson (form action)
-                remove relative if no other person is related to said relative
-                remove abductor if no other person has been abducted by said abductor
-                    delete photos
-        abductor
-            /viewAbductor.do?action=deleteAbductor (form action)
-                delete photos
+    manuscript
+        functional requirements
+        non-functional requirements
+        comments
+        test cases (selenium)
+        recommendations
+            match found to missing
+                word stemming
+                adjacent locations
+            cellphone to mpis
+            methods
+                actionforward (action.*)
+                action (struts-config)
+            success stories
+            merit/demerit system
+            logo of case handler
 
 package
     svn export https://openmpis.googlecode.com/svn/trunk/ openmpis --username rvbabilonia --password
 
-match found to missing
-    word stemming
-    adjacent locations
-
-cellphone to mpis
 
 contact
     gma
@@ -71,9 +60,3 @@ contact
         http://www.humanrights.gov.ph/index.php?categoryid=37
     chr
         Hon. Leila M. De Lima atty_delima@yahoo.com.ph
-
-success stories
-
-merit/demerit system
-
-logo of case handler
