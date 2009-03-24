@@ -6,6 +6,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -82,12 +83,21 @@
                                 <label id="relativelistlabel" class="labelclass" for="relativelistfield">
                                     <bean:message key="label.relative.existing"/>
                                 </label>
+                                <c:url var="viewrelativeurl" scope="page" value="/viewRelative.do">
+                                    <c:param name="action" value="viewRelative"/>
+                                    <c:param name="personid" value="${relativeForm.personId}"/>
+                                    <c:param name="id"/>
+                                </c:url>
+                                <c:url var="newrelativeurl" scope="page" value="/viewRelative.do">
+                                    <c:param name="action" value="newRelative"/>
+                                    <c:param name="personid" value="${relativeForm.personId}"/>
+                                </c:url>
                                 <html:select styleId="relativelistfield" styleClass="selectclass" property="id"
-                                    onchange="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${relativeForm.personId};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${relativeForm.personId};}"
-                                    onkeyup="javascript: if (relativelistfield.value > 0) {window.location = 'viewRelative.do?action=viewRelative&id=' + this.value + '&personid=' + ${relativeForm.personId};} else {window.location = 'viewRelative.do?action=newRelative' + '&personid=' + ${relativeForm.personId};}">
+                                    onchange="javascript: if (relativelistfield.value > 0) {window.location = '${fn:escapeXml(viewrelativeurl)}' + this.value;} else {window.location = '${fn:escapeXml(newrelativeurl)}';}"
+                                    onkeyup="javascript: if (relativelistfield.value > 0) {window.location = '${fn:escapeXml(viewrelativeurl)}' + this.value;} else {window.location = '${fn:escapeXml(newrelativeurl)}';}">
                                     <html:option value="0" styleId="relativefield0" styleClass="optionclass">----------</html:option>
                                     <c:forEach items="${relativelist}" var="relative">
-                                        <html:option value="${relative.id}" styleId="relativefield${i}" styleClass="optionclass">${relative.lastName}, ${relative.firstName}</html:option>
+                                        <html:option value="${relative.id}" styleId="relativefield${relative.id}" styleClass="optionclass">${relative.lastName}, ${relative.firstName}</html:option>
                                     </c:forEach>
                                 </html:select>
                             </p>
@@ -133,6 +143,7 @@
                                 * <bean:message key="label.address.city"/>
                             </label>
                             <html:select styleId="cityfield" styleClass="selectclass" property="city">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="citytextfield" styleClass="hiddeninputclass" property="city" maxlength="30" disabled="true"/>
                             <html:errors property="city"/>
@@ -144,6 +155,7 @@
                             <html:select styleId="provincefield" styleClass="selectclass" property="province"
                                 onchange="javascript: setCitiesOnProvinceChange(this, cityfield);"
                                 onkeyup="javascript: setCitiesOnProvinceChange(this, cityfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="provincetextfield" styleClass="hiddeninputclass" property="province" maxlength="30" disabled="true"/>
                             <html:errors property="province"/>
@@ -155,6 +167,7 @@
                             <html:select styleId="countryfield" styleClass="selectclass" property="country"
                                 onchange="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);"
                                 onkeyup="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -189,7 +202,11 @@
                                             <bean:message key="relative.add.buttons"/>
                                         </c:when>
                                         <c:when test="${((action == 'viewRelative') && (relativeForm.personId != null)) || (action == 'editRelative') || ((action == 'newRelative') && (relativeForm.id != 0))}">
-                                            <bean:message key="relative.delete.buttons" arg0="${relativeForm.id}"/>
+                                            <c:url var="url" scope="page" value="/viewRelative.do">
+                                                <c:param name="action" value="eraseRelative"/>
+                                                <c:param name="id" value="${relativeForm.id}"/>
+                                            </c:url>
+                                            <bean:message key="relative.delete.buttons" arg0="${fn:escapeXml(url)}"/>
                                         </c:when>
                                     </c:choose>
                                 </c:if>

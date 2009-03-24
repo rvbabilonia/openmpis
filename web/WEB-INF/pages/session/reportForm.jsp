@@ -5,6 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -88,7 +89,7 @@
                             <label id="reportlabel" class="labelclass" for="reportfield">
                                 <bean:message key="label.report"/>
                             </label>
-                            <html:textarea styleId="reportfield" styleClass="textareaclass" property="report" cols="50" rows="10"/>
+                            <html:textarea styleId="reportfield" styleClass="textareaclass" property="report" cols="" rows=""/>
                             <html:errors property="report"/>
                         </p>
                         <p class="contentclass">
@@ -98,7 +99,11 @@
                                         <bean:message key="report.add.buttons"/>
                                     </c:when>
                                     <c:when test="${(action == 'editReport') || (action == 'viewReport')}">
-                                        <bean:message key="report.delete.buttons"/>
+                                        <c:url var="url" scope="page" value="/viewReport.do">
+                                            <c:param name="action" value="eraseReport"/>
+                                            <c:param name="id" value="${reportForm.id}"/>
+                                        </c:url>
+                                        <bean:message key="report.edit.buttons" arg0="${fn:escapeXml(url)}"/>
                                     </c:when>
                                 </c:choose>
                             </c:if>
