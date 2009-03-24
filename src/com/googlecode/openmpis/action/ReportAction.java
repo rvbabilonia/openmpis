@@ -489,6 +489,9 @@ public class ReportAction extends DispatchAction {
                 logService.insertLog(reportLog);
                 logger.info(reportLog.toString());
 
+                // Return report
+                request.setAttribute("report", report);
+
                 if (isUpdated) {
                     return mapping.findForward(Constants.ADD_REPORT_SUCCESS);
                 } else {
@@ -545,14 +548,6 @@ public class ReportAction extends DispatchAction {
                 }
                 defaultPhotoBasename += tokens[tokens.length - 1];
                 String absoluteDefaultPhotoFilename = getServlet().getServletContext().getRealPath("/") + defaultPhotoBasename;
-
-//                reportForm.setId(report.getId());
-//                reportForm.setPersonId(report.getPersonId());
-//                reportForm.setReport(report.getReport());
-//                reportForm.setDate(report.getDate());
-//                reportForm.setFirstName(report.getFirstName());
-//                reportForm.setNickname(report.getNickname());
-//                reportForm.setLastName(report.getLastName());
 
                 // Set the paper size and margins
                 Document document = new Document(PageSize.LETTER, 50, 50, 50, 50);
