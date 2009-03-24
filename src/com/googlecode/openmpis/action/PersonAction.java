@@ -44,18 +44,21 @@ import com.googlecode.openmpis.dto.User;
 import com.googlecode.openmpis.form.PersonForm;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.AbductorDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.LogDAOImpl;
+import com.googlecode.openmpis.persistence.ibatis.dao.impl.MessageDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.PersonDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.RelativeDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.ReportDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.dao.impl.UserDAOImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.AbductorService;
 import com.googlecode.openmpis.persistence.ibatis.service.LogService;
+import com.googlecode.openmpis.persistence.ibatis.service.MessageService;
 import com.googlecode.openmpis.persistence.ibatis.service.PersonService;
 import com.googlecode.openmpis.persistence.ibatis.service.RelativeService;
 import com.googlecode.openmpis.persistence.ibatis.service.ReportService;
 import com.googlecode.openmpis.persistence.ibatis.service.UserService;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.AbductorServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.LogServiceImpl;
+import com.googlecode.openmpis.persistence.ibatis.service.impl.MessageServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.PersonServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.RelativeServiceImpl;
 import com.googlecode.openmpis.persistence.ibatis.service.impl.ReportServiceImpl;
@@ -90,6 +93,10 @@ public class PersonAction extends DispatchAction {
      * The report service
      */
     private ReportService reportService = new ReportServiceImpl(new ReportDAOImpl());
+    /**
+     * The message service
+     */
+    private MessageService messageService = new MessageServiceImpl(new MessageDAOImpl());
     /**
      * The relative service
      */
@@ -888,9 +895,6 @@ public class PersonAction extends DispatchAction {
                 if (personForm.getCode() == personForm.getUserCode()) {
                     // Encoder can delete a person
                     if (currentUser.getGroupId() == 1) {
-                        // Delete person
-                        personService.deletePerson(person.getId());
-
                         // Delete person photos
                         String absolutePhotoDirectory = getServlet().getServletContext().getRealPath("/") + "photo" + File.separator + createDirectoryName(person.getId());
                         File photoDirectory = new File(absolutePhotoDirectory);
@@ -935,6 +939,15 @@ public class PersonAction extends DispatchAction {
                             }
                         }
 
+                        // Delete sightings
+                        messageService.deleteMessagesForPerson(person.getId());
+
+                        // Delete reports
+                        reportService.deleteReportsForPerson(person.getId());
+
+                        // Delete person
+                        personService.deletePerson(person.getId());
+
                         // Log person deletion event
                         Log deleteLog = new Log();
                         deleteLog.setLog("Person " + person.getFirstName() + " \"" + person.getNickname() + "\" " + person.getLastName() + " was deleted by " + currentUser.getUsername() + ".");
@@ -956,6 +969,7 @@ public class PersonAction extends DispatchAction {
                     personForm.setLastName(person.getLastName());
                     if (person.getAbductorId() != null) {
                         if (personService.countPersonsByAbductorId(person.getAbductorId()) == 1) {
+                            personForm.setAbductorId(person.getAbductorId());
                             personForm.setAbductorFirstName(abductorService.getAbductorById(person.getAbductorId()).getFirstName());
                             personForm.setAbductorNickname(abductorService.getAbductorById(person.getAbductorId()).getNickname());
                             personForm.setAbductorLastName(abductorService.getAbductorById(person.getAbductorId()).getLastName());
@@ -963,6 +977,7 @@ public class PersonAction extends DispatchAction {
                     }
                     if (person.getRelativeId() != null) {
                         if (personService.countPersonsByRelativeId(person.getRelativeId()) == 1) {
+                            personForm.setRelativeId(person.getRelativeId());
                             personForm.setRelativeFirstName(relativeService.getRelativeById(person.getRelativeId()).getFirstName());
                             personForm.setRelativeLastName(relativeService.getRelativeById(person.getRelativeId()).getLastName());
                         }
