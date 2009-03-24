@@ -136,6 +136,18 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
+     * Deletes all reports for a given person.
+     *
+     * @param personId      the ID of the person
+     * @return              <code>true</code> if all reports for a given person were successfully deleted; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean deleteReportsForPerson(Integer personId) throws SQLException {
+        return reportDAO.deleteReportsForPerson(personId);
+    }
+
+    /**
      * Returns the total number of reports for a given person.
      *
      * @param id            the ID of the person

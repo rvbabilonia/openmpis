@@ -108,6 +108,15 @@ public interface MessageService {
     public boolean deleteMessage(Integer id) throws SQLException;
 
     /**
+     * Deletes all messages for a given person.
+     *
+     * @param personId      the ID of the person
+     * @return              <code>true</code> if all messages for a given person were successfully deleted; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    public boolean deleteMessagesForPerson(Integer personId) throws SQLException;
+
+    /**
      * Returns the total number of feedbacks for the administrator.
      *
      * @param userId        the user ID
