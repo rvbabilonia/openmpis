@@ -19,9 +19,6 @@ documentation
             merit/demerit system
             logo of case handler
 
-package
-    svn export https://openmpis.googlecode.com/svn/trunk/ openmpis --username rvbabilonia --password
-
 
 contact
     gma
