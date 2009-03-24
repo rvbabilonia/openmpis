@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -42,7 +43,6 @@ import com.googlecode.openmpis.util.Configuration;
 import com.googlecode.openmpis.util.Constants;
 import com.googlecode.openmpis.util.Mail;
 import com.googlecode.openmpis.util.Validator;
-import org.apache.log4j.Logger;
 
 /**
  * The FeedbackAction class provides the method to email a feedback to the administrator.
