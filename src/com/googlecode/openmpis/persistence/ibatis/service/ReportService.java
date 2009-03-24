@@ -99,6 +99,15 @@ public interface ReportService {
     public boolean deleteReport(Integer id) throws SQLException;
 
     /**
+     * Deletes all reports for a given person.
+     *
+     * @param personId      the ID of the person
+     * @return              <code>true</code> if all reports for a given person were successfully deleted; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    public boolean deleteReportsForPerson(Integer personId) throws SQLException;
+
+    /**
      * Returns the total number of reports for a given person.
      *
      * @param id            the ID of the person

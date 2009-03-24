@@ -62,6 +62,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
+     * Deletes all messages for a given person.
+     *
+     * @param personId      the ID of the person
+     * @return              <code>true</code> if all messages for a given person were successfully deleted; <code>false</code> otherwise
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean deleteMessagesForPerson(Integer personId) throws SQLException {
+        return messageDAO.deleteMessagesForPerson(personId);
+    }
+
+    /**
      * Retrieves all messages.
      *
      * @param pagination    the pagination context
