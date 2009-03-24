@@ -113,4 +113,11 @@
         WHERE ID = #id#
         ]]>
     </delete>
+
+    <delete id="deleteReportsForPerson" parameterClass="java.lang.Integer">
+        <![CDATA[
+        DELETE FROM REPORT
+        WHERE PERSONID = #personId#
+        ]]>
+    </delete>
 </sqlMap>
