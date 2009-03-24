@@ -17,7 +17,7 @@
         <meta name="robots" content="all"/>
         <link rel="shortcut icon" href="images/favicon.ico"/>
         <style type="text/css" media="all">@import "<bean:message key="global.style"/>";</style>
-        <title><bean:message key="user.title"/></title>
+        <title><bean:message key="report.title"/></title>
     </head>
     <body>
         <div id="container">
@@ -41,10 +41,10 @@
                                 <bean:message key="report.content.created" arg0="${report.firstName}" arg1="${report.nickname}" arg2="${report.lastName}" arg3="${report.date}"/>
                             </c:when>
                             <c:when test="${action == 'editReport'}">
-                                <bean:message key="report.content.updated" arg0="${id}"/>
+                                <bean:message key="report.content.updated" arg0="${report.id}"/>
                             </c:when>
                             <c:when test="${action == 'deleteReport'}">
-                                <bean:message key="report.content.deleted" arg0="${id}"/>
+                                <bean:message key="report.content.deleted" arg0="${report.id}"/>
                             </c:when>
                         </c:choose>
                     </p>
