@@ -179,6 +179,7 @@ public class MessageDAOImpl implements MessageDAO {
      * @throws java.sql.SQLException
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<Message> listAllSightingsForPerson(Integer id) throws SQLException {
         List<Message> messageList = new ArrayList<Message>();
 
