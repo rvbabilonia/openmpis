@@ -86,12 +86,21 @@
                                 <label id="abductorlistlabel" class="labelclass" for="abductorlistfield">
                                     <bean:message key="label.abductor.existing"/>
                                 </label>
+                                <c:url var="viewabductorurl" scope="page" value="/viewAbductor.do">
+                                    <c:param name="action" value="viewAbductor"/>
+                                    <c:param name="personid" value="${abductorForm.personId}"/>
+                                    <c:param name="id"/>
+                                </c:url>
+                                <c:url var="newabductorurl" scope="page" value="/viewAbductor.do">
+                                    <c:param name="action" value="newAbductor"/>
+                                    <c:param name="personid" value="${abductorForm.personId}"/>
+                                </c:url>
                                 <html:select styleId="abductorlistfield" styleClass="selectclass" property="id"
-                                    onchange="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${abductorForm.personId};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${abductorForm.personId};}"
-                                    onkeyup="javascript: if (abductorlistfield.value > 0) {window.location = 'viewAbductor.do?action=viewAbductor&id=' + this.value + '&personid=' + ${abductorForm.personId};} else {window.location = 'viewAbductor.do?action=newAbductor' + '&personid=' + ${abductorForm.personId};}">
+                                    onchange="javascript: if (abductorlistfield.value > 0) {window.location = '${fn:escapeXml(viewabductorurl)}' + this.value;} else {window.location = '${fn:escapeXml(newabductorurl)}';}"
+                                    onkeyup="javascript: if (abductorlistfield.value > 0) {window.location = '${fn:escapeXml(viewabductorurl)}' + this.value;} else {window.location = '${fn:escapeXml(newabductorurl)}';}">
                                     <html:option value="0" styleId="abductorfield0" styleClass="optionclass">----------</html:option>
                                     <c:forEach items="${abductorlist}" var="abductor">
-                                        <html:option value="${abductor.id}" styleId="abductorfield${i}" styleClass="optionclass">${abductor.id} - ${abductor.lastName}, ${abductor.firstName}</html:option>
+                                        <html:option value="${abductor.id}" styleId="abductorfield${abductor.id}" styleClass="optionclass">${abductor.id} - ${abductor.lastName}, ${abductor.firstName}</html:option>
                                     </c:forEach>
                                 </html:select>
                             </p>

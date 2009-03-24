@@ -211,6 +211,7 @@
                                 <bean:message key="label.address.city"/>
                             </label>
                             <html:select styleId="cityfield" styleClass="selectclass" property="city">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="citytextfield" styleClass="hiddeninputclass" property="city" maxlength="30" disabled="true"/>
                         </p>
@@ -221,6 +222,7 @@
                             <html:select styleId="provincefield" styleClass="selectclass" property="province"
                                 onchange="javascript: setCitiesOnProvinceChange(this, cityfield);"
                                 onkeyup="javascript: setCitiesOnProvinceChange(this, cityfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                             <html:text styleId="provincetextfield" styleClass="hiddeninputclass" property="province" maxlength="30" disabled="true"/>
                         </p>
@@ -231,6 +233,7 @@
                             <html:select styleId="countryfield" styleClass="selectclass" property="country"
                                 onchange="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);"
                                 onkeyup="javascript: toggleSelectOrText(this, provincefield, provincetextfield, cityfield, citytextfield);">
+                                <html:option value="" styleClass="optionclass"></html:option>
                             </html:select>
                         </p>
                         <p class="contentclass">
@@ -314,28 +317,28 @@
                             <label id="medicalconditionlabel" class="labelclass" for="medicalconditionfield">
                                 <bean:message key="label.condition"/>
                             </label>
-                            <html:textarea styleId="medicalconditionfield" styleClass="textareaclass" property="medicalCondition"/>
+                            <html:textarea styleId="medicalconditionfield" styleClass="textareaclass" property="medicalCondition" cols="" rows=""/>
                             <html:errors property="medicalcondition"/>
                         </p>
                         <p class="contentclass">
                             <label id="markslabel" class="labelclass" for="marksfield">
                                 * <bean:message key="label.marks"/>
                             </label>
-                            <html:textarea styleId="marksfield" styleClass="textareaclass" property="marks"/>
+                            <html:textarea styleId="marksfield" styleClass="textareaclass" property="marks" cols="" rows=""/>
                             <html:errors property="marks"/>
                         </p>
                         <p class="contentclass">
                             <label id="personaleffectslabel" class="labelclass" for="personaleffectsfield">
                                 * <bean:message key="label.personaleffects"/>
                             </label>
-                            <html:textarea styleId="personaleffectsfield" styleClass="textareaclass" property="personalEffects"/>
+                            <html:textarea styleId="personaleffectsfield" styleClass="textareaclass" property="personalEffects" cols="" rows=""/>
                             <html:errors property="personaleffects"/>
                         </p>
                         <p class="contentclass">
                             <label id="remarkslabel" class="labelclass" for="remarksfield">
                                 <bean:message key="label.remarks"/>
                             </label>
-                            <html:textarea styleId="remarksfield" styleClass="textareaclass" property="remarks"/>
+                            <html:textarea styleId="remarksfield" styleClass="textareaclass" property="remarks" cols="" rows=""/>
                             <html:errors property="remarks"/>
                         </p>
                         <c:choose>
@@ -385,6 +388,7 @@
                                     * <bean:message key="label.address.city"/>
                                 </label>
                                 <html:select styleId="missingfromcityfield" styleClass="selectclass" property="missingFromCity" >
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="missingfromcitytextfield" styleClass="hiddeninputclass" property="missingFromCity" maxlength="30" disabled="true"/>
                                 <html:errors property="missingfromcity"/>
@@ -396,6 +400,7 @@
                                 <html:select styleId="missingfromprovincefield" styleClass="selectclass" property="missingFromProvince"
                                     onchange="javascript: setCitiesOnProvinceChange(this, missingfromcityfield);"
                                     onkeyup="javascript: setCitiesOnProvinceChange(this, missingfromcityfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="missingfromprovincetextfield" styleClass="hiddeninputclass" property="missingFromProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="missingfromprovince"/>
@@ -407,6 +412,7 @@
                                 <html:select styleId="missingfromcountryfield" styleClass="selectclass" property="missingFromCountry"
                                     onchange="javascript: toggleSelectOrText(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);"
                                     onkeyup="javascript: toggleSelectOrText(this, missingfromprovincefield, missingfromprovincetextfield, missingfromcityfield, missingfromcitytextfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                             </p>
                             <p class="contentclass">
@@ -417,6 +423,7 @@
                                     <bean:message key="label.address.city"/>
                                 </label>
                                 <html:select styleId="possiblecityfield" styleClass="selectclass" property="possibleCity" >
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="possiblecitytextfield" styleClass="hiddeninputclass" property="possibleCity" maxlength="30" disabled="true"/>
                                 <html:errors property="possiblecity"/>
@@ -428,6 +435,7 @@
                                 <html:select styleId="possibleprovincefield" styleClass="selectclass" property="possibleProvince"
                                     onchange="javascript: setCitiesOnProvinceChange(this, possiblecityfield);"
                                     onkeyup="javascript: setCitiesOnProvinceChange(this, possiblecityfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="possibleprovincetextfield" styleClass="hiddeninputclass" property="possibleProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="possibleprovince"/>
@@ -439,13 +447,14 @@
                                 <html:select styleId="possiblecountryfield" styleClass="selectclass" property="possibleCountry"
                                 onchange="javascript: toggleSelectOrText(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);"
                                 onkeyup="javascript: toggleSelectOrText(this, possibleprovincefield, possibleprovincetextfield, possiblecityfield, possiblecitytextfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                             </p>
                             <p class="contentclass">
                                 <label id="circumstancelabel" class="labelclass" for="circumstancefield">
                                     * <bean:message key="label.circumstance"/>
                                 </label>
-                                <html:textarea styleId="circumstancefield" styleClass="textareaclass" property="circumstance"/>
+                                <html:textarea styleId="circumstancefield" styleClass="textareaclass" property="circumstance" cols="" rows=""/>
                                 <html:errors property="circumstance"/>
                             </p>
                             <p class="contentclass">
@@ -500,6 +509,7 @@
                                     * <bean:message key="label.address.city"/>
                                 </label>
                                 <html:select styleId="institutioncityfield" styleClass="selectclass" property="institutionCity" >
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="institutioncitytextfield" styleClass="hiddeninputclass" property="institutionCity" maxlength="30" disabled="true"/>
                                 <html:errors property="institutioncity"/>
@@ -511,6 +521,7 @@
                                 <html:select styleId="institutionprovincefield" styleClass="selectclass" property="institutionProvince"
                                     onchange="javascript: setCitiesOnProvinceChange(this, institutioncityfield);"
                                     onkeyup="javascript: setCitiesOnProvinceChange(this, institutioncityfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                                 <html:text styleId="institutionprovincetextfield" styleClass="hiddeninputclass" property="institutionProvince" maxlength="30" disabled="true"/>
                                 <html:errors property="institutionprovince"/>
@@ -522,6 +533,7 @@
                                 <html:select styleId="institutioncountryfield" styleClass="selectclass" property="institutionCountry"
                                     onchange="javascript: toggleSelectOrText(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);"
                                     onkeyup="javascript: toggleSelectOrText(this, institutionprovincefield, institutionprovincetextfield, institutioncityfield, institutioncitytextfield);">
+                                    <html:option value="" styleClass="optionclass"></html:option>
                                 </html:select>
                             </p>
                             <p class="contentclass">
@@ -609,7 +621,11 @@
                                         <bean:message key="case.add.buttons"/>
                                     </c:when>
                                     <c:when test="${(action == 'editPerson') || (action == 'viewPerson')}">
-                                        <bean:message key="case.delete.buttons" arg0="${personForm.id}"/>
+                                        <c:url var="url" scope="page" value="/viewPerson.do">
+                                            <c:param name="action" value="erasePerson"/>
+                                            <c:param name="id" value="${personForm.id}"/>
+                                        </c:url>
+                                        <bean:message key="case.delete.buttons" arg0="${fn:escapeXml(url)}"/>
                                     </c:when>
                                 </c:choose>
                                 <c:if test="${(action == 'editPerson') || (action == 'viewPerson')}">
