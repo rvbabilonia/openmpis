@@ -74,7 +74,6 @@ public class ReportDAOImpl implements ReportDAO {
     /**
      * Retrieves all reports for a given person.
      *
-     * @param pagination    the pagination context
      * @param id            the ID of the person
      * @return              the list of reports for a given person
      * @throws java.sql.SQLException
@@ -101,7 +100,6 @@ public class ReportDAOImpl implements ReportDAO {
      * Retrieves all reports written by a given investigator.
      *
      * @param pagination    the pagination context
-     * @param investigatorId the ID of the investigator
      * @return              the list of reports written by a given investigator
      * @throws java.sql.SQLException
      */
