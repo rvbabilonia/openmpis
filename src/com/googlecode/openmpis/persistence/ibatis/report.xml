@@ -17,33 +17,33 @@
     <select id="getReportById" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
         <![CDATA[
         SELECT
-        REPORT.ID as id,
-        REPORT.REPORT as report,
-        REPORT.DATE as date,
-        REPORT.INVESTIGATORID as investigatorId,
-        REPORT.PERSONID as personId,
-        PERSON.FIRSTNAME as firstName,
-        PERSON.LASTNAME as lastName
+        report.ID as id,
+        report.REPORT as report,
+        report.DATE as date,
+        report.INVESTIGATORID as investigatorId,
+        report.PERSONID as personId,
+        person.FIRSTNAME as firstName,
+        person.LASTNAME as lastName
         FROM report, person
-        WHERE REPORT.ID = #id#
-        AND REPORT.PERSONID = PERSON.ID
+        WHERE report.ID = #id#
+        AND report.PERSONID = person.ID
         ]]>
     </select>
 
     <select id="getAllReportsByInvestigatorId" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
         <![CDATA[
         SELECT
-        REPORT.ID as id,
-        REPORT.REPORT as report,
-        REPORT.DATE as date,
-        REPORT.INVESTIGATORID as investigatorId,
-        REPORT.PERSONID as personId,
-        PERSON.FIRSTNAME as firstName,
-        PERSON.LASTNAME as lastName
+        report.ID as id,
+        report.REPORT as report,
+        report.DATE as date,
+        report.INVESTIGATORID as investigatorId,
+        report.PERSONID as personId,
+        person.FIRSTNAME as firstName,
+        person.LASTNAME as lastName
         FROM report, person
-        WHERE REPORT.INVESTIGATORID = #investigatorId#
-        AND REPORT.PERSONID = PERSON.ID
-        ORDER BY REPORT.PERSONID, REPORT.DATE DESC, REPORT.ID DESC
+        WHERE report.INVESTIGATORID = #investigatorId#
+        AND report.PERSONID = person.ID
+        ORDER BY report.PERSONID, report.DATE DESC, report.ID DESC
         ]]>
     </select>
 
@@ -59,17 +59,17 @@
     <select id="getAllReportsForPerson" parameterClass="java.lang.Integer" resultClass="report" cacheModel="reportCache">
         <![CDATA[
         SELECT
-        REPORT.ID as id,
-        REPORT.REPORT as report,
-        REPORT.DATE as date,
-        REPORT.INVESTIGATORID as investigatorId,
-        REPORT.PERSONID as personId,
-        PERSON.FIRSTNAME as firstName,
-        PERSON.LASTNAME as lastName
+        report.ID as id,
+        report.REPORT as report,
+        report.DATE as date,
+        report.INVESTIGATORID as investigatorId,
+        report.PERSONID as personId,
+        person.FIRSTNAME as firstName,
+        person.LASTNAME as lastName
         FROM report, person
-        WHERE REPORT.PERSONID = #personId#
-        AND REPORT.PERSONID = PERSON.ID
-        ORDER BY REPORT.DATE DESC, REPORT.ID DESC
+        WHERE report.PERSONID = #personId#
+        AND report.PERSONID = person.ID
+        ORDER BY report.DATE DESC, report.ID DESC
         ]]>
     </select>
 
