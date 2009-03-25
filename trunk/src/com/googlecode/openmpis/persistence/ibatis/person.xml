@@ -72,7 +72,7 @@
         RELATIONTOABDUCTOR as relationToAbductor,
         DATE as date,
         ENCODERID as encoderId
-        FROM PERSON
+        FROM person
     </sql>
 
     <sql id="ongoingFragment">
@@ -137,7 +137,7 @@
         RELATIONTOABDUCTOR as relationToAbductor,
         DATE as date,
         ENCODERID as encoderId
-        FROM PERSON
+        FROM person
     </sql>
 
     <sql id="foundColumnsFragment">
@@ -185,7 +185,7 @@
         INVESTIGATORID as investigatorId,
         DATE as date,
         ENCODERID as encoderId
-        FROM PERSON
+        FROM person
     </sql>
 
     <sql id="allMissingFragment">
@@ -352,7 +352,7 @@
         <![CDATA[
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         WHERE ENCODERID = #encoderId#
         AND STATUS = '0'
         ]]>
@@ -371,7 +371,7 @@
         <![CDATA[
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         WHERE INVESTIGATORID = #investigatorId#
         AND STATUS = '0'
         ]]>
@@ -387,7 +387,7 @@
     <select id="countAllPersons" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
     </select>
 
     <select id="getOngoing" resultClass="person" cacheModel="personCache">
@@ -400,7 +400,7 @@
     <select id="countOngoing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="ongoingFragment"/>
     </select>
 
@@ -414,7 +414,7 @@
     <select id="countSolved" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedFragment"/>
     </select>
 
@@ -428,7 +428,7 @@
     <select id="countUnsolved" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedFragment"/>
     </select>
 
@@ -442,21 +442,21 @@
     <select id="countAllMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allMissingFragment"/>
     </select>
 
     <select id="countAllSolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allSolvedMissingFragment"/>
     </select>
 
     <select id="countAllUnsolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allUnsolvedMissingFragment"/>
     </select>
 
@@ -470,21 +470,21 @@
     <select id="countMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="missingFragment"/>
     </select>
 
     <select id="countSolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedMissingFragment"/>
     </select>
 
     <select id="countUnsolvedMissing" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedMissingFragment"/>
     </select>
 
@@ -506,21 +506,21 @@
     <select id="countFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="familyAbductionFragment"/>
     </select>
 
     <select id="countSolvedFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedFamilyAbductionFragment"/>
     </select>
 
     <select id="countUnsolvedFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedFamilyAbductionFragment"/>
     </select>
 
@@ -534,21 +534,21 @@
     <select id="countNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="nonFamilyAbductionFragment"/>
     </select>
 
     <select id="countSolvedNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedNonFamilyAbductionFragment"/>
     </select>
 
     <select id="countUnsolvedNonFamilyAbduction" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedNonFamilyAbductionFragment"/>
     </select>
 
@@ -562,21 +562,21 @@
     <select id="countRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="runawayFragment"/>
     </select>
 
     <select id="countSolvedRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedRunawayFragment"/>
     </select>
 
     <select id="countUnsolvedRunaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedRunawayFragment"/>
     </select>
 
@@ -590,21 +590,21 @@
     <select id="countUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unknownFragment"/>
     </select>
 
     <select id="countSolvedUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedUnknownFragment"/>
     </select>
 
     <select id="countUnsolvedUnknown" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedUnknownFragment"/>
     </select>
 
@@ -618,21 +618,21 @@
     <select id="countAllFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allFoundFragment"/>
     </select>
 
     <select id="countAllSolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allSolvedFoundFragment"/>
     </select>
 
     <select id="countAllUnsolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="allUnsolvedFoundFragment"/>
     </select>
 
@@ -646,21 +646,21 @@
     <select id="countFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="foundFragment"/>
     </select>
 
     <select id="countSolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedFoundFragment"/>
     </select>
 
     <select id="countUnsolvedFound" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedFoundFragment"/>
     </select>
 
@@ -674,21 +674,21 @@
     <select id="countAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="abandonedFragment"/>
     </select>
 
     <select id="countSolvedAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedAbandonedFragment"/>
     </select>
 
     <select id="countUnsolvedAbandoned" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedAbandonedFragment"/>
     </select>
 
@@ -702,21 +702,21 @@
     <select id="countThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="throwawayFragment"/>
     </select>
 
     <select id="countSolvedThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedThrowawayFragment"/>
     </select>
 
     <select id="countUnsolvedThrowaway" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedThrowawayFragment"/>
     </select>
 
@@ -730,35 +730,35 @@
     <select id="countUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unidentifiedFragment"/>
     </select>
 
     <select id="countSolvedUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="solvedUnidentifiedFragment"/>
     </select>
 
     <select id="countUnsolvedUnidentified" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         <include refid="unsolvedUnidentifiedFragment"/>
     </select>
 
     <select id="countPersonsByRelativeId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         WHERE RELATIVEID = #relativeId#
     </select>
 
     <select id="countPersonsByAbductorId" parameterClass="java.lang.Integer" resultClass="java.lang.Integer" cacheModel="personCache">
         SELECT
         COUNT(ID)
-        FROM PERSON
+        FROM person
         WHERE ABDUCTORID = #abductorId#
     </select>
 
@@ -766,7 +766,7 @@
         <![CDATA[
         SELECT
         FIRSTNAME as firstName
-        FROM PERSON
+        FROM person
         WHERE (FIRSTNAME = #firstName# AND NICKNAME = #nickname# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
         ]]>
         <isGreaterThan prepend="AND" property="id" compareValue="0">
@@ -778,7 +778,7 @@
 
     <select id="simpleSearchPerson" parameterClass="java.lang.String" resultClass="person" cacheModel="personCache">
         SELECT *
-        FROM PERSON
+        FROM person
         WHERE
         FIRSTNAME LIKE "%$keyword$%"
         OR NICKNAME LIKE "%$keyword$%"
@@ -810,7 +810,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         <![CDATA[
-        INSERT INTO PERSON
+        INSERT INTO person
         (STATUS, TYPE, FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
         STREET, CITY, PROVINCE, COUNTRY, SEX, FEET, INCHES, WEIGHT, RELIGION, RACE,
         EYECOLOR, HAIRCOLOR, MEDICALCONDITION, MARKS, PERSONALEFFECTS, REMARKS,
@@ -833,7 +833,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updatePerson" parameterClass="person">
         <![CDATA[
-        UPDATE PERSON SET
+        UPDATE person SET
         STATUS = #status#,
         TYPE = #type#,
         FIRSTNAME = #firstName#,
@@ -888,7 +888,7 @@
     
     <update id="updatePersonRelative" parameterClass="person">
         <![CDATA[
-        UPDATE PERSON SET
+        UPDATE person SET
         RELATIVEID = #relativeId#,
         RELATIONTORELATIVE = #relationToRelative#
         WHERE ID = #id#
@@ -897,7 +897,7 @@
 
     <update id="updatePersonInvestigator" parameterClass="person">
         <![CDATA[
-        UPDATE PERSON SET
+        UPDATE person SET
         INVESTIGATORID = #investigatorId#
         WHERE ID = #id#
         ]]>
@@ -905,7 +905,7 @@
 
     <update id="updatePersonEncoder" parameterClass="person">
         <![CDATA[
-        UPDATE PERSON SET
+        UPDATE person SET
         ENCODERID = #encoderId#
         WHERE ID = #id#
         ]]>
@@ -913,7 +913,7 @@
 
     <update id="updatePersonAbductor" parameterClass="person">
         <![CDATA[
-        UPDATE PERSON SET
+        UPDATE person SET
         ABDUCTORID = #abductorId#,
         RELATIONTOABDUCTOR = #relationToAbductor#
         WHERE ID = #id#
@@ -924,7 +924,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deletePerson" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM PERSON
+        DELETE FROM person
         WHERE ID = #id#
         ]]>
     </delete>

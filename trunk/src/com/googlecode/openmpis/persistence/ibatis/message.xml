@@ -25,7 +25,7 @@
         PERSONID as personId,
         USERID as userId,
         DATE as date
-        FROM MESSAGE
+        FROM message
     </sql>
 
     <sql id="userFragment">
@@ -53,7 +53,7 @@
     <select id="countAllMessages" resultClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
     </select>
 
     <select id="getAllFeedbacks" resultClass="message" parameterClass="java.lang.Integer" cacheModel="messageCache">
@@ -65,14 +65,14 @@
     <select id="countAllFeedbacks" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <include refid="userFragment"/>
     </select>
 
     <select id="countAllNewFeedbacks" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <![CDATA[
         WHERE USERID = #userId# AND STATUS = '0'
         ]]>
@@ -87,7 +87,7 @@
     <select id="countAllSightingsForPerson" resultClass="java.lang.Integer" parameterClass="message" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <include refid="personFragment"/>
     </select>
 
@@ -101,7 +101,7 @@
     <select id="countAllNewSightingsForPerson" resultClass="java.lang.Integer" parameterClass="message" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <![CDATA[
         WHERE USERID = #userId# AND PERSONID = #personId# AND STATUS = '0'
         ]]>
@@ -110,7 +110,7 @@
     <select id="countAllSightings" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <![CDATA[
         WHERE USERID = #userId# AND PERSONID > '0'
         ]]>
@@ -119,7 +119,7 @@
     <select id="countAllNewSightings" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" cacheModel="messageCache">
         SELECT
         COUNT(ID)
-        FROM MESSAGE
+        FROM message
         <![CDATA[
         WHERE USERID = #userId# AND PERSONID > '0' AND STATUS = '0'
         ]]>
@@ -137,7 +137,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertSighting" parameterClass="message">
         <![CDATA[
-        INSERT INTO MESSAGE
+        INSERT INTO message
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, IPADDRESS, PERSONID, USERID, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #ipAddress#, #personId#, #userId#, #date#)
@@ -146,7 +146,7 @@
     
     <insert id="insertFeedback" parameterClass="message">
         <![CDATA[
-        INSERT INTO MESSAGE
+        INSERT INTO message
         (FIRSTNAME, LASTNAME, EMAIL, SUBJECT, MESSAGE, USERID, IPADDRESS, DATE)
         VALUES
         (#firstName#, #lastName#, #email#, #subject#, #message#, #userId#, #ipAddress#, #date#)
@@ -157,7 +157,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateMessage" parameterClass="java.lang.Integer">
         <![CDATA[
-        UPDATE MESSAGE SET
+        UPDATE message SET
         STATUS = '1'
         WHERE ID = #id#
         ]]>
@@ -167,14 +167,14 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteMessage" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM MESSAGE
+        DELETE FROM message
         WHERE ID = #id#
         ]]>
     </delete>
 
     <delete id="deleteMessagesForPerson" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM MESSAGE
+        DELETE FROM message
         WHERE PERSONID = #personId#
         ]]>
     </delete>

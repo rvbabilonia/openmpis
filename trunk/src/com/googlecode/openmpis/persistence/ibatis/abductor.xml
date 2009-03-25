@@ -41,7 +41,7 @@
         CODISID as codisId,
         AFISID as afisId,
         DENTALID as dentalId
-        FROM ABDUCTOR
+        FROM abductor
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -69,14 +69,14 @@
     <select id="countAllAbductors" resultClass="java.lang.Integer" cacheModel="abductorCache">
         SELECT
         COUNT(ID)
-        FROM ABDUCTOR
+        FROM abductor
     </select>
 
     <select id="checkAbductor" parameterClass="abductor" resultClass="abductor" cacheModel="abductorCache">
         <![CDATA[
         SELECT
         FIRSTNAME as firstName
-        FROM ABDUCTOR
+        FROM abductor
         WHERE (FIRSTNAME = #firstName# AND LASTNAME = #lastName#)
         ]]>
         <isGreaterThan prepend="AND" property="id" compareValue="0">
@@ -93,7 +93,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         <![CDATA[
-        INSERT INTO ABDUCTOR
+        INSERT INTO abductor
         (FIRSTNAME, NICKNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
         STREET, CITY, PROVINCE, COUNTRY, SEX, FEET, INCHES, WEIGHT, RELIGION, RACE,
         EYECOLOR, HAIRCOLOR, MARKS, PERSONALEFFECTS, REMARKS,
@@ -110,7 +110,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateAbductor" parameterClass="abductor">
         <![CDATA[
-        UPDATE ABDUCTOR SET
+        UPDATE abductor SET
         FIRSTNAME = #firstName#,
         NICKNAME = #nickname#,
         MIDDLENAME = #middleName#,
@@ -146,7 +146,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteAbductor" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM ABDUCTOR
+        DELETE FROM abductor
         WHERE ID = #id#
         ]]>
     </delete>

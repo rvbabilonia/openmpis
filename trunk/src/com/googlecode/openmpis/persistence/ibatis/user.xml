@@ -35,7 +35,7 @@
         CREATORID as creatorId,
         QUESTION as question,
         ANSWER as answer
-        FROM USER
+        FROM user
     </sql>
 
     <sql id="administratorFragment">
@@ -109,7 +109,7 @@
         QUESTION as question,
         ANSWER as answer,
         CREATORID as creatorId
-        FROM USER
+        FROM user
         WHERE USERNAME LIKE BINARY #username# AND STATUS = '0'
         ]]>
     </select>
@@ -132,7 +132,7 @@
     <select id="countAllUsers" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
     </select>
 
     <select id="getAdministrators" resultClass="user" cacheModel="userCache">
@@ -144,7 +144,7 @@
     <select id="countAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="administratorFragment"/>
     </select>
 
@@ -157,7 +157,7 @@
     <select id="countActiveAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="activeAdministratorFragment"/>
     </select>
 
@@ -170,7 +170,7 @@
     <select id="countSuspendedAdministrators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="suspendedAdministratorFragment"/>
     </select>
 
@@ -183,7 +183,7 @@
     <select id="countEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="encoderFragment"/>
     </select>
 
@@ -196,7 +196,7 @@
     <select id="countActiveEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="activeEncoderFragment"/>
     </select>
 
@@ -209,7 +209,7 @@
     <select id="countSuspendedEncoders" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="suspendedEncoderFragment"/>
     </select>
 
@@ -222,7 +222,7 @@
     <select id="countInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="investigatorFragment"/>
     </select>
 
@@ -235,7 +235,7 @@
     <select id="countActiveInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="activeInvestigatorFragment"/>
     </select>
 
@@ -248,7 +248,7 @@
     <select id="countSuspendedInvestigators" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="suspendedInvestigatorFragment"/>
     </select>
 
@@ -261,7 +261,7 @@
     <select id="countActiveUsers" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="activeFragment"/>
     </select>
 
@@ -274,7 +274,7 @@
     <select id="countSuspendedUsers" resultClass="java.lang.Integer" cacheModel="userCache">
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         <include refid="suspendedFragment"/>
     </select>
 
@@ -282,7 +282,7 @@
         <![CDATA[
         SELECT
         COUNT(ID)
-        FROM USER
+        FROM user
         WHERE CREATORID = #creatorId#
         ]]>
     </select>
@@ -291,7 +291,7 @@
         <![CDATA[
         SELECT
         USERNAME as username
-        FROM USER
+        FROM user
         WHERE USERNAME = #username# AND ID != #id#
         ]]>
     </select>
@@ -300,7 +300,7 @@
         <![CDATA[
         SELECT
         EMAIL as email
-        FROM USER
+        FROM user
         WHERE EMAIL = #email# AND ID != #id#
         ]]>
     </select>
@@ -309,7 +309,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertUser" parameterClass="user">
         <![CDATA[
-        INSERT INTO USER
+        INSERT INTO user
         (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
         EMAIL, DESIGNATION, AGENCY, NUMBER, DATE, STATUS, CREATORID, QUESTION)
         VALUES
@@ -322,7 +322,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateUser" parameterClass="user">
         <![CDATA[
-        UPDATE USER SET
+        UPDATE user SET
         GROUPID = #groupId#,
         USERNAME = #username#,
         FIRSTNAME = #firstName#,
@@ -344,7 +344,7 @@
     
     <update id="updatePassword" parameterClass="user">
         <![CDATA[
-        UPDATE USER SET
+        UPDATE user SET
         PASSWORD = #password#
         WHERE ID = #id#
         ]]>
@@ -352,7 +352,7 @@
     
     <update id="updateLogin" parameterClass="user">
         <![CDATA[
-        UPDATE USER SET
+        UPDATE user SET
         IPADDRESS = #ipAddress#,
         LASTLOGIN = #lastLogin#
         WHERE ID = #id#
@@ -363,7 +363,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteUser" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM USER
+        DELETE FROM user
         WHERE ID = #id#
         ]]>
     </delete>

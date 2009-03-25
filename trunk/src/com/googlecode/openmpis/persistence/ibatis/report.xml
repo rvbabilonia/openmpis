@@ -24,7 +24,7 @@
         REPORT.PERSONID as personId,
         PERSON.FIRSTNAME as firstName,
         PERSON.LASTNAME as lastName
-        FROM REPORT, PERSON
+        FROM report, person
         WHERE REPORT.ID = #id#
         AND REPORT.PERSONID = PERSON.ID
         ]]>
@@ -40,7 +40,7 @@
         REPORT.PERSONID as personId,
         PERSON.FIRSTNAME as firstName,
         PERSON.LASTNAME as lastName
-        FROM REPORT, PERSON
+        FROM report, person
         WHERE REPORT.INVESTIGATORID = #investigatorId#
         AND REPORT.PERSONID = PERSON.ID
         ORDER BY REPORT.PERSONID, REPORT.DATE DESC, REPORT.ID DESC
@@ -51,7 +51,7 @@
         <![CDATA[
         SELECT
         COUNT(ID)
-        FROM REPORT
+        FROM report
         WHERE INVESTIGATORID = #investigatorId#
         ]]>
     </select>
@@ -66,7 +66,7 @@
         REPORT.PERSONID as personId,
         PERSON.FIRSTNAME as firstName,
         PERSON.LASTNAME as lastName
-        FROM REPORT, PERSON
+        FROM report, person
         WHERE REPORT.PERSONID = #personId#
         AND REPORT.PERSONID = PERSON.ID
         ORDER BY REPORT.DATE DESC, REPORT.ID DESC
@@ -77,7 +77,7 @@
         <![CDATA[
         SELECT
         COUNT(ID)
-        FROM REPORT
+        FROM report
         WHERE PERSONID = #personId#
         ]]>
     </select>
@@ -86,7 +86,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <insert id="insertReport" parameterClass="report">
         <![CDATA[
-        INSERT INTO REPORT
+        INSERT INTO report
         (REPORT, DATE, PERSONID, INVESTIGATORID)
         VALUES
         (#report#, #date#, #personId#, #investigatorId#)
@@ -97,7 +97,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateReport" parameterClass="report">
         <![CDATA[
-        UPDATE REPORT SET
+        UPDATE report SET
         REPORT = #report#,
         DATE = #date#,
         INVESTIGATORID = #investigatorId#
@@ -109,14 +109,14 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteReport" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM REPORT
+        DELETE FROM report
         WHERE ID = #id#
         ]]>
     </delete>
 
     <delete id="deleteReportsForPerson" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM REPORT
+        DELETE FROM report
         WHERE PERSONID = #personId#
         ]]>
     </delete>
