@@ -2,7 +2,7 @@
 
 <project version="2">
 	<attribs>
-		<attrib name="build">134</attrib>
+		<attrib name="build">135</attrib>
 		<attrib name="serial">45052</attrib>
 	</attribs>
 	<database>
@@ -13,7 +13,7 @@
 CREATE DATABASE IF NOT EXISTS openmpis;
 
 USE openmpis;</attrib>
-			<attrib name="postSql">INSERT INTO USER
+			<attrib name="postSql">INSERT INTO user
 (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
 EMAIL, DESIGNATION, AGENCY, NUMBER,
 IPADDRESS, LASTLOGIN, DATE,
@@ -222,9 +222,14 @@ COMMIT;</attrib>
 					<elem>Changed photo and aged photo from varchar(30) to text</elem>
 				</row>
 				<row>
-					<elem>1.0</elem>
+					<elem>0.38</elem>
 					<elem>2009-03-05 13:57:53</elem>
 					<elem>Fixed columns in abductor</elem>
+				</row>
+				<row>
+					<elem>1.0</elem>
+					<elem>2009-03-25 17:21:12</elem>
+					<elem>Added database name to index SQL statements.</elem>
 				</row>
 			</list>
 		</revisions>
@@ -299,7 +304,7 @@ COMMIT;</attrib>
 				<row>
 					<elem>340</elem>
 					<elem>Idx1</elem>
-					<elem>{table}IDX{cnt}</elem>
+					<elem>openmpis.{table}IDX{cnt}</elem>
 					<elem>b</elem>
 					<elem>i</elem>
 					<elem>false</elem>
@@ -323,19 +328,20 @@ COMMIT;</attrib>
 			<DocsGenModule>
 				<pdf>
 					<pageSize>1</pageSize>
-					<output>D:\My Projects\openmpis\manuals\OpenMPIS Database Documentation 1.0.pdf</output>
 					<bottom>71</bottom>
+					<output>D:\My Projects\openmpis\manuals\OpenMPIS Database Documentation 1.0.pdf</output>
 					<right>71</right>
-					<top>71</top>
 					<left>71</left>
+					<top>71</top>
 				</pdf>
 			</DocsGenModule>
 			<SqlGenModule>
 				<mysql>
 					<output>D:\My Projects\openmpis\database\MySQL\openmpis-mysql-schema-1.0.sql</output>
 					<genDropStmt>N</genDropStmt>
-					<genPreSQL>Y</genPreSQL>
 					<genTriggers>Y</genTriggers>
+					<genPreSQL>Y</genPreSQL>
+					<genProcedures>N</genProcedures>
 					<genPostSQL>Y</genPostSQL>
 				</mysql>
 			</SqlGenModule>
