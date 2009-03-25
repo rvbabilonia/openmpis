@@ -1,28 +1,15 @@
 documentation
     user manual
+	screenshots
     developer manual
+	screenshots
     system administrator manual
+	screenshots
     manuscript
-        functional requirements
-        non-functional requirements
         comments
-        test cases (selenium)
-        recommendations
-            match found to missing
-                word stemming
-                adjacent locations
-            cellphone to mpis
-            methods
-                actionforward (action.*)
-                action (struts-config)
-            success stories
-            merit/demerit system
-            logo of case handler
 
 sandbox
-    debian, apache, mysql, tomcat, ant, java
-    202.90.158.64
-    www.missingfilipinos.gov.ph
+    www.missingfilipinos.gov.ph domain name
 
 contact
     gma
