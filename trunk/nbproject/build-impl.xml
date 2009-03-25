@@ -505,9 +505,10 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.Log4j.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.Log4j.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.iText.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.iText.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.MySQLDriver.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.MySQLDriver.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.CopyLibs.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.CopyLibs.classpath" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.struts.classpath} ${manifest.libs.iBATIS.classpath} ${manifest.libs.jstl11.classpath} ${manifest.libs.JavaMail.classpath} ${manifest.libs.Log4j.classpath} ${manifest.libs.iText.classpath} ${manifest.libs.MySQLDriver.classpath} "/>
+            <attribute name="Class-Path" value="${manifest.libs.struts.classpath} ${manifest.libs.iBATIS.classpath} ${manifest.libs.jstl11.classpath} ${manifest.libs.JavaMail.classpath} ${manifest.libs.Log4j.classpath} ${manifest.libs.iText.classpath} ${manifest.libs.MySQLDriver.classpath} ${manifest.libs.CopyLibs.classpath} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -518,6 +519,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.Log4j.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.iText.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.MySQLDriver.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.CopyLibs.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
