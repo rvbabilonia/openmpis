@@ -1,7 +1,7 @@
 -- ======================================================================
 -- ===   Sql Script for Database : OpenMPIS
 -- ===
--- === Build : 134
+-- === Build : 135
 -- ======================================================================
 
 BEGIN WORK;
@@ -46,7 +46,7 @@ CREATE TABLE abductor
   )
  TYPE = InnoDB;
 
-CREATE INDEX abductorIDX1 ON abductor(id);
+CREATE INDEX openmpis.abductorIDX1 ON abductor(id);
 
 -- ======================================================================
 
@@ -60,7 +60,7 @@ CREATE TABLE log
   )
  TYPE = InnoDB;
 
-CREATE INDEX logIDX1 ON log(id);
+CREATE INDEX openmpis.logIDX1 ON log(id);
 
 -- ======================================================================
 
@@ -82,7 +82,7 @@ CREATE TABLE message
   )
  TYPE = InnoDB;
 
-CREATE INDEX messageIDX1 ON message(id);
+CREATE INDEX openmpis.messageIDX1 ON message(id);
 
 -- ======================================================================
 
@@ -149,7 +149,7 @@ CREATE TABLE person
   )
  TYPE = InnoDB;
 
-CREATE INDEX personIDX1 ON person(id);
+CREATE INDEX openmpis.personIDX1 ON person(id);
 
 -- ======================================================================
 
@@ -170,7 +170,7 @@ CREATE TABLE relative
   )
  TYPE = InnoDB;
 
-CREATE INDEX relativeIDX1 ON relative(id);
+CREATE INDEX openmpis.relativeIDX1 ON relative(id);
 
 -- ======================================================================
 
@@ -186,7 +186,7 @@ CREATE TABLE report
   )
  TYPE = InnoDB;
 
-CREATE INDEX reportIDX1 ON report(id);
+CREATE INDEX openmpis.reportIDX1 ON report(id);
 
 -- ======================================================================
 
@@ -218,11 +218,11 @@ CREATE TABLE user
   )
  TYPE = InnoDB;
 
-CREATE INDEX userIDX1 ON user(id);
+CREATE INDEX openmpis.userIDX1 ON user(id);
 
 -- ======================================================================
 
-INSERT INTO USER
+INSERT INTO user
 (GROUPID, USERNAME, PASSWORD, FIRSTNAME, MIDDLENAME, LASTNAME, BIRTHMONTH, BIRTHDAY, BIRTHYEAR,
 EMAIL, DESIGNATION, AGENCY, NUMBER,
 IPADDRESS, LASTLOGIN, DATE,
