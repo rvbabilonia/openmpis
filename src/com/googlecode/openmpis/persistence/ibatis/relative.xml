@@ -23,7 +23,7 @@
         PROVINCE as province,
         COUNTRY as country,
         NUMBER as number
-        FROM RELATIVE
+        FROM relative
     </sql>
     
     <!-- Use primitive wrapper type (e.g. Integer) as parameter and allow results to
@@ -51,14 +51,14 @@
     <select id="countAllRelatives" resultClass="java.lang.Integer" cacheModel="relativeCache">
         SELECT
         COUNT(ID)
-        FROM RELATIVE
+        FROM relative
     </select>
 
     <select id="checkRelative" parameterClass="relative" resultClass="relative" cacheModel="relativeCache">
         <![CDATA[
         SELECT
         FIRSTNAME as firstName
-        FROM RELATIVE
+        FROM relative
         WHERE
         (FIRSTNAME = #firstName# AND MIDDLENAME = #middleName# AND LASTNAME = #lastName#)
         ]]>
@@ -73,7 +73,7 @@
         <![CDATA[
         SELECT
         FIRSTNAME as firstName
-        FROM RELATIVE
+        FROM relative
         WHERE EMAIL = #email#
         ]]>
         <isGreaterThan prepend="AND" property="id" compareValue="0">
@@ -87,7 +87,7 @@
         <![CDATA[
         SELECT
         FIRSTNAME as firstName
-        FROM RELATIVE
+        FROM relative
         WHERE NUMBER = #number#
         ]]>
         <isGreaterThan prepend="AND" property="id" compareValue="0">
@@ -104,7 +104,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         <![CDATA[
-        INSERT INTO RELATIVE
+        INSERT INTO relative
         (FIRSTNAME, MIDDLENAME, LASTNAME, EMAIL, STREET,
         CITY, PROVINCE, COUNTRY, NUMBER)
         VALUES
@@ -117,7 +117,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <update id="updateRelative" parameterClass="relative">
         <![CDATA[
-        UPDATE RELATIVE SET
+        UPDATE relative SET
         FIRSTNAME = #firstName#,
         MIDDLENAME = #middleName#,
         LASTNAME = #lastName#,
@@ -135,7 +135,7 @@
     parameters in the #hash# symbols is a JavaBeans property. -->
     <delete id="deleteRelative" parameterClass="java.lang.Integer">
         <![CDATA[
-        DELETE FROM RELATIVE
+        DELETE FROM relative
         WHERE ID = #id#
         ]]>
     </delete>

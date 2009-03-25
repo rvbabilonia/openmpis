@@ -17,7 +17,7 @@
         ID as id,
         LOG as log,
         DATE as date,
-        FROM LOG
+        FROM log
         ORDER BY ID
     </select>
     
@@ -26,7 +26,7 @@
         SELECT
         LOG as log,
         DATE as date,
-        FROM LOG
+        FROM log
         WHERE ID = #id#
         ]]>
     </select>
@@ -34,7 +34,7 @@
     <select id="countAllLogs" resultClass="java.lang.Integer" cacheModel="logCache">
         SELECT
         COUNT(ID)
-        FROM LOG
+        FROM log
     </select>
 
     <!-- Use Log object (JavaBean) properties as parameters for insert. Each of the
@@ -42,7 +42,7 @@
     <insert id="insertLog" parameterClass="log">
         <![CDATA[
         INSERT INTO
-        LOG (LOG, DATE)
+        log (LOG, DATE)
         VALUES (#log#, #date#)
         ]]>
     </insert>
