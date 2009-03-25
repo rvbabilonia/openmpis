@@ -1,7 +1,7 @@
 -- ======================================================================
 -- ===   Sql Script for Database : OpenMPIS
 -- ===
--- === Build : 135
+-- === Build : 136
 -- ======================================================================
 
 BEGIN WORK;
@@ -46,7 +46,7 @@ CREATE TABLE abductor
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.abductorIDX1 ON abductor(id);
+CREATE INDEX openmpis_abductorIDX1 ON abductor(id);
 
 -- ======================================================================
 
@@ -60,7 +60,7 @@ CREATE TABLE log
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.logIDX1 ON log(id);
+CREATE INDEX openmpis_logIDX1 ON log(id);
 
 -- ======================================================================
 
@@ -82,7 +82,7 @@ CREATE TABLE message
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.messageIDX1 ON message(id);
+CREATE INDEX openmpis_messageIDX1 ON message(id);
 
 -- ======================================================================
 
@@ -149,7 +149,7 @@ CREATE TABLE person
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.personIDX1 ON person(id);
+CREATE INDEX openmpis_personIDX1 ON person(id);
 
 -- ======================================================================
 
@@ -170,7 +170,7 @@ CREATE TABLE relative
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.relativeIDX1 ON relative(id);
+CREATE INDEX openmpis_relativeIDX1 ON relative(id);
 
 -- ======================================================================
 
@@ -186,7 +186,7 @@ CREATE TABLE report
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.reportIDX1 ON report(id);
+CREATE INDEX openmpis_reportIDX1 ON report(id);
 
 -- ======================================================================
 
@@ -218,7 +218,7 @@ CREATE TABLE user
   )
  TYPE = InnoDB;
 
-CREATE INDEX openmpis.userIDX1 ON user(id);
+CREATE INDEX openmpis_userIDX1 ON user(id);
 
 -- ======================================================================
 

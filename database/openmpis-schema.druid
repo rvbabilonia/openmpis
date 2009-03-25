@@ -2,7 +2,7 @@
 
 <project version="2">
 	<attribs>
-		<attrib name="build">135</attrib>
+		<attrib name="build">136</attrib>
 		<attrib name="serial">45052</attrib>
 	</attribs>
 	<database>
@@ -304,7 +304,7 @@ COMMIT;</attrib>
 				<row>
 					<elem>340</elem>
 					<elem>Idx1</elem>
-					<elem>openmpis.{table}IDX{cnt}</elem>
+					<elem>openmpis_{table}IDX{cnt}</elem>
 					<elem>b</elem>
 					<elem>i</elem>
 					<elem>false</elem>
@@ -328,19 +328,19 @@ COMMIT;</attrib>
 			<DocsGenModule>
 				<pdf>
 					<pageSize>1</pageSize>
-					<bottom>71</bottom>
 					<output>D:\My Projects\openmpis\manuals\OpenMPIS Database Documentation 1.0.pdf</output>
+					<bottom>71</bottom>
 					<right>71</right>
-					<left>71</left>
 					<top>71</top>
+					<left>71</left>
 				</pdf>
 			</DocsGenModule>
 			<SqlGenModule>
 				<mysql>
 					<output>D:\My Projects\openmpis\database\MySQL\openmpis-mysql-schema-1.0.sql</output>
 					<genDropStmt>N</genDropStmt>
-					<genTriggers>Y</genTriggers>
 					<genPreSQL>Y</genPreSQL>
+					<genTriggers>Y</genTriggers>
 					<genProcedures>N</genProcedures>
 					<genPostSQL>Y</genPostSQL>
 				</mysql>
