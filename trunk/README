@@ -131,20 +131,24 @@
 
     4. Start MySQL database server.
 
-    5. Edit src/sqlmapconfig.properties to reflect the correct MySQL username
+    5. Edit nbproject/private/private.properties to set the correct J2EE
+    platform classpath.
+
+    6. Edit src/sqlmapconfig.properties to reflect the correct MySQL username
     and password.
 
-    6. Run ant create-database to set up the schema on the database server.
+    7. Edit src/mail.properties to enable or disable mail functionalities and to
+    set up the proper mail server options.
 
-    7. Run ant to compile the source codes and generate the WAR file.
+    8. Run ant to compile the source codes and generate the WAR file.
 
-    8. Start Tomcat application server.
+    9. Start Tomcat application server.
 
-    9. Go to http://localhost:8080/manager/html and upload
-    openmpis-<version>/dist/openmpis.war or copy it to Tomcat's webapps
+    10. Go to http://localhost:8080/manager/html and upload
+    openmpis/dist/openmpis.war or copy it to Tomcat's webapps
     directory.
 
-    10. Go to http://localhost:8080/openmpis to start using the system. The
+    11. Go to http://localhost:8080/openmpis to start using the system. The
     default username is RB0106 and the default password is admin[123].
 
     Problems
