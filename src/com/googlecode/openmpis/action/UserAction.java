@@ -243,7 +243,7 @@ public class UserAction extends DispatchAction {
                         user.setGroupId(userForm.getGroupId());
                         user.setUsername(username);
                         String password = "p@$$w0rd";
-                        user.setPassword(encryptPassword(password));
+                        user.setPassword(password);
                         user.setFirstName(userForm.getFirstName());
                         user.setLastName(userForm.getLastName());
                         user.setMiddleName(userForm.getMiddleName());
