@@ -41,9 +41,11 @@
                     database and the Druid file
         dist/       The directory containing the deployable openmpis.war file
                     and javadocs/ directory (generated upon running ant)
+        lib/        The directory containing third-party libraries
         manuals/    The directory containing the user, developer, system
                     administrator and database manuals
-        nbproject/  The NetBeans project directory
+        nbproject/  The NetBeans project directory which contains additional
+                    build and configuration files
         src/        The directory containing the Java Server Pages and source
                     codes
         test/       The directory for unit tests
