@@ -1,0 +1,54 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+
+jar {
+    baseName = "openmpis-common"
+    version = "2.0-SNAPSHOT"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    berkeleyVersion = "7.4.5"
+    springVersion = "4.3.9.RELEASE"
+    logbackVersion = "1.2.3"
+    junitVersion = "4.12"
+    aspectjVersion = "1.8.10"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://download.oracle.com/maven"
+    }
+}
+
+dependencies {
+    compile "org.springframework:spring-core:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-tx:${springVersion}"
+    compile "org.springframework:spring-aop:${springVersion}"
+    compile "com.sleepycat:je:${berkeleyVersion}"
+    compile "ch.qos.logback:logback-core:${logbackVersion}"
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    compile "org.aspectj:aspectjrt:${aspectjVersion}"
+    compile "org.aspectj:aspectjweaver:${aspectjVersion}"
+
+    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "junit:junit:${junitVersion}"
+}
+
+eclipse {
+    classpath {
+        containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
+        containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"
+    }
+}
+
+task generateJavadocs(type: Javadoc) {
+    classpath = configurations.compile
+    source = sourceSets.main.allJava
+}
+
