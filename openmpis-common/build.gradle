@@ -51,4 +51,3 @@ task generateJavadocs(type: Javadoc) {
     classpath = configurations.compile
     source = sourceSets.main.allJava
 }
-

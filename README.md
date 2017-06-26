@@ -1,4 +1,5 @@
 ﻿# OpenMPIS
+[![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=master)](https://travis-ci.org/rvbabilonia/openmpis)
 
 OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem.
 It addresses 1.) the lack of a centralized service for disseminating advisories,
@@ -34,8 +35,7 @@ The latest branch can be cloned or downloaded from the [OpenMPIS Web site](https
 
 OpenMPIS v2 shifted from the original monolithic architecture to a scalable RESTful
 microservices architecture using Spring framework. An embedded Apache Tomcat is now used to start all services.
-Relational MySQL database server has
-been replaced by embedded non-relational Berkeley database Java edition.
+Relational MySQL database server has been replaced by embedded non-relational Berkeley database Java edition.
 Apache Ant has been replaced by Gradle for dependency management and building.
 
 #### Modules

@@ -1,9 +1,8 @@
-rootProject.name = 'openmpis'
-include 'openmpis-user'
-include 'openmpis-case'
-include 'openmpis-web'
-include 'openmpis-eureka'
-//include 'openmpis-ldap'
-//include 'openmpis-image'
-include 'openmpis-common'
-
+rootProject.name = "openmpis"
+include "openmpis-common"
+include "openmpis-user"
+include "openmpis-case"
+include "openmpis-web"
+include "openmpis-eureka"
+//include "openmpis-ldap"
+//include "openmpis-image"
