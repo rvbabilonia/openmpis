@@ -1,5 +1,5 @@
 ﻿# OpenMPIS
-[![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=master)](https://travis-ci.org/rvbabilonia/openmpis)
+[![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=2.0)](https://travis-ci.org/rvbabilonia/openmpis)
 
 OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem. 
 It addresses 1.) the lack of a centralized service for disseminating advisories,
