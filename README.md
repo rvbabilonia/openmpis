@@ -1,7 +1,7 @@
 ﻿# OpenMPIS
 [![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=master)](https://travis-ci.org/rvbabilonia/openmpis)
 
-OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem.
+OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem. 
 It addresses 1.) the lack of a centralized service for disseminating advisories,
 2.) the lack of a joint effort for finding missing Filipinos and 3.) the lack of a
 free and open source Missing Persons Information System.
@@ -25,7 +25,8 @@ University of the Philippines - Open University, Los Baños, Laguna.
 
 ## Requirements
 
-You will need Java 1.8 or later to compile and/or run the application.
+You will need [Java 1.8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or later to compile 
+and/or run the application.
 
 ## For Developers
 
