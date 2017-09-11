@@ -75,17 +75,6 @@ public class UserDAOBerkeleyImpl implements UserDAO {
     }
 
     @Override
-    public boolean createUser(String emailAddress, String creator) {
-        User user = new User(emailAddress);
-        user.setRole(Role.ENCODER);
-        user.setDateCreated(new Date());
-        user.setActive(true);
-        user.setCreator(creator);
-
-        return userIndex.putNoOverwrite(transactionManager.getTransaction(), user);
-    }
-
-    @Override
     public List<User> retrieveUsers() {
         return retrieveUsers(userIndex);
     }
@@ -98,6 +87,17 @@ public class UserDAOBerkeleyImpl implements UserDAO {
     @Override
     public List<User> retrieveActiveInvestigators() {
         return retrieveUsers(Role.INVESTIGATOR, true);
+    }
+
+    @Override
+    public boolean createUser(String emailAddress, String creator) {
+        User user = new User(emailAddress);
+        user.setRole(Role.ENCODER);
+        user.setDateCreated(new Date());
+        user.setActive(true);
+        user.setCreator(creator);
+
+        return userIndex.putNoOverwrite(transactionManager.getTransaction(), user);
     }
 
     @Override

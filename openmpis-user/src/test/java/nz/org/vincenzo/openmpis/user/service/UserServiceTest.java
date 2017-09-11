@@ -1,9 +1,11 @@
 package nz.org.vincenzo.openmpis.user.service;
 
 import nz.org.vincenzo.openmpis.user.application.TestUserApplication;
+import nz.org.vincenzo.openmpis.user.dao.UserDAO;
 import nz.org.vincenzo.openmpis.user.enumeration.Role;
 import nz.org.vincenzo.openmpis.user.model.User;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,18 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserDAO userDAO;
+
+    @Before
+    public void setUp() throws Exception {
+        userDAO.createUser("superadmin@domain", "");
+
+        User user = new User();
+        user.setEmailAddress("superadmin@domain");
+        user.setRole(Role.ADMINISTRATOR);
+        userDAO.updateUser(user);
+    }
 
     @Test
     public void retrieveUsers() throws Exception {

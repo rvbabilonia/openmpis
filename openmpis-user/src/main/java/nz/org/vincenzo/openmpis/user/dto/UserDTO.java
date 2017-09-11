@@ -17,7 +17,9 @@
  */
 package nz.org.vincenzo.openmpis.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import nz.org.vincenzo.openmpis.user.enumeration.Role;
+import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -28,13 +30,16 @@ import javax.validation.constraints.NotNull;
  * @author Rey Vincent Babilonia
  * @since 1.0.0
  */
-public class UserDTO {
+public class UserDTO extends ResourceSupport {
 
     @NotNull
     @Email
     private String emailAddress;
     @NotNull
     private Role role;
+    @NotNull
+    @Email
+    private String creator;
     @NotNull
     private String firstName;
     @NotNull
@@ -47,6 +52,14 @@ public class UserDTO {
     private String agency;
     @NotNull
     private String phoneNumber;
+
+    /**
+     * Default constructor.
+     */
+    @JsonCreator
+    public UserDTO() {
+        // do nothing
+    }
 
     /**
      * Returns the email address.
@@ -82,6 +95,24 @@ public class UserDTO {
      */
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    /**
+     * Returns the email address of the creator.
+     *
+     * @return the email address of the creator
+     */
+    public String getCreator() {
+        return creator;
+    }
+
+    /**
+     * Sets the email address of the creator/administrator
+     *
+     * @param creator the email address of the creator/administrator
+     */
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     /**

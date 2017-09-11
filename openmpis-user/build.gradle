@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "1.5.4.RELEASE"
+        springBootVersion = "1.5.6.RELEASE"
     }
 
     repositories {
@@ -26,10 +26,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-    springCloudDependenciesVersion = "Dalston.SR1"
+    springCloudDependenciesVersion = "Dalston.SR2"
     berkeleyVersion = "7.4.5"
-    validationVersion = "2.0.0.Beta2"
-    springVersion = "4.3.9.RELEASE"
+    validationVersion = "2.0.0.Final"
+    springVersion = "4.3.10.RELEASE"
     logbackVersion = "1.2.3"
     springfoxSwaggerVersion = "2.7.0"
     junitVersion = "4.12"
@@ -46,7 +46,9 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework:spring-core"
+    compile "org.springframework:spring-beans"
     compile "org.springframework:spring-tx"
+    compile "org.springframework.boot:spring-boot-starter-hateoas"
     compile "com.sleepycat:je:${berkeleyVersion}"
     compile "javax.validation:validation-api:${validationVersion}"
     compile "ch.qos.logback:logback-core:${logbackVersion}"

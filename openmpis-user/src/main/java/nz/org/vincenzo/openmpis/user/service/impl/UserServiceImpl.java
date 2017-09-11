@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean createUser(String emailAddress, String creator) {
-        return userDAO.createUser(emailAddress, creator);
+        return userDAO.retrieveUser(creator) != null && userDAO.createUser(emailAddress, creator);
     }
 
     @Override

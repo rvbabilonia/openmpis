@@ -6,3 +6,5 @@ include "openmpis-web"
 include "openmpis-eureka"
 //include "openmpis-ldap"
 //include "openmpis-image"
+include 'openmpis-oauth2'
+
