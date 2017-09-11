@@ -49,7 +49,7 @@ public class UserServiceTest {
 
     @Test
     public void retrieveUsers() throws Exception {
-        Assert.assertTrue("List must be empty", userService.retrieveUsers().isEmpty());
+        Assert.assertEquals("Size must be 1", 1, userService.retrieveUsers().size());
 
         Assert.assertTrue("Value must be true", userService.createUser("name1@domain", "superadmin@domain"));
 
@@ -69,8 +69,12 @@ public class UserServiceTest {
         investigator2.setRole(Role.INVESTIGATOR);
         Assert.assertTrue("Value must be true", userService.updateUser(investigator2));
 
+        User superAdministrator = new User("superadmin@domain");
+        superAdministrator.setRole(Role.ADMINISTRATOR);
+
         // ordered by email address, the primary key
-        Assert.assertEquals("Lists must be equal", Arrays.asList(administrator, investigator, investigator2),
+        Assert.assertEquals("Lists must be equal",
+                Arrays.asList(administrator, investigator, investigator2, superAdministrator),
                 userService.retrieveUsers());
     }
 
@@ -133,7 +137,7 @@ public class UserServiceTest {
 
     @Test
     public void retrieveAdministrators() throws Exception {
-        Assert.assertTrue("List must be empty", userService.retrieveAdministrators().isEmpty());
+        Assert.assertEquals("Size must be 1", 1, userService.retrieveAdministrators().size());
 
         Assert.assertTrue("Value must be true", userService.createUser("name1@domain", "superadmin@domain"));
 
@@ -141,7 +145,10 @@ public class UserServiceTest {
         administrator.setRole(Role.ADMINISTRATOR);
         Assert.assertTrue("Value must be true", userService.updateUser(administrator));
 
-        Assert.assertEquals("Lists must be equal", Collections.singletonList(administrator),
+        User superAdministrator = new User("superadmin@domain");
+        superAdministrator.setRole(Role.ADMINISTRATOR);
+
+        Assert.assertEquals("Lists must be equal", Arrays.asList(administrator, superAdministrator),
                 userService.retrieveAdministrators());
     }
 
@@ -162,6 +169,11 @@ public class UserServiceTest {
 
     @Test
     public void retrieveInactiveAdministrators() throws Exception {
+        // activate super administrator
+        User superAdministrator = userService.retrieveUser("superadmin@domain");
+        superAdministrator.setActive(true);
+        Assert.assertTrue("Value must be true", userService.updateUser(superAdministrator));
+
         Assert.assertTrue("List must be empty", userService.retrieveInactiveAdministrators().isEmpty());
 
         Assert.assertTrue("Value must be true", userService.createUser("name1@domain", "superadmin@domain"));
@@ -361,6 +373,6 @@ public class UserServiceTest {
 
         Assert.assertTrue("Value must be true", userService.createUser("name3@domain", "superadmin@domain"));
 
-        Assert.assertEquals("Values must be equal", 3, userService.countUsers());
+        Assert.assertEquals("Values must be equal", 4, userService.countUsers());
     }
 }
