@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0cab1930166340a198fbd892c3284221)](https://app.codacy.com/app/rvbabilonia/openmpis?utm_source=github.com&utm_medium=referral&utm_content=rvbabilonia/openmpis&utm_campaign=Badge_Grade_Dashboard)
 ﻿# OpenMPIS [![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=2.0)](https://travis-ci.org/rvbabilonia/openmpis)
 
 OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem. 
