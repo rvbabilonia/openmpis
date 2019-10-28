@@ -31,7 +31,7 @@ ext {
     validationVersion = "2.0.0.Final"
     springVersion = "4.3.11.RELEASE"
     logbackVersion = "1.2.3"
-    springfoxSwaggerVersion = "2.7.0"
+    springfoxSwaggerVersion = "2.9.2"
     junitVersion = "4.12"
 }
 
