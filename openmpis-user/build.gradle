@@ -29,7 +29,7 @@ ext {
     springCloudDependenciesVersion = "Dalston.SR3"
     berkeleyVersion = "7.4.5"
     validationVersion = "2.0.0.Final"
-    springVersion = "4.3.11.RELEASE"
+    springVersion = "5.2.0.RELEASE"
     logbackVersion = "1.2.3"
     springfoxSwaggerVersion = "2.7.0"
     junitVersion = "4.12"
