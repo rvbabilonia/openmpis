@@ -27,7 +27,7 @@ targetCompatibility = 1.8
 
 ext {
     springCloudDependenciesVersion = "Dalston.SR3"
-    berkeleyVersion = "7.4.5"
+    berkeleyVersion = "18.3.12"
     validationVersion = "2.0.1.Final"
     springVersion = "5.2.0.RELEASE"
     logbackVersion = "1.2.3"
