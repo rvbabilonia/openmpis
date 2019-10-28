@@ -26,7 +26,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-    springCloudDependenciesVersion = "Dalston.SR3"
+    springCloudDependenciesVersion = "Greenwich.SR3"
     berkeleyVersion = "18.3.12"
     validationVersion = "2.0.1.Final"
     springVersion = "5.2.0.RELEASE"
