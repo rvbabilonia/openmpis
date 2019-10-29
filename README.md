@@ -1,4 +1,6 @@
-# OpenMPIS [![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=2.0)](https://travis-ci.org/rvbabilonia/openmpis)
+# OpenMPIS
+
+[![Build Status](https://travis-ci.org/rvbabilonia/openmpis.svg?branch=2.0)](https://travis-ci.org/rvbabilonia/openmpis)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvbabilonia%2Fopenmpis.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvbabilonia%2Fopenmpis?ref=badge_shield)
 
 OpenMPIS is the **Open** Source **M**issing **P**ersons **I**nformation **S**ystem. 
