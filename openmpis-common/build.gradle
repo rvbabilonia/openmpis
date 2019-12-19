@@ -15,7 +15,7 @@ ext {
     springVersion = "5.2.2.RELEASE"
     logbackVersion = "1.2.3"
     junitVersion = "4.12"
-    aspectjVersion = "1.9.4"
+    aspectjVersion = "1.9.5"
 }
 
 repositories {
