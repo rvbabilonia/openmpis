@@ -30,7 +30,7 @@ ext {
     springCloudDependenciesVersion = "Greenwich.SR3"
     berkeleyVersion = "18.3.12"
     validationVersion = "2.0.1.Final"
-    springVersion = "5.2.0.RELEASE"
+    springVersion = "5.2.2.RELEASE"
     logbackVersion = "1.2.3"
     springfoxSwaggerVersion = "2.9.2"
     junitVersion = "4.12"
