@@ -27,7 +27,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-    springCloudDependenciesVersion = "Hoxton.RELEASE"
+    springCloudDependenciesVersion = "Hoxton.SR1"
     berkeleyVersion = "18.3.12"
     validationVersion = "2.0.1.Final"
     springVersion = "5.2.2.RELEASE"
