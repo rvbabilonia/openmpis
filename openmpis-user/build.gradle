@@ -33,7 +33,7 @@ ext {
     springVersion = "5.2.2.RELEASE"
     logbackVersion = "1.2.3"
     springfoxSwaggerVersion = "2.9.2"
-    junitVersion = "4.12"
+    junitVersion = "4.13"
 }
 
 repositories {
