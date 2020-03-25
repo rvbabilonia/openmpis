@@ -12,7 +12,7 @@ targetCompatibility = 1.8
 
 ext {
     berkeleyVersion = "18.3.12"
-    springVersion = "5.2.2.RELEASE"
+    springVersion = "5.2.5.RELEASE"
     logbackVersion = "1.2.3"
     junitVersion = "4.12"
     aspectjVersion = "1.9.5"
