@@ -50,11 +50,11 @@ task buildZip(type: Zip) {
     into('lib') {
         from configurations.runtimeClasspath
     }
-    archiveFileName = 'openmpis-agency.zip'
+    archiveFileName = 'openmpis-institution.zip'
 }
 
 build.dependsOn buildZip
 
 bootJar {
-    mainClassName = "org.vincenzolabs.openmpis.agency.AgencyApplication"
+    mainClassName = "org.vincenzolabs.openmpis.institution.InstitutionApplication"
 }
