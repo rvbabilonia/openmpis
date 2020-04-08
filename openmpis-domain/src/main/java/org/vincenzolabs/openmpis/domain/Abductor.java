@@ -52,13 +52,11 @@ public final class Abductor {
 
     private final LocalDate birthDate;
 
-    private final OffsetDateTime lastSeenOrFoundDate;
+    private final OffsetDateTime lastSeenDate;
 
-    private final StreetAddress lastSeenOrFoundLocation;
+    private final StreetAddress lastSeenLocation;
 
     private final StreetAddress possibleLocation;
-
-    private final String institutionUuid;
 
     private final Set<String> photoUuids;
 
@@ -80,10 +78,9 @@ public final class Abductor {
         this.lastName = builder.lastName;
         this.nickname = builder.nickname;
         this.birthDate = builder.birthDate;
-        this.lastSeenOrFoundDate = builder.lastSeenOrFoundDate;
-        this.lastSeenOrFoundLocation = builder.lastSeenOrFoundLocation;
+        this.lastSeenDate = builder.lastSeenDate;
+        this.lastSeenLocation = builder.lastSeenLocation;
         this.possibleLocation = builder.possibleLocation;
-        this.institutionUuid = builder.institutionUuid;
         this.photoUuids = builder.photoUuids;
         this.primaryPhotoUuid = builder.primaryPhotoUuid;
         this.description = builder.description;
@@ -155,21 +152,21 @@ public final class Abductor {
     }
 
     /**
-     * Returns the {@link OffsetDateTime} the {@link Person} was last seen or found.
+     * Returns the {@link OffsetDateTime} the alleged {@link Abductor} was last seen.
      *
-     * @return the {@link OffsetDateTime} the {@link Person} was last seen or found
+     * @return the {@link OffsetDateTime} the alleged {@link Abductor} was last seen
      */
-    public OffsetDateTime getLastSeenOrFoundDate() {
-        return lastSeenOrFoundDate;
+    public OffsetDateTime getLastSeenDate() {
+        return lastSeenDate;
     }
 
     /**
-     * Returns the location the {@link Person} was last seen or found.
+     * Returns the location the alleged {@link Abductor} was last seen.
      *
-     * @return the location the {@link Person} was last seen or found
+     * @return the location the alleged {@link Abductor} was last seen
      */
-    public StreetAddress getLastSeenOrFoundLocation() {
-        return lastSeenOrFoundLocation;
+    public StreetAddress getLastSeenLocation() {
+        return lastSeenLocation;
     }
 
     /**
@@ -179,15 +176,6 @@ public final class Abductor {
      */
     public StreetAddress getPossibleLocation() {
         return possibleLocation;
-    }
-
-    /**
-     * Returns the {@link Institution} UUID.
-     *
-     * @return the {@link Institution} UUID
-     */
-    public String getInstitutionUuid() {
-        return institutionUuid;
     }
 
     /**
@@ -254,10 +242,9 @@ public final class Abductor {
             .append(lastName, abductor.lastName)
             .append(nickname, abductor.nickname)
             .append(birthDate, abductor.birthDate)
-            .append(lastSeenOrFoundDate, abductor.lastSeenOrFoundDate)
-            .append(lastSeenOrFoundLocation, abductor.lastSeenOrFoundLocation)
+            .append(lastSeenDate, abductor.lastSeenDate)
+            .append(lastSeenLocation, abductor.lastSeenLocation)
             .append(possibleLocation, abductor.possibleLocation)
-            .append(institutionUuid, abductor.institutionUuid)
             .append(photoUuids, abductor.photoUuids)
             .append(primaryPhotoUuid, abductor.primaryPhotoUuid)
             .append(description, abductor.description)
@@ -274,10 +261,9 @@ public final class Abductor {
             .append(lastName)
             .append(nickname)
             .append(birthDate)
-            .append(lastSeenOrFoundDate)
-            .append(lastSeenOrFoundLocation)
+            .append(lastSeenDate)
+            .append(lastSeenLocation)
             .append(possibleLocation)
-            .append(institutionUuid)
             .append(photoUuids)
             .append(primaryPhotoUuid)
             .append(description)
@@ -294,10 +280,9 @@ public final class Abductor {
             .append("lastName", lastName)
             .append("nickname", nickname)
             .append("birthDate", birthDate)
-            .append("lastSeenOrFoundDate", lastSeenOrFoundDate)
-            .append("lastSeenOrFoundLocation", lastSeenOrFoundLocation)
+            .append("lastSeenOrFoundDate", lastSeenDate)
+            .append("lastSeenOrFoundLocation", lastSeenLocation)
             .append("possibleLocation", possibleLocation)
-            .append("institutionUuid", institutionUuid)
             .append("photoUuids", photoUuids)
             .append("primaryPhotoUuid", primaryPhotoUuid)
             .append("description", description)
@@ -322,13 +307,11 @@ public final class Abductor {
 
         private LocalDate birthDate;
 
-        private OffsetDateTime lastSeenOrFoundDate;
+        private OffsetDateTime lastSeenDate;
 
-        private StreetAddress lastSeenOrFoundLocation;
+        private StreetAddress lastSeenLocation;
 
         private StreetAddress possibleLocation;
-
-        private String institutionUuid;
 
         private Set<String> photoUuids;
 
@@ -412,24 +395,24 @@ public final class Abductor {
         }
 
         /**
-         * Sets the {@link OffsetDateTime} the {@link Person} was last seen or found.
+         * Sets the {@link OffsetDateTime} the alleged {@link Abductor} was last seen.
          *
-         * @param lastSeenOrFoundDate the {@link OffsetDateTime} the {@link Person} was last seen or found
+         * @param lastSeenDate the {@link OffsetDateTime} the alleged {@link Abductor} was last seen
          * @return the {@link Builder}
          */
-        public Builder withLastSeenOrFoundDate(OffsetDateTime lastSeenOrFoundDate) {
-            this.lastSeenOrFoundDate = lastSeenOrFoundDate;
+        public Builder withLastSeenDate(OffsetDateTime lastSeenDate) {
+            this.lastSeenDate = lastSeenDate;
             return this;
         }
 
         /**
-         * Sets the location the {@link Person} was last seen or found.
+         * Sets the location the alleged {@link Abductor} was last seen.
          *
-         * @param lastSeenOrFoundLocation the location the {@link Person} was last seen or found
+         * @param lastSeenLocation the location the alleged {@link Abductor} was last seen
          * @return the {@link Builder}
          */
-        public Builder withLastSeenOrFoundLocation(StreetAddress lastSeenOrFoundLocation) {
-            this.lastSeenOrFoundLocation = lastSeenOrFoundLocation;
+        public Builder withLastSeenLocation(StreetAddress lastSeenLocation) {
+            this.lastSeenLocation = lastSeenLocation;
             return this;
         }
 
@@ -441,17 +424,6 @@ public final class Abductor {
          */
         public Builder withPossibleLocation(StreetAddress possibleLocation) {
             this.possibleLocation = possibleLocation;
-            return this;
-        }
-
-        /**
-         * Sets the {@link Institution} UUID.
-         *
-         * @param institutionUuid the institutionUuid
-         * @return the {@link Builder}
-         */
-        public Builder withInstitutionUuid(String institutionUuid) {
-            this.institutionUuid = institutionUuid;
             return this;
         }
 
