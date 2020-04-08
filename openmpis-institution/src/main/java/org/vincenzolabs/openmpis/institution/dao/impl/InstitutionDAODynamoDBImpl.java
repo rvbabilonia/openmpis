@@ -127,7 +127,7 @@ public class InstitutionDAODynamoDBImpl
             .tableName(INSTITUTION_TABLE_NAME)
             .build();
 
-        Set<Institution> agencies = new HashSet<>();
+        Set<Institution> institutions = new HashSet<>();
         try {
             ScanResponse response = client.scan(request);
             response.items().forEach(item -> {
@@ -139,10 +139,10 @@ public class InstitutionDAODynamoDBImpl
                     .withEmailAddress(item.get("emailAddress").s())
                     .build();
 
-                agencies.add(institution);
+                institutions.add(institution);
             });
 
-            return agencies;
+            return institutions;
         } catch (DynamoDbException e) {
             LOGGER.error("Failed to retrieve institutions: [{}]", e.getMessage(), e);
 
