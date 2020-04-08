@@ -29,6 +29,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.vincenzolabs.openmpis.agency.service.AgencyService;
 import org.vincenzolabs.openmpis.domain.Agency;
@@ -55,6 +56,7 @@ public class CreateAgencyRequestHandler
      * @param agencyService the {@link AgencyService}
      * @param gson          the {@link Gson}
      */
+    @Autowired
     public CreateAgencyRequestHandler(AgencyService agencyService, Gson gson) {
         this.agencyService = agencyService;
         this.gson = gson;

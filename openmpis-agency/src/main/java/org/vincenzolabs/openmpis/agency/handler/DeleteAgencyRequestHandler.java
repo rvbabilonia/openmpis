@@ -28,7 +28,6 @@ import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 import org.vincenzolabs.openmpis.agency.service.AgencyService;
 import org.vincenzolabs.openmpis.domain.Agency;
@@ -47,17 +46,13 @@ public class DeleteAgencyRequestHandler
 
     private final AgencyService agencyService;
 
-    private final Gson gson;
-
     /**
      * Default constructor.
      *
      * @param agencyService the {@link AgencyService}
-     * @param gson          the {@link Gson}
      */
-    public DeleteAgencyRequestHandler(AgencyService agencyService, Gson gson) {
+    public DeleteAgencyRequestHandler(AgencyService agencyService) {
         this.agencyService = agencyService;
-        this.gson = gson;
     }
 
     @Override

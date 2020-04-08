@@ -28,12 +28,12 @@ import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.vincenzolabs.openmpis.institution.service.InstitutionService;
 import org.vincenzolabs.openmpis.domain.Institution;
 import org.vincenzolabs.openmpis.domain.Request;
 import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.institution.service.InstitutionService;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -47,17 +47,13 @@ public class DeleteInstitutionRequestHandler
 
     private final InstitutionService institutionService;
 
-    private final Gson gson;
-
     /**
      * Default constructor.
      *
      * @param institutionService the {@link InstitutionService}
-     * @param gson          the {@link Gson}
      */
-    public DeleteInstitutionRequestHandler(InstitutionService institutionService, Gson gson) {
+    public DeleteInstitutionRequestHandler(InstitutionService institutionService) {
         this.institutionService = institutionService;
-        this.gson = gson;
     }
 
     @Override
