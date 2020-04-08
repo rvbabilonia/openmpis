@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.owasp.dependencycheck' version '5.3.1'
+    id 'com.github.ben-manes.versions' version '0.28.0'
+}
+
+group 'org.vincenzolabs'
+def onTravisCI = System.getenv("TRAVIS_BUILD_NUMBER") != null
+project.ext.set("buildNumber", onTravisCI ? System.getenv("TRAVIS_BUILD_NUMBER") : "DEV-SNAPSHOT")
+def versionNumber = System.getenv("VERSION_NUMBER") != null ? System.getenv("VERSION_NUMBER") : "3.0"
+version = "$versionNumber.$project.ext.buildNumber"
+sourceCompatibility = '11'
+description = "Open Missing Persons Information System"
+
+allprojects {
+    version = rootProject.ext.buildNumber
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+subprojects {
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencyUpdates {
+        gradleReleaseChannel = 'current'
+        resolutionStrategy {
+            componentSelection { rules ->
+                rules.all { ComponentSelection selection ->
+                    def version = selection.candidate.version.toLowerCase()
+                    if (version.contains('alpha') || version.contains('beta')
+                            || version.contains('snapshot') || version.contains('rc')
+                            || version ==~ '[0-9]+\\.[0-9]+\\.[0-9]+(?:-b|.m|-M)[0-9]+(\\.)?[0-9]*') {
+                        selection.reject('Not a release')
+                    }
+                }
+            }
+        }
+    }
+}
