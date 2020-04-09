@@ -55,7 +55,7 @@ public class AbductorServiceImpl
     public Abductor createAbductor(Abductor abductor) {
         if (StringUtils.isBlank(abductor.getNickname())
             && (StringUtils.isBlank(abductor.getFirstName())) && StringUtils.isBlank(abductor.getLastName())) {
-            throw new IllegalArgumentException("Nickname must not be blank if first and last names are also null");
+            throw new IllegalArgumentException("Nickname must not be blank if first and last names are also blank");
         }
         return abductorDAO.createAbductor(abductor);
     }
@@ -74,7 +74,7 @@ public class AbductorServiceImpl
     public Abductor updateAbductor(Abductor abductor) {
         if (StringUtils.isBlank(abductor.getNickname())
             && (StringUtils.isBlank(abductor.getFirstName())) && StringUtils.isBlank(abductor.getLastName())) {
-            throw new IllegalArgumentException("Nickname must not be blank if first and last names are also null");
+            throw new IllegalArgumentException("Nickname must not be blank if first and last names are also blank");
         }
         return abductorDAO.updateAbductor(abductor);
     }
