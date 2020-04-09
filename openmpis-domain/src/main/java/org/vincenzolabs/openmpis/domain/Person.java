@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -196,7 +197,7 @@ public final class Person {
      * @return the {@link Set} of photo UUID's
      */
     public Set<String> getPhotoUuids() {
-        return photoUuids;
+        return photoUuids != null ? photoUuids : new HashSet<>();
     }
 
     /**

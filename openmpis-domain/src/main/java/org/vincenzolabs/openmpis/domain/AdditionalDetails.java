@@ -23,6 +23,7 @@
  */
 package org.vincenzolabs.openmpis.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -65,7 +66,7 @@ public final class AdditionalDetails {
      * @return the {@link Set} of age-progressed photo UUID's
      */
     public Set<String> getAgeProgressedPhotoUuids() {
-        return ageProgressedPhotoUuids;
+        return ageProgressedPhotoUuids != null ? ageProgressedPhotoUuids : new HashSet<>();
     }
 
     /**

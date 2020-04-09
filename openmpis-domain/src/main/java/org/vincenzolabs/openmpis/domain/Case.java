@@ -24,6 +24,7 @@
 package org.vincenzolabs.openmpis.domain;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -156,7 +157,7 @@ public final class Case {
      * @return the {@link Set} of alleged abductor UUID's
      */
     public Set<String> getAbductorUuids() {
-        return abductorUuids;
+        return abductorUuids != null ? abductorUuids : new HashSet<>();
     }
 
     /**
@@ -165,7 +166,7 @@ public final class Case {
      * @return the {@link Set} of {@link Report}s
      */
     public Set<Report> getReports() {
-        return reports;
+        return reports != null ? reports : new HashSet<>();
     }
 
     /**
@@ -174,7 +175,7 @@ public final class Case {
      * @return the {@link Set} of {@link Tip}s
      */
     public Set<Tip> getTips() {
-        return tips;
+        return tips != null ? tips : new HashSet<>();
     }
 
     /**
