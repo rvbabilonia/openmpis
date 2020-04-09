@@ -29,7 +29,7 @@ import java.util.Set;
 import org.vincenzolabs.openmpis.domain.User;
 
 /**
- * The service for person.
+ * The service for user.
  *
  * @author Rey Vincent Babilonia
  */
@@ -54,10 +54,10 @@ public interface UserService {
     /**
      * Returns the {@link User} matching the given UUID.
      *
-     * @param personUuid the {@link User} UUID
+     * @param userUuid the {@link User} UUID
      * @return the {@link User}
      */
-    User retrieveUser(String personUuid);
+    User retrieveUser(String userUuid);
 
     /**
      * Authenticates the user.

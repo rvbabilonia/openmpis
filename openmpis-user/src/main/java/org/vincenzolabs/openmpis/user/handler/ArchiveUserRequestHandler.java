@@ -73,9 +73,9 @@ public class ArchiveUserRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            String personUuid = request.getPathParameters().get("personUuid");
+            String userUuid = request.getPathParameters().get("userUuid");
 
-            User user = userService.archiveUser(personUuid);
+            User user = userService.archiveUser(userUuid);
 
             response.setStatusCode(200);
             response.setBody(gson.toJson(user));

@@ -84,8 +84,8 @@ public class UserServiceImpl
     }
 
     @Override
-    public User retrieveUser(final String personUuid) {
-        return userDAO.retrieveUser(personUuid);
+    public User retrieveUser(final String userUuid) {
+        return userDAO.retrieveUser(userUuid);
     }
 
     @Override
