@@ -55,7 +55,7 @@ public final class User {
 
     private final String designation;
 
-    private final Agency agency;
+    private final String agencyUuid;
 
     private final String ipAddress;
 
@@ -82,7 +82,7 @@ public final class User {
         this.middleName = builder.middleName;
         this.lastName = builder.lastName;
         this.designation = builder.designation;
-        this.agency = builder.agency;
+        this.agencyUuid = builder.agencyUuid;
         this.ipAddress = builder.ipAddress;
         this.lastLoginDate = builder.lastLoginDate;
         this.creationDate = builder.creationDate;
@@ -172,12 +172,12 @@ public final class User {
     }
 
     /**
-     * Returns the {@link Agency}.
+     * Returns the {@link Agency} UUID.
      *
-     * @return the {@link Agency}
+     * @return the {@link Agency} UUID
      */
-    public Agency getAgency() {
-        return agency;
+    public String getAgencyUuid() {
+        return agencyUuid;
     }
 
     /**
@@ -234,6 +234,16 @@ public final class User {
         return new Builder();
     }
 
+    /**
+     * Returns a {@link Builder}.
+     *
+     * @param user the {@link User}
+     * @return the {@link Builder}
+     */
+    public static Builder builder(User user) {
+        return new Builder(user);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -257,7 +267,7 @@ public final class User {
             .append(middleName, user.middleName)
             .append(lastName, user.lastName)
             .append(designation, user.designation)
-            .append(agency, user.agency)
+            .append(agencyUuid, user.agencyUuid)
             .append(ipAddress, user.ipAddress)
             .append(lastLoginDate, user.lastLoginDate)
             .append(creationDate, user.creationDate)
@@ -277,7 +287,7 @@ public final class User {
             .append(middleName)
             .append(lastName)
             .append(designation)
-            .append(agency)
+            .append(agencyUuid)
             .append(ipAddress)
             .append(lastLoginDate)
             .append(creationDate)
@@ -298,7 +308,7 @@ public final class User {
             .append("middleName", middleName)
             .append("lastName", lastName)
             .append("designation", designation)
-            .append("agency", agency)
+            .append("agencyUuid", agencyUuid)
             .append("ipAddress", ipAddress)
             .append("lastLoginDate", lastLoginDate)
             .append("creationDate", creationDate)
@@ -330,7 +340,7 @@ public final class User {
 
         private String designation;
 
-        private Agency agency;
+        private String agencyUuid;
 
         private String ipAddress;
 
@@ -347,6 +357,29 @@ public final class User {
          */
         private Builder() {
             // prevent instantiation
+        }
+
+        /**
+         * Private constructor with {@link User}.
+         *
+         * @param user the {@link User}
+         */
+        private Builder(User user) {
+            uuid = user.getUuid();
+            group = user.getGroup();
+            emailAddress = user.getEmailAddress();
+            password = user.getPassword();
+            rank = user.getRank();
+            firstName = user.getFirstName();
+            middleName = user.getMiddleName();
+            lastName = user.getLastName();
+            designation = user.getDesignation();
+            agencyUuid = user.getAgencyUuid();
+            ipAddress = user.getIpAddress();
+            lastLoginDate = user.getLastLoginDate();
+            creationDate = user.getCreationDate();
+            active = user.isActive();
+            creatorUuid = user.getCreatorUuid();
         }
 
         /**
@@ -449,13 +482,13 @@ public final class User {
         }
 
         /**
-         * Sets the agency.
+         * Sets the {@link Agency} UUID.
          *
-         * @param agency the agency
+         * @param agencyUuid the {@link Agency} UUID
          * @return the {@link Builder}
          */
-        public Builder withAgency(Agency agency) {
-            this.agency = agency;
+        public Builder withAgencyUuid(String agencyUuid) {
+            this.agencyUuid = agencyUuid;
             return this;
         }
 
