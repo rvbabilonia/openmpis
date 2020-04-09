@@ -64,7 +64,7 @@ public interface PersonDAO {
     Person updatePerson(Person person);
 
     /**
-     * Deletes an {@link Person}.
+     * Deletes a {@link Person}.
      *
      * @param personUuid the {@link Person} UUID
      * @return {@code true} if the {@link Person} has been deleted; {@code false} otherwise
