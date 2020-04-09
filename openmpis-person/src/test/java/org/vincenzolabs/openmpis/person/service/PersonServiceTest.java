@@ -66,7 +66,7 @@ import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 @ExtendWith(DynamoDB.class)
 class PersonServiceTest {
 
-    private static final String ABDUCTOR_TABLE_NAME = "person";
+    private static final String PERSON_TABLE_NAME = "person";
 
     @AWSClient(endpoint = Endpoint.class)
     private DynamoDbClient client;
@@ -76,7 +76,7 @@ class PersonServiceTest {
     @BeforeEach
     void setUp() {
         CreateTableRequest createTableRequest = CreateTableRequest.builder()
-            .tableName(ABDUCTOR_TABLE_NAME)
+            .tableName(PERSON_TABLE_NAME)
             .keySchema(KeySchemaElement.builder()
                 .attributeName("uuid")
                 .keyType(KeyType.HASH)
@@ -101,7 +101,7 @@ class PersonServiceTest {
     @AfterEach
     void tearDown() {
         DeleteTableRequest deleteTableRequest = DeleteTableRequest.builder()
-            .tableName(ABDUCTOR_TABLE_NAME)
+            .tableName(PERSON_TABLE_NAME)
             .build();
 
         client.deleteTable(deleteTableRequest);
