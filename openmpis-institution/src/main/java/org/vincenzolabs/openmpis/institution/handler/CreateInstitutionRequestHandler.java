@@ -31,10 +31,13 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.vincenzolabs.openmpis.adapter.InstitutionAdapter;
+import org.vincenzolabs.openmpis.adapter.StreetAddressAdapter;
 import org.vincenzolabs.openmpis.institution.service.InstitutionService;
 import org.vincenzolabs.openmpis.domain.Institution;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.InstitutionJson;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -75,13 +78,14 @@ public class CreateInstitutionRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            Institution input = gson.fromJson(request.getBody(), Institution.class);
+            InstitutionJson institutionJson = gson.fromJson(request.getBody(), InstitutionJson.class);
 
-            Institution institution = institutionService.createInstitution(input.getName(), input.getContactNumber(),
-                input.getStreetAddress(), input.getEmailAddress());
+            Institution institution = institutionService.createInstitution(institutionJson.getName(),
+                institutionJson.getContactNumber(), StreetAddressAdapter.adapt(institutionJson.getStreetAddressJson()),
+                institutionJson.getEmailAddress());
 
             response.setStatusCode(201);
-            response.setBody(gson.toJson(institution));
+            response.setBody(gson.toJson(InstitutionAdapter.adapt(institution)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 

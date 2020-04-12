@@ -31,10 +31,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.vincenzolabs.openmpis.institution.service.InstitutionService;
+import org.vincenzolabs.openmpis.adapter.InstitutionAdapter;
 import org.vincenzolabs.openmpis.domain.Institution;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.institution.service.InstitutionService;
+import org.vincenzolabs.openmpis.representation.InstitutionJson;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -54,7 +56,7 @@ public class UpdateInstitutionRequestHandler
      * Default constructor.
      *
      * @param institutionService the {@link InstitutionService}
-     * @param gson          the {@link Gson}
+     * @param gson               the {@link Gson}
      */
     @Autowired
     public UpdateInstitutionRequestHandler(InstitutionService institutionService, Gson gson) {
@@ -75,12 +77,12 @@ public class UpdateInstitutionRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            Institution input = gson.fromJson(request.getBody(), Institution.class);
+            InstitutionJson institutionJson = gson.fromJson(request.getBody(), InstitutionJson.class);
 
-            Institution institution = institutionService.updateInstitution(input);
+            Institution institution = institutionService.updateInstitution(InstitutionAdapter.adapt(institutionJson));
 
             response.setStatusCode(200);
-            response.setBody(gson.toJson(institution));
+            response.setBody(gson.toJson(InstitutionAdapter.adapt(institution)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 
