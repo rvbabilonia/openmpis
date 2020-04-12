@@ -55,8 +55,6 @@ public final class Tip {
 
     private final String ipAddress;
 
-    private final String caseUuid;
-
     /**
      * Private constructor.
      *
@@ -72,7 +70,6 @@ public final class Tip {
         this.message = builder.message;
         this.status = builder.status;
         this.ipAddress = builder.ipAddress;
-        this.caseUuid = builder.caseUuid;
     }
 
     /**
@@ -126,7 +123,7 @@ public final class Tip {
      * @return the contact number
      */
     public String getContactNumber() {
-        return emailAddress;
+        return contactNumber;
     }
 
     /**
@@ -154,15 +151,6 @@ public final class Tip {
      */
     public String getIpAddress() {
         return ipAddress;
-    }
-
-    /**
-     * Returns the case UUID.
-     *
-     * @return the case UUID
-     */
-    public String getCaseUuid() {
-        return caseUuid;
     }
 
     /**
@@ -196,7 +184,6 @@ public final class Tip {
             .append(message, tip.message)
             .append(status, tip.status)
             .append(ipAddress, tip.ipAddress)
-            .append(caseUuid, tip.caseUuid)
             .isEquals();
     }
 
@@ -212,7 +199,6 @@ public final class Tip {
             .append(message)
             .append(status)
             .append(ipAddress)
-            .append(caseUuid)
             .toHashCode();
     }
 
@@ -228,7 +214,6 @@ public final class Tip {
             .append("message", message)
             .append("status", status)
             .append("ipAddress", ipAddress)
-            .append("caseUuid", caseUuid)
             .toString();
     }
 
@@ -254,8 +239,6 @@ public final class Tip {
         private MessageStatus status;
 
         private String ipAddress;
-
-        private String caseUuid;
 
         /**
          * Private constructor.
@@ -360,17 +343,6 @@ public final class Tip {
          */
         public Builder withIpAddress(String ipAddress) {
             this.ipAddress = ipAddress;
-            return this;
-        }
-
-        /**
-         * Sets the case UUID.
-         *
-         * @param caseUuid the case UUID
-         * @return the {@link Builder}
-         */
-        public Builder withCaseUuid(String caseUuid) {
-            this.caseUuid = caseUuid;
             return this;
         }
 

@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author Rey Vincent Babilonia
  */
-public class ContactPerson {
+public class ContactPersonJson {
 
     private String uuid;
 
@@ -184,7 +184,7 @@ public class ContactPerson {
             return false;
         }
 
-        ContactPerson that = (ContactPerson) o;
+        ContactPersonJson that = (ContactPersonJson) o;
 
         return new EqualsBuilder()
             .append(uuid, that.uuid)

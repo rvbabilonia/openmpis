@@ -40,8 +40,6 @@ public final class Report {
 
     private final OffsetDateTime creationDate;
 
-    private final String caseUuid;
-
     private final String investigatorUuid;
 
     private final String report;
@@ -56,7 +54,6 @@ public final class Report {
     private Report(Builder builder) {
         this.uuid = builder.uuid;
         this.creationDate = builder.creationDate;
-        this.caseUuid = builder.caseUuid;
         this.investigatorUuid = builder.investigatorUuid;
         this.report = builder.report;
         this.ipAddress = builder.ipAddress;
@@ -78,15 +75,6 @@ public final class Report {
      */
     public OffsetDateTime getCreationDate() {
         return creationDate;
-    }
-
-    /**
-     * Returns the case UUID.
-     *
-     * @return the case UUID
-     */
-    public String getCaseUuid() {
-        return caseUuid;
     }
 
     /**
@@ -140,7 +128,6 @@ public final class Report {
         return new EqualsBuilder()
             .append(uuid, report1.uuid)
             .append(creationDate, report1.creationDate)
-            .append(caseUuid, report1.caseUuid)
             .append(investigatorUuid, report1.investigatorUuid)
             .append(report, report1.report)
             .append(ipAddress, report1.ipAddress)
@@ -152,7 +139,6 @@ public final class Report {
         return new HashCodeBuilder(17, 37)
             .append(uuid)
             .append(creationDate)
-            .append(caseUuid)
             .append(investigatorUuid)
             .append(report)
             .append(ipAddress)
@@ -164,7 +150,6 @@ public final class Report {
         return new ToStringBuilder(this)
             .append("uuid", uuid)
             .append("creationDate", creationDate)
-            .append("caseUuid", caseUuid)
             .append("investigatorUuid", investigatorUuid)
             .append("report", report)
             .append("ipAddress", ipAddress)
@@ -179,8 +164,6 @@ public final class Report {
         private String uuid;
 
         private OffsetDateTime creationDate;
-
-        private String caseUuid;
 
         private String investigatorUuid;
 
@@ -214,17 +197,6 @@ public final class Report {
          */
         public Builder withCreationDate(OffsetDateTime creationDate) {
             this.creationDate = creationDate;
-            return this;
-        }
-
-        /**
-         * Sets the case UUID.
-         *
-         * @param caseUuid the case UUID
-         * @return the {@link Builder}
-         */
-        public Builder withCaseUuid(String caseUuid) {
-            this.caseUuid = caseUuid;
             return this;
         }
 

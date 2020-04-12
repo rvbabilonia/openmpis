@@ -153,5 +153,9 @@ public enum Relationship {
     /**
      * Other.
      */
-    OTHER
+    OTHER,
+    /**
+     * Unknown
+     */
+    UNKNOWN
 }

@@ -151,7 +151,7 @@ public class TipJson {
      * @return the contact number
      */
     public String getContactNumber() {
-        return emailAddress;
+        return contactNumber;
     }
 
     /**

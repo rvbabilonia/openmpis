@@ -128,18 +128,18 @@ public class InvestigationJson {
     }
 
     /**
-     * Returns the {@link ContactPerson} UUID.
+     * Returns the {@link ContactPersonJson} UUID.
      *
-     * @return the {@link ContactPerson} UUID
+     * @return the {@link ContactPersonJson} UUID
      */
     public String getContactPersonUuid() {
         return contactPersonUuid;
     }
 
     /**
-     * Sets the {@link ContactPerson} UUID.
+     * Sets the {@link ContactPersonJson} UUID.
      *
-     * @param contactPersonUuid the {@link ContactPerson} UUID
+     * @param contactPersonUuid the {@link ContactPersonJson} UUID
      */
     public void setContactPersonUuid(String contactPersonUuid) {
         this.contactPersonUuid = contactPersonUuid;
@@ -254,18 +254,18 @@ public class InvestigationJson {
     }
 
     /**
-     * Returns the {@link Relationship} of the {@link ContactPerson} to the {@link PersonJson}.
+     * Returns the {@link Relationship} of the {@link ContactPersonJson} to the {@link PersonJson}.
      *
-     * @return the {@link Relationship} of the {@link ContactPerson} to the {@link PersonJson}
+     * @return the {@link Relationship} of the {@link ContactPersonJson} to the {@link PersonJson}
      */
     public Relationship getRelationshipToContactPerson() {
         return relationshipToContactPerson;
     }
 
     /**
-     * Sets the {@link Relationship} of the {@link ContactPerson} to the {@link PersonJson}.
+     * Sets the {@link Relationship} of the {@link ContactPersonJson} to the {@link PersonJson}.
      *
-     * @param relationshipToContactPerson the {@link Relationship} of the {@link ContactPerson} to the
+     * @param relationshipToContactPerson the {@link Relationship} of the {@link ContactPersonJson} to the
      *                                    {@link PersonJson}
      */
     public void setRelationshipToContactPerson(Relationship relationshipToContactPerson) {

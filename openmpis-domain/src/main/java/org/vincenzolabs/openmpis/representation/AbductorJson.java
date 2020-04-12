@@ -55,9 +55,9 @@ public class AbductorJson {
 
     private OffsetDateTime lastSeenDate;
 
-    private StreetAddressJson lastSeenLocation;
+    private StreetAddressJson lastSeenLocationJson;
 
-    private StreetAddressJson possibleLocation;
+    private StreetAddressJson possibleLocationJson;
 
     private Set<String> photoUuids;
 
@@ -216,17 +216,17 @@ public class AbductorJson {
      *
      * @return the location the alleged {@link AbductorJson} was last seen
      */
-    public StreetAddressJson getLastSeenLocation() {
-        return lastSeenLocation;
+    public StreetAddressJson getLastSeenLocationJson() {
+        return lastSeenLocationJson;
     }
 
     /**
      * Sets the location the alleged {@link AbductorJson} was last seen.
      *
-     * @param lastSeenLocation the location
+     * @param lastSeenLocationJson the location
      */
-    public void setLastSeenLocation(StreetAddressJson lastSeenLocation) {
-        this.lastSeenLocation = lastSeenLocation;
+    public void setLastSeenLocationJson(StreetAddressJson lastSeenLocationJson) {
+        this.lastSeenLocationJson = lastSeenLocationJson;
     }
 
     /**
@@ -234,17 +234,17 @@ public class AbductorJson {
      *
      * @return the possible location
      */
-    public StreetAddressJson getPossibleLocation() {
-        return possibleLocation;
+    public StreetAddressJson getPossibleLocationJson() {
+        return possibleLocationJson;
     }
 
     /**
      * Sets the possible location.
      *
-     * @param possibleLocation the possible location
+     * @param possibleLocationJson the possible location
      */
-    public void setPossibleLocation(StreetAddressJson possibleLocation) {
-        this.possibleLocation = possibleLocation;
+    public void setPossibleLocationJson(StreetAddressJson possibleLocationJson) {
+        this.possibleLocationJson = possibleLocationJson;
     }
 
     /**
@@ -340,8 +340,8 @@ public class AbductorJson {
             .append(birthDate, that.birthDate)
             .append(age, that.age)
             .append(lastSeenDate, that.lastSeenDate)
-            .append(lastSeenLocation, that.lastSeenLocation)
-            .append(possibleLocation, that.possibleLocation)
+            .append(lastSeenLocationJson, that.lastSeenLocationJson)
+            .append(possibleLocationJson, that.possibleLocationJson)
             .append(photoUuids, that.photoUuids)
             .append(primaryPhotoUuid, that.primaryPhotoUuid)
             .append(descriptionJson, that.descriptionJson)
@@ -360,8 +360,8 @@ public class AbductorJson {
             .append(birthDate)
             .append(age)
             .append(lastSeenDate)
-            .append(lastSeenLocation)
-            .append(possibleLocation)
+            .append(lastSeenLocationJson)
+            .append(possibleLocationJson)
             .append(photoUuids)
             .append(primaryPhotoUuid)
             .append(descriptionJson)
@@ -380,8 +380,8 @@ public class AbductorJson {
             .append("birthDate", birthDate)
             .append("age", age)
             .append("lastSeenDate", lastSeenDate)
-            .append("lastSeenLocation", lastSeenLocation)
-            .append("possibleLocation", possibleLocation)
+            .append("lastSeenLocationJson", lastSeenLocationJson)
+            .append("possibleLocationJson", possibleLocationJson)
             .append("photoUuids", photoUuids)
             .append("primaryPhotoUuid", primaryPhotoUuid)
             .append("descriptionJson", descriptionJson)

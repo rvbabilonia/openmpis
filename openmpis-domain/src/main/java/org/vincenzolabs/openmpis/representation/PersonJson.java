@@ -55,9 +55,9 @@ public class PersonJson {
 
     private OffsetDateTime lastSeenOrFoundDate;
 
-    private StreetAddressJson lastSeenOrFoundLocation;
+    private StreetAddressJson lastSeenOrFoundLocationJson;
 
-    private StreetAddressJson possibleLocation;
+    private StreetAddressJson possibleLocationJson;
 
     private String institutionUuid;
 
@@ -218,17 +218,17 @@ public class PersonJson {
      *
      * @return the location the {@link PersonJson} was last seen or found
      */
-    public StreetAddressJson getLastSeenOrFoundLocation() {
-        return lastSeenOrFoundLocation;
+    public StreetAddressJson getLastSeenOrFoundLocationJson() {
+        return lastSeenOrFoundLocationJson;
     }
 
     /**
      * Sets the location the {@link PersonJson} was last seen or found.
      *
-     * @param lastSeenOrFoundLocation the location the {@link PersonJson} was last seen or found
+     * @param lastSeenOrFoundLocationJson the location the {@link PersonJson} was last seen or found
      */
-    public void setLastSeenOrFoundLocation(StreetAddressJson lastSeenOrFoundLocation) {
-        this.lastSeenOrFoundLocation = lastSeenOrFoundLocation;
+    public void setLastSeenOrFoundLocationJson(StreetAddressJson lastSeenOrFoundLocationJson) {
+        this.lastSeenOrFoundLocationJson = lastSeenOrFoundLocationJson;
     }
 
     /**
@@ -236,17 +236,17 @@ public class PersonJson {
      *
      * @return the possible location
      */
-    public StreetAddressJson getPossibleLocation() {
-        return possibleLocation;
+    public StreetAddressJson getPossibleLocationJson() {
+        return possibleLocationJson;
     }
 
     /**
      * Sets the possible location.
      *
-     * @param possibleLocation the possible location
+     * @param possibleLocationJson the possible location
      */
-    public void setPossibleLocation(StreetAddressJson possibleLocation) {
-        this.possibleLocation = possibleLocation;
+    public void setPossibleLocationJson(StreetAddressJson possibleLocationJson) {
+        this.possibleLocationJson = possibleLocationJson;
     }
 
     /**
@@ -360,8 +360,8 @@ public class PersonJson {
             .append(birthDate, personJson.birthDate)
             .append(age, personJson.age)
             .append(lastSeenOrFoundDate, personJson.lastSeenOrFoundDate)
-            .append(lastSeenOrFoundLocation, personJson.lastSeenOrFoundLocation)
-            .append(possibleLocation, personJson.possibleLocation)
+            .append(lastSeenOrFoundLocationJson, personJson.lastSeenOrFoundLocationJson)
+            .append(possibleLocationJson, personJson.possibleLocationJson)
             .append(institutionUuid, personJson.institutionUuid)
             .append(photoUuids, personJson.photoUuids)
             .append(primaryPhotoUuid, personJson.primaryPhotoUuid)
@@ -381,8 +381,8 @@ public class PersonJson {
             .append(birthDate)
             .append(age)
             .append(lastSeenOrFoundDate)
-            .append(lastSeenOrFoundLocation)
-            .append(possibleLocation)
+            .append(lastSeenOrFoundLocationJson)
+            .append(possibleLocationJson)
             .append(institutionUuid)
             .append(photoUuids)
             .append(primaryPhotoUuid)
@@ -402,8 +402,8 @@ public class PersonJson {
             .append("birthDate", birthDate)
             .append("age", age)
             .append("lastSeenOrFoundDate", lastSeenOrFoundDate)
-            .append("lastSeenOrFoundLocation", lastSeenOrFoundLocation)
-            .append("possibleLocation", possibleLocation)
+            .append("lastSeenOrFoundLocationJson", lastSeenOrFoundLocationJson)
+            .append("possibleLocationJson", possibleLocationJson)
             .append("institutionUuid", institutionUuid)
             .append("photoUuids", photoUuids)
             .append("primaryPhotoUuid", primaryPhotoUuid)
