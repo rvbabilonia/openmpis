@@ -31,8 +31,8 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.springframework.stereotype.Component;
 import org.vincenzolabs.openmpis.abductor.service.AbductorService;
 import org.vincenzolabs.openmpis.domain.Abductor;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**

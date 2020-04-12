@@ -32,9 +32,11 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.vincenzolabs.openmpis.abductor.service.AbductorService;
+import org.vincenzolabs.openmpis.adapter.AbductorAdapter;
 import org.vincenzolabs.openmpis.domain.Abductor;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.AbductorJson;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -75,12 +77,12 @@ public class UpdateAbductorRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            Abductor input = gson.fromJson(request.getBody(), Abductor.class);
+            AbductorJson abductorJson = gson.fromJson(request.getBody(), AbductorJson.class);
 
-            Abductor abductor = abductorService.updateAbductor(input);
+            Abductor abductor = abductorService.updateAbductor(AbductorAdapter.adapt(abductorJson));
 
             response.setStatusCode(200);
-            response.setBody(gson.toJson(abductor));
+            response.setBody(gson.toJson(AbductorAdapter.adapt(abductor)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 
