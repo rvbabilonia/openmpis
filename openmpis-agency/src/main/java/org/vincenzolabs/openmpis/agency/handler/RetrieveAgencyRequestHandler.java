@@ -31,10 +31,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.vincenzolabs.openmpis.adapter.AgencyAdapter;
 import org.vincenzolabs.openmpis.agency.service.AgencyService;
 import org.vincenzolabs.openmpis.domain.Agency;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -80,7 +81,7 @@ public class RetrieveAgencyRequestHandler
             Agency agency = agencyService.retrieveAgency(agencyUuid);
 
             response.setStatusCode(200);
-            response.setBody(gson.toJson(agency));
+            response.setBody(gson.toJson(AgencyAdapter.adapt(agency)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 
