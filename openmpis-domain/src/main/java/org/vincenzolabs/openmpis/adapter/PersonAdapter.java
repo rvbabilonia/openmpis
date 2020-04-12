@@ -75,6 +75,7 @@ public final class PersonAdapter {
         json.setLastName(bean.getLastName());
         json.setNickname(bean.getNickname());
         json.setBirthDate(bean.getBirthDate());
+        json.setAge(bean.getAge());
         json.setLastSeenOrFoundDate(bean.getLastSeenOrFoundDate());
         json.setLastSeenOrFoundLocationJson(StreetAddressAdapter.adapt(bean.getLastSeenOrFoundLocation()));
         json.setPossibleLocationJson(StreetAddressAdapter.adapt(bean.getPossibleLocation()));

@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Set;
 import java.util.UUID;
 
@@ -265,7 +264,7 @@ class PersonServiceTest {
         assertThat(actual.getPhotoUuids())
             .hasSize(2)
             .containsOnlyOnce(primaryPhotoUuid);
-        assertThat(actual.getAge(ZoneId.of("Pacific/Auckland"))).isGreaterThanOrEqualTo(39);
+        assertThat(actual.getAge()).isGreaterThanOrEqualTo(39);
     }
 
     @Test

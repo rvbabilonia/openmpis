@@ -89,6 +89,7 @@ class PersonAdapterTest {
         personJson.setFirstName("Kirsten Chloe");
         personJson.setLastName("Dy");
         personJson.setBirthDate(LocalDate.of(1999, 2, 1));
+        personJson.setAge(21);
         personJson.setLastSeenOrFoundDate(OffsetDateTime.of(2015, 2, 3, 16, 45, 0, 0, ZoneOffset.of("+08:00")));
         StreetAddressJson lastSeenLocation = new StreetAddressJson();
         lastSeenLocation.setCity("Tagaytay City");
@@ -116,6 +117,7 @@ class PersonAdapterTest {
         Person bean = PersonAdapter.adapt(personJson);
 
         assertThat(bean).isEqualTo(personBean);
+        assertThat(bean.getAge()).isGreaterThanOrEqualTo(21);
     }
 
     @Test
@@ -123,6 +125,7 @@ class PersonAdapterTest {
         PersonJson json = PersonAdapter.adapt(personBean);
 
         assertThat(json).isEqualTo(personJson);
+        assertThat(json.getAge()).isGreaterThanOrEqualTo(16);
     }
 
     @Test

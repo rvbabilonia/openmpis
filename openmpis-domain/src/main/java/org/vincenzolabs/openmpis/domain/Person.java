@@ -150,16 +150,13 @@ public final class Person {
      *
      * @return the age
      */
-    public Integer getAge(ZoneId zoneId) {
+    public Integer getAge() {
         if (birthDate == null) {
             return null;
         }
-        if (zoneId == null) {
-            zoneId = ZoneId.of("Pacific/Auckland");
-        }
 
-        return Period.between(LocalDate.from(birthDate.atStartOfDay(zoneId)),
-            LocalDate.now(zoneId)).getYears();
+        return Period.between(LocalDate.from(birthDate.atStartOfDay()),
+            LocalDate.now()).getYears();
     }
 
     /**
