@@ -370,6 +370,7 @@ class UserServiceTest {
         assertThat(userService.login("mvbabilonia@gmail.com", "password", ZoneId.of("Pacific/Auckland"), "127.0.0.1"))
             .isNull();
     }
+
     @Test
     void archiveUser() {
         String agencyUuid = UUID.randomUUID().toString();

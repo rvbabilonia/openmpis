@@ -31,9 +31,10 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.vincenzolabs.openmpis.adapter.UserAdapter;
 import org.vincenzolabs.openmpis.domain.User;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import org.vincenzolabs.openmpis.user.service.UserService;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
@@ -54,7 +55,7 @@ public class RetrieveUserRequestHandler
      * Default constructor.
      *
      * @param userService the {@link UserService}
-     * @param gson            the {@link Gson}
+     * @param gson        the {@link Gson}
      */
     @Autowired
     public RetrieveUserRequestHandler(UserService userService, Gson gson) {
@@ -75,12 +76,12 @@ public class RetrieveUserRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            String personUuid = request.getPathParameters().get("personUuid");
+            String userUuid = request.getPathParameters().get("userUuid");
 
-            User person = userService.retrieveUser(personUuid);
+            User user = userService.retrieveUser(userUuid);
 
             response.setStatusCode(200);
-            response.setBody(gson.toJson(person));
+            response.setBody(gson.toJson(UserAdapter.adapt(user)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 

@@ -30,8 +30,8 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.springframework.stereotype.Component;
 import org.vincenzolabs.openmpis.domain.User;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import org.vincenzolabs.openmpis.user.service.UserService;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
@@ -68,9 +68,9 @@ public class DeleteUserRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            String personUuid = request.getPathParameters().get("personUuid");
+            String userUuid = request.getPathParameters().get("userUuid");
 
-            userService.deleteUser(personUuid);
+            userService.deleteUser(userUuid);
 
             response.setStatusCode(200);
         } catch (AwsServiceException e) {

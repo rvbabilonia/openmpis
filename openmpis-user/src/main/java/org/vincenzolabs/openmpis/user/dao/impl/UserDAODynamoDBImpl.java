@@ -95,7 +95,7 @@ public class UserDAODynamoDBImpl
     public User createUser(User user, ZoneId zoneId) {
         User newUser = User.builder(user)
             .withUuid(UUID.randomUUID().toString())
-            .withCreationDate(OffsetDateTime.now())
+            .withCreationDate(OffsetDateTime.now(zoneId))
             .withActive(true)
             .build();
 
@@ -377,16 +377,16 @@ public class UserDAODynamoDBImpl
                 .withDesignation(getValue(item.get("designation"), String.class))
                 .withAgencyUuid(getValue(item.get("agencyUuid"), String.class))
                 .withIpAddress(getValue(item.get("ipAddress"), String.class))
-                .withCreatorUuid(getValue(item.get("creatorUuid"), String.class));
+                .withCreationDate(OffsetDateTime.parse(getValue(item.get("creationDate"), String.class)))
+                .withCreatorUuid(getValue(item.get("creatorUuid"), String.class))
+                .withActive(getValue(item.get("active"), Boolean.class));
 
             if (item.get("group") != null) {
                 builder.withGroup(Group.valueOf(getValue(item.get("group"), String.class)));
             }
-            builder.withCreationDate(OffsetDateTime.parse(getValue(item.get("creationDate"), String.class)));
             if (item.get("lastLoginDate") != null) {
                 builder.withLastLoginDate(OffsetDateTime.parse(getValue(item.get("lastLoginDate"), String.class)));
             }
-            builder.withActive(getValue(item.get("active"), Boolean.class));
 
             return builder.build();
         } else {
