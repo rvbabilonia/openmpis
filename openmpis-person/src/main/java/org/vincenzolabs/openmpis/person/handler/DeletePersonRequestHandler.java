@@ -29,10 +29,10 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.springframework.stereotype.Component;
-import org.vincenzolabs.openmpis.person.service.PersonService;
 import org.vincenzolabs.openmpis.domain.Person;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.person.service.PersonService;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**

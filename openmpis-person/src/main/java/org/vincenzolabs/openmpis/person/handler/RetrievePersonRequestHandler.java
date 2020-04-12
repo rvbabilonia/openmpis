@@ -31,10 +31,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.vincenzolabs.openmpis.person.service.PersonService;
+import org.vincenzolabs.openmpis.adapter.PersonAdapter;
 import org.vincenzolabs.openmpis.domain.Person;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.person.service.PersonService;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -54,7 +55,7 @@ public class RetrievePersonRequestHandler
      * Default constructor.
      *
      * @param personService the {@link PersonService}
-     * @param gson            the {@link Gson}
+     * @param gson          the {@link Gson}
      */
     @Autowired
     public RetrievePersonRequestHandler(PersonService personService, Gson gson) {
@@ -80,7 +81,7 @@ public class RetrievePersonRequestHandler
             Person person = personService.retrievePerson(personUuid);
 
             response.setStatusCode(200);
-            response.setBody(gson.toJson(person));
+            response.setBody(gson.toJson(PersonAdapter.adapt(person)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 

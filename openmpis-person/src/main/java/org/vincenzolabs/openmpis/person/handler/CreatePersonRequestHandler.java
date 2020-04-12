@@ -31,10 +31,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.vincenzolabs.openmpis.person.service.PersonService;
+import org.vincenzolabs.openmpis.adapter.PersonAdapter;
 import org.vincenzolabs.openmpis.domain.Person;
-import org.vincenzolabs.openmpis.domain.Request;
-import org.vincenzolabs.openmpis.domain.Response;
+import org.vincenzolabs.openmpis.person.service.PersonService;
+import org.vincenzolabs.openmpis.representation.PersonJson;
+import org.vincenzolabs.openmpis.representation.Request;
+import org.vincenzolabs.openmpis.representation.Response;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 
 /**
@@ -54,7 +56,7 @@ public class CreatePersonRequestHandler
      * Default constructor.
      *
      * @param personService the {@link PersonService}
-     * @param gson            the {@link Gson}
+     * @param gson          the {@link Gson}
      */
     @Autowired
     public CreatePersonRequestHandler(PersonService personService, Gson gson) {
@@ -75,12 +77,12 @@ public class CreatePersonRequestHandler
         response.setHeaders(Map.of("Access-Control-Allow-Methods", "OPTIONS,POST,GET"));
 
         try {
-            Person input = gson.fromJson(request.getBody(), Person.class);
+            PersonJson personJson = gson.fromJson(request.getBody(), PersonJson.class);
 
-            Person person = personService.createPerson(input);
+            Person person = personService.createPerson(PersonAdapter.adapt(personJson));
 
             response.setStatusCode(201);
-            response.setBody(gson.toJson(person));
+            response.setBody(gson.toJson(PersonAdapter.adapt(person)));
         } catch (AwsServiceException e) {
             logger.log(e.getMessage());
 
