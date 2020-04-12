@@ -302,7 +302,7 @@ public final class User {
             .append("uuid", uuid)
             .append("group", group)
             .append("emailAddress", emailAddress)
-            .append("password", password)
+            .append("password", "********")
             .append("rank", rank)
             .append("firstName", firstName)
             .append("middleName", middleName)

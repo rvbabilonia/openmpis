@@ -31,15 +31,19 @@ package org.vincenzolabs.openmpis.enumeration;
 public enum CaseStatus {
 
     /**
+     * Open case
+     */
+    OPEN,
+    /**
      * Ongoing case.
      */
     ONGOING,
     /**
-     * Closed case.
+     * Closed case - solved.
      */
     CLOSED,
     /**
-     * Unsolved case.
+     * Closed case - unsolved.
      */
     UNSOLVED
 }

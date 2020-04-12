@@ -35,11 +35,11 @@ import org.vincenzolabs.openmpis.enumeration.CaseType;
 import org.vincenzolabs.openmpis.enumeration.Relationship;
 
 /**
- * The domain model object for case.
+ * The domain model object for investigation.
  *
  * @author Rey Vincent Babilonia
  */
-public final class Case {
+public final class Investigation {
 
     private final String uuid;
 
@@ -78,7 +78,7 @@ public final class Case {
      *
      * @param builder the {@link Builder}
      */
-    private Case(Builder builder) {
+    private Investigation(Builder builder) {
         this.uuid = builder.uuid;
         this.creationDate = builder.creationDate;
         this.personUuid = builder.personUuid;
@@ -107,9 +107,9 @@ public final class Case {
     }
 
     /**
-     * Returns the {@link OffsetDateTime} the {@link Case} was filed.
+     * Returns the {@link OffsetDateTime} the {@link Investigation} was filed.
      *
-     * @return the {@link OffsetDateTime} the {@link Case} was filed
+     * @return the {@link OffsetDateTime} the {@link Investigation} was filed
      */
     public OffsetDateTime getCreationDate() {
         return creationDate;
@@ -250,6 +250,16 @@ public final class Case {
         return new Builder();
     }
 
+    /**
+     * Returns a {@link Builder}.
+     *
+     * @param investigation the {@link Investigation}
+     * @return the {@link Builder}
+     */
+    public static Builder builder(Investigation investigation) {
+        return new Builder(investigation);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -260,25 +270,25 @@ public final class Case {
             return false;
         }
 
-        Case aCase = (Case) o;
+        Investigation anInvestigation = (Investigation) o;
 
         return new EqualsBuilder()
-            .append(uuid, aCase.uuid)
-            .append(creationDate, aCase.creationDate)
-            .append(personUuid, aCase.personUuid)
-            .append(contactPersonUuid, aCase.contactPersonUuid)
-            .append(encoderUuid, aCase.encoderUuid)
-            .append(investigatorUuid, aCase.investigatorUuid)
-            .append(abductorUuids, aCase.abductorUuids)
-            .append(reports, aCase.reports)
-            .append(tips, aCase.tips)
-            .append(agencyUuid, aCase.agencyUuid)
-            .append(relationshipToContactPerson, aCase.relationshipToContactPerson)
-            .append(relationshipToAbductors, aCase.relationshipToAbductors)
-            .append(caseStatus, aCase.caseStatus)
-            .append(caseType, aCase.caseType)
-            .append(circumstance, aCase.circumstance)
-            .append(reward, aCase.reward)
+            .append(uuid, anInvestigation.uuid)
+            .append(creationDate, anInvestigation.creationDate)
+            .append(personUuid, anInvestigation.personUuid)
+            .append(contactPersonUuid, anInvestigation.contactPersonUuid)
+            .append(encoderUuid, anInvestigation.encoderUuid)
+            .append(investigatorUuid, anInvestigation.investigatorUuid)
+            .append(abductorUuids, anInvestigation.abductorUuids)
+            .append(reports, anInvestigation.reports)
+            .append(tips, anInvestigation.tips)
+            .append(agencyUuid, anInvestigation.agencyUuid)
+            .append(relationshipToContactPerson, anInvestigation.relationshipToContactPerson)
+            .append(relationshipToAbductors, anInvestigation.relationshipToAbductors)
+            .append(caseStatus, anInvestigation.caseStatus)
+            .append(caseType, anInvestigation.caseType)
+            .append(circumstance, anInvestigation.circumstance)
+            .append(reward, anInvestigation.reward)
             .isEquals();
     }
 
@@ -371,6 +381,30 @@ public final class Case {
         }
 
         /**
+         * Private constructor with {@link Investigation}.
+         *
+         * @param investigation the {@link Investigation}
+         */
+        private Builder(Investigation investigation) {
+            uuid = investigation.getUuid();
+            creationDate = investigation.getCreationDate();
+            personUuid = investigation.getPersonUuid();
+            contactPersonUuid = investigation.getContactPersonUuid();
+            encoderUuid = investigation.getEncoderUuid();
+            investigatorUuid = investigation.getInvestigatorUuid();
+            abductorUuids = investigation.getAbductorUuids();
+            reports = investigation.getReports();
+            tips = investigation.getTips();
+            agencyUuid = investigation.getAgencyUuid();
+            relationshipToContactPerson = investigation.getRelationshipToContactPerson();
+            relationshipToAbductors = investigation.getRelationshipToAbductors();
+            caseStatus = investigation.getCaseStatus();
+            caseType = investigation.getCaseType();
+            circumstance = investigation.getCircumstance();
+            reward = investigation.getReward();
+        }
+
+        /**
          * Sets the UUID.
          *
          * @param uuid the UUID
@@ -382,9 +416,9 @@ public final class Case {
         }
 
         /**
-         * Sets the {@link OffsetDateTime} the {@link Case} was filed.
+         * Sets the {@link OffsetDateTime} the {@link Investigation} was filed.
          *
-         * @param creationDate the {@link OffsetDateTime} the {@link Case} was filed
+         * @param creationDate the {@link OffsetDateTime} the {@link Investigation} was filed
          * @return the {@link Builder}
          */
         public Builder withCreationDate(OffsetDateTime creationDate) {
@@ -470,7 +504,7 @@ public final class Case {
         }
 
         /**
-         * Sets the {@link Agency} handling the {@link Case}.
+         * Sets the {@link Agency} handling the {@link Investigation}.
          *
          * @param agencyUuid the {@link Agency}
          * @return the {@link Builder}
@@ -550,12 +584,12 @@ public final class Case {
         }
 
         /**
-         * Builds a {@link Case}.
+         * Builds a {@link Investigation}.
          *
-         * @return the {@link Case}
+         * @return the {@link Investigation}
          */
-        public Case build() {
-            return new Case(this);
+        public Investigation build() {
+            return new Investigation(this);
         }
     }
 }

@@ -23,6 +23,9 @@
  */
 package org.vincenzolabs.openmpis.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.vincenzolabs.openmpis.enumeration.EyeColor;
 import org.vincenzolabs.openmpis.enumeration.HairColor;
 import org.vincenzolabs.openmpis.enumeration.Race;
@@ -96,9 +99,9 @@ public class Description {
     }
 
     /**
-     * Returns the weight in kilograms.
+     * Returns the mass in kilograms.
      *
-     * @return the weight in kilograms
+     * @return the mass in kilograms
      */
     public Double getMass() {
         return mass;
@@ -183,6 +186,67 @@ public class Description {
      */
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Description that = (Description) o;
+
+        return new EqualsBuilder()
+            .append(sex, that.sex)
+            .append(height, that.height)
+            .append(mass, that.mass)
+            .append(religion, that.religion)
+            .append(race, that.race)
+            .append(eyeColor, that.eyeColor)
+            .append(hairColor, that.hairColor)
+            .append(medicalCondition, that.medicalCondition)
+            .append(distinguishingFeatures, that.distinguishingFeatures)
+            .append(personalEffects, that.personalEffects)
+            .append(remarks, that.remarks)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+            .append(sex)
+            .append(height)
+            .append(mass)
+            .append(religion)
+            .append(race)
+            .append(eyeColor)
+            .append(hairColor)
+            .append(medicalCondition)
+            .append(distinguishingFeatures)
+            .append(personalEffects)
+            .append(remarks)
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("sex", sex)
+            .append("height", height)
+            .append("mass", mass)
+            .append("religion", religion)
+            .append("race", race)
+            .append("eyeColor", eyeColor)
+            .append("hairColor", hairColor)
+            .append("medicalCondition", medicalCondition)
+            .append("distinguishingFeatures", distinguishingFeatures)
+            .append("personalEffects", personalEffects)
+            .append("remarks", remarks)
+            .toString();
     }
 
     /**

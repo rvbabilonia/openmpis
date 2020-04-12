@@ -150,7 +150,14 @@ public final class Person {
      *
      * @return the age
      */
-    public int getAge(ZoneId zoneId) {
+    public Integer getAge(ZoneId zoneId) {
+        if (birthDate == null) {
+            return null;
+        }
+        if (zoneId == null) {
+            zoneId = ZoneId.of("Pacific/Auckland");
+        }
+
         return Period.between(LocalDate.from(birthDate.atStartOfDay(zoneId)),
             LocalDate.now(zoneId)).getYears();
     }
@@ -479,9 +486,9 @@ public final class Person {
         }
 
         /**
-         * Sets the description.
+         * Sets the {@link Description}.
          *
-         * @param description the description
+         * @param description the {@link Description}
          * @return the {@link Builder}
          */
         public Builder withDescription(Description description) {

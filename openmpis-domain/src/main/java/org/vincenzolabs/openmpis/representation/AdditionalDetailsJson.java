@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.vincenzolabs.openmpis.domain;
+package org.vincenzolabs.openmpis.representation;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,34 +31,21 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * The domain model object for additional details and advanced features.
+ * The data transfer object for additional details and advanced features.
  *
  * @author Rey Vincent Babilonia
  */
-public final class AdditionalDetails {
+public class AdditionalDetailsJson {
 
-    private final Set<String> ageProgressedPhotoUuids;
+    private Set<String> ageProgressedPhotoUuids;
 
-    private final String primaryAgeProgressedPhotoUuid;
+    private String primaryAgeProgressedPhotoUuid;
 
-    private final String codisId;
+    private String codisId;
 
-    private final String afisId;
+    private String afisId;
 
-    private final String dentalId;
-
-    /**
-     * Private constructor.
-     *
-     * @param builder the {@link Builder}
-     */
-    private AdditionalDetails(Builder builder) {
-        this.ageProgressedPhotoUuids = builder.ageProgressedPhotoUuids;
-        this.primaryAgeProgressedPhotoUuid = builder.primaryAgeProgressedPhotoUuid;
-        this.codisId = builder.codisId;
-        this.afisId = builder.afisId;
-        this.dentalId = builder.dentalId;
-    }
+    private String dentalId;
 
     /**
      * Returns the {@link Set} of age-progressed photo UUID's.
@@ -70,12 +57,30 @@ public final class AdditionalDetails {
     }
 
     /**
+     * Sets the {@link Set} of age-progressed photo UUID's.
+     *
+     * @param ageProgressedPhotoUuids the age-progressed photo UUID's
+     */
+    public void setAgeProgressedPhotoUuids(Set<String> ageProgressedPhotoUuids) {
+        this.ageProgressedPhotoUuids = ageProgressedPhotoUuids;
+    }
+
+    /**
      * Returns the primary age-progressed photo UUID.
      *
      * @return the primary age-progressed photo UUID
      */
     public String getPrimaryAgeProgressedPhotoUuid() {
         return primaryAgeProgressedPhotoUuid;
+    }
+
+    /**
+     * Sets the primary age-progressed photo UUID.
+     *
+     * @param primaryAgeProgressedPhotoUuid the primary age-progressed photo UUID
+     */
+    public void setPrimaryAgeProgressedPhotoUuid(String primaryAgeProgressedPhotoUuid) {
+        this.primaryAgeProgressedPhotoUuid = primaryAgeProgressedPhotoUuid;
     }
 
     /**
@@ -89,12 +94,30 @@ public final class AdditionalDetails {
     }
 
     /**
+     * Sets the combined DNA index system (CODIS) identifier.
+     *
+     * @param codisId the combined DNA index system (CODIS) identifier
+     */
+    public void setCodisId(String codisId) {
+        this.codisId = codisId;
+    }
+
+    /**
      * Returns the automated fingerprint identification system (AFIS) identifier.
      *
      * @return the automated fingerprint identification system (AFIS) identifier
      */
     public String getAfisId() {
         return afisId;
+    }
+
+    /**
+     * Sets the automated fingerprint identification system (AFIS) identifier.
+     *
+     * @param afisId the automated fingerprint identification system (AFIS) identifier
+     */
+    public void setAfisId(String afisId) {
+        this.afisId = afisId;
     }
 
     /**
@@ -107,12 +130,12 @@ public final class AdditionalDetails {
     }
 
     /**
-     * Returns a {@link Builder}.
+     * Sets the dental record identifier.
      *
-     * @return the {@link Builder}
+     * @param dentalId the dental record identifier
      */
-    public static Builder builder() {
-        return new Builder();
+    public void setDentalId(String dentalId) {
+        this.dentalId = dentalId;
     }
 
     @Override
@@ -125,7 +148,7 @@ public final class AdditionalDetails {
             return false;
         }
 
-        AdditionalDetails that = (AdditionalDetails) o;
+        AdditionalDetailsJson that = (AdditionalDetailsJson) o;
 
         return new EqualsBuilder()
             .append(ageProgressedPhotoUuids, that.ageProgressedPhotoUuids)
@@ -156,92 +179,5 @@ public final class AdditionalDetails {
             .append("afisId", afisId)
             .append("dentalId", dentalId)
             .toString();
-    }
-
-    /**
-     * The builder.
-     */
-    public static class Builder {
-
-        private Set<String> ageProgressedPhotoUuids;
-
-        private String primaryAgeProgressedPhotoUuid;
-
-        private String codisId;
-
-        private String afisId;
-
-        private String dentalId;
-
-        /**
-         * Private constructor.
-         */
-        private Builder() {
-            // prevent instantiation
-        }
-
-        /**
-         * Sets the {@link Set} of age-progressed photo UUID's.
-         *
-         * @param ageProgressedPhotoUuids the age-progressed photo UUID's
-         * @return the {@link Builder}
-         */
-        public Builder withAgeProgressedPhotoUuids(Set<String> ageProgressedPhotoUuids) {
-            this.ageProgressedPhotoUuids = ageProgressedPhotoUuids;
-            return this;
-        }
-
-        /**
-         * Sets the primary age-progressed photo UUID.
-         *
-         * @param primaryAgeProgressedPhotoUuid the primary age-progressed photo UUID
-         * @return the {@link Builder}
-         */
-        public Builder withPrimaryAgeProgressedPhotoUuid(String primaryAgeProgressedPhotoUuid) {
-            this.primaryAgeProgressedPhotoUuid = primaryAgeProgressedPhotoUuid;
-            return this;
-        }
-
-        /**
-         * Sets the combined DNA index system (CODIS) identifier.
-         *
-         * @param codisId the combined DNA index system (CODIS) identifier
-         * @return the {@link Builder}
-         */
-        public Builder withCodisId(String codisId) {
-            this.codisId = codisId;
-            return this;
-        }
-
-        /**
-         * Sets the automated fingerprint identification system (AFIS) identifier.
-         *
-         * @param afisId the automated fingerprint identification system (AFIS) identifier
-         * @return the {@link Builder}
-         */
-        public Builder withAfisId(String afisId) {
-            this.afisId = afisId;
-            return this;
-        }
-
-        /**
-         * Sets the dental record identifier.
-         *
-         * @param dentalId the dental record identifier
-         * @return the {@link Builder}
-         */
-        public Builder withDentalId(String dentalId) {
-            this.dentalId = dentalId;
-            return this;
-        }
-
-        /**
-         * Builds an {@link AdditionalDetails}.
-         *
-         * @return the {@link AdditionalDetails}
-         */
-        public AdditionalDetails build() {
-            return new AdditionalDetails(this);
-        }
     }
 }
