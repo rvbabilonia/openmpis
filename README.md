@@ -25,89 +25,70 @@ OpenMPIS was developed by Rey Vincent Babilonia in partial fulfillment of
 the requirements for the degree Master of Information Systems from the
 University of the Philippines - Open University, Los Baños, Laguna.
 
-## Requirements
-
-You will need [Java 1.8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or later to compile 
-and/or run the application.
-
 ## For Developers
 
 The latest branch can be cloned or downloaded from the [OpenMPIS Web site](https://github.com/rvbabilonia/openmpis).
 
-#### Architecture
+### Architecture
 
 OpenMPIS v2 shifted from the original monolithic architecture to a scalable RESTful microservices architecture. An 
 embedded Apache Tomcat is now used to start all services. The relational MySQL database server has been replaced by 
 the embedded non-relational Berkeley database Java edition. Apache Ant has been replaced by Gradle for dependency 
 management and building. Apache Struts was replaced by Spring as the MVC framework.
 
-
+OpenMPIS v3 is a complete overhaul designed to run on Amazon Web Services. The microservices now run as AWS Lambda
+functions. Amazon DynamoDB is now the database service. Frontend is now using React. Other AWS services in use include
+Route 53, CloudFront, API Gateway, S3, IAM, Certificate Manager and CloudFormation.
 
 #### Modules
 
-* openmpis-web-thymeleaf
+* openmpis-domain
 
-    This module offers a new and improved Web interface using Thymeleaf natural templating engine. It retains the 
-    look-and-feel of the original frontend.
+    This shared module contains all the domain model objects, data transfer objects and adapters.
 
-* openmpis-web-angular
+* openmpis-abductor
 
-    This module sports a mobile-first single-page application (SPA) utilizing AngularJS.
+    This module handles the creation, retrieval, modification and archiving of alleged abductors.
+
+* openmpis-agency
+
+    This module handles the creation, retrieval, modification and deletion of government agencies.
+
+* openmpis-institution
+
+    This module handles the creation, retrieval, modification and deletion of social welfare institutions and
+    non-government organizations.
     
-* openmpis-rest
+* openmpis-investigation
 
-    This module exposes all applicable RESTful APIs and invokes the various microservices. It is being used by both 
-    openmpis-web-thymeleaf and openmpis-web-angular modules. You can even create your own frontend.
-            
-* openmpis-eureka
-
-    This module runs the Netflix Eureka server for service registration and discovery.
-    
-* openmpis-user
-
-    This module handles the creation, modification and retrieval of users. It can authenticate users via LDAP or 
-    OpenID. You can even implement other authentication mechanisms such as X.509 certificates.
+    This module binds the encoder, investigator, person, contact person and abductor, if any, into a single case
+    investigation. This module also handles tips and investigation reports.
     
 * openmpis-person
 
-    This module handles the creation, modification and retrieval of persons, relatives and abductors, if any.
+    This module handles the creation, retrieval, modification and deletion of persons.
     
-* openmpis-image
+* openmpis-user
 
-    This module stores and displays the picture of the person. You can even introduce an age progression library.
-    
-* openmpis-case
+    This module handles the creation, retrieval, modification and archiving of encoders and investigators.
 
-    This module binds the encoder, investigator, person, relative and abductor, if any, into a single case.
+* openmpis-web
 
-## For System Administrators
+    This module sports a mobile-first single-page application (SPA) utilizing React.
 
-#### Server Installation (Bare Metal or Virtual Machine)
+### Development
 
-1. Download the latest release from the [OpenMPIS Web site](https://github.com/rvbabilonia/openmpis/releases).
+1. You will need [Corretto 11](https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html) or later
+to compile and/or run the application locally.
 
-2. Uncompress openmpis-<version>.zip or openmpis-<version>.tar.gz.
+2. Download DynamoDB Local: `docker pull amazon/dynamodb-local`
 
-3. On your MS-DOS prompt or Linux terminal, go to the extracted directory.
+3. Start DynamoDB Local: `docker run -p 8000:8000 amazon/dynamodb-local`
 
-4. Configure...
+4. Set environment variables: `DYNAMODB_URL=http://localhost:8000;DYNAMODB_REGION=ap-southeast-2;
+DYNAMODB_ACCESS_KEY=accessKey;DYNAMODB_SECRET_KEY=secretKey`
 
-5. Start the microservices...
-
-6. Go to http://localhost:8080/openmpis to start using the system. The default username is `admin` and the default 
-password is `password`.
-
-#### Docker Containerization
-
-1. Go to docker/release folder.
-
-2. Configure...
-
-3. Build the image by running `docker build -f Dockerfile .`.
-
-4. Deploy the image into the Docker container.
-    
-## Documentation
+## For End Users
 
 The latest user, developer and system administrator manuals with screenshots can be viewed from the
 [OpenMPIS wiki](https://github.com/rvbabilonia/openmpis/wiki).
@@ -115,26 +96,20 @@ The latest user, developer and system administrator manuals with screenshots can
 The application programming interface (API) documentations are available in HTML format in the build/docs directory 
 upon running `gradlew clean build generateJavadocs`.
 
+The site is accessible at https://openmpis.vincenzolabs.org or https://missingfilipinos.vincenzolabs.org.
+
 ## Licensing
 
-OpenMPIS is licensed under the GNU Lesser General Public License. Details may be found in the file named "LICENSE.md".
+OpenMPIS is now licensed under the MIT License. Details may be found in the file named `LICENSE`.
 
 OpenMPIS also uses the following free and open source software:
-* Java which is licensed under the GNU General Public License;
-* Spring Framework, its subprojects like Spring Boot, and its transitive dependies like Netflix Eureka, which are 
+* Corretto 11 which is licensed under the GNU General Public License;
+* Spring Framework, its subprojects like Spring Boot, and its transitive dependencies, which are 
 licensed under the Apache License;
-* Oracle Berkeley Database Java Edition which is licensed under the Apache License;
-* Logback which is dual-licensed under the Eclipse Public License and the Lesser GNU General Public License;
-* JUnit which is licensed under Eclipse Public License;
-* AspectJ which is licensed under the Eclipse Public License;
-* Thymeleaf which is licensed under the Apache License;
-* AngularJS which is licensed under the MIT License;
-* jQuery which is licensed under the MIT License;
-* Swagger and Springfox which are licensed under the Apache License;
-* JavaMail which is licensed under the Common Development and Distribution License and the GNU General Public License.
-* iText which is licensed under the Affero General Public License.
-* Apache Tomcat which is licensed under the Apache License;
-
+* AWS SDK for Java v2 which is licensed under the Apache License;
+* JUnit which is licensed under the Eclipse Public License;
+* React which is licensed under the MIT License;
+* Apache PDFBox which is licensed under the Apache License.
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvbabilonia%2Fopenmpis.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvbabilonia%2Fopenmpis?ref=badge_large)
 
