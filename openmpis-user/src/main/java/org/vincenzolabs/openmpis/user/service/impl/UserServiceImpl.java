@@ -26,6 +26,7 @@ package org.vincenzolabs.openmpis.user.service.impl;
 import java.time.ZoneId;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.vincenzolabs.openmpis.domain.User;
@@ -75,7 +76,23 @@ public class UserServiceImpl
         if (StringUtils.isBlank(user.getCreatorUuid())) {
             throw new IllegalArgumentException("Creator must not be blank");
         }
-        return userDAO.createUser(user, zoneId);
+
+        String temporaryPassword = null;
+        if (StringUtils.isBlank(user.getPassword())) {
+            temporaryPassword = RandomStringUtils.randomAlphanumeric(8);
+
+            user = User.builder(user)
+                .withPassword(temporaryPassword)
+                .build();
+        }
+
+        User newUser = userDAO.createUser(user, zoneId);
+
+        if (StringUtils.isNotBlank(temporaryPassword)) {
+            // FIXME use SES
+        }
+
+        return newUser;
     }
 
     @Override

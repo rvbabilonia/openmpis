@@ -67,7 +67,6 @@ public class UpdateUserRequestHandler
     @Override
     public Response handleRequest(Request request, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log(request.toString());
 
         Response response = new Response();
         // enable CORS

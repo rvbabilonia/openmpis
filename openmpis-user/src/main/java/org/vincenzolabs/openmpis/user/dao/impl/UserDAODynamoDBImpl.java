@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.lambdaworks.crypto.SCryptUtil;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -410,8 +409,6 @@ public class UserDAODynamoDBImpl
     }
 
     private String getPasswordHash(String plainTextPassword) {
-        String password = StringUtils.getIfBlank(plainTextPassword, () -> RandomStringUtils.randomAlphanumeric(8));
-
-        return SCryptUtil.scrypt(password, COST_FACTOR, BLOCK_SIZE_FACTOR, PARALLELIZATION_FACTOR);
+        return SCryptUtil.scrypt(plainTextPassword, COST_FACTOR, BLOCK_SIZE_FACTOR, PARALLELIZATION_FACTOR);
     }
 }
