@@ -1,0 +1,60 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'org.owasp.dependencycheck'
+    id 'com.github.ben-manes.versions'
+}
+
+ext {
+    awsVersion = '2.11.12'
+    awsLambdaJavaCoreVersion = '1.2.0'
+    awsLambdaJavaEventsVersion = '2.2.7'
+    awsLambdaJavaLog4JVersion = '1.0.0'
+    gsonVersion = '2.8.6'
+    langVersion = '3.10'
+    slf4jVersion = '1.7.30'
+
+    mockitoVersion = '3.3.3'
+    assertjVersion = '3.15.0'
+    dynamoV2Version = '5.0.4'
+}
+
+dependencies {
+    implementation project(':openmpis-domain')
+    implementation "org.springframework.boot:spring-boot"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "software.amazon.awssdk:aws-sdk-java:$awsVersion"
+    implementation "software.amazon.awssdk:dynamodb:$awsVersion"
+    implementation "software.amazon.awssdk:lambda:$awsVersion"
+    implementation "com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion"
+    implementation "com.amazonaws:aws-lambda-java-events:$awsLambdaJavaEventsVersion"
+    implementation "com.amazonaws:aws-lambda-java-log4j:$awsLambdaJavaLog4JVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "org.apache.commons:commons-lang3:$langVersion"
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+        exclude module : 'spring-boot-starter-logging'
+    }
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "by.dev.madhead.aws-junit5:dynamo-v2:$dynamoV2Version"
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+    archiveFileName = 'openmpis-investigation.zip'
+}
+
+build.dependsOn buildZip
+
+bootJar {
+    mainClassName = "org.vincenzolabs.openmpis.investigation.InvestigationApplication"
+}
