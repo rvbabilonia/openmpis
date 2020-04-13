@@ -1,0 +1,174 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: The OpenMPIS CloudFormation template.
+
+# FIXME Parameters:
+
+Resources:
+  # DYNAMODB
+
+  ## DYNAMODB TABLES
+  AbductorTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+        - AttributeName: "lastName"
+          AttributeType: "S"
+        - AttributeName: "nickname"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "abductor"
+      GlobalSecondaryIndexes:
+        - IndexName: "lastNames"
+          KeySchema:
+            - AttributeName: "lastName"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: "nicknames"
+          KeySchema:
+            - AttributeName: "nickname"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+  AgencyTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "case"
+  InvestigationTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "investigation"
+  ContactPersonTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "contact_person"
+  InstitutionTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "institution"
+  PersonTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+        - AttributeName: "firstName"
+          AttributeType: "S"
+        - AttributeName: "nickname"
+          AttributeType: "S"
+        - AttributeName: "lastName"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "person"
+      GlobalSecondaryIndexes:
+        - IndexName: "firstNames"
+          KeySchema:
+            - AttributeName: "firstName"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: "nicknames"
+          KeySchema:
+            - AttributeName: "nickname"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: "lastNames"
+          KeySchema:
+            - AttributeName: "lastName"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+  UserTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "uuid"
+          AttributeType: "S"
+        - AttributeName: "emailAddress"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "uuid"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: "user"
+      GlobalSecondaryIndexes:
+        - IndexName: "emailAddresses"
+          KeySchema:
+            - AttributeName: "emailAddress"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+
+  # S3
+
+  ## S3 BUCKETS
