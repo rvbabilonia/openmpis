@@ -30,6 +30,8 @@ matrix:
 #          bucket: $LAMBDA_BUCKET
 #          skip_cleanup: true
 #          local_dir: openmpis-agency/build/distributions
+#          on:
+#            all_branches: true
 #        - provider: s3
 #          access_key_id: $ACCESS_KEY_ID
 #          secret_access_key: $SECRET_ACCESS_KEY
@@ -37,6 +39,8 @@ matrix:
 #          bucket: $LAMBDA_BUCKET
 #          skip_cleanup: true
 #          local_dir: openmpis-institution/build/distributions
+#          on:
+#            all_branches: true
     - language: node_js
       node_js: 13.9.0
       dist: xenial
@@ -54,6 +58,8 @@ matrix:
           bucket: $WEB_BUCKET
           skip_cleanup: true
           local_dir: build
+          on:
+            all_branches: true
 
 deploy:
   - provider: s3
@@ -63,9 +69,13 @@ deploy:
     bucket: $LAMBDA_BUCKET
     skip_cleanup: true
     local_dir: openmpis-aws
+    on:
+      all_branches: true
 #  - provider: cloudformation
 #    access_key_id: $ACCESS_KEY_ID
 #    secret_access_key: $SECRET_ACCESS_KEY
 #    region: $REGION
 #    template: https://openmpis-aws-cloudformation.s3-ap-southeast-2.amazonaws.com/openmpis-cloudformation-template.yml
 #    stack_name: openmpis
+#    on:
+#      all_branches: true
