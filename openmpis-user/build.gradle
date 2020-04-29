@@ -8,7 +8,7 @@ plugins {
 
 ext {
     awsVersion = '2.11.12'
-    awsLambdaJavaCoreVersion = '1.2.0'
+    awsLambdaJavaCoreVersion = '1.2.1'
     awsLambdaJavaEventsVersion = '2.2.7'
     awsLambdaJavaLog4JVersion = '1.0.0'
     gsonVersion = '2.8.6'
