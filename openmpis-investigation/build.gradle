@@ -15,7 +15,7 @@ ext {
     langVersion = '3.10'
     slf4jVersion = '1.7.30'
 
-    mockitoVersion = '3.3.3'
+    mockitoVersion = '3.4.0'
     assertjVersion = '3.15.0'
     dynamoV2Version = '5.0.4'
 }
