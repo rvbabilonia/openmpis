@@ -12,7 +12,7 @@ ext {
     awsLambdaJavaEventsVersion = '2.2.7'
     awsLambdaJavaLog4JVersion = '1.0.0'
     gsonVersion = '2.8.6'
-    langVersion = '3.10'
+    langVersion = '3.11'
     slf4jVersion = '1.7.30'
 
     mockitoVersion = '3.3.3'
